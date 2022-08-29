@@ -1,0 +1,97 @@
+{
+    "name": "@etsoo/materialui",
+    "version": "1.0.1",
+    "description": "TypeScript Material-UI Implementation",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "format": "prettier --write src/**/*.{ts,tsx}",
+        "lint": "eslint --ext .ts,.tsx src/",
+        "test": "jest",
+        "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand"
+    },
+    "jest": {
+        "automock": false,
+        "testMatch": [
+            "<rootDir>/__tests__/**/*.{ts,tsx}"
+        ],
+        "testEnvironment": "jsdom",
+        "transform": {
+            ".+\\.jsx?$": "babel-jest",
+            ".+\\.tsx?$": "ts-jest"
+        },
+        "transformIgnorePatterns": [
+            "/node_modules/(?!@etsoo/).+\\.js$"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ETSOO/ReactMU.git"
+    },
+    "keywords": [
+        "React",
+        "MaterialUI",
+        "TypeScript",
+        "ETSOO",
+        "SmartERP",
+        "司友云平台",
+        "青岛亿速思维",
+        "上海亿商"
+    ],
+    "author": "ETSOO",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ETSOO/ReactMU/issues"
+    },
+    "homepage": "https://github.com/ETSOO/ReactMU#readme",
+    "dependencies": {
+        "@dnd-kit/core": "^6.0.5",
+        "@dnd-kit/sortable": "^7.0.1",
+        "@emotion/css": "^11.10.0",
+        "@emotion/react": "^11.10.0",
+        "@emotion/styled": "^11.10.0",
+        "@etsoo/appscript": "^1.2.88",
+        "@etsoo/notificationbase": "^1.1.7",
+        "@etsoo/react": "^1.5.81",
+        "@etsoo/shared": "^1.1.51",
+        "@mui/icons-material": "^5.10.2",
+        "@mui/material": "^5.10.2",
+        "@types/pica": "^9.0.1",
+        "@types/pulltorefreshjs": "^0.1.5",
+        "@types/react": "^18.0.17",
+        "@types/react-avatar-editor": "^13.0.0",
+        "@types/react-dom": "^18.0.6",
+        "@types/react-input-mask": "^3.0.1",
+        "@types/react-window": "^1.8.5",
+        "pica": "^9.0.1",
+        "pulltorefreshjs": "^0.1.22",
+        "react": "^18.2.0",
+        "react-avatar-editor": "^13.0.0",
+        "react-dom": "^18.2.0",
+        "react-draggable": "^4.4.5",
+        "react-imask": "^6.4.2",
+        "react-router-dom": "^6.3.0",
+        "react-window": "^1.8.7"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.18.10",
+        "@babel/core": "^7.18.13",
+        "@babel/plugin-transform-runtime": "^7.18.10",
+        "@babel/preset-env": "^7.18.10",
+        "@babel/runtime-corejs3": "^7.18.9",
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.3.0",
+        "@types/jest": "^28.1.8",
+        "@typescript-eslint/eslint-plugin": "^5.35.1",
+        "@typescript-eslint/parser": "^5.35.1",
+        "eslint": "^8.23.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-react": "^7.31.1",
+        "jest": "^28.1.3",
+        "jest-environment-jsdom": "^28.1.3",
+        "ts-jest": "^28.0.8",
+        "typescript": "^4.8.2"
+    }
+}
