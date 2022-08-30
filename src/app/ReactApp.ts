@@ -309,7 +309,9 @@ export class ReactApp<
         BridgeUtils.host?.changeCulture(culture.name);
 
         // Document title
-        document.title = this.get(this.name) ?? this.name;
+        // Default is servier name's label or appName label
+        document.title =
+            this.get(this.name) ?? this.get('appName') ?? this.name;
     }
 
     /**
