@@ -45,6 +45,11 @@ export type SelectExProps<
     itemIconRenderer?: (id: T[D]) => React.ReactNode;
 
     /**
+     * Item style
+     */
+    itemStyle?: (option: T) => React.CSSProperties;
+
+    /**
      * Label field
      */
     labelField?: L | ((option: T) => string);
@@ -90,6 +95,7 @@ export function SelectEx<
         defaultValue,
         idField = 'id' as D,
         itemIconRenderer,
+        itemStyle,
         label,
         labelField = 'label' as L,
         loadData,
@@ -273,6 +279,11 @@ export function SelectEx<
                                 }
                                 if (!multiple) setItemValue(id);
                             }}
+                            style={
+                                itemStyle == null
+                                    ? undefined
+                                    : itemStyle(option)
+                            }
                         >
                             {multiple && <Checkbox checked={itemChecked(id)} />}
                             <ListItemText primary={label} />
