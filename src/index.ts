@@ -41,6 +41,7 @@ export * from './EmailInput';
 export * from './FabBox';
 export * from './FlexBox';
 export * from './GridDataFormat';
+export * from './HiSelector';
 export * from './IconButtonLink';
 export * from './InputField';
 export * from './ItemList';
