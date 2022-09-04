@@ -1,6 +1,7 @@
 import {
     Checkbox,
     FormControl,
+    FormHelperText,
     InputLabel,
     ListItemText,
     MenuItem,
@@ -33,6 +34,16 @@ export type SelectExProps<
      * Auto add blank item
      */
     autoAddBlankItem?: boolean;
+
+    /**
+     * The helper text content.
+     */
+    helperText?: React.ReactNode;
+
+    /**
+     * Input required
+     */
+    inputRequired?: boolean;
 
     /**
      * Id field
@@ -94,6 +105,9 @@ export function SelectEx<
     const {
         defaultValue,
         idField = 'id' as D,
+        error,
+        helperText,
+        inputRequired,
         itemIconRenderer,
         itemStyle,
         label,
@@ -218,6 +232,7 @@ export function SelectEx<
         <FormControl
             size={search ? MUGlobal.searchFieldSize : MUGlobal.inputFieldSize}
             fullWidth={fullWidth}
+            error={error}
         >
             <InputLabel
                 id={labelId}
@@ -236,7 +251,13 @@ export function SelectEx<
                         ? valueState ?? ''
                         : ''
                 }
-                input={<OutlinedInput notched label={label} />}
+                input={
+                    <OutlinedInput
+                        notched
+                        label={label}
+                        required={inputRequired}
+                    />
+                }
                 labelId={labelId}
                 name={name}
                 multiple={multiple}
@@ -296,6 +317,9 @@ export function SelectEx<
                     );
                 })}
             </Select>
+            {helperText != null && (
+                <FormHelperText>{helperText}</FormHelperText>
+            )}
         </FormControl>
     );
 }
