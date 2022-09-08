@@ -59,7 +59,7 @@ export type HiSelectorProps<
     /**
      * Item change callback
      */
-    onItemChange?: (option?: T) => void;
+    onItemChange?: (option: T | undefined, userAction: boolean) => void;
 
     /**
      * Required
@@ -125,7 +125,7 @@ export function HiSelector<
             (option == null || option[idField] !== values.at(-1))
         )
             return;
-        onItemChange(option);
+        onItemChange(option, userAction);
     };
 
     React.useEffect(() => {

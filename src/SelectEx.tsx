@@ -20,7 +20,6 @@ import {
     ListType,
     Utils
 } from '@etsoo/shared';
-import { ReactUtils } from '@etsoo/react';
 
 /**
  * Extended select component props
@@ -123,7 +122,7 @@ export function SelectEx<
         onLoadData,
         multiple = false,
         name,
-        options = [],
+        options,
         search = false,
         autoAddBlankItem = search,
         value,
@@ -133,7 +132,7 @@ export function SelectEx<
     } = props;
 
     // Options state
-    const [localOptions, setOptions] = React.useState(options);
+    const [localOptions, setOptions] = React.useState<readonly T[]>([]);
     const isMounted = React.useRef(true);
 
     const doItemChange = (
@@ -142,23 +141,27 @@ export function SelectEx<
         userAction: boolean
     ) => {
         if (onItemChange == null) return;
-        if (value == null || value === '') onItemChange(undefined, userAction);
+        if (value == null || value === '') {
+            onItemChange(undefined, userAction);
+            return;
+        }
         const option = options.find((option) => option[idField] === value);
         onItemChange(option, userAction);
     };
 
     const setOptionsAdd = (options: readonly T[]) => {
         setOptions(options);
-        if (valueState != null && valueState !== '')
-            doItemChange(options, valueState, false);
+        if (localValue != null && localValue !== '')
+            doItemChange(options, localValue, false);
     };
 
     // When options change
     // [options] will cause infinite loop
     const propertyWay = loadData == null;
     React.useEffect(() => {
-        if (propertyWay && options != null) setOptionsAdd(options);
-    }, [JSON.stringify(options), propertyWay]);
+        if (options == null || !propertyWay) return;
+        setOptionsAdd(options);
+    }, [options, propertyWay]);
 
     // Local value
     const valueSource = defaultValue ?? value ?? '';
@@ -198,11 +201,13 @@ export function SelectEx<
         if (id != valueState) {
             setValueState(id);
 
+            /*
             const input = divRef.current?.querySelector('input');
             if (input) {
                 // Different value, trigger change event
                 ReactUtils.triggerChange(input, id as string, false);
             }
+            */
         }
     };
 
@@ -287,7 +292,7 @@ export function SelectEx<
                 onChange={(event, child) => {
                     if (onChange) onChange(event, child);
                     doItemChange(localOptions, event.target.value, true);
-                    if (multiple) handleChange(event);
+                    handleChange(event);
                 }}
                 renderValue={(selected) => {
                     // The text shows up
@@ -322,7 +327,6 @@ export function SelectEx<
                                     onItemClick(event, option);
                                     if (event.defaultPrevented) return;
                                 }
-                                if (!multiple) setItemValue(id);
                             }}
                             style={
                                 itemStyle == null
