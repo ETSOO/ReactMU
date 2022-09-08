@@ -52,9 +52,14 @@ export type HiSelectorProps<
     onChange?: (value: unknown) => void;
 
     /**
-     * On item change event
+     * On select change event
      */
-    onItemChange?: (e: SelectChangeEvent<unknown>) => void;
+    onSelectChange?: (e: SelectChangeEvent<unknown>) => void;
+
+    /**
+     * Item change callback
+     */
+    onItemChange?: (option?: T) => void;
 
     /**
      * Required
@@ -87,6 +92,7 @@ export function HiSelector<
         labelField = 'name' as L,
         loadData,
         onChange,
+        onSelectChange,
         onItemChange,
         required,
         values = []
@@ -109,7 +115,17 @@ export function HiSelector<
         if (itemValue != null) newValues.push(itemValue);
         setValues(newValues);
 
-        if (onItemChange) onItemChange(event);
+        if (onSelectChange) onSelectChange(event);
+    };
+
+    const doItemChange = (option: T | undefined, userAction: boolean) => {
+        if (onItemChange == null) return;
+        if (
+            !userAction &&
+            (option == null || option[idField] !== values.at(-1))
+        )
+            return;
+        onItemChange(option);
     };
 
     React.useEffect(() => {
@@ -146,6 +162,7 @@ export function HiSelector<
                     loadData={() => loadData()}
                     value={values[0]}
                     onChange={(event) => doChange(event, 0)}
+                    onItemChange={doItemChange}
                     inputRequired={required}
                     error={error}
                     helperText={helperText}
@@ -163,6 +180,7 @@ export function HiSelector<
                         loadData={() => loadData(localValues[0])}
                         value={values[1]}
                         onChange={(event) => doChange(event, 1)}
+                        onItemChange={doItemChange}
                     />
                 </Grid>
             )}
@@ -178,6 +196,7 @@ export function HiSelector<
                         loadData={() => loadData(localValues[1])}
                         value={values[2]}
                         onChange={(event) => doChange(event, 2)}
+                        onItemChange={doItemChange}
                     />
                 </Grid>
             )}
@@ -193,6 +212,7 @@ export function HiSelector<
                         loadData={() => loadData(localValues[2])}
                         value={values[3]}
                         onChange={(event) => doChange(event, 3)}
+                        onItemChange={doItemChange}
                     />
                 </Grid>
             )}

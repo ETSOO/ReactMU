@@ -71,6 +71,11 @@ export type SelectExProps<
     loadData?: () => PromiseLike<T[] | null | undefined>;
 
     /**
+     * Item change callback
+     */
+    onItemChange?: (option: T | undefined, userAction: boolean) => void;
+
+    /**
      * Item click handler
      */
     onItemClick?: (event: React.MouseEvent, option: T) => void;
@@ -113,6 +118,7 @@ export function SelectEx<
         label,
         labelField = 'label' as L,
         loadData,
+        onItemChange,
         onItemClick,
         onLoadData,
         multiple = false,
@@ -130,11 +136,28 @@ export function SelectEx<
     const [localOptions, setOptions] = React.useState(options);
     const isMounted = React.useRef(true);
 
+    const doItemChange = (
+        options: readonly T[],
+        value: unknown,
+        userAction: boolean
+    ) => {
+        if (onItemChange == null) return;
+        if (value == null || value === '') onItemChange(undefined, userAction);
+        const option = options.find((option) => option[idField] === value);
+        onItemChange(option, userAction);
+    };
+
+    const setOptionsAdd = (options: readonly T[]) => {
+        setOptions(options);
+        if (valueState != null && valueState !== '')
+            doItemChange(options, valueState, false);
+    };
+
     // When options change
     // [options] will cause infinite loop
     const propertyWay = loadData == null;
     React.useEffect(() => {
-        if (propertyWay && options != null) setOptions(options);
+        if (propertyWay && options != null) setOptionsAdd(options);
     }, [JSON.stringify(options), propertyWay]);
 
     // Local value
@@ -207,7 +230,7 @@ export function SelectEx<
                 if (autoAddBlankItem) {
                     Utils.addBlankItem(result, idField, labelField);
                 }
-                setOptions(result);
+                setOptionsAdd(result);
             });
         }
     }, [localValue]);
@@ -263,6 +286,7 @@ export function SelectEx<
                 multiple={multiple}
                 onChange={(event, child) => {
                     if (onChange) onChange(event, child);
+                    doItemChange(localOptions, event.target.value, true);
                     if (multiple) handleChange(event);
                 }}
                 renderValue={(selected) => {
