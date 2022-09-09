@@ -163,7 +163,8 @@ export function TableEx<
             ? columns.find((column) => column.field === defaultOrderBy)?.sortAsc
             : undefined,
         batchSize: rowsPerPageLocal,
-        selectedItems: []
+        selectedItems: [],
+        idCache: {}
     });
     const state = stateRefs.current;
 

@@ -92,7 +92,8 @@ export function ListMoreDisplay<
         orderBy: defaultOrderBy,
         batchSize: 10,
         loadedItems: 0,
-        selectedItems: []
+        selectedItems: [],
+        idCache: {}
     });
     const ref = refs.current;
 
@@ -141,13 +142,14 @@ export function ListMoreDisplay<
         ref.currentPage = currentPage + 1;
 
         // Update rows
-        if (states.items == null || reset)
+        if (states.items == null || reset) {
             setStates({ items, completed: !hasNextPage });
-        else
+        } else {
             setStates({
                 items: [...states.items, ...items],
                 completed: !hasNextPage
             });
+        }
     };
 
     const reset = (data?: GridData) => {

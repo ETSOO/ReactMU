@@ -120,7 +120,7 @@ export type ScrollerListExItemSize =
 export type ScrollerListExProps<
     T extends object,
     D extends DataTypes.Keys<T>
-> = Omit<ScrollerListProps<T>, 'itemRenderer' | 'itemSize'> & {
+> = Omit<ScrollerListProps<T, D>, 'itemRenderer' | 'itemSize'> & {
     /**
      * Alternating colors for odd/even rows
      */
@@ -137,12 +137,6 @@ export type ScrollerListExProps<
      * Item renderer
      */
     itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
-
-    /**
-     * Id field
-     * Failed: D extends { id: DataTypes.IdType } ? { idField?: D } : { idField: D }
-     */
-    idField?: D;
 
     /**
      * Item size, a function indicates its a variable size list
@@ -302,8 +296,6 @@ export function ScrollerListEx<
         idField = 'id' as D,
         innerItemRenderer,
         itemSize,
-        itemKey = (index: number, data: T) =>
-            DataTypes.getIdValue1(data, idField) ?? index,
         itemRenderer = (itemProps) => {
             const [itemHeight, space, margins] = calculateItemSize(
                 itemProps.index
@@ -372,13 +364,13 @@ export function ScrollerListEx<
 
     // Layout
     return (
-        <ScrollerList<T>
+        <ScrollerList<T, D>
             className={Utils.mergeClasses(
                 'ScrollerListEx-Body',
                 className,
                 createGridStyle(alternatingColors, selectedColor)
             )}
-            itemKey={itemKey}
+            idField={idField}
             itemRenderer={itemRenderer}
             itemSize={itemSizeLocal}
             {...rest}
