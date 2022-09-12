@@ -38,7 +38,7 @@ export interface ViewPageField<T extends object> extends GridProps {
     /**
      * Display as single row
      */
-    singleRow?: boolean;
+    singleRow?: boolean | 'default' | 'small';
 
     /**
      * Render props
@@ -107,8 +107,6 @@ function getItemField<T extends object>(
         itemLabel: React.ReactNode,
         gridProps: GridProps = {};
 
-    let xs = 6;
-
     if (Array.isArray(field)) {
         const [fieldData, fieldType, renderProps] = field;
         itemData = GridDataFormat(data[fieldData], fieldType, renderProps);
@@ -120,16 +118,27 @@ function getItemField<T extends object>(
             dataType,
             label: fieldLabel,
             renderProps,
-            singleRow,
+            singleRow = 'default',
             ...rest
         } = field;
 
+        const res =
+            singleRow === 'default'
+                ? { xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }
+                : singleRow === true
+                ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
+                : {
+                      xs: singleRow === false ? 12 : 6,
+                      sm: 6,
+                      md: 6,
+                      lg: 4,
+                      xl: 3
+                  };
+
         gridProps = {
             ...rest,
-            ...(singleRow && { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 })
+            ...res
         };
-
-        if (singleRow === false) xs = 12;
 
         // Field data
         if (typeof fieldData === 'function') itemData = fieldData(data);
@@ -149,11 +158,7 @@ function getItemField<T extends object>(
         itemLabel = globalApp.get<string>(field) ?? field;
     }
 
-    return [
-        itemData,
-        itemLabel,
-        { xs, sm: 6, md: 6, lg: 4, xl: 3, ...gridProps }
-    ];
+    return [itemData, itemLabel, gridProps];
 }
 
 /**
