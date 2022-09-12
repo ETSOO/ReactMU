@@ -236,9 +236,13 @@ export function ViewPage<T extends DataTypes.StringRecord>(
                                     >
                                         {itemLabel}:
                                     </Typography>
-                                    <Typography variant="subtitle2">
-                                        {itemData}
-                                    </Typography>
+                                    {typeof itemData === 'object' ? (
+                                        itemData
+                                    ) : (
+                                        <Typography variant="subtitle2">
+                                            {itemData}
+                                        </Typography>
+                                    )}
                                 </Grid>
                             );
                         })}
