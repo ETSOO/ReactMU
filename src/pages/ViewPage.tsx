@@ -16,6 +16,8 @@ import { PullToRefreshUI } from '../PullToRefreshUI';
 import { CommonPage } from './CommonPage';
 import { CommonPageProps } from './CommonPageProps';
 
+type RowType = boolean | 'default' | 'small';
+
 /**
  * View page display field
  */
@@ -38,7 +40,7 @@ export interface ViewPageField<T extends object> extends GridProps {
     /**
      * Display as single row
      */
-    singleRow?: boolean | 'default' | 'small';
+    singleRow?: RowType;
 
     /**
      * Render props
@@ -48,7 +50,7 @@ export interface ViewPageField<T extends object> extends GridProps {
 
 type ViewPageFieldType<T extends object> =
     | (string & keyof T)
-    | [string & keyof T, GridDataType, GridColumnRenderProps?]
+    | [string & keyof T, GridDataType, GridColumnRenderProps?, RowType?]
     | ViewPageField<T>;
 
 /**
@@ -98,6 +100,20 @@ function formatItemData(fieldData: unknown): string | undefined {
     return `${fieldData}`;
 }
 
+function getResp(singleRow: RowType) {
+    return singleRow === 'default'
+        ? { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }
+        : singleRow === true
+        ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
+        : {
+              xs: singleRow === false ? 12 : 6,
+              sm: 6,
+              md: 6,
+              lg: 4,
+              xl: 3
+          };
+}
+
 function getItemField<T extends object>(
     field: ViewPageFieldType<T>,
     data: T
@@ -108,9 +124,10 @@ function getItemField<T extends object>(
         gridProps: GridProps = {};
 
     if (Array.isArray(field)) {
-        const [fieldData, fieldType, renderProps] = field;
+        const [fieldData, fieldType, renderProps, singleRow = 'small'] = field;
         itemData = GridDataFormat(data[fieldData], fieldType, renderProps);
         itemLabel = globalApp.get<string>(fieldData) ?? fieldData;
+        gridProps = { ...getResp(singleRow) };
     } else if (typeof field === 'object') {
         // Destruct
         const {
@@ -122,22 +139,9 @@ function getItemField<T extends object>(
             ...rest
         } = field;
 
-        const res =
-            singleRow === 'default'
-                ? { xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }
-                : singleRow === true
-                ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
-                : {
-                      xs: singleRow === false ? 12 : 6,
-                      sm: 6,
-                      md: 6,
-                      lg: 4,
-                      xl: 3
-                  };
-
         gridProps = {
             ...rest,
-            ...res
+            ...getResp(singleRow)
         };
 
         // Field data
