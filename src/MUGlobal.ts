@@ -1,6 +1,6 @@
 import { NumberUtils } from '@etsoo/shared';
 import { Breakpoint, ListItemButtonProps, Theme } from '@mui/material';
-import { RLink } from './RLink';
+import { Link } from 'react-router-dom';
 
 /**
  * Mouse event handler with data
@@ -74,9 +74,9 @@ export class MUGlobal {
         }
 
         return {
-            component: RLink,
+            component: Link,
             selected,
-            href,
+            to: href,
             sx: {
                 ...(selected && {
                     '.MuiListItemIcon-root': {

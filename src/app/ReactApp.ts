@@ -34,6 +34,7 @@ import {
     UserCalls,
     UserState
 } from '@etsoo/react';
+import { NavigateFunction, NavigateOptions } from 'react-router-dom';
 
 /**
  * Global application
@@ -190,6 +191,11 @@ export class ReactApp<
      * Is screen size up 'md'
      */
     mdUp?: boolean;
+
+    /**
+     * Navigate function
+     */
+    navigateFunction?: NavigateFunction;
 
     /**
      * Page state dispatch
@@ -367,14 +373,6 @@ export class ReactApp<
     }
 
     /**
-     * Redirect to the Url
-     * @param url Url
-     */
-    override redirectTo(url: string) {
-        location.href = url;
-    }
-
-    /**
      * Set page data
      * @param data Page data
      */
@@ -403,6 +401,20 @@ export class ReactApp<
                 data
             });
         }
+    }
+
+    /**
+     * Navigate to Url or delta
+     * @param url Url or delta
+     * @param options Options
+     */
+    override navigate<T extends number | string | URL>(
+        to: T,
+        options?: T extends number ? never : NavigateOptions
+    ) {
+        if (this.navigateFunction == null) super.navigate(to, options);
+        else if (typeof to === 'number') this.navigateFunction(to);
+        else this.navigateFunction(to, options);
     }
 
     /**
