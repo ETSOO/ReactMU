@@ -18,7 +18,6 @@ import React from 'react';
 import { NotifierMU } from '../NotifierMU';
 import { ProgressCount } from '../ProgressCount';
 import { Labels } from './Labels';
-import { createBrowserHistory, createMemoryHistory, History } from 'history';
 import {
     CultureAction,
     CultureState,
@@ -35,6 +34,11 @@ import {
     UserCalls,
     UserState
 } from '@etsoo/react';
+import {
+    History,
+    createBrowserHistory,
+    createMemoryHistory
+} from '@remix-run/router';
 
 /**
  * Global application
