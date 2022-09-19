@@ -22,7 +22,7 @@ export const RLink = React.forwardRef<HTMLAnchorElement, RLinkProps>(
 
         const delayed = useDelayedExecutor((href: string) => {
             // Router push
-            globalApp.history.push(href);
+            globalApp.redirectTo(href);
         }, delay);
 
         // Click handler

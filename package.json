@@ -1,6 +1,6 @@
 {
     "name": "@etsoo/materialui",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "description": "TypeScript Material-UI Implementation",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -57,7 +57,6 @@
         "@etsoo/shared": "^1.1.57",
         "@mui/icons-material": "^5.10.3",
         "@mui/material": "^5.10.5",
-        "@remix-run/router": "^1.0.0",
         "@types/pica": "^9.0.1",
         "@types/pulltorefreshjs": "^0.1.5",
         "@types/react": "^18.0.20",

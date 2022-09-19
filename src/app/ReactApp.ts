@@ -34,11 +34,6 @@ import {
     UserCalls,
     UserState
 } from '@etsoo/react';
-import {
-    History,
-    createBrowserHistory,
-    createMemoryHistory
-} from '@remix-run/router';
 
 /**
  * Global application
@@ -95,11 +90,6 @@ export interface IReactAppBase {
      * User state
      */
     readonly userState: UserState<any>;
-
-    /**
-     * Router history
-     */
-    readonly history: History;
 
     /**
      * Set page data
@@ -182,11 +172,6 @@ export class ReactApp<
     readonly cultureState: CultureState;
 
     /**
-     * Router history
-     */
-    readonly history: History;
-
-    /**
      * Page state
      */
     readonly pageState: PageState<P>;
@@ -231,11 +216,6 @@ export class ReactApp<
         );
 
         if (BridgeUtils.host) {
-            const startUrl = BridgeUtils.host.getStartUrl();
-            this.history = createMemoryHistory({
-                initialEntries: startUrl == null ? undefined : [startUrl]
-            });
-
             BridgeUtils.host.onUpdate((app, version) => {
                 this.notifier.message(
                     NotificationMessageType.Success,
@@ -243,8 +223,6 @@ export class ReactApp<
                     this.get('updateReady')
                 );
             });
-        } else {
-            this.history = createBrowserHistory();
         }
 
         this.cultureState = new CultureState(settings.currentCulture);
@@ -393,7 +371,7 @@ export class ReactApp<
      * @param url Url
      */
     override redirectTo(url: string) {
-        this.history.push(url);
+        location.href = url;
     }
 
     /**
