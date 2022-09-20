@@ -6,4 +6,4 @@ import { ListItemIcon, styled } from '@mui/material';
 export const ListItemRightIcon = styled(ListItemIcon)(({ theme }) => ({
     minWidth: '20px!important',
     paddingLeft: theme.spacing(2)
-}));
+})) as typeof ListItemIcon;
