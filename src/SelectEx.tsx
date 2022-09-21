@@ -80,11 +80,6 @@ export type SelectExProps<
     onItemClick?: (event: React.MouseEvent, option: T) => void;
 
     /**
-     * Item mouse down handler
-     */
-    onItemMouseDown?: (event: React.MouseEvent, option: T) => void;
-
-    /**
      * On load data handler
      */
     onLoadData?: (options: T[]) => void;
@@ -124,7 +119,6 @@ export function SelectEx<
         loadData,
         onItemChange,
         onItemClick,
-        onItemMouseDown,
         onLoadData,
         multiple = false,
         name,
@@ -296,7 +290,12 @@ export function SelectEx<
                 name={name}
                 multiple={multiple}
                 onChange={(event, child) => {
-                    if (onChange) onChange(event, child);
+                    if (onChange) {
+                        onChange(event, child);
+
+                        // event.preventDefault() will block executing
+                        if (event.defaultPrevented) return;
+                    }
                     doItemChange(localOptions, event.target.value, true);
                     handleChange(event);
                 }}
@@ -331,11 +330,6 @@ export function SelectEx<
                             onClick={(event) => {
                                 if (onItemClick) {
                                     onItemClick(event, option);
-                                }
-                            }}
-                            onMouseDown={(event) => {
-                                if (onItemMouseDown) {
-                                    onItemMouseDown(event, option);
                                 }
                             }}
                             style={
