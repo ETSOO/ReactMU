@@ -2,17 +2,20 @@ import {
     Checkbox,
     FormControl,
     FormHelperText,
+    IconButton,
     InputLabel,
     ListItemText,
     MenuItem,
     OutlinedInput,
     Select,
     SelectChangeEvent,
-    SelectProps
+    SelectProps,
+    Stack
 } from '@mui/material';
 import React from 'react';
 import { MUGlobal } from './MUGlobal';
 import { ListItemRightIcon } from './ListItemRightIcon';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import {
     DataTypes,
     IdDefaultType,
@@ -90,6 +93,11 @@ export type SelectExProps<
     options?: ReadonlyArray<T>;
 
     /**
+     * Supports refresh label or component
+     */
+    refresh?: string | React.ReactNode;
+
+    /**
      * Is search case?
      */
     search?: boolean;
@@ -123,6 +131,7 @@ export function SelectEx<
         multiple = false,
         name,
         options,
+        refresh,
         search = false,
         autoAddBlankItem = search,
         value,
@@ -226,18 +235,22 @@ export function SelectEx<
     // Refs
     const divRef = React.useRef<HTMLDivElement>();
 
+    // Refresh list data
+    const refreshData = () => {
+        if (loadData == null) return;
+        loadData().then((result) => {
+            if (result == null || !isMounted.current) return;
+            if (onLoadData) onLoadData(result);
+            if (autoAddBlankItem) {
+                Utils.addBlankItem(result, idField, labelField);
+            }
+            setOptionsAdd(result);
+        });
+    };
+
     // When value change
     React.useEffect(() => {
-        if (loadData) {
-            loadData().then((result) => {
-                if (result == null || !isMounted.current) return;
-                if (onLoadData) onLoadData(result);
-                if (autoAddBlankItem) {
-                    Utils.addBlankItem(result, idField, labelField);
-                }
-                setOptionsAdd(result);
-            });
-        }
+        refreshData();
     }, [localValue]);
 
     // When layout ready
@@ -257,101 +270,122 @@ export function SelectEx<
 
     // Layout
     return (
-        <FormControl
-            size={search ? MUGlobal.searchFieldSize : MUGlobal.inputFieldSize}
-            fullWidth={fullWidth}
-            error={error}
-        >
-            <InputLabel
-                id={labelId}
-                shrink={
-                    search
-                        ? MUGlobal.searchFieldShrink
-                        : MUGlobal.inputFieldShrink
+        <Stack direction="row">
+            <FormControl
+                size={
+                    search ? MUGlobal.searchFieldSize : MUGlobal.inputFieldSize
                 }
-            >
-                {label}
-            </InputLabel>
-            <Select
-                ref={divRef}
-                value={
-                    localOptions.some((option) => itemChecked(getId(option)))
-                        ? valueState ?? ''
-                        : ''
-                }
-                input={
-                    <OutlinedInput
-                        notched
-                        label={label}
-                        required={inputRequired}
-                    />
-                }
-                labelId={labelId}
-                name={name}
-                multiple={multiple}
-                onChange={(event, child) => {
-                    if (onChange) {
-                        onChange(event, child);
-
-                        // event.preventDefault() will block executing
-                        if (event.defaultPrevented) return;
-                    }
-                    doItemChange(localOptions, event.target.value, true);
-                    handleChange(event);
-                }}
-                renderValue={(selected) => {
-                    // The text shows up
-                    return localOptions
-                        .filter((option) => {
-                            const id = getId(option);
-                            return Array.isArray(selected)
-                                ? selected.indexOf(id) !== -1
-                                : selected === id;
-                        })
-                        .map((option) => getLabel(option))
-                        .join(', ');
-                }}
-                sx={{ minWidth: '150px' }}
                 fullWidth={fullWidth}
-                {...rest}
+                error={error}
             >
-                {localOptions.map((option) => {
-                    // Option id
-                    const id = getId(option);
+                <InputLabel
+                    id={labelId}
+                    shrink={
+                        search
+                            ? MUGlobal.searchFieldShrink
+                            : MUGlobal.inputFieldShrink
+                    }
+                >
+                    {label}
+                </InputLabel>
+                <Select
+                    ref={divRef}
+                    value={
+                        localOptions.some((option) =>
+                            itemChecked(getId(option))
+                        )
+                            ? valueState ?? ''
+                            : ''
+                    }
+                    input={
+                        <OutlinedInput
+                            notched
+                            label={label}
+                            required={inputRequired}
+                        />
+                    }
+                    labelId={labelId}
+                    name={name}
+                    multiple={multiple}
+                    onChange={(event, child) => {
+                        if (onChange) {
+                            onChange(event, child);
 
-                    // Option label
-                    const label = getLabel(option);
+                            // event.preventDefault() will block executing
+                            if (event.defaultPrevented) return;
+                        }
+                        doItemChange(localOptions, event.target.value, true);
+                        handleChange(event);
+                    }}
+                    renderValue={(selected) => {
+                        // The text shows up
+                        return localOptions
+                            .filter((option) => {
+                                const id = getId(option);
+                                return Array.isArray(selected)
+                                    ? selected.indexOf(id) !== -1
+                                    : selected === id;
+                            })
+                            .map((option) => getLabel(option))
+                            .join(', ');
+                    }}
+                    sx={{ minWidth: '150px' }}
+                    fullWidth={fullWidth}
+                    {...rest}
+                >
+                    {localOptions.map((option) => {
+                        // Option id
+                        const id = getId(option);
 
-                    // Option
-                    return (
-                        <MenuItem
-                            key={id}
-                            value={id}
-                            onClick={(event) => {
-                                if (onItemClick) {
-                                    onItemClick(event, option);
+                        // Option label
+                        const label = getLabel(option);
+
+                        // Option
+                        return (
+                            <MenuItem
+                                key={id}
+                                value={id}
+                                onClick={(event) => {
+                                    if (onItemClick) {
+                                        onItemClick(event, option);
+                                    }
+                                }}
+                                style={
+                                    itemStyle == null
+                                        ? undefined
+                                        : itemStyle(option)
                                 }
-                            }}
-                            style={
-                                itemStyle == null
-                                    ? undefined
-                                    : itemStyle(option)
-                            }
-                        >
-                            {multiple && <Checkbox checked={itemChecked(id)} />}
-                            <ListItemText primary={label} />
-                            {itemIconRenderer && (
-                                <ListItemRightIcon>
-                                    {itemIconRenderer(option[idField])}
-                                </ListItemRightIcon>
-                            )}
-                        </MenuItem>
-                    );
-                })}
-            </Select>
-            {helperText != null && (
-                <FormHelperText>{helperText}</FormHelperText>
-            )}
-        </FormControl>
+                            >
+                                {multiple && (
+                                    <Checkbox checked={itemChecked(id)} />
+                                )}
+                                <ListItemText primary={label} />
+                                {itemIconRenderer && (
+                                    <ListItemRightIcon>
+                                        {itemIconRenderer(option[idField])}
+                                    </ListItemRightIcon>
+                                )}
+                            </MenuItem>
+                        );
+                    })}
+                </Select>
+                {helperText != null && (
+                    <FormHelperText>{helperText}</FormHelperText>
+                )}
+            </FormControl>
+            {refresh != null &&
+                loadData != null &&
+                (typeof refresh === 'string' ? (
+                    <IconButton
+                        size="small"
+                        title={refresh}
+                        onClick={refreshData}
+                    >
+                        <RefreshIcon />
+                    </IconButton>
+                ) : (
+                    refresh
+                ))}
+        </Stack>
     );
 }
