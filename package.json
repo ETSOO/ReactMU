@@ -1,6 +1,6 @@
 {
     "name": "@etsoo/materialui",
-    "version": "1.0.29",
+    "version": "1.0.30",
     "description": "TypeScript Material-UI Implementation",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -83,8 +83,8 @@
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
         "@types/jest": "^29.0.3",
-        "@typescript-eslint/eslint-plugin": "^5.38.0",
-        "@typescript-eslint/parser": "^5.38.0",
+        "@typescript-eslint/eslint-plugin": "^5.38.1",
+        "@typescript-eslint/parser": "^5.38.1",
         "eslint": "^8.24.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-plugin-import": "^2.26.0",

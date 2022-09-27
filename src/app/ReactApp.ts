@@ -93,6 +93,29 @@ export interface IReactAppBase {
     readonly userState: UserState<any>;
 
     /**
+     * Is screen size down 'sm'
+     */
+    smDown?: boolean;
+
+    /**
+     * Is screen size up 'md'
+     */
+    mdUp?: boolean;
+
+    /**
+     * Get date format props
+     * @returns Props
+     */
+    getDateFormatProps(): object;
+
+    /**
+     * Get money format props
+     * @param currency Currency, if undefined, default currency applied
+     * @returns Props
+     */
+    getMoneyFormatProps(currency?: string): object;
+
+    /**
      * Set page data
      * @param data Page data
      */
@@ -109,6 +132,17 @@ export interface IReactAppBase {
      * @param title Page title
      */
     setPageTitle(title: string): void;
+
+    /**
+     * Show input dialog
+     * @param props Props
+     */
+    showInputDialog({
+        title,
+        message,
+        callback,
+        ...rest
+    }: InputDialogProps): INotificationReact;
 }
 
 /**
