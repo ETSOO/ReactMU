@@ -9,6 +9,7 @@ import {
     IUser
 } from '@etsoo/appscript';
 import {
+    INotifier,
     NotificationMessageType,
     NotificationRenderProps,
     NotificationReturn
@@ -87,6 +88,11 @@ export function ReactAppStateDetector(props: IStateProps) {
  * React implemented base
  */
 export interface IReactAppBase {
+    /**
+     * Override Notifier as React specific
+     */
+    readonly notifier: INotifier<React.ReactNode, NotificationReactCallProps>;
+
     /**
      * User state
      */

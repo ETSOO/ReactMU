@@ -118,7 +118,8 @@ test('Prompt tests', async () => {
     act(() => {
         // Add the notification
         notifier.prompt<boolean>('Prompt message', handleClick, undefined, {
-            type: 'switch'
+            type: 'switch',
+            inputProps: { required: false }
         });
     });
 
@@ -146,7 +147,8 @@ test('Prompt tests with form submit', async () => {
     act(() => {
         // Add the notification
         notifier.prompt<boolean>('Prompt message', handleClick, undefined, {
-            type: 'switch'
+            type: 'switch',
+            inputProps: { required: false }
         });
     });
 

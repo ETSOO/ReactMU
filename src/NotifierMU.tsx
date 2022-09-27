@@ -240,7 +240,7 @@ export class NotificationMU extends NotificationReact {
             fullWidth = true,
             maxWidth,
             primaryButton,
-            ...rest
+            inputProps
         } = this.inputProps ?? {};
 
         const inputRef = React.createRef<HTMLInputElement>();
@@ -322,7 +322,7 @@ export class NotificationMU extends NotificationReact {
                 localInputs = (
                     <Switch
                         inputRef={inputRef}
-                        {...rest}
+                        {...inputProps}
                         value="true"
                         autoFocus
                         required
@@ -340,7 +340,7 @@ export class NotificationMU extends NotificationReact {
                         fullWidth
                         type={type}
                         required
-                        {...rest}
+                        {...inputProps}
                     />
                 );
             }
