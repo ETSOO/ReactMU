@@ -78,7 +78,7 @@ export function SwitchAnt(props: SwitchAntProps) {
             </Typography>
             <Switch
                 checked={controlChecked}
-                ref={ref}
+                inputRef={ref}
                 value={value}
                 onChange={onChangeLocal}
                 {...rest}
