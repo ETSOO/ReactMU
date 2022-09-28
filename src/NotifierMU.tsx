@@ -58,16 +58,6 @@ const IconDialogTitle = styled(DialogTitle)`
  * MU notification
  */
 export class NotificationMU extends NotificationReact {
-    // On return
-    // Dismiss first, then run callback
-    private async returnValue(value: any) {
-        if (this.onReturn) {
-            const result = await this.onReturn(value);
-            if (result === false) return;
-        }
-        this.dismiss();
-    }
-
     // Create alert
     private createAlert(_props: NotificationRenderProps, className: string) {
         const labels = Labels.NotificationMU;
@@ -132,7 +122,7 @@ export class NotificationMU extends NotificationReact {
                 </DialogContent>
                 <DialogActions>
                     {buttons ? (
-                        buttons(callback)
+                        buttons(this, callback)
                     ) : (
                         <LoadingButton
                             {...setupProps}
@@ -190,7 +180,7 @@ export class NotificationMU extends NotificationReact {
                 </DialogContent>
                 <DialogActions>
                     {buttons ? (
-                        buttons(callback)
+                        buttons(this, callback)
                     ) : (
                         <React.Fragment>
                             {cancelButton && (
@@ -414,7 +404,7 @@ export class NotificationMU extends NotificationReact {
                     </DialogContent>
                     <DialogActions>
                         {buttons ? (
-                            buttons(handleSubmit)
+                            buttons(this, handleSubmit)
                         ) : (
                             <React.Fragment>
                                 {cancelButton && (
