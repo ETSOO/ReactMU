@@ -73,6 +73,7 @@ export class NotificationMU extends NotificationReact {
         const labels = Labels.NotificationMU;
 
         const {
+            buttons,
             inputs,
             fullScreen,
             fullWidth = true,
@@ -104,6 +105,13 @@ export class NotificationMU extends NotificationReact {
         // Setup callback
         if (this.renderSetup) this.renderSetup(setupProps);
 
+        // Callback
+        const callback = async (
+            _event: React.MouseEvent<HTMLButtonElement>
+        ) => {
+            await this.returnValue(undefined);
+        };
+
         return (
             <Dialog
                 key={this.id}
@@ -123,14 +131,18 @@ export class NotificationMU extends NotificationReact {
                     {inputs}
                 </DialogContent>
                 <DialogActions>
-                    <LoadingButton
-                        {...setupProps}
-                        onClick={async () => await this.returnValue(undefined)}
-                        autoFocus
-                        {...primaryButton}
-                    >
-                        {okLabel}
-                    </LoadingButton>
+                    {buttons ? (
+                        buttons(callback)
+                    ) : (
+                        <LoadingButton
+                            {...setupProps}
+                            onClick={callback}
+                            autoFocus
+                            {...primaryButton}
+                        >
+                            {okLabel}
+                        </LoadingButton>
+                    )}
                 </DialogActions>
             </Dialog>
         );
@@ -142,6 +154,7 @@ export class NotificationMU extends NotificationReact {
         const title = this.title ?? labels.confirmTitle;
 
         const {
+            buttons,
             okLabel = labels.confirmYes,
             cancelLabel = labels.confirmNo,
             cancelButton = true,
@@ -151,6 +164,11 @@ export class NotificationMU extends NotificationReact {
             maxWidth,
             primaryButton
         } = this.inputProps ?? {};
+
+        const callback = async (
+            _event: React.MouseEvent<HTMLButtonElement>,
+            value: boolean
+        ) => await this.returnValue(value);
 
         return (
             <Dialog
@@ -171,22 +189,32 @@ export class NotificationMU extends NotificationReact {
                     {inputs}
                 </DialogContent>
                 <DialogActions>
-                    {cancelButton && (
-                        <LoadingButton
-                            color="secondary"
-                            onClick={async () => await this.returnValue(false)}
-                        >
-                            {cancelLabel}
-                        </LoadingButton>
+                    {buttons ? (
+                        buttons(callback)
+                    ) : (
+                        <React.Fragment>
+                            {cancelButton && (
+                                <LoadingButton
+                                    color="secondary"
+                                    onClick={async (event) =>
+                                        await callback(event, false)
+                                    }
+                                >
+                                    {cancelLabel}
+                                </LoadingButton>
+                            )}
+                            <LoadingButton
+                                color="primary"
+                                onClick={async (event) =>
+                                    await callback(event, true)
+                                }
+                                autoFocus
+                                {...primaryButton}
+                            >
+                                {okLabel}
+                            </LoadingButton>
+                        </React.Fragment>
                     )}
-                    <LoadingButton
-                        color="primary"
-                        onClick={async () => await this.returnValue(true)}
-                        autoFocus
-                        {...primaryButton}
-                    >
-                        {okLabel}
-                    </LoadingButton>
                 </DialogActions>
             </Dialog>
         );
@@ -231,6 +259,7 @@ export class NotificationMU extends NotificationReact {
         const title = this.title ?? labels.promptTitle;
 
         const {
+            buttons,
             cancelLabel = labels.promptCancel,
             okLabel = labels.promptOK,
             cancelButton = true,
@@ -384,26 +413,33 @@ export class NotificationMU extends NotificationReact {
                         />
                     </DialogContent>
                     <DialogActions>
-                        {cancelButton && (
-                            <Button
-                                color="secondary"
-                                onClick={() => {
-                                    if (this.onReturn) this.onReturn(undefined);
-                                    this.dismiss();
-                                }}
-                            >
-                                {cancelLabel}
-                            </Button>
+                        {buttons ? (
+                            buttons(handleSubmit)
+                        ) : (
+                            <React.Fragment>
+                                {cancelButton && (
+                                    <Button
+                                        color="secondary"
+                                        onClick={() => {
+                                            if (this.onReturn)
+                                                this.onReturn(undefined);
+                                            this.dismiss();
+                                        }}
+                                    >
+                                        {cancelLabel}
+                                    </Button>
+                                )}
+                                <LoadingButton
+                                    color="primary"
+                                    autoFocus
+                                    onClick={handleSubmit}
+                                    name="okButton"
+                                    {...primaryButton}
+                                >
+                                    {okLabel}
+                                </LoadingButton>
+                            </React.Fragment>
                         )}
-                        <LoadingButton
-                            color="primary"
-                            autoFocus
-                            onClick={handleSubmit}
-                            name="okButton"
-                            {...primaryButton}
-                        >
-                            {okLabel}
-                        </LoadingButton>
                     </DialogActions>
                 </form>
             </Dialog>
