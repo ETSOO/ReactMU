@@ -7,7 +7,7 @@ import React from 'react';
  */
 export interface SwitchAntProps extends SwitchProps {
     /**
-     *
+     * Active color
      */
     activeColor?: string;
 
@@ -46,6 +46,9 @@ export function SwitchAnt(props: SwitchAntProps) {
         checked ?? defaultChecked ?? defaultValue == value
     );
 
+    // Ref
+    const ref = React.useRef<HTMLButtonElement>(null);
+
     React.useEffect(() => {
         if (checked) setControlChecked(checked);
     }, [checked]);
@@ -63,7 +66,7 @@ export function SwitchAnt(props: SwitchAntProps) {
     return (
         <Stack direction="row" spacing={1} alignItems="center">
             <Typography
-                onClick={() => setControlChecked(false)}
+                onClick={() => controlChecked && ref.current?.click()}
                 sx={{
                     cursor: 'pointer',
                     color: controlChecked
@@ -75,12 +78,13 @@ export function SwitchAnt(props: SwitchAntProps) {
             </Typography>
             <Switch
                 checked={controlChecked}
+                ref={ref}
                 value={value}
                 onChange={onChangeLocal}
                 {...rest}
             />
             <Typography
-                onClick={() => setControlChecked(true)}
+                onClick={() => !controlChecked && ref.current?.click()}
                 sx={{
                     cursor: 'pointer',
                     color: controlChecked
