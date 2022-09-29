@@ -100,6 +100,7 @@ export class NotificationMU extends NotificationReact {
             _event: React.MouseEvent<HTMLButtonElement>
         ) => {
             await this.returnValue(undefined);
+            return true;
         };
 
         return (
@@ -158,7 +159,10 @@ export class NotificationMU extends NotificationReact {
         const callback = async (
             _event: React.MouseEvent<HTMLButtonElement>,
             value: boolean
-        ) => await this.returnValue(value);
+        ) => {
+            await this.returnValue(value);
+            return true;
+        };
 
         return (
             <Dialog
@@ -291,14 +295,14 @@ export class NotificationMU extends NotificationReact {
                         const dateValue = input.valueAsDate;
                         if (dateValue == null && input.required) {
                             input.focus();
-                            return;
+                            return false;
                         }
                         result = this.onReturn(dateValue);
                     } else if (type === 'number') {
                         const numberValue = input.valueAsNumber;
                         if (isNaN(numberValue) && input.required) {
                             input.focus();
-                            return;
+                            return false;
                         }
                         result = this.onReturn(numberValue);
                     } else if (type === 'switch') {
@@ -308,7 +312,7 @@ export class NotificationMU extends NotificationReact {
                         const textValue = input.value.trim();
                         if (textValue === '' && input.required) {
                             input.focus();
-                            return;
+                            return false;
                         }
                         result = this.onReturn(textValue);
                     }
@@ -322,15 +326,16 @@ export class NotificationMU extends NotificationReact {
             const v = await result;
             if (v === false) {
                 input?.focus();
-                return;
+                return false;
             }
             if (typeof v === 'string') {
                 setError(v);
                 input?.focus();
-                return;
+                return false;
             }
 
             this.dismiss();
+            return true;
         };
 
         let localInputs: React.ReactNode;
