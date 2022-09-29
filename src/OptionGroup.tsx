@@ -18,6 +18,17 @@ import {
 import React from 'react';
 
 /**
+ * OptionGroup methods ref
+ */
+export interface OptionGroupRef {
+    /**
+     * Disable specific items with their ids
+     * @param ids Ids
+     */
+    disable(ids: unknown[]): void;
+}
+
+/**
  * OptionGroup props
  */
 export type OptionGroupProps<
@@ -49,6 +60,11 @@ export type OptionGroupProps<
      * Label field
      */
     labelField?: L;
+
+    /**
+     * Methods
+     */
+    mRef?: React.Ref<OptionGroupRef>;
 
     /**
      * Multiple choose item
@@ -99,6 +115,7 @@ export function OptionGroup<
         label,
         labelField = 'label' as L,
         multiple = false,
+        mRef,
         name,
         onValueChange,
         options,
@@ -125,6 +142,9 @@ export function OptionGroup<
             : [defaultValue]
     );
 
+    // Disabled ids
+    const [disabledIds, setDisabledIds] = React.useState<unknown[]>();
+
     // Item checked
     const itemChecked = (option: T) => {
         // Value
@@ -134,11 +154,20 @@ export function OptionGroup<
         return values.includes(value);
     };
 
+    React.useImperativeHandle(mRef, () => ({
+        disable(ids: unknown[]) {
+            setDisabledIds(ids);
+        }
+    }));
+
     // First item value
     const firstOptionValue = getOptionValue(options[0]);
 
     // Items
     const list = options.map((option) => {
+        // Value
+        const ov = getOptionValue(option);
+
         // Control
         const control = multiple ? (
             <Checkbox
@@ -146,6 +175,7 @@ export function OptionGroup<
                 readOnly={readOnly}
                 size={size}
                 checked={itemChecked(option)}
+                disabled={disabledIds?.includes(ov)}
                 onChange={(event) => {
                     if (firstOptionValue == null) return;
 
@@ -171,7 +201,11 @@ export function OptionGroup<
                 }}
             />
         ) : (
-            <Radio size={size} readOnly={readOnly} />
+            <Radio
+                disabled={disabledIds?.includes(ov)}
+                size={size}
+                readOnly={readOnly}
+            />
         );
 
         // Label
