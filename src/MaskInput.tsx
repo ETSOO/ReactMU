@@ -80,7 +80,7 @@ export function MaskInput<
     const localValue = defaultValue ?? value;
 
     // Shrink
-    InputLabelProps.shrink = search
+    InputLabelProps.shrink ??= search
         ? MUGlobal.searchFieldShrink
         : MUGlobal.inputFieldShrink;
 

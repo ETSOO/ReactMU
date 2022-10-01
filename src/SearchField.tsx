@@ -37,7 +37,7 @@ export function SearchField(props: SearchFieldProps) {
     } = props;
 
     // Shrink
-    InputLabelProps.shrink = MUGlobal.searchFieldShrink;
+    InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
 
     // Read only
     if (readOnly != null) InputProps.readOnly = readOnly;
