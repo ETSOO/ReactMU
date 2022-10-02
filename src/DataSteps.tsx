@@ -184,6 +184,7 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
             InputProps={{
                 onKeyDown: cancelInput,
                 onPaste: cancelInput,
+                sx: { cursor: 'pointer' },
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton edge="end" size="small">
@@ -192,7 +193,6 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
                     </InputAdornment>
                 )
             }}
-            sx={{ cursor: 'pointer' }}
             onClick={() => showStep(0)}
             value={localValue}
             {...rest}
