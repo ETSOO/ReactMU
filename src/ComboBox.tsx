@@ -104,7 +104,7 @@ export function ComboBox<
     const propertyWay = loadData == null;
     React.useEffect(() => {
         if (propertyWay && options != null) setOptions(options);
-    }, [JSON.stringify(options), propertyWay]);
+    }, [options, propertyWay]);
 
     // Local default value
     let localValue =
@@ -168,19 +168,17 @@ export function ComboBox<
         }
     };
 
-    // When value change
     React.useEffect(() => {
-        if (loadData) {
-            loadData().then((result) => {
-                if (result == null || !isMounted.current) return;
-                if (onLoadData) onLoadData(result);
-                if (autoAddBlankItem) {
-                    SharedUtils.addBlankItem(result, idField, labelField);
-                }
-                setOptions(result);
-            });
-        }
-    }, [localValue]);
+        if (propertyWay || loadData == null) return;
+        loadData().then((result) => {
+            if (result == null || !isMounted.current) return;
+            if (onLoadData) onLoadData(result);
+            if (autoAddBlankItem) {
+                SharedUtils.addBlankItem(result, idField, labelField);
+            }
+            setOptions(result);
+        });
+    }, [propertyWay]);
 
     React.useEffect(() => {
         return () => {
