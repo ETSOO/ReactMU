@@ -23,6 +23,7 @@ import {
     ListType,
     Utils
 } from '@etsoo/shared';
+import { ReactUtils } from '@etsoo/react';
 
 /**
  * Extended select component props
@@ -183,7 +184,12 @@ export function SelectEx<
     }
 
     // Value state
-    const [valueState, setValueState] = React.useState<unknown>();
+    const [valueState, setValueStateBase] = React.useState<unknown>();
+    const valueRef = React.useRef<unknown>();
+    const setValueState = (newValue: unknown) => {
+        valueRef.current = newValue;
+        setValueStateBase(newValue);
+    };
 
     React.useEffect(() => {
         if (localValue != null) setValueState(localValue);
@@ -201,23 +207,23 @@ export function SelectEx<
     // Change handler
     const handleChange = (event: SelectChangeEvent<unknown>) => {
         const value = event.target.value;
-        if (multiple && !Array.isArray(value)) setItemValue([value]);
-        else setItemValue(value);
+        if (multiple && !Array.isArray(value)) return setItemValue([value]);
+        else return setItemValue(value);
     };
 
     // Set item
     const setItemValue = (id: unknown) => {
-        if (id != valueState) {
+        if (id != valueRef.current) {
             setValueState(id);
 
-            /*
             const input = divRef.current?.querySelector('input');
             if (input) {
                 // Different value, trigger change event
                 ReactUtils.triggerChange(input, id as string, false);
             }
-            */
+            return true;
         }
+        return false;
     };
 
     // Get option id
@@ -314,8 +320,14 @@ export function SelectEx<
                             // event.preventDefault() will block executing
                             if (event.defaultPrevented) return;
                         }
-                        doItemChange(localOptions, event.target.value, true);
-                        handleChange(event);
+
+                        if (handleChange(event)) {
+                            doItemChange(
+                                localOptions,
+                                event.target.value,
+                                true
+                            );
+                        }
                     }}
                     renderValue={(selected) => {
                         // The text shows up
