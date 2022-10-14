@@ -38,9 +38,14 @@ import {
 import { NavigateFunction, NavigateOptions } from 'react-router-dom';
 
 /**
+ * React Application Type
+ */
+export type ReactAppType = IApp & IReactAppBase;
+
+/**
  * Global application
  */
-export let globalApp: IApp & IReactAppBase;
+export let globalApp: ReactAppType;
 
 /**
  * React app state detector
@@ -192,14 +197,6 @@ export class ReactApp<
         return this._notifierProvider;
     }
 
-    private static createApi(settings: IAppSettings) {
-        // API
-        // Support to replace {hostname} with current hostname
-        const api = createClient();
-        api.baseUrl = settings.endpoint;
-        return api;
-    }
-
     private static createNotifier() {
         // Notifier
         ReactApp._notifierProvider = NotifierMU.setup();
@@ -255,7 +252,7 @@ export class ReactApp<
     constructor(settings: S, name: string) {
         super(
             settings,
-            ReactApp.createApi(settings),
+            createClient(),
             ReactApp.createNotifier(),
             new WindowStorage(),
             name
