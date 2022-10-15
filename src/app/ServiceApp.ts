@@ -62,9 +62,11 @@ export class ServiceApp<
 
         // Service API
         const api = createClient();
+        this.setApi(api);
+
+        // Fix the baseUrl done by setupApi (Default is the settings.endpoint)
         api.baseUrl = settings.serviceEndpoint;
 
-        this.setApi(api);
         this.serviceApi = api;
     }
 
