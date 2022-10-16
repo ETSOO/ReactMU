@@ -4,9 +4,10 @@ import {
     IAppSettings,
     IUser,
     RefreshTokenProps,
-    RefreshTokenResult
+    RefreshTokenResult,
+    RefreshTokenRQ
 } from '@etsoo/appscript';
-import { CoreConstants, IPageData, RefreshTokenRQ } from '@etsoo/react';
+import { CoreConstants, IPageData } from '@etsoo/react';
 import { ReactApp } from './ReactApp';
 
 /**

@@ -5,9 +5,10 @@ import {
     IApi,
     IApiPayload,
     RefreshTokenProps,
-    RefreshTokenResult
+    RefreshTokenResult,
+    RefreshTokenRQ
 } from '@etsoo/appscript';
-import { CoreConstants, RefreshTokenRQ } from '@etsoo/react';
+import { CoreConstants } from '@etsoo/react';
 import { DomUtils } from '@etsoo/shared';
 import { IServiceAppSettings } from './IServiceAppSettings';
 import { IServicePageData } from './IServicePage';
