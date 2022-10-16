@@ -1,4 +1,5 @@
 export * from './app/CommonApp';
+export * from './app/IServiceApp';
 export * from './app/IServiceAppSettings';
 export * from './app/IServicePage';
 export * from './app/IServiceUser';

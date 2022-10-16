@@ -10,6 +10,7 @@ import {
 } from '@etsoo/appscript';
 import { CoreConstants } from '@etsoo/react';
 import { DomUtils } from '@etsoo/shared';
+import { IServiceApp } from './IServiceApp';
 import { IServiceAppSettings } from './IServiceAppSettings';
 import { IServicePageData } from './IServicePage';
 import { IServiceUser, ServiceLoginResult } from './IServiceUser';
@@ -23,10 +24,13 @@ import { ReactApp } from './ReactApp';
  * Use the new acess token and refresh token to login
  */
 export class ServiceApp<
-    U extends IServiceUser = IServiceUser,
-    P extends IServicePageData = IServicePageData,
-    S extends IServiceAppSettings = IServiceAppSettings
-> extends ReactApp<S, ISmartERPUser, P> {
+        U extends IServiceUser = IServiceUser,
+        P extends IServicePageData = IServicePageData,
+        S extends IServiceAppSettings = IServiceAppSettings
+    >
+    extends ReactApp<S, ISmartERPUser, P>
+    implements IServiceApp
+{
     /**
      * Service API
      */
@@ -330,11 +334,7 @@ export class ServiceApp<
      * @param refreshToken Refresh token
      * @param serviceUser Service user
      */
-    userLoginEx(
-        user: ISmartERPUser,
-        refreshToken: string,
-        serviceUser: U
-    ): void {
+    userLoginEx(user: ISmartERPUser, refreshToken: string, serviceUser: U) {
         // Service user login
         this.servicePassphrase =
             this.decrypt(
