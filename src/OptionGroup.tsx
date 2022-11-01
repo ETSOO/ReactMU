@@ -95,6 +95,11 @@ export type OptionGroupProps<
      * Display group of elements in a compact row
      */
     row?: boolean;
+
+    /**
+     * Item size
+     */
+    itemSize?: 'small' | 'medium';
 };
 
 /**
@@ -121,7 +126,7 @@ export function OptionGroup<
         options,
         readOnly,
         row,
-        size,
+        itemSize,
         ...rest
     } = props;
 
@@ -173,7 +178,7 @@ export function OptionGroup<
             <Checkbox
                 name={name}
                 readOnly={readOnly}
-                size={size}
+                size={itemSize}
                 checked={itemChecked(option)}
                 disabled={disabledIds?.includes(ov)}
                 onChange={(event) => {
@@ -203,7 +208,7 @@ export function OptionGroup<
         ) : (
             <Radio
                 disabled={disabledIds?.includes(ov)}
-                size={size}
+                size={itemSize}
                 readOnly={readOnly}
             />
         );

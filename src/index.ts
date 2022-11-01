@@ -47,6 +47,7 @@ export * from './HiSelector';
 export * from './IconButtonLink';
 export * from './InputField';
 export * from './ItemList';
+export * from './ListChooser';
 export * from './ListItemRightIcon';
 export * from './ListMoreDisplay';
 export * from './LoadingButton';
