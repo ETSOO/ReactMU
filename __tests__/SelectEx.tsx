@@ -86,15 +86,22 @@ it('Render multiple SelectEx', async () => {
     fireEvent.mouseDown(button); // Not click
 
     // Get list item
+    const itemName1 = await findByText(baseElement, 'Name 1');
+    const checkbox1 = itemName1.closest('li')?.querySelector('input');
+
+    expect(checkbox1?.checked).toBeTruthy();
+
     const itemName3 = await findByText(baseElement, 'Name 3');
     expect(itemName3.nodeName).toBe('SPAN');
 
     // Checkbox
-    const checkbox = itemName3.closest('li')?.querySelector('input');
+    const checkbox3 = itemName3.closest('li')?.querySelector('input');
 
     act(() => {
-        checkbox?.click();
+        checkbox3?.click();
     });
+
+    expect(checkbox3?.checked).toBeTruthy();
 
     expect(itemChangeCallback).toBeCalledTimes(2);
 });

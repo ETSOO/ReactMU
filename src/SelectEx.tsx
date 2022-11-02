@@ -8,7 +8,6 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
-    SelectChangeEvent,
     SelectProps,
     Stack
 } from '@mui/material';
@@ -202,12 +201,6 @@ export function SelectEx<
     // Label id
     const labelId = `selectex-label-${name}`;
 
-    // Item checked or not
-    const itemChecked = (id: unknown) => {
-        if (Array.isArray(valueState)) return valueState.indexOf(id) !== -1;
-        return valueState === id;
-    };
-
     // Set item
     const setItemValue = (id: unknown) => {
         if (id != valueRef.current) {
@@ -376,7 +369,13 @@ export function SelectEx<
                                 }
                             >
                                 {multiple && (
-                                    <Checkbox checked={itemChecked(id)} />
+                                    <Checkbox
+                                        checked={
+                                            Array.isArray(valueState)
+                                                ? valueState.includes(id)
+                                                : valueState === id
+                                        }
+                                    />
                                 )}
                                 <ListItemText primary={label} />
                                 {itemIconRenderer && (
