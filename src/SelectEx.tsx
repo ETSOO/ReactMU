@@ -143,7 +143,7 @@ export function SelectEx<
 
     // Options state
     const [localOptions, setOptions] = React.useState<readonly T[]>([]);
-    const isMounted = React.useRef(true);
+    const isMounted = React.useRef(false);
 
     const doItemChange = (
         options: readonly T[],
@@ -151,18 +151,21 @@ export function SelectEx<
         userAction: boolean
     ) => {
         if (onItemChange == null) return;
-        if (value == null || value === '') {
-            onItemChange(undefined, userAction);
-            return;
+
+        let option: T | undefined;
+        if (multiple && Array.isArray(value)) {
+            option = options.find((option) => value.includes(option[idField]));
+        } else if (value == null || value === '') {
+            option = undefined;
+        } else {
+            option = options.find((option) => option[idField] === value);
         }
-        const option = options.find((option) => option[idField] === value);
         onItemChange(option, userAction);
     };
 
     const setOptionsAdd = (options: readonly T[]) => {
         setOptions(options);
-        if (localValue != null && localValue !== '')
-            doItemChange(options, localValue, false);
+        if (valueSource != null) doItemChange(options, valueSource, false);
     };
 
     // When options change
@@ -174,17 +177,18 @@ export function SelectEx<
     }, [options, propertyWay]);
 
     // Local value
-    const valueSource = defaultValue ?? value ?? '';
-    let localValue: unknown | unknown[];
-    if (multiple) {
-        if (Array.isArray(valueSource)) localValue = valueSource;
-        else localValue = [valueSource];
-    } else {
-        localValue = valueSource;
-    }
+    const v = defaultValue ?? value;
+    const valueSource = multiple
+        ? v
+            ? Array.isArray(v)
+                ? v
+                : [v]
+            : []
+        : v ?? '';
 
     // Value state
-    const [valueState, setValueStateBase] = React.useState<unknown>();
+    const [valueState, setValueStateBase] =
+        React.useState<unknown>(valueSource);
     const valueRef = React.useRef<unknown>();
     const setValueState = (newValue: unknown) => {
         valueRef.current = newValue;
@@ -192,8 +196,8 @@ export function SelectEx<
     };
 
     React.useEffect(() => {
-        if (localValue != null) setValueState(localValue);
-    }, [localValue]);
+        if (valueSource != null) setValueState(valueSource);
+    }, [valueSource]);
 
     // Label id
     const labelId = `selectex-label-${name}`;
@@ -204,16 +208,17 @@ export function SelectEx<
         return valueState === id;
     };
 
-    // Change handler
-    const handleChange = (event: SelectChangeEvent<unknown>) => {
-        const value = event.target.value;
-        if (multiple && !Array.isArray(value)) return setItemValue([value]);
-        else return setItemValue(value);
-    };
-
     // Set item
     const setItemValue = (id: unknown) => {
         if (id != valueRef.current) {
+            // Difference
+            const diff = multiple
+                ? Utils.arrayDifferences(
+                      id as T[D][],
+                      valueRef.current as T[D][]
+                  )
+                : id;
+
             setValueState(id);
 
             const input = divRef.current?.querySelector('input');
@@ -221,9 +226,9 @@ export function SelectEx<
                 // Different value, trigger change event
                 ReactUtils.triggerChange(input, id as string, false);
             }
-            return true;
+            return diff;
         }
-        return false;
+        return undefined;
     };
 
     // Get option id
@@ -257,7 +262,7 @@ export function SelectEx<
     // When value change
     React.useEffect(() => {
         refreshData();
-    }, [localValue]);
+    }, [valueSource]);
 
     // When layout ready
     React.useEffect(() => {
@@ -267,6 +272,8 @@ export function SelectEx<
             if (event.cancelable) setValueState(multiple ? [] : '');
         };
         input?.addEventListener('change', inputChange);
+
+        isMounted.current = true;
 
         return () => {
             isMounted.current = false;
@@ -297,10 +304,12 @@ export function SelectEx<
                 <Select
                     ref={divRef}
                     value={
-                        localOptions.some((option) =>
-                            itemChecked(getId(option))
-                        )
-                            ? valueState ?? ''
+                        multiple
+                            ? valueState
+                            : localOptions.some(
+                                  (o) => o[idField] === valueState
+                              )
+                            ? valueState
                             : ''
                     }
                     input={
@@ -321,12 +330,10 @@ export function SelectEx<
                             if (event.defaultPrevented) return;
                         }
 
-                        if (handleChange(event)) {
-                            doItemChange(
-                                localOptions,
-                                event.target.value,
-                                true
-                            );
+                        // Set item value
+                        const diff = setItemValue(event.target.value);
+                        if (diff != null) {
+                            doItemChange(localOptions, diff, true);
                         }
                     }}
                     renderValue={(selected) => {

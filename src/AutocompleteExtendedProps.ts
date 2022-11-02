@@ -10,7 +10,7 @@ export type AutocompleteExtendedProps<
     D extends DataTypes.Keys<T>
 > = Omit<
     AutocompleteProps<T, undefined, false, false>,
-    'renderInput' | 'options'
+    'renderInput' | 'options' | 'multiple'
 > & {
     /**
      * Id field

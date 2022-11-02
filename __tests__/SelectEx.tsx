@@ -51,3 +51,50 @@ it('Render SelectEx', async () => {
 
     expect(itemChangeCallback).toBeCalledTimes(2);
 });
+
+it('Render multiple SelectEx', async () => {
+    // Arrange
+    type T = { id: number; name: string };
+    const options: T[] = [
+        { id: 1, name: 'Name 1' },
+        { id: 2, name: 'Name 2' },
+        { id: 3, name: 'Name 3' }
+    ];
+
+    const itemChangeCallback = jest.fn((option, userAction) => {
+        if (userAction) expect(option.id).toBe(3);
+        else expect(option.id).toBe(1);
+    });
+
+    // Render component
+    const { baseElement } = render(
+        <SelectEx<T>
+            options={options}
+            name="test"
+            onItemChange={itemChangeCallback}
+            value={[1, 2]}
+            multiple
+            search
+            labelField="name"
+        />
+    );
+
+    expect(itemChangeCallback).toBeCalled();
+
+    // Act, click to show the list
+    const button = screen.getByRole('button');
+    fireEvent.mouseDown(button); // Not click
+
+    // Get list item
+    const itemName3 = await findByText(baseElement, 'Name 3');
+    expect(itemName3.nodeName).toBe('SPAN');
+
+    // Checkbox
+    const checkbox = itemName3.closest('li')?.querySelector('input');
+
+    act(() => {
+        checkbox?.click();
+    });
+
+    expect(itemChangeCallback).toBeCalledTimes(2);
+});
