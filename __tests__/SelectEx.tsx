@@ -2,7 +2,7 @@ import React from 'react';
 import { SelectEx } from '../src';
 import { findByText, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { Utils } from '@etsoo/shared';
+import { ListType1, Utils } from '@etsoo/shared';
 import { act } from 'react-dom/test-utils';
 
 it('Render SelectEx', async () => {
@@ -54,16 +54,16 @@ it('Render SelectEx', async () => {
 
 it('Render multiple SelectEx', async () => {
     // Arrange
-    type T = { id: number; name: string };
+    type T = ListType1;
     const options: T[] = [
-        { id: 1, name: 'Name 1' },
-        { id: 2, name: 'Name 2' },
-        { id: 3, name: 'Name 3' }
+        { id: '1', label: 'Name 1' },
+        { id: '2', label: 'Name 2' },
+        { id: '3', label: 'Name 3' }
     ];
 
     const itemChangeCallback = jest.fn((option, userAction) => {
-        if (userAction) expect(option.id).toBe(3);
-        else expect(option.id).toBe(1);
+        if (userAction) expect(option.id).toBe('3');
+        else expect(option.id).toBe('1');
     });
 
     // Render component
@@ -72,10 +72,8 @@ it('Render multiple SelectEx', async () => {
             options={options}
             name="test"
             onItemChange={itemChangeCallback}
-            value={[1, 2]}
+            value={['1', '2']}
             multiple
-            search
-            labelField="name"
         />
     );
 

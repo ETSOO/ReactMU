@@ -177,13 +177,10 @@ export function SelectEx<
 
     // Local value
     const v = defaultValue ?? value;
-    const valueSource = multiple
-        ? v
-            ? Array.isArray(v)
-                ? v
-                : [v]
-            : []
-        : v ?? '';
+    const valueSource = React.useMemo(
+        () => (multiple ? (v ? (Array.isArray(v) ? v : [v]) : []) : v ?? ''),
+        [multiple, v]
+    );
 
     // Value state
     const [valueState, setValueStateBase] =
@@ -203,7 +200,7 @@ export function SelectEx<
 
     // Set item
     const setItemValue = (id: unknown) => {
-        if (id != valueRef.current) {
+        if (id !== valueRef.current) {
             // Difference
             const diff = multiple
                 ? Utils.arrayDifferences(
@@ -272,7 +269,7 @@ export function SelectEx<
             isMounted.current = false;
             input?.removeEventListener('change', inputChange);
         };
-    }, []);
+    }, [multiple]);
 
     // Layout
     return (
@@ -324,7 +321,10 @@ export function SelectEx<
                         }
 
                         // Set item value
-                        const diff = setItemValue(event.target.value);
+                        const value = event.target.value;
+                        if (multiple && !Array.isArray(value)) return;
+
+                        const diff = setItemValue(value);
                         if (diff != null) {
                             doItemChange(localOptions, diff, true);
                         }
