@@ -23,60 +23,63 @@ export type InputFieldProps = TextFieldProps & {
  * @param props Props
  * @returns Component
  */
-export function InputField(props: InputFieldProps) {
-    // Destruct
-    const {
-        changeDelay,
-        InputLabelProps = {},
-        InputProps = {},
-        onChange,
-        readOnly,
-        size = MUGlobal.inputFieldSize,
-        variant = MUGlobal.inputFieldVariant,
-        ...rest
-    } = props;
+export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
+    (props, ref) => {
+        // Destruct
+        const {
+            changeDelay,
+            InputLabelProps = {},
+            InputProps = {},
+            onChange,
+            readOnly,
+            size = MUGlobal.inputFieldSize,
+            variant = MUGlobal.inputFieldVariant,
+            ...rest
+        } = props;
 
-    // Shrink
-    InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
+        // Shrink
+        InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
 
-    // Read only
-    if (readOnly != null) InputProps.readOnly = readOnly;
+        // Read only
+        if (readOnly != null) InputProps.readOnly = readOnly;
 
-    const isMounted = React.useRef(true);
-    const delayed =
-        onChange != null && changeDelay != null && changeDelay >= 1
-            ? useDelayedExecutor(onChange, changeDelay)
-            : undefined;
+        const isMounted = React.useRef(true);
+        const delayed =
+            onChange != null && changeDelay != null && changeDelay >= 1
+                ? useDelayedExecutor(onChange, changeDelay)
+                : undefined;
 
-    const onChangeEx = (
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        if (onChange == null) return;
+        const onChangeEx = (
+            event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => {
+            if (onChange == null) return;
 
-        if (changeDelay == null || changeDelay < 1) {
-            onChange(event);
-            return;
-        }
+            if (changeDelay == null || changeDelay < 1) {
+                onChange(event);
+                return;
+            }
 
-        delayed?.call(undefined, event);
-    };
-
-    React.useEffect(() => {
-        return () => {
-            isMounted.current = false;
-            delayed?.clear();
+            delayed?.call(undefined, event);
         };
-    }, []);
 
-    // Layout
-    return (
-        <TextField
-            InputLabelProps={InputLabelProps}
-            InputProps={InputProps}
-            onChange={onChangeEx}
-            size={size}
-            variant={variant}
-            {...rest}
-        />
-    );
-}
+        React.useEffect(() => {
+            return () => {
+                isMounted.current = false;
+                delayed?.clear();
+            };
+        }, []);
+
+        // Layout
+        return (
+            <TextField
+                ref={ref}
+                InputLabelProps={InputLabelProps}
+                InputProps={InputProps}
+                onChange={onChangeEx}
+                size={size}
+                variant={variant}
+                {...rest}
+            />
+        );
+    }
+);

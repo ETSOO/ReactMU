@@ -6,15 +6,19 @@ import {
     Utils
 } from '@etsoo/shared';
 import {
+    Box,
     Checkbox,
     FormControl,
     FormControlLabel,
     FormControlProps,
     FormGroup,
-    FormLabel,
+    FormHelperText,
+    InputLabel,
     Radio,
-    RadioGroup
+    RadioGroup,
+    useTheme
 } from '@mui/material';
+import NotchedOutline from '@mui/material/OutlinedInput/NotchedOutline';
 import React from 'react';
 
 /**
@@ -100,6 +104,11 @@ export type OptionGroupProps<
      * Item size
      */
     itemSize?: 'small' | 'medium';
+
+    /**
+     * Helper text
+     */
+    helperText?: React.ReactNode;
 };
 
 /**
@@ -127,8 +136,14 @@ export function OptionGroup<
         readOnly,
         row,
         itemSize,
+        helperText,
+        variant,
+        required,
         ...rest
     } = props;
+
+    // Theme
+    const theme = useTheme();
 
     // Get option value
     // D type should be the source id type
@@ -254,9 +269,25 @@ export function OptionGroup<
 
     // Layout
     return (
-        <FormControl component="fieldset" {...rest}>
-            {label && <FormLabel component="legend">{label}</FormLabel>}
-            {group}
-        </FormControl>
+        <React.Fragment>
+            <FormControl component="fieldset" {...rest}>
+                {label && (
+                    <InputLabel required={required} variant={variant} shrink>
+                        {label}
+                    </InputLabel>
+                )}
+                <Box paddingLeft={2} paddingY="7px">
+                    {group}
+                </Box>
+                {variant === 'outlined' && (
+                    <NotchedOutline
+                        label={label && required ? label + ' *' : label}
+                        notched
+                        style={{ borderRadius: theme.shape.borderRadius }}
+                    />
+                )}
+            </FormControl>
+            {helperText && <FormHelperText>{helperText}</FormHelperText>}
+        </React.Fragment>
     );
 }
