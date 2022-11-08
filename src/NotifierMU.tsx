@@ -4,7 +4,7 @@ import {
     NotificationRenderProps,
     NotificationType
 } from '@etsoo/notificationbase';
-import { DataTypes } from '@etsoo/shared';
+import { DataTypes, DomUtils } from '@etsoo/shared';
 import {
     Alert,
     AlertColor,
@@ -291,30 +291,19 @@ export class NotificationMU extends NotificationReact {
                 if (inputs && value == null) value = event.currentTarget.form;
 
                 if (input) {
-                    if (type === 'date') {
-                        const dateValue = input.valueAsDate;
-                        if (dateValue == null && input.required) {
-                            input.focus();
-                            return false;
-                        }
-                        result = this.onReturn(dateValue);
-                    } else if (type === 'number') {
-                        const numberValue = input.valueAsNumber;
-                        if (isNaN(numberValue) && input.required) {
-                            input.focus();
-                            return false;
-                        }
-                        result = this.onReturn(numberValue);
-                    } else if (type === 'switch') {
+                    if (type === 'switch') {
                         const boolValue = input.value === 'true';
                         result = this.onReturn(boolValue);
                     } else {
-                        const textValue = input.value.trim();
-                        if (textValue === '' && input.required) {
+                        const inputValue = DomUtils.getInputValue(input);
+                        if (
+                            (inputValue == null || inputValue === '') &&
+                            input.required
+                        ) {
                             input.focus();
                             return false;
                         }
-                        result = this.onReturn(textValue);
+                        result = this.onReturn(inputValue);
                     }
                 } else if (value != null) {
                     result = this.onReturn(value);

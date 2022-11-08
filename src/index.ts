@@ -75,6 +75,7 @@ export * from './TabBox';
 export * from './TableEx';
 export * from './TextFieldEx';
 export * from './Tiplist';
+export * from './TwoFieldInput';
 export * from './TooltipClick';
 export * from './UserAvatar';
 export * from './UserAvatarEditor';
