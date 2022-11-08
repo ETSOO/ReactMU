@@ -280,10 +280,11 @@ export class ReactApp<
      * @param callback Callback
      */
     override alertResult(
-        result: IActionResult,
+        result: IActionResult | string,
         callback?: NotificationReturn<void>
     ) {
-        const message = this.formatResult(result);
+        const message =
+            typeof result === 'string' ? result : this.formatResult(result);
         if (message.endsWith(')')) {
             const startPos = message.lastIndexOf('(');
             if (startPos > 0) {
@@ -305,7 +306,7 @@ export class ReactApp<
                 return;
             }
         }
-        this.notifier.alert(message, callback);
+        super.alertResult(message, callback);
     }
 
     /**
