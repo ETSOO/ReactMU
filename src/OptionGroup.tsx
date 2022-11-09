@@ -157,12 +157,15 @@ export function OptionGroup<
     const [values, setValues] = React.useState<T[D][]>([]);
 
     // Values
-    const dv =
-        defaultValue == null
-            ? []
-            : Array.isArray(defaultValue)
-            ? defaultValue
-            : [defaultValue];
+    const dv = React.useMemo(
+        () =>
+            defaultValue == null
+                ? []
+                : Array.isArray(defaultValue)
+                ? defaultValue
+                : [defaultValue],
+        [defaultValue]
+    );
 
     React.useEffect(() => {
         setValues(dv);
@@ -261,7 +264,7 @@ export function OptionGroup<
         <RadioGroup
             row={row}
             name={name}
-            value={values[0]}
+            value={values[0] ?? ''}
             onChange={(_event, value) => {
                 if (firstOptionValue == null) return;
                 const typeValue = Utils.parseString(value, firstOptionValue);
