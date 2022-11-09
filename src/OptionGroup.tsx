@@ -154,13 +154,19 @@ export function OptionGroup<
     };
 
     // Checkbox values
-    const [values, setValues] = React.useState(
+    const [values, setValues] = React.useState<T[D][]>([]);
+
+    // Values
+    const dv =
         defaultValue == null
             ? []
             : Array.isArray(defaultValue)
             ? defaultValue
-            : [defaultValue]
-    );
+            : [defaultValue];
+
+    React.useEffect(() => {
+        setValues(dv);
+    }, [dv]);
 
     // Disabled ids
     const [disabledIds, setDisabledIds] = React.useState<unknown[]>();
