@@ -88,6 +88,10 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
         return v;
     };
 
+    React.useEffect(() => {
+        valueRef.current = localValues;
+    }, [localValues]);
+
     // Layout
     return (
         <InputField
