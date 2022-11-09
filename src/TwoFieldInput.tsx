@@ -2,7 +2,7 @@ import { Input, InputAdornment } from '@mui/material';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { useDimensions } from '@etsoo/react';
 import React from 'react';
-import { DomUtils } from '@etsoo/shared';
+import { DateUtils, DomUtils } from '@etsoo/shared';
 import { InputField, InputFieldProps } from './InputField';
 
 type ValueType = string | number | Date | null | undefined;
@@ -80,12 +80,20 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
         if (onChange) onChange(event);
     };
 
+    const formatValue = (v: ValueType, type?: string) => {
+        if (v == null) return '';
+        if (typeof v === 'number') return v;
+        if (type === 'date') return DateUtils.formatForInput(v);
+        if (type === 'datetime-local') return DateUtils.formatForInput(v, true);
+        return v;
+    };
+
     // Layout
     return (
         <InputField
             name={`${name}-start`}
             type={type}
-            defaultValue={localValues[0] ?? ''}
+            defaultValue={formatValue(localValues[0], type)}
             ref={dimensions[0][0]}
             inputProps={inputProps}
             InputProps={{
@@ -102,7 +110,7 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
                         <Input
                             type={type}
                             name={`${name}-end`}
-                            defaultValue={localValues[1] ?? ''}
+                            defaultValue={formatValue(localValues[1], type)}
                             disableUnderline
                             onInput={onInput}
                             onChange={handleChange}
