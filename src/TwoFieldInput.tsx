@@ -93,7 +93,7 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
         <InputField
             name={`${name}-start`}
             type={type}
-            defaultValue={formatValue(localValues[0], type)}
+            value={formatValue(localValues[0], type)}
             ref={dimensions[0][0]}
             inputProps={inputProps}
             InputProps={{
@@ -110,7 +110,7 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
                         <Input
                             type={type}
                             name={`${name}-end`}
-                            defaultValue={formatValue(localValues[1], type)}
+                            value={formatValue(localValues[1], type)}
                             disableUnderline
                             onInput={onInput}
                             onChange={handleChange}
