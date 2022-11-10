@@ -48,7 +48,10 @@ export interface ViewPageField<T extends object> extends GridProps {
     renderProps?: GridColumnRenderProps;
 }
 
-type ViewPageFieldType<T extends object> =
+/**
+ * View page field type
+ */
+export type ViewPageFieldType<T extends object> =
     | (string & keyof T)
     | [string & keyof T, GridDataType, GridColumnRenderProps?, RowType?]
     | ViewPageField<T>;
