@@ -268,20 +268,19 @@ export function ViewPage<T extends DataTypes.StringRecord>(
                             );
                         })}
                     </Grid>
-                    {actions != null && (
-                        <Stack
-                            className="ET-ViewPage-Actions"
-                            direction="row"
-                            width="100%"
-                            flexWrap="wrap"
-                            justifyContent="flex-end"
-                            paddingTop={paddings}
-                            paddingBottom={paddings}
-                            gap={paddings}
-                        >
-                            {Utils.getResult(actions, data, refresh)}
-                        </Stack>
-                    )}
+                    <Stack
+                        className="ET-ViewPage-Actions"
+                        direction="row"
+                        width="100%"
+                        flexWrap="wrap"
+                        justifyContent="flex-end"
+                        paddingTop={actions == null ? undefined : paddings}
+                        paddingBottom={paddings}
+                        gap={paddings}
+                    >
+                        {actions != null &&
+                            Utils.getResult(actions, data, refresh)}
+                    </Stack>
                     {Utils.getResult(children, data, refresh)}
                     {pullToRefresh && (
                         <PullToRefreshUI
