@@ -71,12 +71,12 @@ export const ShowDataComparison = (
         <Table>
             <TableHead>
                 <TableRow>
-                    <TableCell width="18%">{getLabel('field')}</TableCell>
+                    <TableCell width="18%">{globalApp.get('field')}</TableCell>
                     <TableCell width="41%" align="right">
-                        {getLabel('oldValue')}
+                        {globalApp.get('oldValue')}
                     </TableCell>
                     <TableCell width="41%" align="right">
-                        {getLabel('newValue')}
+                        {globalApp.get('newValue')}
                     </TableCell>
                 </TableRow>
             </TableHead>
