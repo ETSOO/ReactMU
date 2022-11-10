@@ -17,6 +17,16 @@ export interface AuditDisplayProps
     getItemStyle?: (index: number, theme: Theme) => CSSProperties;
 
     /**
+     * Get column label
+     */
+    getColumnLabel?: (field: string) => string;
+
+    /**
+     * Equal check
+     */
+    equalCheck?: boolean;
+
+    /**
      * Item/line renderer
      */
     itemRenderer?: (data: AuditLineDto, index: number) => React.ReactNode;
@@ -54,6 +64,8 @@ export function AuditDisplay(props: AuditDisplayProps) {
                     ? theme.palette.grey[100]
                     : theme.palette.grey[50]
         }),
+        getColumnLabel,
+        equalCheck,
         itemRenderer = (data) => {
             const {
                 newData,
@@ -66,7 +78,14 @@ export function AuditDisplay(props: AuditDisplayProps) {
                         <Button
                             variant="outlined"
                             size="small"
-                            onClick={() => ShowDataComparison(changes, title)}
+                            onClick={() =>
+                                ShowDataComparison(
+                                    changes,
+                                    title,
+                                    getColumnLabel,
+                                    equalCheck
+                                )
+                            }
                             sx={{
                                 marginLeft: theme.spacing(1),
                                 marginTop: theme.spacing(-0.5),

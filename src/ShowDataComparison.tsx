@@ -38,11 +38,13 @@ const formatValue = (value: unknown, app: IApp) => {
  * @param data Data
  * @param modelTitle Model window title
  * @param getLabel Get label callback
+ * @param equalCheck Equal check for properties
  */
 export const ShowDataComparison = (
     data: AuditLineChangesDto,
     modelTitle?: string,
-    getLabel?: (field: string) => string
+    getLabel?: (field: string) => string,
+    equalCheck: boolean = true
 ) => {
     modelTitle ??= globalApp.get<string>('dataComparison');
     getLabel ??= (key) => {
@@ -54,11 +56,16 @@ export const ShowDataComparison = (
         ...Object.keys(data.newData)
     ]);
 
-    const rows = Array.from(keys).map((field) => ({
+    let rows = Array.from(keys).map((field) => ({
         field,
         oldValue: data.oldData[field],
         newValue: data.newData[field]
     }));
+
+    if (equalCheck)
+        rows = rows.filter(
+            (item) => !Utils.equals(item.oldValue, item.newValue)
+        );
 
     const inputs = (
         <Table>
