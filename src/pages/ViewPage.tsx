@@ -56,8 +56,9 @@ type ViewPageFieldTypeNarrow<T extends object> =
 /**
  * View page field type
  */
-export type ViewPageFieldType<T extends object> = ViewPageFieldTypeNarrow<T> &
-    ((data: T) => React.ReactNode);
+export type ViewPageFieldType<T extends object> =
+    | ViewPageFieldTypeNarrow<T>
+    | ((data: T) => React.ReactNode);
 
 /**
  * View page props
