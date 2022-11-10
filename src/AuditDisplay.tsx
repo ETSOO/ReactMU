@@ -1,26 +1,16 @@
+import { AuditLineDto } from '@etsoo/appscript';
 import { Utils } from '@etsoo/shared';
 import { Button, Divider, Theme, Typography, useTheme } from '@mui/material';
 import React, { CSSProperties } from 'react';
 import { globalApp } from './app/ReactApp';
 import { ListMoreDisplay, ListMoreDisplayProps } from './ListMoreDisplay';
-import { AuditLineUpdateData, ShowDataComparison } from './ShowDataComparison';
-
-/**
- * Audit line data model
- */
-export interface AuditLine {
-    id: number;
-    creation: Date;
-    user: string;
-    action: string;
-    changes?: AuditLineUpdateData;
-}
+import { ShowDataComparison } from './ShowDataComparison';
 
 /**
  * Audit display props
  */
 export interface AuditDisplayProps
-    extends Omit<ListMoreDisplayProps<AuditLine>, 'children'> {
+    extends Omit<ListMoreDisplayProps<AuditLineDto>, 'children'> {
     /**
      * Get list item style callback
      */
@@ -29,7 +19,7 @@ export interface AuditDisplayProps
     /**
      * Item/line renderer
      */
-    itemRenderer?: (data: AuditLine, index: number) => React.ReactNode;
+    itemRenderer?: (data: AuditLineDto, index: number) => React.ReactNode;
 }
 
 // Get label
@@ -65,7 +55,11 @@ export function AuditDisplay(props: AuditDisplayProps) {
                     : theme.palette.grey[50]
         }),
         itemRenderer = (data) => {
-            const changes = data.changes;
+            const {
+                newData,
+                oldData,
+                changes = { newData: newData ?? {}, oldData: oldData ?? {} }
+            } = data;
             return (
                 <React.Fragment>
                     {changes != null && (
@@ -103,7 +97,7 @@ export function AuditDisplay(props: AuditDisplayProps) {
 
     // Layout
     return (
-        <ListMoreDisplay<AuditLine> headerTitle={headerTitle} {...rest}>
+        <ListMoreDisplay<AuditLineDto> headerTitle={headerTitle} {...rest}>
             {(data, index) => (
                 <div key={data.id} style={getItemStyle(index, theme)}>
                     {itemRenderer(data, index)}

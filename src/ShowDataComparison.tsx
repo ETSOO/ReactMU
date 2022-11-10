@@ -1,4 +1,4 @@
-import { IApp } from '@etsoo/appscript/lib/mjs/app/IApp';
+import { AuditLineChangesDto, IApp } from '@etsoo/appscript';
 import { NotificationMessageType } from '@etsoo/notificationbase';
 import { Utils } from '@etsoo/shared';
 import {
@@ -12,19 +12,11 @@ import React from 'react';
 import { globalApp } from './app/ReactApp';
 
 /**
- * Audit line update data model
- */
-export interface AuditLineUpdateData {
-    oldData: Record<string, unknown>;
-    newData: Record<string, unknown>;
-}
-
-/**
- * Check obj is instance of AuditLineUpdateData
+ * Check obj is instance of AuditLineChangesDto
  * @param obj Input
  * @returns Result
  */
-export function IsAuditLineUpdateData(obj: any): obj is AuditLineUpdateData {
+export function IsAuditLineUpdateData(obj: any): obj is AuditLineChangesDto {
     return (
         typeof obj === 'object' &&
         'oldData' in obj &&
@@ -48,7 +40,7 @@ const formatValue = (value: unknown, app: IApp) => {
  * @param getLabel Get label callback
  */
 export const ShowDataComparison = (
-    data: AuditLineUpdateData,
+    data: AuditLineChangesDto,
     modelTitle?: string,
     getLabel?: (field: string) => string
 ) => {

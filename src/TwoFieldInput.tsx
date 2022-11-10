@@ -83,8 +83,8 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
     const formatValue = (v: ValueType, type?: string) => {
         if (v == null) return '';
         if (typeof v === 'number') return v;
-        if (type === 'date') return DateUtils.formatForInput(v);
-        if (type === 'datetime-local') return DateUtils.formatForInput(v, true);
+        if (type === 'date' || type === 'datetime-local')
+            return DateUtils.formatForInput(v, type);
         return v;
     };
 
