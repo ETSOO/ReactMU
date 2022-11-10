@@ -48,13 +48,16 @@ export interface ViewPageField<T extends object> extends GridProps {
     renderProps?: GridColumnRenderProps;
 }
 
-/**
- * View page field type
- */
-export type ViewPageFieldType<T extends object> =
+type ViewPageFieldTypeNarrow<T extends object> =
     | (string & keyof T)
     | [string & keyof T, GridDataType, GridColumnRenderProps?, RowType?]
     | ViewPageField<T>;
+
+/**
+ * View page field type
+ */
+export type ViewPageFieldType<T extends object> = ViewPageFieldTypeNarrow<T> &
+    ((data: T) => React.ReactNode);
 
 /**
  * View page props
@@ -118,7 +121,7 @@ function getResp(singleRow: RowType) {
 }
 
 function getItemField<T extends object>(
-    field: ViewPageFieldType<T>,
+    field: ViewPageFieldTypeNarrow<T>,
     data: T
 ): [React.ReactNode, React.ReactNode, GridProps] {
     // Item data and label
@@ -232,6 +235,11 @@ export function ViewPage<T extends DataTypes.StringRecord>(
                     >
                         {fields.map((field, index) => {
                             // Get data
+                            if (typeof field === 'function') {
+                                // Most flexible way, do whatever you want
+                                return field(data);
+                            }
+
                             const [itemData, itemLabel, gridProps] =
                                 getItemField(field, data);
 
