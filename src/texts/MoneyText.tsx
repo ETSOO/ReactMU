@@ -37,13 +37,15 @@ export function MoneyText(props: MoneyTextProps) {
     // Layout
     return (
         <Typography component="span" fontSize="inherit" {...rest}>
-            {NumberUtils.formatMoney(
-                value,
-                currency,
-                locale,
-                isInteger,
-                options
-            )}
+            {value == null
+                ? ''
+                : NumberUtils.formatMoney(
+                      value,
+                      currency,
+                      locale,
+                      isInteger,
+                      options
+                  )}
         </Typography>
     );
 }

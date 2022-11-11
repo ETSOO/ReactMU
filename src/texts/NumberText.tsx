@@ -19,7 +19,7 @@ export interface NumberTextProps extends TypographyProps {
     /**
      * Value
      */
-    value?: number | bigint;
+    value?: number | bigint | null;
 }
 
 /**
@@ -34,7 +34,7 @@ export function NumberText(props: NumberTextProps) {
     // Layout
     return (
         <Typography component="span" fontSize="inherit" {...rest}>
-            {NumberUtils.format(value, locale, options)}
+            {value == null ? '' : NumberUtils.format(value, locale, options)}
         </Typography>
     );
 }
