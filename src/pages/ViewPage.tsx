@@ -16,7 +16,10 @@ import { PullToRefreshUI } from '../PullToRefreshUI';
 import { CommonPage } from './CommonPage';
 import { CommonPageProps } from './CommonPageProps';
 
-type RowType = boolean | 'default' | 'small';
+/**
+ * View page row width type
+ */
+export type ViewPageRowType = boolean | 'default' | 'small' | object;
 
 /**
  * View page display field
@@ -40,7 +43,7 @@ export interface ViewPageField<T extends object> extends GridProps {
     /**
      * Display as single row
      */
-    singleRow?: RowType;
+    singleRow?: ViewPageRowType;
 
     /**
      * Render props
@@ -50,7 +53,7 @@ export interface ViewPageField<T extends object> extends GridProps {
 
 type ViewPageFieldTypeNarrow<T extends object> =
     | (string & keyof T)
-    | [string & keyof T, GridDataType, GridColumnRenderProps?, RowType?]
+    | [string & keyof T, GridDataType, GridColumnRenderProps?, ViewPageRowType?]
     | ViewPageField<T>;
 
 /**
@@ -107,8 +110,10 @@ function formatItemData(fieldData: unknown): string | undefined {
     return `${fieldData}`;
 }
 
-function getResp(singleRow: RowType) {
-    return singleRow === 'default'
+function getResp(singleRow: ViewPageRowType) {
+    return typeof singleRow === 'object'
+        ? singleRow
+        : singleRow === 'default'
         ? { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }
         : singleRow === true
         ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
