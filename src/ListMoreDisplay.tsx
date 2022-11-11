@@ -27,6 +27,11 @@ export interface ListMoreDisplayProps<
 > extends Omit<CardProps, 'children'>,
         GridLoader<T> {
     /**
+     * Batch size to load
+     */
+    batchSize?: number;
+
+    /**
      * Children to display the list
      */
     children: (data: T, index: number) => React.ReactNode;
@@ -68,6 +73,7 @@ export function ListMoreDisplay<
 >(props: ListMoreDisplayProps<T, F>) {
     // Destruct
     const {
+        batchSize = 6,
         children,
         defaultOrderBy,
         headerRenderer,
@@ -90,7 +96,7 @@ export function ListMoreDisplay<
         hasNextPage: true,
         isNextPageLoading: false,
         orderBy: defaultOrderBy,
-        batchSize: 10,
+        batchSize,
         loadedItems: 0,
         selectedItems: [],
         idCache: {}
