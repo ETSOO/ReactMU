@@ -36,7 +36,7 @@ export type DataStepsProps<T extends object> = Omit<
     /**
      * JSON value
      */
-    jsonValue?: string;
+    jsonValue: T;
 
     /**
      * Value formatter
@@ -83,16 +83,13 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
     // Current index
     const indexRef = React.useRef<number>(-1);
 
-    // Current data
-    const dataRef = React.useRef({} as T);
-
     // Current value
     const [localValue, setLocalValue] = React.useState(value);
 
     // Get step
     const showStep = (index: number) => {
         indexRef.current = index;
-        const [{ callback, ...rest }, more] = steps(index, dataRef.current);
+        const [{ callback, ...rest }, more] = steps(index, jsonValue);
 
         app.showInputDialog({
             ...rest,
@@ -145,10 +142,9 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
                                 const result = await callback(event);
                                 if (!result) return;
 
-                                const value = dataRef.current;
-                                setLocalValue(valueFormatter(value));
+                                setLocalValue(valueFormatter(jsonValue));
 
-                                if (onValueChange) onValueChange(value);
+                                if (onValueChange) onValueChange(jsonValue);
                             }}
                         >
                             {labels.submit}
@@ -172,10 +168,7 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
     };
 
     React.useEffect(() => {
-        if (jsonValue) {
-            dataRef.current = JSON.parse(jsonValue);
-            setLocalValue(valueFormatter(dataRef.current));
-        }
+        setLocalValue(valueFormatter(jsonValue));
     }, [jsonValue]);
 
     return (
