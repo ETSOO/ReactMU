@@ -130,7 +130,7 @@ export function ListChooser<
             const label =
                 typeof labelField === 'function'
                     ? labelField(item)
-                    : Reflect.get(item, labelField);
+                    : (Reflect.get(item, labelField) as React.ReactNode);
 
             return (
                 <ListItem disableGutters key={`${id}`}>

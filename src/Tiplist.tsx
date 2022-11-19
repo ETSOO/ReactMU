@@ -44,7 +44,7 @@ export function Tiplist<
         search = false,
         idField = 'id' as D,
         idValue,
-        inputAutoComplete = 'off',
+        inputAutoComplete = 'new-password',
         inputError,
         inputHelperText,
         inputMargin,

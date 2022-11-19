@@ -331,13 +331,17 @@ export class ReactApp<
             }
         });
 
-        // Notify host
-        BridgeUtils.host?.changeCulture(culture.name);
-
         // Document title
         // Default is servier name's label or appName label
-        document.title =
-            this.get(this.name) ?? this.get('appName') ?? this.name;
+        const title = this.get(this.name) ?? this.get('appName') ?? this.name;
+        const host = BridgeUtils.host;
+        if (host) {
+            // Notify host
+            host.changeCulture(culture.name);
+            host.setTitle(title);
+        } else {
+            document.title = title;
+        }
     }
 
     /**

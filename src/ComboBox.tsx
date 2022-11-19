@@ -80,7 +80,7 @@ export function ComboBox<
         loadData,
         onLoadData,
         name,
-        inputAutoComplete = 'off',
+        inputAutoComplete = 'new-password', // disable autocomplete and autofill, 'off' does not work
         options,
         dataReadonly = true,
         readOnly,
