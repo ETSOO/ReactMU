@@ -267,7 +267,7 @@ export function Tiplist<
                     search ? (
                         <SearchField
                             onChange={changeHandle}
-                            {...params}
+                            {...addReadOnly(params)}
                             readOnly={readOnly}
                             label={label}
                             name={name + 'Input'}
