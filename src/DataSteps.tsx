@@ -70,7 +70,7 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
     const {
         InputLabelProps = {},
         jsonValue,
-        valueFormatter = (_data: T) => '...',
+        valueFormatter = (_data) => '...',
         onValueChange,
         steps,
         value = '',
@@ -83,13 +83,16 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
     // Current index
     const indexRef = React.useRef<number>(-1);
 
+    // Current Json data
+    const jsonRef = React.useRef<T>(jsonValue);
+
     // Current value
     const [localValue, setLocalValue] = React.useState(value);
 
     // Get step
     const showStep = (index: number) => {
         indexRef.current = index;
-        const [{ callback, ...rest }, more] = steps(index, jsonValue);
+        const [{ callback, ...rest }, more] = steps(index, jsonRef.current);
 
         app.showInputDialog({
             ...rest,
@@ -142,9 +145,10 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
                                 const result = await callback(event);
                                 if (!result) return;
 
-                                setLocalValue(valueFormatter(jsonValue));
+                                const value = jsonRef.current;
+                                setLocalValue(valueFormatter(value));
 
-                                if (onValueChange) onValueChange(jsonValue);
+                                if (onValueChange) onValueChange(value);
                             }}
                         >
                             {labels.submit}
@@ -168,8 +172,8 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
     };
 
     React.useEffect(() => {
-        setLocalValue(valueFormatter(jsonValue));
-    }, [jsonValue]);
+        setLocalValue(valueFormatter(jsonRef.current));
+    }, [jsonRef.current]);
 
     return (
         <TextField
