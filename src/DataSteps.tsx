@@ -85,6 +85,7 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
 
     // Current Json data
     const jsonRef = React.useRef<T>(jsonValue);
+    if (jsonValue != jsonRef.current) jsonRef.current = jsonValue;
 
     // Current value
     const [localValue, setLocalValue] = React.useState(value);
