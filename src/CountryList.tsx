@@ -49,7 +49,7 @@ export function CountryList(props: CountryListProps) {
 
     // Ready
     React.useEffect(() => {
-        if (loadFavoredIds)
+        if (loadFavoredIds && favoredIds.current.length === 0)
             loadFavoredIds().then((ids) => {
                 favoredIds.current = ids;
             });
