@@ -42,6 +42,11 @@ export type ComboBoxProps<
     loadData?: () => PromiseLike<T[] | null | undefined>;
 
     /**
+     * Multiple
+     */
+    multiple?: boolean;
+
+    /**
      * On load data handler
      */
     onLoadData?: (options: T[]) => void;
@@ -50,6 +55,11 @@ export type ComboBoxProps<
      * Array of options.
      */
     options?: ReadonlyArray<T>;
+
+    /**
+     * Id values
+     */
+    idValues?: T[D][];
 };
 
 /**
@@ -68,6 +78,7 @@ export function ComboBox<
         autoAddBlankItem = search,
         idField = 'id' as D,
         idValue,
+        idValues,
         inputError,
         inputHelperText,
         inputMargin,
@@ -78,6 +89,7 @@ export function ComboBox<
         label,
         labelField = 'label' as L,
         loadData,
+        multiple = false,
         onLoadData,
         name,
         inputAutoComplete = 'new-password', // disable autocomplete and autofill, 'off' does not work
@@ -107,20 +119,19 @@ export function ComboBox<
     }, [options, propertyWay]);
 
     // Local default value
-    let localValue =
-        idValue != null
-            ? localOptions.find((o) => o[idField] === idValue)
-            : defaultValue ?? value;
-
-    if (localValue === undefined) localValue = null;
+    const localValue = React.useMemo(
+        () =>
+            idValue != null
+                ? localOptions.find((o) => o[idField] === idValue)
+                : idValues != null
+                ? localOptions.filter((o) => idValues?.includes(o[idField]))
+                : defaultValue ?? value,
+        [idValue, idValues, defaultValue, value]
+    );
 
     // State
     // null for controlled
-    const [stateValue, setStateValue] = React.useState<T | null>(null);
-
-    // Current id value
-    // One time calculation for input's default value (uncontrolled)
-    const localIdValue = stateValue && stateValue[idField];
+    const [stateValue, setStateValue] = React.useState<T | T[] | null>(null);
 
     React.useEffect(() => {
         if (localValue != null) setStateValue(localValue);
@@ -151,7 +162,14 @@ export function ComboBox<
         return params;
     };
 
-    const setInputValue = (value: T | null) => {
+    const getValue = (value: T | T[] | null): string => {
+        if (value == null) return '';
+        if (Array.isArray(value))
+            return value.map((item) => item[idField]).join(',');
+        return `${value[idField]}`;
+    };
+
+    const setInputValue = (value: T | T[] | null) => {
         // Set state
         setStateValue(value);
 
@@ -159,7 +177,7 @@ export function ComboBox<
         const input = inputRef.current;
         if (input) {
             // Update value
-            const newValue = value != null ? `${value[idField]}` : '';
+            const newValue = getValue(value);
 
             if (newValue !== input.value) {
                 // Different value, trigger change event
@@ -195,13 +213,14 @@ export function ComboBox<
                 type="text"
                 style={{ display: 'none' }}
                 name={name}
-                value={`${localIdValue ?? ''}`}
+                value={getValue(stateValue)}
                 readOnly
                 onChange={inputOnChange}
             />
             {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
-            <Autocomplete<T, undefined, false, false>
+            <Autocomplete<T, boolean | undefined, false, false>
                 value={stateValue}
+                multiple={multiple}
                 getOptionLabel={getOptionLabel}
                 isOptionEqualToValue={(option: T, value: T) =>
                     option[idField] === value[idField]

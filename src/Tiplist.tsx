@@ -10,8 +10,8 @@ import { SearchField } from './SearchField';
  * Tiplist props
  */
 export type TiplistProps<T extends object, D extends DataTypes.Keys<T>> = Omit<
-    AutocompleteExtendedProps<T, D>,
-    'open'
+    AutocompleteExtendedProps<T, D, undefined>,
+    'open' | 'multiple'
 > & {
     /**
      * Load data callback

@@ -7,9 +7,10 @@ import { ChangeEventHandler } from 'react';
  */
 export type AutocompleteExtendedProps<
     T extends object,
-    D extends DataTypes.Keys<T>
+    D extends DataTypes.Keys<T>,
+    M extends boolean | undefined = boolean | undefined
 > = Omit<
-    AutocompleteProps<T, undefined, false, false>,
+    AutocompleteProps<T, M, false, false>,
     'renderInput' | 'options' | 'multiple'
 > & {
     /**
