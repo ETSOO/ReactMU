@@ -27,6 +27,7 @@ export * from './texts/MoneyText';
 export * from './texts/NumberText';
 
 export * from './AuditDisplay';
+export * from './AutocompleteExtendedProps';
 export * from './BackButton';
 export * from './BridgeCloseButton';
 export * from './ButtonLink';

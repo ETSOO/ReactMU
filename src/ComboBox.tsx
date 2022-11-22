@@ -5,13 +5,23 @@ import {
     LabelDefaultType,
     ListType
 } from '@etsoo/shared';
-import { Autocomplete, AutocompleteRenderInputParams } from '@mui/material';
+import {
+    Autocomplete,
+    AutocompleteRenderInputParams,
+    Checkbox
+} from '@mui/material';
 import React from 'react';
 import { Utils as SharedUtils } from '@etsoo/shared';
-import { AutocompleteExtendedProps } from './AutocompleteExtendedProps';
-import { InputField } from './InputField';
-import { SearchField } from './SearchField';
 import { ReactUtils } from '@etsoo/react';
+
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { AutocompleteExtendedProps } from './AutocompleteExtendedProps';
+import { SearchField } from './SearchField';
+import { InputField } from './InputField';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 /**
  * ComboBox props
@@ -99,6 +109,22 @@ export function ComboBox<
         onChange,
         openOnFocus = true,
         value,
+        disableCloseOnSelect = multiple,
+        renderOption = multiple
+            ? (props, option, { selected }) => (
+                  <li {...props}>
+                      <>
+                          <Checkbox
+                              icon={icon}
+                              checkedIcon={checkedIcon}
+                              style={{ marginRight: 8 }}
+                              checked={selected}
+                          />
+                          {option[labelField]}
+                      </>
+                  </li>
+              )
+            : undefined,
         getOptionLabel = (option: T) => `${option[labelField]}`,
         sx = { minWidth: '150px' },
         ...rest
@@ -119,15 +145,22 @@ export function ComboBox<
     }, [options, propertyWay]);
 
     // Local default value
-    const localValue = React.useMemo(
-        () =>
+    let localValue: T | T[] | null | undefined;
+    if (multiple) {
+        localValue =
+            idValue != null
+                ? localOptions.filter((o) => o[idField] === idValue)
+                : idValues != null
+                ? localOptions.filter((o) => idValues?.includes(o[idField]))
+                : defaultValue ?? value;
+    } else {
+        localValue =
             idValue != null
                 ? localOptions.find((o) => o[idField] === idValue)
                 : idValues != null
                 ? localOptions.filter((o) => idValues?.includes(o[idField]))
-                : defaultValue ?? value,
-        [idValue, idValues, defaultValue, value]
-    );
+                : defaultValue ?? value;
+    }
 
     // State
     // null for controlled
@@ -196,7 +229,14 @@ export function ComboBox<
             }
             setOptions(result);
         });
-    }, [propertyWay]);
+    }, [
+        propertyWay,
+        loadData,
+        onLoadData,
+        autoAddBlankItem,
+        idField,
+        labelField
+    ]);
 
     React.useEffect(() => {
         return () => {
@@ -219,8 +259,9 @@ export function ComboBox<
             />
             {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
             <Autocomplete<T, boolean | undefined, false, false>
-                value={stateValue}
+                value={multiple ? stateValue ?? [] : stateValue}
                 multiple={multiple}
+                disableCloseOnSelect={disableCloseOnSelect}
                 getOptionLabel={getOptionLabel}
                 isOptionEqualToValue={(option: T, value: T) =>
                     option[idField] === value[idField]
@@ -261,6 +302,7 @@ export function ComboBox<
                     )
                 }
                 options={localOptions}
+                renderOption={renderOption}
                 {...rest}
             />
         </div>
