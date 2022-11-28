@@ -170,10 +170,9 @@ function getItemField<T extends object>(
         itemLabel =
             typeof fieldLabel === 'function'
                 ? fieldLabel()
-                : globalApp.get<string>(
-                      fieldLabel ??
-                          (typeof fieldData === 'string' ? fieldData : 'noData')
-                  ) ?? fieldLabel;
+                : fieldLabel != null
+                ? globalApp.get<string>(fieldLabel)
+                : fieldLabel;
     } else {
         itemData = formatItemData(data[field]);
         itemLabel = globalApp.get<string>(field) ?? field;
@@ -263,12 +262,14 @@ export function ViewPage<T extends DataTypes.StringRecord>(
                             // Layout
                             return (
                                 <Grid item {...gridProps} key={index}>
-                                    <Typography
-                                        variant="caption"
-                                        component="div"
-                                    >
-                                        {itemLabel}:
-                                    </Typography>
+                                    {itemLabel != null && (
+                                        <Typography
+                                            variant="caption"
+                                            component="div"
+                                        >
+                                            {itemLabel}:
+                                        </Typography>
+                                    )}
                                     {typeof itemData === 'object' ? (
                                         itemData
                                     ) : (
