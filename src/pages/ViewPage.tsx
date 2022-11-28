@@ -101,6 +101,11 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
      * Support refresh
      */
     supportRefresh?: boolean;
+
+    /**
+     * Grid container reference
+     */
+    gridRef?: React.Ref<HTMLDivElement>;
 }
 
 function formatItemData(fieldData: unknown): string | undefined {
@@ -195,6 +200,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
         fabColumnDirection = true,
         supportBack = true,
         pullToRefresh = true,
+        gridRef,
         ...rest
     } = props;
 
@@ -233,6 +239,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
                         justifyContent="left"
                         spacing={paddings}
                         className="ET-ViewPage"
+                        ref={gridRef}
                         sx={{
                             '.MuiTypography-subtitle2': {
                                 fontWeight: 'bold'
