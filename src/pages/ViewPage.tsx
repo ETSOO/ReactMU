@@ -171,7 +171,7 @@ function getItemField<T extends object>(
             typeof fieldLabel === 'function'
                 ? fieldLabel()
                 : fieldLabel != null
-                ? globalApp.get<string>(fieldLabel)
+                ? globalApp.get<string>(fieldLabel) ?? fieldLabel
                 : fieldLabel;
     } else {
         itemData = formatItemData(data[field]);
