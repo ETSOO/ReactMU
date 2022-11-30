@@ -34,6 +34,11 @@ export interface ItemListProps<
     className?: string;
 
     /**
+     * Keep click for all items
+     */
+    keepClick?: boolean;
+
+    /**
      * Id field name
      */
     idField?: D;
@@ -42,6 +47,11 @@ export interface ItemListProps<
      * Label field name or callback
      */
     labelField?: L | ((item: T) => string);
+
+    /**
+     * Minimum width
+     */
+    minWidth?: number | string;
 
     /**
      * Button icon
@@ -98,9 +108,11 @@ export function ItemList<
         buttonLabel,
         className,
         color = 'primary',
+        keepClick = false,
         items,
         idField = 'id' as D,
         labelField = 'label' as L,
+        minWidth = '200px',
         icon,
         onClose,
         selectedValue,
@@ -182,12 +194,9 @@ export function ItemList<
                 aria-labelledby="dialog-title"
                 open={open}
                 onClose={closeHandler}
+                sx={{ minWidth }}
             >
-                {title && (
-                    <DialogTitle sx={{ minWidth: '200px' }} id="dialog-title">
-                        {title}
-                    </DialogTitle>
-                )}
+                {title && <DialogTitle id="dialog-title">{title}</DialogTitle>}
                 <DialogContent>
                     <List>
                         {items.map((item) => {
@@ -195,7 +204,10 @@ export function ItemList<
                             return (
                                 <ListItemButton
                                     key={id as unknown as React.Key}
-                                    disabled={id === currentItem[idField]}
+                                    disabled={
+                                        id === currentItem[idField] &&
+                                        !keepClick
+                                    }
                                     onClick={() => closeItemHandler(item)}
                                 >
                                     <ListItemText>
