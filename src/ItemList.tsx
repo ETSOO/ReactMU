@@ -112,7 +112,7 @@ export function ItemList<
         items,
         idField = 'id' as D,
         labelField = 'label' as L,
-        minWidth = '200px',
+        minWidth,
         icon,
         onClose,
         selectedValue,
@@ -194,10 +194,9 @@ export function ItemList<
                 aria-labelledby="dialog-title"
                 open={open}
                 onClose={closeHandler}
-                sx={{ minWidth }}
             >
                 {title && <DialogTitle id="dialog-title">{title}</DialogTitle>}
-                <DialogContent>
+                <DialogContent sx={{ minWidth }}>
                     <List>
                         {items.map((item) => {
                             const id = item[idField];
