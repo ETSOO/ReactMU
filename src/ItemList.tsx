@@ -24,6 +24,11 @@ export interface ItemListProps<
     L extends DataTypes.Keys<T, string>
 > {
     /**
+     * Button label
+     */
+    buttonLabel?: React.ReactNode;
+
+    /**
      * Style class name
      */
     className?: string;
@@ -90,6 +95,7 @@ export function ItemList<
 >(props: ItemListProps<T, D, L>) {
     //  properties destructure
     const {
+        buttonLabel,
         className,
         color = 'primary',
         items,
@@ -170,16 +176,18 @@ export function ItemList<
                 size={size}
                 onClick={clickHandler}
             >
-                {getLabel(currentItem)}
+                {buttonLabel ?? getLabel(currentItem)}
             </Button>
             <Dialog
                 aria-labelledby="dialog-title"
                 open={open}
                 onClose={closeHandler}
             >
-                <DialogTitle sx={{ minWidth: '200px' }} id="dialog-title">
-                    {title || ''}
-                </DialogTitle>
+                {title && (
+                    <DialogTitle sx={{ minWidth: '200px' }} id="dialog-title">
+                        {title}
+                    </DialogTitle>
+                )}
                 <DialogContent>
                     <List>
                         {items.map((item) => {
