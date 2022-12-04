@@ -12,9 +12,9 @@ import CheckIcon from '@mui/icons-material/Check';
 import StartIcon from '@mui/icons-material/Start';
 import { InputDialogProps } from '@etsoo/react';
 import React from 'react';
+import { HBox } from './FlexBox';
 import { globalApp } from './app/ReactApp';
 import { MUGlobal } from './MUGlobal';
-import { HBox } from './FlexBox';
 
 /**
  * Data step
@@ -85,7 +85,10 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
 
     // Current Json data
     const jsonRef = React.useRef<T>(jsonValue);
-    if (jsonValue != jsonRef.current) jsonRef.current = jsonValue;
+
+    // Ignore empty value case
+    if (jsonValue !== jsonRef.current && valueFormatter(jsonValue))
+        jsonRef.current = jsonValue;
 
     // Current value
     const [localValue, setLocalValue] = React.useState(value);
@@ -174,10 +177,11 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
 
     React.useEffect(() => {
         setLocalValue(valueFormatter(jsonRef.current));
-    }, [jsonRef.current]);
+    }, [valueFormatter]);
 
     return (
         <TextField
+            autoComplete="new-password"
             InputLabelProps={InputLabelProps}
             inputProps={{ style: { cursor: 'pointer' } }}
             InputProps={{
