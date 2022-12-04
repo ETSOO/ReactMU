@@ -104,6 +104,11 @@ export interface DnDListRef<D extends object> {
      * @param index Index
      */
     editItem(newItem: D, index: number): boolean;
+
+    /**
+     * Get all items
+     */
+    getItems(): D[];
 }
 
 /**
@@ -304,6 +309,10 @@ export function DnDList<
 
                     // Update the state
                     changeItems(newItems);
+                },
+
+                getItems() {
+                    return items;
                 }
             };
         },
