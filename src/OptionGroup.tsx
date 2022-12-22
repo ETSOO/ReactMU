@@ -18,7 +18,7 @@ import {
     RadioGroup,
     useTheme
 } from '@mui/material';
-import NotchedOutline from '@mui/material/OutlinedInput/NotchedOutline';
+import NotchedOutline from '@mui/material/OutlinedInput';
 import React from 'react';
 
 /**

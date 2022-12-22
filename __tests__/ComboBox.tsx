@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComboBox } from '../src';
 import { fireEvent, render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+//import '@testing-library/jest-dom/extend-expect';
 
 it('Render ComboBox', async () => {
     // Arrange

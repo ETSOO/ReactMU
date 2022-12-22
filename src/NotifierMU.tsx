@@ -59,7 +59,7 @@ const IconDialogTitle = styled(DialogTitle)`
  */
 export class NotificationMU extends NotificationReact {
     // Create alert
-    private createAlert(_props: NotificationRenderProps, className: string) {
+    private createAlert(_props: NotificationRenderProps, className?: string) {
         const labels = Labels.NotificationMU;
 
         const {
@@ -140,7 +140,7 @@ export class NotificationMU extends NotificationReact {
     }
 
     // Create confirm
-    private createConfirm(_props: NotificationRenderProps, className: string) {
+    private createConfirm(_props: NotificationRenderProps, className?: string) {
         const labels = Labels.NotificationMU;
         const title = this.title ?? labels.confirmTitle;
 
@@ -222,7 +222,7 @@ export class NotificationMU extends NotificationReact {
     }
 
     // Create message
-    private createMessage(_props: NotificationRenderProps, className: string) {
+    private createMessage(_props: NotificationRenderProps, className?: string) {
         if (!this.open) return <React.Fragment key={this.id}></React.Fragment>;
 
         const setupProps: AlertProps = {
@@ -248,7 +248,7 @@ export class NotificationMU extends NotificationReact {
     }
 
     // Create prompt
-    private createPrompt(_props: NotificationRenderProps, className: string) {
+    private createPrompt(_props: NotificationRenderProps, className?: string) {
         const labels = Labels.NotificationMU;
         const title = this.title ?? labels.promptTitle;
 
@@ -431,7 +431,7 @@ export class NotificationMU extends NotificationReact {
     }
 
     // Create loading
-    private createLoading(_props: NotificationRenderProps, className: string) {
+    private createLoading(_props: NotificationRenderProps, className?: string) {
         // Properties
         const setupProps: CircularProgressProps = { color: 'primary' };
 
@@ -487,7 +487,7 @@ export class NotificationMU extends NotificationReact {
      * @param className Style class name
      * @param classes Style classes
      */
-    render(props: NotificationRenderProps, className: string) {
+    render(props: NotificationRenderProps, className?: string) {
         // Loading bar
         if (this.type === NotificationType.Loading) {
             return this.createLoading(props, className);

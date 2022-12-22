@@ -1,7 +1,6 @@
 import React from 'react';
 import { SelectEx } from '../src';
 import { findByText, fireEvent, render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import { ListType1, Utils } from '@etsoo/shared';
 import { act } from 'react-dom/test-utils';
 
