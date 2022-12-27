@@ -25,6 +25,15 @@ export type TextFieldExProps = TextFieldProps & {
     onEnter?: React.KeyboardEventHandler<HTMLDivElement>;
 
     /**
+     * On visibility
+     * @param input HTML input
+     * @returns Result
+     */
+    onVisibility?: (
+        input: HTMLInputElement
+    ) => void | boolean | Promise<boolean>;
+
+    /**
      * Is the field read only?
      */
     readOnly?: boolean;
@@ -65,6 +74,7 @@ export const TextFieldEx = React.forwardRef<
         onChange,
         onKeyPress,
         onEnter,
+        onVisibility,
         inputRef,
         readOnly,
         showClear,
@@ -121,9 +131,14 @@ export const TextFieldEx = React.forwardRef<
         if (e.isDefaultPrevented()) e.preventDefault();
     };
 
-    const touchStart = (e: React.TouchEvent | React.MouseEvent) => {
+    const touchStart = async (e: React.TouchEvent | React.MouseEvent) => {
         // Show the password
         if (input) {
+            if (onVisibility) {
+                const result = await onVisibility(input);
+                if (result === false) return;
+            }
+
             input.blur();
             input.type = 'text';
         }
@@ -132,7 +147,11 @@ export const TextFieldEx = React.forwardRef<
 
     const touchEnd = (e: React.TouchEvent | React.MouseEvent) => {
         // Show the password
-        if (input) input.type = 'password';
+        if (input) {
+            if (onVisibility) return;
+
+            input.type = 'password';
+        }
         preventDefault(e);
     };
 
