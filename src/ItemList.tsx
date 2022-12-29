@@ -66,7 +66,7 @@ export interface ItemListProps<
     /**
      * Close event
      */
-    onClose?(item: T, changed: boolean): void;
+    onClose?(item: T | undefined, changed: boolean): void;
 
     /**
      * Current selected language
@@ -134,8 +134,9 @@ export function ItemList<
     const [open, setOpen] = React.useState(false);
 
     // Default state
-    const defaultItem =
-        items.find((item) => item[idField] === selectedValue) ?? items[0];
+    const defaultItem: T | undefined = items.find(
+        (item) => item[idField] === selectedValue
+    );
 
     // Current item
     const [currentItem, setCurrentItem] = React.useState(defaultItem);
@@ -188,7 +189,8 @@ export function ItemList<
                 size={size}
                 onClick={clickHandler}
             >
-                {buttonLabel ?? getLabel(currentItem)}
+                {buttonLabel ??
+                    (currentItem ? getLabel(currentItem) : undefined)}
             </Button>
             <Dialog
                 aria-labelledby="dialog-title"
@@ -204,8 +206,10 @@ export function ItemList<
                                 <ListItemButton
                                     key={id as unknown as React.Key}
                                     disabled={
-                                        id === currentItem[idField] &&
-                                        !keepClick
+                                        id ===
+                                            (currentItem
+                                                ? currentItem[idField]
+                                                : undefined) && !keepClick
                                     }
                                     onClick={() => closeItemHandler(item)}
                                 >
