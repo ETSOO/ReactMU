@@ -1,97 +1,97 @@
-import React from 'react';
+import React from "react";
 import {
-    Dialog,
-    DialogTitle,
-    List,
-    ListItemText,
-    DialogContent,
-    Button,
-    ListItemButton
-} from '@mui/material';
+  Dialog,
+  DialogTitle,
+  List,
+  ListItemText,
+  DialogContent,
+  Button,
+  ListItemButton,
+} from "@mui/material";
 import {
-    DataTypes,
-    IdDefaultType,
-    LabelDefaultType,
-    ListType
-} from '@etsoo/shared';
+  DataTypes,
+  IdDefaultType,
+  LabelDefaultType,
+  ListType,
+} from "@etsoo/shared";
 
 /**
  * Item list properties
  */
 export interface ItemListProps<
-    T extends object,
-    D extends DataTypes.Keys<T>,
-    L extends DataTypes.Keys<T, string>
+  T extends object,
+  D extends DataTypes.Keys<T>,
+  L extends DataTypes.Keys<T, string>
 > {
-    /**
-     * Button label
-     */
-    buttonLabel?: React.ReactNode;
+  /**
+   * Button label
+   */
+  buttonLabel?: React.ReactNode;
 
-    /**
-     * Style class name
-     */
-    className?: string;
+  /**
+   * Style class name
+   */
+  className?: string;
 
-    /**
-     * Keep click for all items
-     */
-    keepClick?: boolean;
+  /**
+   * Keep click for all items
+   */
+  keepClick?: boolean;
 
-    /**
-     * Id field name
-     */
-    idField?: D;
+  /**
+   * Id field name
+   */
+  idField?: D;
 
-    /**
-     * Label field name or callback
-     */
-    labelField?: L | ((item: T) => string);
+  /**
+   * Label field name or callback
+   */
+  labelField?: L | ((item: T) => string);
 
-    /**
-     * Minimum width
-     */
-    minWidth?: number | string;
+  /**
+   * Minimum width
+   */
+  minWidth?: number | string;
 
-    /**
-     * Button icon
-     */
-    icon?: React.ReactNode;
+  /**
+   * Button icon
+   */
+  icon?: React.ReactNode;
 
-    /**
-     * Button color
-     */
-    color?: 'inherit' | 'primary' | 'secondary';
+  /**
+   * Button color
+   */
+  color?: "inherit" | "primary" | "secondary";
 
-    /**
-     * Close event
-     */
-    onClose?(item: T | undefined, changed: boolean): void;
+  /**
+   * Close event
+   */
+  onClose?(item: T | undefined, changed: boolean): void;
 
-    /**
-     * Current selected language
-     */
-    selectedValue?: T[D];
+  /**
+   * Current selected language
+   */
+  selectedValue?: T[D];
 
-    /**
-     * Button size
-     */
-    size?: 'small' | 'medium' | 'large';
+  /**
+   * Button size
+   */
+  size?: "small" | "medium" | "large";
 
-    /**
-     * Title
-     */
-    title?: string;
+  /**
+   * Title
+   */
+  title?: string;
 
-    /**
-     * Items
-     */
-    items: T[];
+  /**
+   * Items
+   */
+  items: T[];
 
-    /**
-     * Button variant
-     */
-    variant?: 'text' | 'outlined' | 'contained';
+  /**
+   * Button variant
+   */
+  variant?: "text" | "outlined" | "contained";
 }
 
 /**
@@ -99,129 +99,122 @@ export interface ItemListProps<
  * @param props Properties
  */
 export function ItemList<
-    T extends object = ListType,
-    D extends DataTypes.Keys<T> = IdDefaultType<T>,
-    L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
+  T extends object = ListType,
+  D extends DataTypes.Keys<T> = IdDefaultType<T>,
+  L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
 >(props: ItemListProps<T, D, L>) {
-    //  properties destructure
-    const {
-        buttonLabel,
-        className,
-        color = 'primary',
-        keepClick = false,
-        items,
-        idField = 'id' as D,
-        labelField = 'label' as L,
-        minWidth,
-        icon,
-        onClose,
-        selectedValue,
-        size = 'medium',
-        title,
-        variant = 'outlined'
-    } = props;
+  //  properties destructure
+  const {
+    buttonLabel,
+    className,
+    color = "primary",
+    keepClick = false,
+    items,
+    idField = "id" as D,
+    labelField = "label" as L,
+    minWidth,
+    icon,
+    onClose,
+    selectedValue,
+    size = "medium",
+    title,
+    variant = "outlined",
+  } = props;
 
-    // Get label
-    const getLabel = (item: T): string => {
-        if (typeof labelField === 'function') {
-            return labelField(item);
-        } else {
-            return DataTypes.convert(item[labelField], 'string') ?? '';
-        }
-    };
+  // Get label
+  const getLabel = (item: T): string => {
+    if (typeof labelField === "function") {
+      return labelField(item);
+    } else {
+      return DataTypes.convert(item[labelField], "string") ?? "";
+    }
+  };
 
-    // Dialog open or not state
-    const [open, setOpen] = React.useState(false);
+  // Dialog open or not state
+  const [open, setOpen] = React.useState(false);
 
-    // Default state
-    const defaultItem: T | undefined = items.find(
-        (item) => item[idField] === selectedValue
-    );
+  // Default state
+  const defaultItem: T | undefined = items.find(
+    (item) => item[idField] === selectedValue
+  );
 
-    // Current item
-    const [currentItem, setCurrentItem] = React.useState(defaultItem);
+  // Current item
+  const [currentItem, setCurrentItem] = React.useState(defaultItem);
 
-    // Click handler
-    const clickHandler = () => {
-        // More than one language
-        if (items.length < 2) {
-            return;
-        }
+  // Click handler
+  const clickHandler = () => {
+    // More than one language
+    if (items.length < 2) {
+      return;
+    }
 
-        // Open the dialog
-        setOpen(true);
-    };
+    // Open the dialog
+    setOpen(true);
+  };
 
-    // Close handler
-    const closeHandler = () => {
-        if (!open) return;
+  // Close handler
+  const closeHandler = () => {
+    if (!open) return;
 
-        // Close the dialog
-        setOpen(false);
+    // Close the dialog
+    setOpen(false);
 
-        // Emit close event
-        if (onClose) {
-            onClose(currentItem, false);
-        }
-    };
+    // Emit close event
+    if (onClose) {
+      onClose(currentItem, false);
+    }
+  };
 
-    // Close item handler
-    const closeItemHandler = (item: any) => {
-        // Update the current item
-        setCurrentItem(item);
+  // Close item handler
+  const closeItemHandler = (item: T) => {
+    if (!keepClick) {
+      // Update the current item
+      setCurrentItem(item);
+    }
 
-        // Close the dialog
-        setOpen(false);
+    // Close the dialog
+    setOpen(false);
 
-        // Emit close event
-        if (onClose) {
-            onClose(item, true);
-        }
-    };
+    // Emit close event
+    if (onClose) {
+      onClose(item, true);
+    }
+  };
 
-    return (
-        <>
-            <Button
-                className={className}
-                variant={variant}
-                startIcon={icon}
-                color={color}
-                size={size}
-                onClick={clickHandler}
-            >
-                {buttonLabel ??
-                    (currentItem ? getLabel(currentItem) : undefined)}
-            </Button>
-            <Dialog
-                aria-labelledby="dialog-title"
-                open={open}
-                onClose={closeHandler}
-            >
-                {title && <DialogTitle id="dialog-title">{title}</DialogTitle>}
-                <DialogContent sx={{ minWidth }}>
-                    <List>
-                        {items.map((item) => {
-                            const id = item[idField];
-                            return (
-                                <ListItemButton
-                                    key={id as unknown as React.Key}
-                                    disabled={
-                                        id ===
-                                            (currentItem
-                                                ? currentItem[idField]
-                                                : undefined) && !keepClick
-                                    }
-                                    onClick={() => closeItemHandler(item)}
-                                >
-                                    <ListItemText>
-                                        {getLabel(item)}
-                                    </ListItemText>
-                                </ListItemButton>
-                            );
-                        })}
-                    </List>
-                </DialogContent>
-            </Dialog>
-        </>
-    );
+  return (
+    <>
+      <Button
+        className={className}
+        variant={variant}
+        startIcon={icon}
+        color={color}
+        size={size}
+        onClick={clickHandler}
+      >
+        {buttonLabel ?? (currentItem ? getLabel(currentItem) : undefined)}
+      </Button>
+      <Dialog aria-labelledby="dialog-title" open={open} onClose={closeHandler}>
+        {title && <DialogTitle id="dialog-title">{title}</DialogTitle>}
+        <DialogContent sx={{ minWidth }}>
+          <List>
+            {items.map((item) => {
+              const id = item[idField];
+              return (
+                <ListItemButton
+                  key={id as unknown as React.Key}
+                  disabled={
+                    id === (currentItem ? currentItem[idField] : undefined) &&
+                    !keepClick
+                  }
+                  onClick={() => closeItemHandler(item)}
+                >
+                  <ListItemText>{getLabel(item)}</ListItemText>
+                </ListItemButton>
+              );
+            })}
+          </List>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
 }
