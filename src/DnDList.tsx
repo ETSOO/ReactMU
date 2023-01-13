@@ -201,10 +201,15 @@ export function DnDList<
   const [items, setItems] = React.useState<D[]>([]);
   const [activeId, setActiveId] = React.useState<UniqueIdentifier>();
 
+  const doFormChange = (newItems?: D[]) => {
+    if (onFormChange) onFormChange(newItems ?? items);
+  };
+
   const changeItems = (newItems: D[]) => {
     // Possible to alter items with the handler
     if (onChange) onChange(newItems);
-    if (onFormChange) onFormChange(newItems);
+
+    doFormChange(newItems);
 
     // Update state
     setItems(newItems);
@@ -325,14 +330,37 @@ export function DnDList<
     [items]
   );
 
+  const setupDiv = (div: HTMLDivElement) => {
+    // Inputs
+    div
+      .querySelectorAll("input")
+      .forEach((input) =>
+        input.addEventListener("change", () => doFormChange())
+      );
+
+    // Textareas
+    div
+      .querySelectorAll("textarea")
+      .forEach((input) =>
+        input.addEventListener("change", () => doFormChange())
+      );
+
+    // Select
+    div
+      .querySelectorAll("select")
+      .forEach((input) =>
+        input.addEventListener("change", () => doFormChange())
+      );
+  };
+
   React.useEffect(() => {
     setItems(props.items);
   }, [props.items]);
 
   return (
-    <form
-      onChange={() => {
-        if (onFormChange) onFormChange(items);
+    <div
+      ref={(div) => {
+        if (div) setupDiv(div);
       }}
     >
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -352,6 +380,6 @@ export function DnDList<
           })}
         </SortableContext>
       </DndContext>
-    </form>
+    </div>
   );
 }
