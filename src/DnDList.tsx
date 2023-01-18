@@ -357,29 +357,38 @@ export function DnDList<
     setItems(props.items);
   }, [props.items]);
 
-  return (
-    <div
-      ref={(div) => {
-        if (div) setupDiv(div);
-      }}
-    >
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          {items.map((item, index) => {
-            const id = item[keyField] as unknown as UniqueIdentifier;
-            return (
-              <SortableItem
-                id={id}
-                key={id}
-                style={getItemStyle!(index, id === activeId)}
-                itemRenderer={(nodeRef, actionNodeRef) =>
-                  itemRenderer(item, index, nodeRef, actionNodeRef)
-                }
-              />
-            );
-          })}
-        </SortableContext>
-      </DndContext>
-    </div>
+  const children = (
+    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        {items.map((item, index) => {
+          const id = item[keyField] as unknown as UniqueIdentifier;
+          return (
+            <SortableItem
+              id={id}
+              key={id}
+              style={getItemStyle!(index, id === activeId)}
+              itemRenderer={(nodeRef, actionNodeRef) =>
+                itemRenderer(item, index, nodeRef, actionNodeRef)
+              }
+            />
+          );
+        })}
+      </SortableContext>
+    </DndContext>
   );
+
+  if (onFormChange) {
+    return (
+      <div
+        style={{ width: "100%" }}
+        ref={(div) => {
+          if (div) setupDiv(div);
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  return children;
 }
