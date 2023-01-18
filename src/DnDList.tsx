@@ -79,7 +79,7 @@ export const DnDItemStyle = (
 /**
  * DnD list forward ref
  */
-export interface DnDListRef<D extends object, K extends DataTypes.Keys<D>> {
+export interface DnDListRef<D extends object> {
   /**
    * Add item
    * @param item New item
@@ -104,11 +104,6 @@ export interface DnDListRef<D extends object, K extends DataTypes.Keys<D>> {
    * @param index Index
    */
   editItem(newItem: D, index: number): boolean;
-
-  /**
-   * Get deleted ids
-   */
-  getDeletedIds(): D[K][];
 
   /**
    * Get all items
@@ -153,7 +148,7 @@ export interface DnDListPros<D extends object, K extends DataTypes.Keys<D>> {
   /**
    * Methods ref
    */
-  mRef?: React.Ref<DnDListRef<D, K>>;
+  mRef?: React.Ref<DnDListRef<D>>;
 
   /**
    * Data change handler
@@ -205,7 +200,6 @@ export function DnDList<
   // States
   const [items, setItems] = React.useState<D[]>([]);
   const [activeId, setActiveId] = React.useState<UniqueIdentifier>();
-  const deletedIds = React.useRef<D[K][]>([]);
 
   const doFormChange = (newItems?: D[]) => {
     if (onFormChange) onFormChange(newItems ?? items);
@@ -322,18 +316,10 @@ export function DnDList<
           const newItems = [...items];
 
           // Remove the item
-          const deleted = newItems.splice(index, 1);
-          deleted.forEach((d) => {
-            const id = d[keyField];
-            if (!deletedIds.current.includes(id)) deletedIds.current.push(id);
-          });
+          newItems.splice(index, 1);
 
           // Update the state
           changeItems(newItems);
-        },
-
-        getDeletedIds() {
-          return deletedIds.current;
         },
 
         getItems() {
@@ -369,7 +355,6 @@ export function DnDList<
 
   React.useEffect(() => {
     setItems(props.items);
-    deletedIds.current = [];
   }, [props.items]);
 
   const children = (
