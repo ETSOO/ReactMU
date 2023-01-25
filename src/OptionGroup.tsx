@@ -277,7 +277,7 @@ export function OptionGroup<
   return (
     <React.Fragment>
       <FormControl component="fieldset" fullWidth={fullWidth} {...rest}>
-        {label && (
+        {label && variant !== "outlined" && (
           <InputLabel required={required} variant={variant} shrink>
             {label}
           </InputLabel>
