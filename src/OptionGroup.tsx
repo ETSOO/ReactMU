@@ -277,14 +277,11 @@ export function OptionGroup<
   return (
     <React.Fragment>
       <FormControl component="fieldset" fullWidth={fullWidth} {...rest}>
-        {label && variant !== "outlined" && (
+        {label && (
           <InputLabel required={required} variant={variant} shrink>
             {label}
           </InputLabel>
         )}
-        <Box paddingLeft={2} paddingY="7px">
-          {group}
-        </Box>
         {variant === "outlined" && (
           <NotchedOutline
             label={label && required ? label + " *" : label}
@@ -296,6 +293,9 @@ export function OptionGroup<
             }}
           />
         )}
+        <Box paddingLeft={2} paddingY="7px">
+          {group}
+        </Box>
       </FormControl>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </React.Fragment>
