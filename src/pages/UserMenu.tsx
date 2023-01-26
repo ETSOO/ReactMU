@@ -1,5 +1,7 @@
+import { EventWatcher } from "@etsoo/react";
 import { IconButton, Menu } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { UserAvatar } from "../UserAvatar";
 
 /**
@@ -36,6 +38,13 @@ export interface UserMenuLocalProps extends Omit<UserMenuProps, "children"> {
 }
 
 /**
+ * Event watcher
+ */
+export const eventWatcher = new EventWatcher();
+
+const eventWatcherAction = "usermenu.href.transitionend";
+
+/**
  * User menu
  * @param props Props
  * @returns Component
@@ -50,6 +59,9 @@ export function UserMenu(props: UserMenuProps) {
   // User menu open or not
   const isMenuOpen = Boolean(anchorEl);
 
+  // Route
+  const navigate = useNavigate();
+
   // User menu
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -57,6 +69,25 @@ export function UserMenu(props: UserMenuProps) {
 
   const handleMenuClose = () => {
     setAnchorEl(undefined);
+  };
+
+  const handleClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+    handleMenuClose();
+
+    const item = (event.target as HTMLElement)?.closest("li[href]");
+    if (item != null) {
+      const href = item.getAttribute("href");
+      if (href) {
+        // Even set transitionDuration = 0, still need to wait a little bit
+        eventWatcher.add({
+          type: eventWatcherAction,
+          action: () => {
+            navigate(href!);
+          },
+          once: true
+        });
+      }
+    }
   };
 
   return (
@@ -108,7 +139,8 @@ export function UserMenu(props: UserMenuProps) {
           horizontal: "right"
         }}
         open={isMenuOpen}
-        onClick={handleMenuClose}
+        onTransitionEnd={() => eventWatcher.do(eventWatcherAction)}
+        onClick={handleClick}
         onClose={handleMenuClose}
       >
         {children(handleMenuClose)}
