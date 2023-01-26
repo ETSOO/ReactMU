@@ -293,7 +293,7 @@ export function OptionGroup<
             }}
           />
         )}
-        <Box paddingLeft={2} paddingY="7px">
+        <Box paddingLeft={2} paddingY="7px" position="absolute">
           {group}
         </Box>
       </FormControl>

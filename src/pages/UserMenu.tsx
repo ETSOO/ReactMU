@@ -28,6 +28,13 @@ export interface UserMenuProps {
   children(handleMenuClose: () => void): React.ReactNode;
 }
 
+export interface UserMenuLocalProps extends Omit<UserMenuProps, "children"> {
+  /**
+   * Current screen size is down sm
+   */
+  smDown: boolean;
+}
+
 /**
  * User menu
  * @param props Props
