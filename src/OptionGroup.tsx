@@ -286,10 +286,14 @@ export function OptionGroup<
           <NotchedOutline
             label={label && required ? label + " *" : label}
             notched
-            style={{
+            sx={{
+              cursor: "default",
               position: "absolute",
               borderRadius: theme.shape.borderRadius,
-              width: fullWidth ? "100%" : "auto"
+              width: fullWidth ? "100%" : "auto",
+              "& input": {
+                visibility: "hidden"
+              }
             }}
           />
         )}
