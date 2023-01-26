@@ -289,7 +289,6 @@ export function OptionGroup<
             sx={{
               cursor: "default",
               position: "absolute",
-              borderRadius: theme.shape.borderRadius,
               width: fullWidth ? "100%" : "auto",
               "& input": {
                 visibility: "hidden"
