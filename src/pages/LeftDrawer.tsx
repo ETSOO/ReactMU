@@ -12,13 +12,6 @@ import { DrawerHeader } from "./DrawerHeader";
 import { globalApp } from "../app/ReactApp";
 
 /**
- * Left drawer methods
- */
-export interface LeftDrawerMethods {
-  open(): void;
-}
-
-/**
  * Left drawer props
  */
 export type LeftDrawerProps = React.PropsWithRef<{
@@ -43,50 +36,48 @@ export type LeftDrawerProps = React.PropsWithRef<{
   appName?: string;
 
   /**
+   * Is open or not
+   */
+  open?: boolean;
+
+  /**
    * Minimize hanlder
    */
   onMinimize?: () => void;
 }>;
 
-export const LeftDrawer = React.forwardRef<
-  LeftDrawerMethods,
-  React.PropsWithChildren<LeftDrawerProps>
->((props, ref) => {
+export function LeftDrawer(props: React.PropsWithChildren<LeftDrawerProps>) {
   // Destruct
   const {
     mdUp,
     width,
     appName = globalApp?.get("appName"),
     onMinimize,
+    open = mdUp,
     children
   } = props;
 
   // Menu open/close state
-  const [open, setOpen] = React.useState<boolean>();
+  const [openLocal, setOpen] = React.useState<boolean>();
 
   const handleDrawerClose = () => {
     if (onMinimize) onMinimize();
     setOpen(false);
   };
 
-  React.useImperativeHandle(ref, () => ({
-    open() {
-      setOpen(true);
-    }
-  }));
-
   // Ready
   React.useEffect(() => {
-    setOpen(mdUp);
-  }, [mdUp]);
+    setOpen(open);
+  }, [open]);
 
   return (
     <Drawer
+      hidden={!openLocal}
       sx={{
-        width: open ? width : 0,
+        width,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: open ? width : 0,
+          width,
           boxSizing: "border-box"
         }
       }}
@@ -122,4 +113,4 @@ export const LeftDrawer = React.forwardRef<
       <List onClick={mdUp ? undefined : handleDrawerClose}>{children}</List>
     </Drawer>
   );
-});
+}
