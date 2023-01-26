@@ -6,7 +6,7 @@ import {
   List,
   Typography
 } from "@mui/material";
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { DrawerHeader } from "./DrawerHeader";
 import { globalApp } from "../app/ReactApp";
@@ -21,7 +21,7 @@ export interface LeftDrawerMethods {
 /**
  * Left drawer props
  */
-export interface LeftDrawerProps {
+export type LeftDrawerProps = React.PropsWithRef<{
   /**
    * Show when md up
    */
@@ -40,20 +40,26 @@ export interface LeftDrawerProps {
   /**
    * Application name
    */
-  appName: string;
+  appName?: string;
 
   /**
    * Minimize hanlder
    */
   onMinimize?: () => void;
-}
+}>;
 
 export const LeftDrawer = React.forwardRef<
   LeftDrawerMethods,
-  PropsWithChildren<LeftDrawerProps>
+  React.PropsWithChildren<LeftDrawerProps>
 >((props, ref) => {
   // Destruct
-  const { mdUp, width, appName, onMinimize, children } = props;
+  const {
+    mdUp,
+    width,
+    appName = globalApp?.get("appName"),
+    onMinimize,
+    children
+  } = props;
 
   // Menu open/close state
   const [open, setOpen] = React.useState<boolean>();
@@ -105,7 +111,7 @@ export const LeftDrawer = React.forwardRef<
             sx={{ marginLeft: -0.5, marginRight: 1.5, marginBottom: 1 }}
           />
         </a>
-        <Typography noWrap component="div" title={appName}>
+        <Typography noWrap component="div" title={appName} sx={{ flexGrow: 2 }}>
           {appName}
         </Typography>
         <IconButton size="small" onClick={handleDrawerClose}>
