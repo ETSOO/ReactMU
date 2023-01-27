@@ -139,6 +139,7 @@ export function UserMenu(props: UserMenuProps) {
           horizontal: "right"
         }}
         open={isMenuOpen}
+        transitionDuration={0}
         onTransitionEnd={() => eventWatcher.do(eventWatcherAction)}
         onClick={handleClick}
         onClose={handleMenuClose}
