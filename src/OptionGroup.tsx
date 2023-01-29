@@ -276,7 +276,12 @@ export function OptionGroup<
   // Layout
   return (
     <React.Fragment>
-      <FormControl component="fieldset" fullWidth={fullWidth} {...rest}>
+      <FormControl
+        component="fieldset"
+        fullWidth={fullWidth}
+        sx={{ height: "56px" }}
+        {...rest}
+      >
         {label && (
           <InputLabel required={required} variant={variant} shrink>
             {label}
