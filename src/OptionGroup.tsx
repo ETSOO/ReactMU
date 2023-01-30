@@ -279,7 +279,7 @@ export function OptionGroup<
       <FormControl
         component="fieldset"
         fullWidth={fullWidth}
-        sx={{ height: "56px" }}
+        sx={{ height: "56px" }} // absolute layout inside relative layout needed
         {...rest}
       >
         {label && (
