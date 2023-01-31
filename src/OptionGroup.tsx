@@ -106,6 +106,11 @@ export type OptionGroupProps<
   itemSize?: "small" | "medium";
 
   /**
+   * Item height in px
+   */
+  itemHeight?: number;
+
+  /**
    * Helper text
    */
   helperText?: React.ReactNode;
@@ -136,6 +141,7 @@ export function OptionGroup<
     readOnly,
     row,
     itemSize,
+    itemHeight = row ? 56 : 42,
     helperText,
     variant,
     required,
@@ -145,6 +151,9 @@ export function OptionGroup<
 
   // Theme
   const theme = useTheme();
+
+  // Outlined
+  const outlined = variant === "outlined";
 
   // Get option value
   // D type should be the source id type
@@ -276,18 +285,13 @@ export function OptionGroup<
   // Layout
   return (
     <React.Fragment>
-      <FormControl
-        component="fieldset"
-        fullWidth={fullWidth}
-        sx={{ height: "56px" }} // absolute layout inside relative layout needed
-        {...rest}
-      >
+      <FormControl component="fieldset" fullWidth={fullWidth} {...rest}>
         {label && (
           <InputLabel required={required} variant={variant} shrink>
             {label}
           </InputLabel>
         )}
-        {variant === "outlined" && (
+        {outlined && (
           <NotchedOutline
             label={label && required ? label + " *" : label}
             notched
@@ -301,7 +305,18 @@ export function OptionGroup<
             }}
           />
         )}
-        <Box paddingLeft={2} paddingY="7px" position="absolute">
+        <Box
+          paddingLeft={2}
+          paddingY="7px"
+          position={outlined ? "absolute" : undefined}
+          height={
+            outlined
+              ? row
+                ? `${itemHeight}px`
+                : `${options.length * itemHeight + 14}px`
+              : undefined
+          }
+        >
           {group}
         </Box>
       </FormControl>
