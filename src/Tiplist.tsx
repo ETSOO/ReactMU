@@ -18,9 +18,15 @@ export type TiplistProps<T extends object, D extends DataTypes.Keys<T>> = Omit<
    * Load data callback
    */
   loadData: (
-    keyword?: string,
-    id?: T[D]
+    keyword: string | undefined,
+    id: T[D] | undefined,
+    maxItems: number
   ) => PromiseLike<T[] | null | undefined>;
+
+  /**
+   * Max items to read and display
+   */
+  maxItems?: number;
 };
 
 // Multiple states
@@ -41,7 +47,7 @@ export function Tiplist<
   D extends DataTypes.Keys<T> = IdDefaultType<T>
 >(props: TiplistProps<T, D>) {
   // Labels
-  const labels = globalApp?.getLabels("noOptions", "loading");
+  const labels = globalApp?.getLabels("noOptions", "loading", "more");
 
   // Destruct
   const {
@@ -59,6 +65,7 @@ export function Tiplist<
     loadData,
     defaultValue,
     value,
+    maxItems = 16,
     name,
     readOnly,
     onChange,
@@ -66,6 +73,8 @@ export function Tiplist<
     sx = { minWidth: "180px" },
     noOptionsText = labels?.noOptions,
     loadingText = labels?.loading,
+    getOptionLabel,
+    getOptionDisabled,
     ...rest
   } = props;
 
@@ -161,8 +170,12 @@ export function Tiplist<
     if (!states.loading) stateUpdate({ loading: true });
 
     // Load list
-    loadData(keyword, id).then((options) => {
+    loadData(keyword, id, maxItems).then((options) => {
       if (!isMounted.current) return;
+
+      if (options != null && options.length >= maxItems) {
+        options.push({ [idField]: "n/a" } as T);
+      }
 
       // Indicates loading completed
       stateUpdate({
@@ -299,6 +312,20 @@ export function Tiplist<
         }
         noOptionsText={noOptionsText}
         loadingText={loadingText}
+        getOptionDisabled={(item) => {
+          if (item[idField] === "n/a") return true;
+          return getOptionDisabled ? getOptionDisabled(item) : false;
+        }}
+        getOptionLabel={(item) => {
+          if (item[idField] === "n/a") return (labels.more ?? "More") + "...";
+          return getOptionLabel
+            ? getOptionLabel(item)
+            : "label" in item
+            ? `${item.label}`
+            : "name" in item
+            ? `${item.name}`
+            : `${item}`;
+        }}
         {...rest}
       />
     </div>
