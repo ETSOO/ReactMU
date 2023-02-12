@@ -318,13 +318,18 @@ export function Tiplist<
         }}
         getOptionLabel={(item) => {
           if (item[idField] === "n/a") return (labels.more ?? "More") + "...";
-          return getOptionLabel
-            ? getOptionLabel(item)
-            : "label" in item
-            ? `${item.label}`
-            : "name" in item
-            ? `${item.name}`
-            : `${item}`;
+          try {
+            return getOptionLabel
+              ? getOptionLabel(item)
+              : "label" in item
+              ? `${item.label}`
+              : "name" in item
+              ? `${item.name}`
+              : `${item}`;
+          } catch (e) {
+            console.log(typeof item, item, e);
+            return "";
+          }
         }}
         {...rest}
       />
