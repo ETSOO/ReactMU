@@ -174,7 +174,7 @@ export function ComboBox<
 
   React.useEffect(() => {
     if (localValue != null) setStateValue(localValue);
-  }, [localValue]);
+  }, [JSON.stringify(localValue) != JSON.stringify(stateValue)]);
 
   // Add readOnly
   const addReadOnly = (params: AutocompleteRenderInputParams) => {
