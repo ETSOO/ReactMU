@@ -49,6 +49,7 @@ export * from "./FabBox";
 export * from "./FlexBox";
 export * from "./GridDataFormat";
 export * from "./HiSelector";
+export * from "./HiSelectorTL";
 export * from "./IconButtonLink";
 export * from "./InputField";
 export * from "./ItemList";

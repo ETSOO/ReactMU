@@ -1,15 +1,19 @@
-import { DataTypes, IdDefaultType, LabelDefaultType } from "@etsoo/shared";
-import { FormLabel, Grid, SelectChangeEvent } from "@mui/material";
+import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import {
+  AutocompleteChangeReason,
+  AutocompleteValue,
+  FormLabel,
+  Grid
+} from "@mui/material";
 import React from "react";
-import { SelectEx } from "./SelectEx";
+import { Tiplist } from "./Tiplist";
 
 /**
- * Hierarchy selector props
+ * Hierarchy tiplist selector props
  */
-export type HiSelectorProps<
+export type HiSelectorTLProps<
   T extends object,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>,
-  L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
+  D extends DataTypes.Keys<T> = IdDefaultType<T>
 > = {
   /**
    * Id field
@@ -37,14 +41,14 @@ export type HiSelectorProps<
   label?: string;
 
   /**
-   * Label field
-   */
-  labelField?: L;
-
-  /**
    * Load data callback
    */
-  loadData: (parent?: T[D]) => PromiseLike<T[] | null | undefined>;
+  loadData: (
+    keyword: string | undefined,
+    id: T[D] | undefined,
+    maxItems: number,
+    parent?: T[D]
+  ) => PromiseLike<T[] | null | undefined>;
 
   /**
    * On value change event
@@ -52,14 +56,13 @@ export type HiSelectorProps<
   onChange?: (value: unknown) => void;
 
   /**
-   * On select change event
-   */
-  onSelectChange?: (e: SelectChangeEvent<unknown>) => void;
-
-  /**
    * Item change callback
    */
-  onItemChange?: (option: T | undefined, userAction: boolean) => void;
+  onItemChange?: (
+    event: React.SyntheticEvent,
+    option: T | null,
+    reason: AutocompleteChangeReason
+  ) => void;
 
   /**
    * Required
@@ -78,15 +81,14 @@ export type HiSelectorProps<
 };
 
 /**
- * Hierarchy selector
+ * Hierarchy tiplist selector
  * @param props Prop
  * @returns Component
  */
-export function HiSelector<
+export function HiSelectorTL<
   T extends object,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>,
-  L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
->(props: HiSelectorProps<T, D, L>) {
+  D extends DataTypes.Keys<T> = IdDefaultType<T>
+>(props: HiSelectorTLProps<T, D>) {
   // Destruct
   const {
     idField = "id" as D,
@@ -94,13 +96,11 @@ export function HiSelector<
     helperText,
     name,
     label = name,
-    labelField = "name" as L,
     loadData,
     onChange,
-    onSelectChange,
     onItemChange,
     required,
-    search = true,
+    search = false,
     values = []
   } = props;
 
@@ -112,23 +112,23 @@ export function HiSelector<
     if (onChange) onChange(value);
   };
 
-  const doChange = (event: SelectChangeEvent<unknown>, index: number) => {
-    const value = event.target.value;
-    const itemValue = value === "" ? undefined : (value as T[D]);
+  const doChange = (
+    index: number,
+    event: React.SyntheticEvent,
+    value: AutocompleteValue<T, false, false, false>,
+    reason: AutocompleteChangeReason
+  ) => {
+    if (onItemChange) {
+      onItemChange(event, value, reason);
+      if (event.isDefaultPrevented()) return;
+    }
+
+    const itemValue = value ? value[idField] : undefined;
     updateValue(itemValue);
 
     const newValues = [...localValues.slice(0, index)];
     if (itemValue != null) newValues.push(itemValue);
     setValues(newValues);
-
-    if (onSelectChange) onSelectChange(event);
-  };
-
-  const doItemChange = (option: T | undefined, userAction: boolean) => {
-    if (onItemChange == null) return;
-    if (!userAction && (option == null || option[idField] !== values.at(-1)))
-      return;
-    onItemChange(option, userAction);
   };
 
   React.useEffect(() => {
@@ -136,7 +136,7 @@ export function HiSelector<
       setValues(values);
       updateValue(values.at(-1));
     }
-  }, [values]);
+  }, [values.toString()]);
 
   const currentValue = localValues.at(-1);
 
@@ -152,66 +152,74 @@ export function HiSelector<
         <input type="hidden" name={name} value={`${currentValue ?? ""}`} />
       </Grid>
       <Grid item xs={6} md={4} lg={3}>
-        <SelectEx<T, D, L>
+        <Tiplist<T, D>
           idField={idField}
-          labelField={labelField}
+          label="1"
           name="tab1"
           search={search}
           fullWidth
-          loadData={() => loadData()}
-          value={values[0]}
-          onChange={(event) => doChange(event, 0)}
-          onItemChange={doItemChange}
+          idValue={values[0]}
+          loadData={(keyword, id, items) => loadData(keyword, id, items)}
           inputRequired={required}
-          error={error}
-          helperText={helperText}
+          inputError={error}
+          inputHelperText={helperText}
+          onChange={(event, value, reason) => doChange(0, event, value, reason)}
         />
       </Grid>
       {localValues[0] != null && (
         <Grid item xs={6} md={4} lg={3}>
-          <SelectEx<T, D, L>
+          <Tiplist<T, D>
             key={`${localValues[0]}`}
+            label="2"
             idField={idField}
-            labelField={labelField}
             name="tab2"
             search={search}
             fullWidth
-            loadData={() => loadData(localValues[0])}
-            value={values[1]}
-            onChange={(event) => doChange(event, 1)}
-            onItemChange={doItemChange}
+            loadData={(keyword, id, items) =>
+              loadData(keyword, id, items, localValues[0])
+            }
+            idValue={values[1]}
+            onChange={(event, value, reason) =>
+              doChange(1, event, value, reason)
+            }
           />
         </Grid>
       )}
       {localValues[1] != null && (
         <Grid item xs={6} md={4} lg={3}>
-          <SelectEx<T, D, L>
+          <Tiplist<T, D>
             key={`${localValues[1]}`}
+            label="3"
             idField={idField}
-            labelField={labelField}
             name="tab3"
             search={search}
             fullWidth
-            loadData={() => loadData(localValues[1])}
-            value={values[2]}
-            onChange={(event) => doChange(event, 2)}
-            onItemChange={doItemChange}
+            loadData={(keyword, id, items) =>
+              loadData(keyword, id, items, localValues[1])
+            }
+            idValue={values[2]}
+            onChange={(event, value, reason) =>
+              doChange(2, event, value, reason)
+            }
           />
         </Grid>
       )}
       {localValues[2] != null && (
         <Grid item xs={6} md={4} lg={3}>
-          <SelectEx<T, D, L>
+          <Tiplist<T, D>
             key={`${localValues[2]}`}
+            label="4"
             idField={idField}
-            labelField={labelField}
             name="tab4"
             search={search}
             fullWidth
-            loadData={() => loadData(localValues[2])}
-            value={values[3]}
-            onChange={(event) => doChange(event, 3)}
-            onItemChange={doItemChange}
+            loadData={(keyword, id, items) =>
+              loadData(keyword, id, items, localValues[2])
+            }
+            idValue={values[3]}
+            onChange={(event, value, reason) =>
+              doChange(3, event, value, reason)
+            }
           />
         </Grid>
       )}

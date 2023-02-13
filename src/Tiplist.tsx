@@ -317,19 +317,15 @@ export function Tiplist<
           return getOptionDisabled ? getOptionDisabled(item) : false;
         }}
         getOptionLabel={(item) => {
+          if (typeof item !== "object") return `${item}`;
           if (item[idField] === "n/a") return (labels.more ?? "More") + "...";
-          try {
-            return getOptionLabel
-              ? getOptionLabel(item)
-              : "label" in item
-              ? `${item.label}`
-              : "name" in item
-              ? `${item.name}`
-              : `${item}`;
-          } catch (e) {
-            console.log(typeof item, item, e);
-            return "";
-          }
+          return getOptionLabel
+            ? getOptionLabel(item)
+            : "label" in item
+            ? `${item.label}`
+            : "name" in item
+            ? `${item.name}`
+            : `${item}`;
         }}
         {...rest}
       />
