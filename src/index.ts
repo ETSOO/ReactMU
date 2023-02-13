@@ -52,6 +52,7 @@ export * from "./HiSelector";
 export * from "./HiSelectorTL";
 export * from "./IconButtonLink";
 export * from "./InputField";
+export * from "./IntInputField";
 export * from "./ItemList";
 export * from "./ListChooser";
 export * from "./ListItemRightIcon";
