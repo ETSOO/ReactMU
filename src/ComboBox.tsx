@@ -235,14 +235,7 @@ export function ComboBox<
       }
       setOptions(result);
     });
-  }, [
-    propertyWay,
-    loadData,
-    onLoadData,
-    autoAddBlankItem,
-    idField,
-    labelField
-  ]);
+  }, [propertyWay, autoAddBlankItem, idField, labelField]);
 
   React.useEffect(() => {
     return () => {
