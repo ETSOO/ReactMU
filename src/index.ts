@@ -64,6 +64,7 @@ export * from "./MoneyInputField";
 export * from "./MoreFab";
 export * from "./MUGlobal";
 export * from "./NotifierMU";
+export * from "./OptionBool";
 export * from "./OptionGroup";
 export * from "./PList";
 export * from "./ProgressCount";

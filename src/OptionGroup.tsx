@@ -15,8 +15,7 @@ import {
   FormHelperText,
   InputLabel,
   Radio,
-  RadioGroup,
-  useTheme
+  RadioGroup
 } from "@mui/material";
 import NotchedOutline from "@mui/material/OutlinedInput";
 import React from "react";
@@ -148,9 +147,6 @@ export function OptionGroup<
     fullWidth,
     ...rest
   } = props;
-
-  // Theme
-  const theme = useTheme();
 
   // Outlined
   const outlined = variant === "outlined";
