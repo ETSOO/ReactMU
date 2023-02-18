@@ -145,11 +145,22 @@ export function OptionGroup<
     variant,
     required,
     fullWidth,
+    sx = {},
     ...rest
   } = props;
 
   // Outlined
   const outlined = variant === "outlined";
+
+  if (sx) {
+    Object.assign(sx, {
+      height: outlined
+        ? row
+          ? `${itemHeight}px`
+          : `${options.length * itemHeight + 14}px`
+        : undefined
+    });
+  }
 
   // Get option value
   // D type should be the source id type
@@ -281,7 +292,7 @@ export function OptionGroup<
   // Layout
   return (
     <React.Fragment>
-      <FormControl component="fieldset" fullWidth={fullWidth} {...rest}>
+      <FormControl component="fieldset" fullWidth={fullWidth} sx={sx} {...rest}>
         {label && (
           <InputLabel required={required} variant={variant} shrink>
             {label}
@@ -305,13 +316,6 @@ export function OptionGroup<
           paddingLeft={2}
           paddingY="7px"
           position={outlined ? "absolute" : undefined}
-          height={
-            outlined
-              ? row
-                ? `${itemHeight}px`
-                : `${options.length * itemHeight + 14}px`
-              : undefined
-          }
         >
           {group}
         </Box>
