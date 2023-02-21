@@ -28,9 +28,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
  * ComboBox props
  */
 export type ComboBoxProps<
-  T extends object,
-  D extends DataTypes.Keys<T>,
-  L extends DataTypes.Keys<T, string>
+  T extends object = ListType,
+  D extends DataTypes.Keys<T> = IdDefaultType<T>,
+  L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
 > = AutocompleteExtendedProps<T, D> & {
   /**
    * Auto add blank item
