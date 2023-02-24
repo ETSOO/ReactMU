@@ -30,7 +30,7 @@ export interface SwitchAntProps extends SwitchProps {
  */
 export function SwitchAnt(props: SwitchAntProps) {
   // Labels
-  const { yes, no } = globalApp?.getLabels("yes", "no");
+  const { yes = "Yes", no = "No" } = globalApp?.getLabels("yes", "no") ?? {};
 
   // Destruct
   const {

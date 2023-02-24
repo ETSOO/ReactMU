@@ -1,15 +1,15 @@
-import { AuditLineChangesDto, IApp } from '@etsoo/appscript';
-import { NotificationMessageType } from '@etsoo/notificationbase';
-import { Utils } from '@etsoo/shared';
+import { AuditLineChangesDto, IApp } from "@etsoo/appscript";
+import { NotificationMessageType } from "@etsoo/notificationbase";
+import { Utils } from "@etsoo/shared";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow
-} from '@mui/material';
-import React from 'react';
-import { globalApp } from './app/ReactApp';
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow
+} from "@mui/material";
+import React from "react";
+import { globalApp } from "./app/ReactApp";
 
 /**
  * Check obj is instance of AuditLineChangesDto
@@ -17,20 +17,20 @@ import { globalApp } from './app/ReactApp';
  * @returns Result
  */
 export function IsAuditLineUpdateData(obj: any): obj is AuditLineChangesDto {
-    return (
-        typeof obj === 'object' &&
-        'oldData' in obj &&
-        typeof obj.oldData === 'object' &&
-        'newData' in obj &&
-        typeof obj.newData === 'object'
-    );
+  return (
+    typeof obj === "object" &&
+    "oldData" in obj &&
+    typeof obj.oldData === "object" &&
+    "newData" in obj &&
+    typeof obj.newData === "object"
+  );
 }
 
 // Format value
 const formatValue = (value: unknown, app: IApp) => {
-    if (value == null) return '';
-    if (value instanceof Date) return app.formatDate(value, 'ds');
-    return `${value}`;
+  if (value == null) return "";
+  if (value instanceof Date) return app.formatDate(value, "ds");
+  return `${value}`;
 };
 
 /**
@@ -41,65 +41,77 @@ const formatValue = (value: unknown, app: IApp) => {
  * @param equalCheck Equal check for properties
  */
 export const ShowDataComparison = (
-    data: AuditLineChangesDto,
-    modelTitle?: string,
-    getLabel?: (field: string) => string,
-    equalCheck: boolean = true
+  data: AuditLineChangesDto,
+  modelTitle?: string,
+  getLabel?: (field: string) => string,
+  equalCheck: boolean = true
 ) => {
-    modelTitle ??= globalApp.get<string>('dataComparison');
-    getLabel ??= (key) => {
-        return globalApp.get(Utils.formatInitial(key)) ?? key;
-    };
+  // Validate app
+  const app = globalApp;
+  if (app == null) {
+    throw new Error("No globalApp");
+  }
 
-    const keys = new Set([
-        ...Object.keys(data.oldData),
-        ...Object.keys(data.newData)
-    ]);
+  // Labels
+  const { dataComparison, field, newValue, oldValue } = app.getLabels(
+    "dataComparison",
+    "field",
+    "newValue",
+    "oldValue"
+  );
 
-    let rows = Array.from(keys).map((field) => ({
-        field,
-        oldValue: data.oldData[field],
-        newValue: data.newData[field]
-    }));
+  modelTitle ??= dataComparison;
+  getLabel ??= (key) => {
+    return app.get(Utils.formatInitial(key)) ?? key;
+  };
 
-    if (equalCheck)
-        rows = rows.filter(
-            (item) => !Utils.equals(item.oldValue, item.newValue)
-        );
+  const keys = new Set([
+    ...Object.keys(data.oldData),
+    ...Object.keys(data.newData)
+  ]);
 
-    const inputs = (
-        <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell width="18%">{globalApp.get('field')}</TableCell>
-                    <TableCell width="41%" align="right">
-                        {globalApp.get('oldValue')}
-                    </TableCell>
-                    <TableCell width="41%" align="right">
-                        {globalApp.get('newValue')}
-                    </TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {rows.map((row) => (
-                    <TableRow key={row.field}>
-                        <TableCell>{getLabel!(row.field)}</TableCell>
-                        <TableCell align="right">
-                            {formatValue(row.oldValue, globalApp)}
-                        </TableCell>
-                        <TableCell align="right">
-                            {formatValue(row.newValue, globalApp)}
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    );
+  let rows = Array.from(keys).map((field) => ({
+    field,
+    oldValue: data.oldData[field],
+    newValue: data.newData[field]
+  }));
 
-    globalApp.notifier.alert(
-        [undefined, modelTitle],
-        undefined,
-        NotificationMessageType.Info,
-        { fullScreen: globalApp.smDown, inputs }
-    );
+  if (equalCheck)
+    rows = rows.filter((item) => !Utils.equals(item.oldValue, item.newValue));
+
+  const inputs = (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell width="18%">{field}</TableCell>
+          <TableCell width="41%" align="right">
+            {oldValue}
+          </TableCell>
+          <TableCell width="41%" align="right">
+            {newValue}
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {rows.map((row) => (
+          <TableRow key={row.field}>
+            <TableCell>{getLabel!(row.field)}</TableCell>
+            <TableCell align="right">
+              {formatValue(row.oldValue, app)}
+            </TableCell>
+            <TableCell align="right">
+              {formatValue(row.newValue, app)}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+
+  app.notifier.alert(
+    [undefined, modelTitle],
+    undefined,
+    NotificationMessageType.Info,
+    { fullScreen: app.smDown, inputs }
+  );
 };

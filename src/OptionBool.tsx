@@ -18,7 +18,7 @@ export type OptionBoolProps = Omit<
  */
 export function OptionBool(props: OptionBoolProps) {
   // Options
-  const options = globalApp.getBools();
+  const options = globalApp?.getBools() ?? [];
 
   // Layout
   return (

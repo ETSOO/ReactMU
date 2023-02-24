@@ -21,7 +21,7 @@ export function SelectBool(props: SelectBoolProps) {
   const { search = true, autoAddBlankItem = search, ...rest } = props;
 
   // Options
-  const options = globalApp.getBools();
+  const options = globalApp?.getBools() ?? [];
 
   if (autoAddBlankItem) Utils.addBlankItem(options);
 
