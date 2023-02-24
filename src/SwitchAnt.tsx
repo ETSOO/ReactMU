@@ -15,12 +15,12 @@ export interface SwitchAntProps extends SwitchProps {
   /**
    * Start label
    */
-  startLabel: string;
+  startLabel?: string;
 
   /**
    * End label
    */
-  endLabel: string;
+  endLabel?: string;
 }
 
 /**
