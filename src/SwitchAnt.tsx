@@ -1,25 +1,26 @@
-import { Stack, Typography } from '@mui/material';
-import Switch, { SwitchProps } from '@mui/material/Switch';
-import React from 'react';
+import { Stack, Typography } from "@mui/material";
+import Switch, { SwitchProps } from "@mui/material/Switch";
+import React from "react";
+import { globalApp } from "./app/ReactApp";
 
 /**
  * Ant style switch props
  */
 export interface SwitchAntProps extends SwitchProps {
-    /**
-     * Active color
-     */
-    activeColor?: string;
+  /**
+   * Active color
+   */
+  activeColor?: string;
 
-    /**
-     * Start label
-     */
-    startLabel: string;
+  /**
+   * Start label
+   */
+  startLabel: string;
 
-    /**
-     * End label
-     */
-    endLabel: string;
+  /**
+   * End label
+   */
+  endLabel: string;
 }
 
 /**
@@ -28,72 +29,75 @@ export interface SwitchAntProps extends SwitchProps {
  * @returns Component
  */
 export function SwitchAnt(props: SwitchAntProps) {
-    // Destruct
-    const {
-        activeColor,
-        checked,
-        defaultChecked,
-        defaultValue,
-        endLabel,
-        startLabel,
-        onChange,
-        value = 'true',
-        ...rest
-    } = props;
+  // Labels
+  const { yes, no } = globalApp?.getLabels("yes", "no");
 
-    // Checked state
-    const [controlChecked, setControlChecked] = React.useState(
-        checked ?? defaultChecked ?? defaultValue == value
-    );
+  // Destruct
+  const {
+    activeColor,
+    checked,
+    defaultChecked,
+    defaultValue,
+    endLabel = yes,
+    startLabel = no,
+    onChange,
+    value = "true",
+    ...rest
+  } = props;
 
-    // Ref
-    const ref = React.useRef<HTMLButtonElement>(null);
+  // Checked state
+  const [controlChecked, setControlChecked] = React.useState(
+    checked ?? defaultChecked ?? defaultValue == value
+  );
 
-    React.useEffect(() => {
-        if (checked) setControlChecked(checked);
-    }, [checked]);
+  // Ref
+  const ref = React.useRef<HTMLButtonElement>(null);
 
-    // On change
-    const onChangeLocal = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        checked: boolean
-    ) => {
-        if (onChange) onChange(event, checked);
-        setControlChecked(checked);
-    };
+  React.useEffect(() => {
+    if (checked) setControlChecked(checked);
+  }, [checked]);
 
-    // Layout
-    return (
-        <Stack direction="row" spacing={1} alignItems="center">
-            <Typography
-                onClick={() => controlChecked && ref.current?.click()}
-                sx={{
-                    cursor: 'pointer',
-                    color: controlChecked
-                        ? undefined
-                        : (theme) => activeColor ?? theme.palette.warning.main
-                }}
-            >
-                {startLabel}
-            </Typography>
-            <Switch
-                checked={controlChecked}
-                inputRef={ref}
-                value={value}
-                onChange={onChangeLocal}
-                {...rest}
-            />
-            <Typography
-                onClick={() => !controlChecked && ref.current?.click()}
-                sx={{
-                    cursor: 'pointer',
-                    color: controlChecked
-                        ? (theme) => activeColor ?? theme.palette.warning.main
-                        : undefined
-                }}
-            >
-                {endLabel}
-            </Typography>
-        </Stack>
-    );
+  // On change
+  const onChangeLocal = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    if (onChange) onChange(event, checked);
+    setControlChecked(checked);
+  };
+
+  // Layout
+  return (
+    <Stack direction="row" spacing={1} alignItems="center">
+      <Typography
+        onClick={() => controlChecked && ref.current?.click()}
+        sx={{
+          cursor: "pointer",
+          color: controlChecked
+            ? undefined
+            : (theme) => activeColor ?? theme.palette.warning.main
+        }}
+      >
+        {startLabel}
+      </Typography>
+      <Switch
+        checked={controlChecked}
+        inputRef={ref}
+        value={value}
+        onChange={onChangeLocal}
+        {...rest}
+      />
+      <Typography
+        onClick={() => !controlChecked && ref.current?.click()}
+        sx={{
+          cursor: "pointer",
+          color: controlChecked
+            ? (theme) => activeColor ?? theme.palette.warning.main
+            : undefined
+        }}
+      >
+        {endLabel}
+      </Typography>
+    </Stack>
+  );
 }
