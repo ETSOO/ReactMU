@@ -120,8 +120,8 @@ export function SwitchField(props: SwitchFieldProps) {
           <SwitchAnt
             activeColor={activeColor}
             name={name}
-            startLabel={startLabel ?? "NO"}
-            endLabel={endLabel ?? "YES"}
+            startLabel={startLabel}
+            endLabel={endLabel}
             value={value}
             checked={checked}
           />
