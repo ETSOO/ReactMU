@@ -47,8 +47,12 @@ export function Tiplist<
   D extends DataTypes.Keys<T> = IdDefaultType<T>
 >(props: TiplistProps<T, D>) {
   // Labels
-  const { noOptions, loading, more } =
-    globalApp?.getLabels("noOptions", "loading", "more") ?? {};
+  const {
+    noOptions,
+    loading,
+    more,
+    open: openDefault
+  } = globalApp?.getLabels("noOptions", "loading", "more", "open") ?? {};
 
   // Destruct
   const {
@@ -74,6 +78,7 @@ export function Tiplist<
     sx = { minWidth: "180px" },
     noOptionsText = noOptions,
     loadingText = loading,
+    openText = openDefault,
     getOptionLabel,
     getOptionDisabled,
     ...rest
@@ -313,6 +318,7 @@ export function Tiplist<
         }
         noOptionsText={noOptionsText}
         loadingText={loadingText}
+        openText={openText}
         getOptionDisabled={(item) => {
           if (item[idField] === "n/a") return true;
           return getOptionDisabled ? getOptionDisabled(item) : false;

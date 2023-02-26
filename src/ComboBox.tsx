@@ -64,7 +64,7 @@ export function ComboBox<
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
 >(props: ComboBoxProps<T, D, L>) {
   // Labels
-  const labels = globalApp?.getLabels("noOptions", "loading");
+  const labels = globalApp?.getLabels("noOptions", "loading", "open");
 
   // Destruct
   const {
@@ -96,6 +96,7 @@ export function ComboBox<
     sx = { minWidth: "150px" },
     noOptionsText = labels?.noOptions,
     loadingText = labels?.loading,
+    openText = labels?.open,
     ...rest
   } = props;
 
@@ -262,6 +263,7 @@ export function ComboBox<
         options={localOptions}
         noOptionsText={noOptionsText}
         loadingText={loadingText}
+        openText={openText}
         {...rest}
       />
     </div>

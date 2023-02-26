@@ -5,7 +5,7 @@ import {
   AddressRegionDb,
   AddressState
 } from "@etsoo/appscript";
-import { FormLabel, Grid } from "@mui/material";
+import { FormLabel, Grid, RegularBreakpoints } from "@mui/material";
 import React from "react";
 import { globalApp } from "./app/ReactApp";
 import { ComboBox } from "./ComboBox";
@@ -37,6 +37,11 @@ export type AddressSelectorProps = {
    * Address API
    */
   api: AddressApi;
+
+  /**
+   * Break points
+   */
+  breakPoints?: RegularBreakpoints;
 
   /**
    * City
@@ -145,8 +150,17 @@ export function AddressSelector(props: AddressSelectorProps) {
     required,
     search,
     state,
-    stateLabel = stateDefault
+    stateLabel = stateDefault,
+    breakPoints = { xs: 12, md: 6, lg: hideRegion ? 4 : 3 }
   } = props;
+
+  const isMounted = React.useRef(true);
+  React.useEffect(
+    () => () => {
+      isMounted.current = false;
+    },
+    []
+  );
 
   // States
   const [regionState, setRegion] = React.useState(region);
@@ -167,7 +181,7 @@ export function AddressSelector(props: AddressSelectorProps) {
     if (regionState == null) setStates([]);
     else
       api.states(regionState).then((items) => {
-        if (items == null) return;
+        if (items == null || !isMounted.current) return;
         setStates(items);
       });
   }, [regionState]);
@@ -175,7 +189,7 @@ export function AddressSelector(props: AddressSelectorProps) {
     if (stateState == null) setCities([]);
     else
       api.cities(stateState).then((items) => {
-        if (items == null) return;
+        if (items == null || !isMounted.current) return;
         setCities(items);
       });
   }, [stateState]);
@@ -183,16 +197,15 @@ export function AddressSelector(props: AddressSelectorProps) {
     if (cityState == null) setDistricts([]);
     else
       api.districts(cityState).then((items) => {
-        if (items == null) return;
+        if (items == null || !isMounted.current) return;
         setDistricts(items);
       });
   }, [cityState]);
 
-  // Field size
-  const fieldSize = hideRegion ? 4 : 3;
-
   // Handle field change
   const handleChange = <F extends AddressField>(event: AddressFieldType<F>) => {
+    if (!isMounted.current) return;
+
     if (onChange) onChange(event);
 
     const [field, data] = event;
@@ -254,7 +267,7 @@ export function AddressSelector(props: AddressSelectorProps) {
         </Grid>
       )}
       {!hideRegion && (
-        <Grid item xs={12} md={6} lg={fieldSize}>
+        <Grid item {...breakPoints}>
           <Tiplist<AddressRegionDb>
             label={regionLabel}
             name={AddressField.Region}
@@ -273,7 +286,7 @@ export function AddressSelector(props: AddressSelectorProps) {
           />
         </Grid>
       )}
-      <Grid item xs={12} md={6} lg={fieldSize}>
+      <Grid item {...breakPoints}>
         <ComboBox<AddressState>
           name={AddressField.State}
           label={stateLabel}
@@ -289,7 +302,7 @@ export function AddressSelector(props: AddressSelectorProps) {
           }
         />
       </Grid>
-      <Grid item xs={12} md={6} lg={fieldSize}>
+      <Grid item {...breakPoints}>
         <ComboBox<AddressCity>
           name={AddressField.City}
           label={cityLabel}
@@ -300,7 +313,7 @@ export function AddressSelector(props: AddressSelectorProps) {
           onChange={(_event, value) => handleChange([AddressField.City, value])}
         />
       </Grid>
-      <Grid item xs={12} md={6} lg={fieldSize}>
+      <Grid item {...breakPoints}>
         <ComboBox<AddressDistrict>
           name={AddressField.District}
           label={districtLabel}

@@ -3,7 +3,8 @@ import {
   AutocompleteChangeReason,
   AutocompleteValue,
   FormLabel,
-  Grid
+  Grid,
+  RegularBreakpoints
 } from "@mui/material";
 import React from "react";
 import { Tiplist } from "./Tiplist";
@@ -15,6 +16,11 @@ export type HiSelectorTLProps<
   T extends object,
   D extends DataTypes.Keys<T> = IdDefaultType<T>
 > = {
+  /**
+   * Break points
+   */
+  breakPoints?: RegularBreakpoints;
+
   /**
    * Id field
    */
@@ -91,6 +97,7 @@ export function HiSelectorTL<
 >(props: HiSelectorTLProps<T, D>) {
   // Destruct
   const {
+    breakPoints = { xs: 6, md: 4, lg: 3 },
     idField = "id" as D,
     error,
     helperText,
@@ -153,7 +160,7 @@ export function HiSelectorTL<
         </Grid>
       )}
       <input type="hidden" name={name} value={`${currentValue ?? ""}`} />
-      <Grid item xs={6} md={4} lg={3}>
+      <Grid item {...breakPoints}>
         <Tiplist<T, D>
           idField={idField}
           label="1"
@@ -169,7 +176,7 @@ export function HiSelectorTL<
         />
       </Grid>
       {localValues[0] != null && (
-        <Grid item xs={6} md={4} lg={3}>
+        <Grid item {...breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[0]}`}
             label="2"
@@ -188,7 +195,7 @@ export function HiSelectorTL<
         </Grid>
       )}
       {localValues[1] != null && (
-        <Grid item xs={6} md={4} lg={3}>
+        <Grid item {...breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[1]}`}
             label="3"
@@ -207,7 +214,7 @@ export function HiSelectorTL<
         </Grid>
       )}
       {localValues[2] != null && (
-        <Grid item xs={6} md={4} lg={3}>
+        <Grid item {...breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[2]}`}
             label="4"

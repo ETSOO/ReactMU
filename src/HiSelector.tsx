@@ -1,5 +1,10 @@
 import { DataTypes, IdDefaultType, LabelDefaultType } from "@etsoo/shared";
-import { FormLabel, Grid, SelectChangeEvent } from "@mui/material";
+import {
+  FormLabel,
+  Grid,
+  RegularBreakpoints,
+  SelectChangeEvent
+} from "@mui/material";
 import React from "react";
 import { SelectEx } from "./SelectEx";
 
@@ -11,6 +16,11 @@ export type HiSelectorProps<
   D extends DataTypes.Keys<T> = IdDefaultType<T>,
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
 > = {
+  /**
+   * Break points
+   */
+  breakPoints?: RegularBreakpoints;
+
   /**
    * Id field
    */
@@ -89,6 +99,7 @@ export function HiSelector<
 >(props: HiSelectorProps<T, D, L>) {
   // Destruct
   const {
+    breakPoints = { xs: 6, md: 4, lg: 3 },
     idField = "id" as D,
     error,
     helperText,
@@ -153,7 +164,7 @@ export function HiSelector<
         </Grid>
       )}
       <input type="hidden" name={name} value={`${currentValue ?? ""}`} />
-      <Grid item xs={6} md={4} lg={3}>
+      <Grid item {...breakPoints}>
         <SelectEx<T, D, L>
           idField={idField}
           labelField={labelField}
@@ -170,7 +181,7 @@ export function HiSelector<
         />
       </Grid>
       {localValues[0] != null && (
-        <Grid item xs={6} md={4} lg={3}>
+        <Grid item {...breakPoints}>
           <SelectEx<T, D, L>
             key={`${localValues[0]}`}
             idField={idField}
@@ -186,7 +197,7 @@ export function HiSelector<
         </Grid>
       )}
       {localValues[1] != null && (
-        <Grid item xs={6} md={4} lg={3}>
+        <Grid item {...breakPoints}>
           <SelectEx<T, D, L>
             key={`${localValues[1]}`}
             idField={idField}
@@ -202,7 +213,7 @@ export function HiSelector<
         </Grid>
       )}
       {localValues[2] != null && (
-        <Grid item xs={6} md={4} lg={3}>
+        <Grid item {...breakPoints}>
           <SelectEx<T, D, L>
             key={`${localValues[2]}`}
             idField={idField}
