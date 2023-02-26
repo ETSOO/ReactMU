@@ -142,15 +142,17 @@ export function HiSelectorTL<
 
   return (
     <React.Fragment>
-      <Grid item xs={12}>
-        <FormLabel
-          required={required}
-          sx={{ fontSize: (theme) => theme.typography.caption }}
-        >
-          {label}
-        </FormLabel>
-        <input type="hidden" name={name} value={`${currentValue ?? ""}`} />
-      </Grid>
+      {label && (
+        <Grid item xs={12}>
+          <FormLabel
+            required={required}
+            sx={{ fontSize: (theme) => theme.typography.caption }}
+          >
+            {label}
+          </FormLabel>
+        </Grid>
+      )}
+      <input type="hidden" name={name} value={`${currentValue ?? ""}`} />
       <Grid item xs={6} md={4} lg={3}>
         <Tiplist<T, D>
           idField={idField}

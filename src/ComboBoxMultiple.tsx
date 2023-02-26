@@ -5,23 +5,33 @@ import {
   LabelDefaultType,
   ListType
 } from "@etsoo/shared";
-import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+  Checkbox
+} from "@mui/material";
 import React from "react";
 import { Utils as SharedUtils } from "@etsoo/shared";
 import { ReactUtils } from "@etsoo/react";
+
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
 import { globalApp } from "./app/ReactApp";
 
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
 /**
- * ComboBox props
+ * ComboBox multiple props
  */
-export type ComboBoxProps<
+export type ComboBoxMultipleProps<
   T extends object = ListType,
   D extends DataTypes.Keys<T> = IdDefaultType<T>,
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
-> = AutocompleteExtendedProps<T, D, false> & {
+> = AutocompleteExtendedProps<T, D, true> & {
   /**
    * Auto add blank item
    */
@@ -51,18 +61,23 @@ export type ComboBoxProps<
    * Array of options.
    */
   options?: ReadonlyArray<T>;
+
+  /**
+   * Id values
+   */
+  idValues?: T[D][];
 };
 
 /**
- * ComboBox
+ * ComboBox multiple
  * @param props Props
  * @returns Component
  */
-export function ComboBox<
+export function ComboBoxMultiple<
   T extends object = ListType,
   D extends DataTypes.Keys<T> = IdDefaultType<T>,
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
->(props: ComboBoxProps<T, D, L>) {
+>(props: ComboBoxMultipleProps<T, D, L>) {
   // Labels
   const labels = globalApp?.getLabels("noOptions", "loading");
 
@@ -72,6 +87,7 @@ export function ComboBox<
     autoAddBlankItem = search,
     idField = "id" as D,
     idValue,
+    idValues,
     inputError,
     inputHelperText,
     inputMargin,
@@ -91,7 +107,20 @@ export function ComboBox<
     onChange,
     openOnFocus = true,
     value,
-    disableCloseOnSelect = false,
+    disableCloseOnSelect = true,
+    renderOption = (props, option, { selected }) => (
+      <li {...props}>
+        <>
+          <Checkbox
+            icon={icon}
+            checkedIcon={checkedIcon}
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {option[labelField]}
+        </>
+      </li>
+    ),
     getOptionLabel = (option: T) => `${option[labelField]}`,
     sx = { minWidth: "150px" },
     noOptionsText = labels?.noOptions,
@@ -114,14 +143,16 @@ export function ComboBox<
   }, [options, propertyWay]);
 
   // Local default value
-  const localValue: T | null | undefined =
+  const localValue: T | T[] | null | undefined =
     idValue != null
-      ? localOptions.find((o) => o[idField] === idValue)
+      ? localOptions.filter((o) => o[idField] === idValue)
+      : idValues != null
+      ? localOptions.filter((o) => idValues?.includes(o[idField]))
       : defaultValue ?? value;
 
   // State
   // null for controlled
-  const [stateValue, setStateValue] = React.useState<T | null>(null);
+  const [stateValue, setStateValue] = React.useState<T | T[] | null>(null);
 
   React.useEffect(() => {
     if (localValue != null && localValue != stateValue) {
@@ -154,14 +185,14 @@ export function ComboBox<
     return params;
   };
 
-  const getValue = (value: T | null): string => {
+  const getValue = (value: T | T[] | null): string => {
     if (value == null) return "";
     if (Array.isArray(value))
       return value.map((item) => item[idField]).join(",");
     return `${value[idField]}`;
   };
 
-  const setInputValue = (value: T | null) => {
+  const setInputValue = (value: T | T[] | null) => {
     // Set state
     setStateValue(value);
 
@@ -210,8 +241,14 @@ export function ComboBox<
         onChange={inputOnChange}
       />
       {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
-      <Autocomplete<T, false, false, false>
-        value={stateValue}
+      <Autocomplete<T, true, false, false>
+        value={
+          stateValue == null
+            ? undefined
+            : Array.isArray(stateValue)
+            ? stateValue
+            : [stateValue]
+        }
         disableCloseOnSelect={disableCloseOnSelect}
         getOptionLabel={getOptionLabel}
         isOptionEqualToValue={(option: T, value: T) =>
@@ -252,6 +289,7 @@ export function ComboBox<
           )
         }
         options={localOptions}
+        renderOption={renderOption}
         noOptionsText={noOptionsText}
         loadingText={loadingText}
         {...rest}

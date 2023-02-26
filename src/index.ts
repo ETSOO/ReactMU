@@ -29,12 +29,14 @@ export * from "./texts/DateText";
 export * from "./texts/MoneyText";
 export * from "./texts/NumberText";
 
+export * from "./AddresSelector";
 export * from "./AuditDisplay";
 export * from "./AutocompleteExtendedProps";
 export * from "./BackButton";
 export * from "./BridgeCloseButton";
 export * from "./ButtonLink";
 export * from "./ComboBox";
+export * from "./ComboBoxMultiple";
 export * from "./CountdownButton";
 export * from "./CountryList";
 export * from "./CustomFabProps";
