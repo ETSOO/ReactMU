@@ -139,7 +139,22 @@ export function ComboBoxMultiple<
   // [options] will cause infinite loop
   const propertyWay = loadData == null;
   React.useEffect(() => {
-    if (propertyWay && options != null) setOptions(options);
+    if (propertyWay && options != null) {
+      setOptions(options);
+
+      if (stateValue != null) {
+        if (Array.isArray(stateValue)) {
+          const newState = stateValue.filter((item) =>
+            options.some((option) => option[idField] === item[idField])
+          );
+          setStateValue(newState);
+        } else if (
+          !options.some((option) => option[idField] === stateValue[idField])
+        ) {
+          setStateValue(null);
+        }
+      }
+    }
   }, [options, propertyWay]);
 
   // Local default value

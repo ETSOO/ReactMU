@@ -21,6 +21,14 @@ export enum AddressField {
   District = "district"
 }
 
+type AddressFieldType<F extends AddressField> = F extends AddressField.Region
+  ? [F, AddressRegionDb | null]
+  : F extends AddressField.State
+  ? [F, AddressState | null]
+  : F extends AddressField.City
+  ? [F, AddressCity | null]
+  : [F, AddressDistrict | null];
+
 /**
  * Address selector props
  */
@@ -69,6 +77,12 @@ export type AddressSelectorProps = {
    * Label
    */
   label?: string;
+
+  /**
+   * Onchange hanlder
+   * @param event Event
+   */
+  onChange?: <F extends AddressField>(event: AddressFieldType<F>) => void;
 
   /**
    * Country or region
@@ -125,6 +139,7 @@ export function AddressSelector(props: AddressSelectorProps) {
     helperText,
     hideRegion,
     label,
+    onChange,
     region,
     regionLabel = regionDefault,
     required,
@@ -177,12 +192,16 @@ export function AddressSelector(props: AddressSelectorProps) {
   const fieldSize = hideRegion ? 4 : 3;
 
   // Handle field change
-  const handleChange = (field: AddressField, value: unknown) => {
+  const handleChange = <F extends AddressField>(event: AddressFieldType<F>) => {
+    if (onChange) onChange(event);
+
+    const [field, data] = event;
+
     if (field === AddressField.Region) {
-      if (value == null) {
+      if (data == null) {
         setRegion(undefined);
       } else {
-        setRegion(value as string);
+        setRegion(data.id);
       }
       setState(undefined);
       setCity(undefined);
@@ -192,10 +211,10 @@ export function AddressSelector(props: AddressSelectorProps) {
     }
 
     if (field === AddressField.State) {
-      if (value == null) {
+      if (data == null) {
         setState(undefined);
       } else {
-        setState(value as string);
+        setState(data.id);
       }
       setCity(undefined);
       setDistrict(undefined);
@@ -204,28 +223,22 @@ export function AddressSelector(props: AddressSelectorProps) {
     }
 
     if (field === AddressField.City) {
-      if (value == null) {
+      if (data == null) {
         setCity(undefined);
-      } else if (typeof value === "number") {
-        setCity(value);
       } else {
-        setCity(parseInt(`${value}`));
+        setCity(data.id);
       }
       setDistrict(undefined);
 
       return;
     }
 
-    if (value == null) {
+    if (data == null) {
       setDistrict(undefined);
-    } else if (typeof value === "number") {
-      setDistrict(value);
     } else {
-      setDistrict(parseInt(`${value}`));
+      setDistrict(data.id);
     }
   };
-
-  console.log(regionState, stateState, cityState, districtState);
 
   // Layout
   return (
@@ -255,7 +268,7 @@ export function AddressSelector(props: AddressSelectorProps) {
             inputError={error}
             inputHelperText={helperText}
             onChange={(_event, value) =>
-              handleChange(AddressField.Region, value?.id)
+              handleChange([AddressField.Region, value])
             }
           />
         </Grid>
@@ -272,7 +285,7 @@ export function AddressSelector(props: AddressSelectorProps) {
           inputError={hideRegion ? error : undefined}
           inputHelperText={hideRegion ? helperText : undefined}
           onChange={(_event, value) =>
-            handleChange(AddressField.State, value?.id)
+            handleChange([AddressField.State, value])
           }
         />
       </Grid>
@@ -284,9 +297,7 @@ export function AddressSelector(props: AddressSelectorProps) {
           fullWidth
           idValue={cityState}
           options={cities}
-          onChange={(_event, value) =>
-            handleChange(AddressField.City, value?.id)
-          }
+          onChange={(_event, value) => handleChange([AddressField.City, value])}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={fieldSize}>
@@ -298,7 +309,7 @@ export function AddressSelector(props: AddressSelectorProps) {
           idValue={districtState}
           options={districts}
           onChange={(_event, value) =>
-            handleChange(AddressField.District, value?.id)
+            handleChange([AddressField.District, value])
           }
         />
       </Grid>
