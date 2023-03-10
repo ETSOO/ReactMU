@@ -29,6 +29,12 @@ type AddressFieldType<F extends AddressField> = F extends AddressField.Region
   ? [F, AddressCity | null]
   : [F, AddressDistrict | null];
 
+type AddressFavorType<F extends AddressField> = F extends
+  | AddressField.Region
+  | AddressField.State
+  ? string
+  : number;
+
 /**
  * Address selector props
  */
@@ -67,6 +73,13 @@ export type AddressSelectorProps = {
    * Error
    */
   error?: boolean;
+
+  /**
+   * Get favored ids
+   * @param field Field
+   * @returns Result
+   */
+  favoredIds?: <F extends AddressField>(field: F) => AddressFavorType<F>[];
 
   /**
    * The helper text content.
@@ -141,6 +154,7 @@ export function AddressSelector(props: AddressSelectorProps) {
     district,
     districtLabel = districtDefault,
     error,
+    favoredIds,
     helperText,
     hideRegion,
     label,
@@ -180,26 +194,41 @@ export function AddressSelector(props: AddressSelectorProps) {
   React.useEffect(() => {
     if (regionState == null) setStates([]);
     else
-      api.states(regionState).then((items) => {
-        if (items == null || !isMounted.current) return;
-        setStates(items);
-      });
+      api
+        .states(
+          regionState,
+          favoredIds == null ? undefined : favoredIds(AddressField.State)
+        )
+        .then((items) => {
+          if (items == null || !isMounted.current) return;
+          setStates(items);
+        });
   }, [regionState]);
   React.useEffect(() => {
     if (stateState == null) setCities([]);
     else
-      api.cities(stateState).then((items) => {
-        if (items == null || !isMounted.current) return;
-        setCities(items);
-      });
+      api
+        .cities(
+          stateState,
+          favoredIds == null ? undefined : favoredIds(AddressField.City)
+        )
+        .then((items) => {
+          if (items == null || !isMounted.current) return;
+          setCities(items);
+        });
   }, [stateState]);
   React.useEffect(() => {
     if (cityState == null) setDistricts([]);
     else
-      api.districts(cityState).then((items) => {
-        if (items == null || !isMounted.current) return;
-        setDistricts(items);
-      });
+      api
+        .districts(
+          cityState,
+          favoredIds == null ? undefined : favoredIds(AddressField.District)
+        )
+        .then((items) => {
+          if (items == null || !isMounted.current) return;
+          setDistricts(items);
+        });
   }, [cityState]);
 
   // Handle field change
@@ -275,7 +304,15 @@ export function AddressSelector(props: AddressSelectorProps) {
             fullWidth
             idValue={regionState}
             loadData={(keyword, id, items) =>
-              api.getRegions({ keyword, id, items })
+              api.getRegions({
+                keyword,
+                id,
+                items,
+                favoredIds:
+                  favoredIds == null
+                    ? undefined
+                    : favoredIds(AddressField.Region)
+              })
             }
             inputRequired={required}
             inputError={error}
@@ -294,7 +331,7 @@ export function AddressSelector(props: AddressSelectorProps) {
           fullWidth
           idValue={stateState}
           options={states}
-          inputRequired={hideRegion ? required : undefined}
+          inputRequired={required}
           inputError={hideRegion ? error : undefined}
           inputHelperText={hideRegion ? helperText : undefined}
           onChange={(_event, value) =>
