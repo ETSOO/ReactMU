@@ -88,6 +88,7 @@ export * from "./TabBox";
 export * from "./TableEx";
 export * from "./TextFieldEx";
 export * from "./Tiplist";
+export * from "./TagList";
 export * from "./TwoFieldInput";
 export * from "./TooltipClick";
 export * from "./UserAvatar";
