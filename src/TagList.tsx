@@ -66,6 +66,8 @@ export function TagList(props: TagListProps) {
     openText = openDefault,
     loadData,
     maxItems = 16,
+    disableCloseOnSelect = true,
+    openOnFocus = true,
     label,
     inputProps,
     ...rest
@@ -87,6 +89,7 @@ export function TagList(props: TagListProps) {
     <Autocomplete<string, true, false, true>
       multiple
       freeSolo
+      filterOptions={(options, _state) => options}
       open={open}
       onOpen={() => {
         setOpen(true);
@@ -99,6 +102,8 @@ export function TagList(props: TagListProps) {
       }}
       options={options}
       loading={loading}
+      disableCloseOnSelect={disableCloseOnSelect}
+      openOnFocus={openOnFocus}
       renderOption={renderOption}
       renderTags={renderTags}
       renderInput={(params) => (
@@ -106,6 +111,10 @@ export function TagList(props: TagListProps) {
           label={label}
           changeDelay={480}
           onChange={async (event) => {
+            // Stop bubble
+            event.preventDefault();
+            event.stopPropagation();
+
             await loadDataLocal(event.target.value);
           }}
           {...inputProps}
