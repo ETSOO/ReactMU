@@ -75,14 +75,16 @@ export function TagList(props: TagListProps) {
 
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<readonly string[]>([]);
-  const loading = open && options.length === 0;
+  const [loading, setLoading] = React.useState(false);
 
   const loadDataLocal = async (keyword?: string) => {
+    setLoading(true);
     const result = (await loadData(keyword, maxItems)) ?? [];
     if (result.length >= maxItems) {
       result.push(moreLabel);
     }
     setOptions(result);
+    setLoading(false);
   };
 
   return (
