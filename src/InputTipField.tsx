@@ -10,29 +10,46 @@ type ItemType = DataTypes.IdLabelItem<string | number>;
 /**
  * InputField with tips properties
  */
-export type InputTipFieldProps = InputFieldProps & {
-  /**
-   * Load data
-   * @param value Duplicate test value
-   */
-  loadData(value: string): Promise<[ItemType[]?, string?]>;
+export type InputTipFieldProps<T extends ItemType = ItemType> =
+  InputFieldProps & {
+    /**
+     * Load data
+     * @param value Duplicate test value
+     */
+    loadData(value: string): Promise<[T[]?, string?]>;
 
-  /**
-   * Label props
-   */
-  labelProps?: Omit<TypographyProps, "onClick">;
-};
+    /**
+     * Label props
+     */
+    labelProps?: Omit<TypographyProps, "onClick">;
+
+    /**
+     * Custom item label
+     * @param item List item data
+     * @returns Result
+     */
+    itemLabel?: (item: T) => React.ReactNode;
+
+    /**
+     * Custom render item
+     * @param item List item data
+     * @returns Result
+     */
+    renderItem?: (item: T) => React.ReactNode;
+  };
 
 /**
  * InputField with tips
  * @param props Props
  * @returns Component
  */
-export function InputTipField(props: InputTipFieldProps) {
+export function InputTipField<T extends ItemType = ItemType>(
+  props: InputTipFieldProps<T>
+) {
   // State
   const [title, setTitle] = React.useState<string>();
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement>();
-  const [data, setData] = React.useState<ItemType[]>();
+  const [data, setData] = React.useState<T[]>();
 
   // Destruct
   const {
@@ -57,6 +74,8 @@ export function InputTipField(props: InputTipFieldProps) {
     changeDelay = 480,
     onChangeDelay,
     loadData,
+    itemLabel = (item) => item.label,
+    renderItem = (item) => <ListItem key={item.id}>{itemLabel(item)}</ListItem>,
     ...rest
   } = props;
 
@@ -83,13 +102,7 @@ export function InputTipField(props: InputTipFieldProps) {
           horizontal: "left"
         }}
       >
-        {data && (
-          <List>
-            {data.map((item) => (
-              <ListItem key={item.id}>{item.label}</ListItem>
-            ))}
-          </List>
-        )}
+        {data && <List>{data.map((item) => renderItem(item))}</List>}
       </Popover>
       <InputField
         changeDelay={changeDelay}
