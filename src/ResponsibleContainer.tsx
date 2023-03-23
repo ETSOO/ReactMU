@@ -1,155 +1,160 @@
-import { DataTypes, IdDefaultType } from '@etsoo/shared';
-import { Box, Stack, SxProps, Theme } from '@mui/material';
-import React from 'react';
-import { ListChildComponentProps } from 'react-window';
+import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import { Box, Stack, SxProps, Theme } from "@mui/material";
+import React from "react";
+import { ListChildComponentProps } from "react-window";
 import {
-    GridColumn,
-    GridDataGet,
-    GridJsonData,
-    GridLoadDataProps,
-    GridMethodRef,
-    ReactUtils,
-    useCombinedRefs,
-    useDimensions
-} from '@etsoo/react';
+  GridColumn,
+  GridDataGet,
+  GridJsonData,
+  GridLoadDataProps,
+  GridMethodRef,
+  ReactUtils,
+  useCombinedRefs,
+  useDimensions
+} from "@etsoo/react";
 import {
-    DataGridEx,
-    DataGridExCalColumns,
-    DataGridExProps
-} from './DataGridEx';
-import { MUGlobal } from './MUGlobal';
-import { PullToRefreshUI } from './PullToRefreshUI';
+  DataGridEx,
+  DataGridExCalColumns,
+  DataGridExProps
+} from "./DataGridEx";
+import { MUGlobal } from "./MUGlobal";
+import { PullToRefreshUI } from "./PullToRefreshUI";
 import {
-    ScrollerListEx,
-    ScrollerListExInnerItemRendererProps,
-    ScrollerListExItemSize
-} from './ScrollerListEx';
-import { SearchBar } from './SearchBar';
-import { Labels } from './app/Labels';
+  ScrollerListEx,
+  ScrollerListExInnerItemRendererProps,
+  ScrollerListExItemSize
+} from "./ScrollerListEx";
+import { SearchBar } from "./SearchBar";
+import { Labels } from "./app/Labels";
 
 /**
  * ResponsibleContainer props
  */
 export type ResponsibleContainerProps<
-    T extends object,
-    F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
-    D extends DataTypes.Keys<T> = IdDefaultType<T>
+  T extends object,
+  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
+  D extends DataTypes.Keys<T> = IdDefaultType<T>
 > = Omit<
-    DataGridExProps<T, D>,
-    'height' | 'itemKey' | 'loadData' | 'mRef' | 'onScroll' | 'onItemsRendered'
+  DataGridExProps<T, D>,
+  "height" | "itemKey" | "loadData" | "mRef" | "onScroll" | "onItemsRendered"
 > & {
-    /**
-     * Height will be deducted
-     * @param height Current calcuated height
-     */
-    adjustHeight?: (height: number) => number;
+  /**
+   * Height will be deducted
+   * @param height Current calcuated height
+   */
+  adjustHeight?: (height: number) => number;
 
-    /**
-     * Columns
-     */
-    columns: GridColumn<T>[];
+  /**
+   * Top height
+   */
+  topHeight?: number;
 
-    /**
-     * Container box SX (dataGrid determines the case)
-     */
-    containerBoxSx?: (
-        paddings: Record<string, string | number>,
-        hasFields: boolean,
-        dataGrid?: boolean
-    ) => SxProps<Theme>;
+  /**
+   * Columns
+   */
+  columns: GridColumn<T>[];
 
-    /**
-     * Min width to show Datagrid
-     */
-    dataGridMinWidth?: number;
+  /**
+   * Container box SX (dataGrid determines the case)
+   */
+  containerBoxSx?: (
+    paddings: Record<string, string | number>,
+    hasFields: boolean,
+    dataGrid?: boolean
+  ) => SxProps<Theme>;
 
-    /**
-     * Search fields
-     */
-    fields?: React.ReactElement[];
+  /**
+   * Min width to show Datagrid
+   */
+  dataGridMinWidth?: number;
 
-    /**
-     * Search field template
-     */
-    fieldTemplate?: F;
+  /**
+   * Search fields
+   */
+  fields?: React.ReactElement[];
 
-    /**
-     * Grid height
-     */
-    height?: number;
+  /**
+   * Search field template
+   */
+  fieldTemplate?: F;
 
-    /**
-     * Inner item renderer
-     */
-    innerItemRenderer: (
-        props: ScrollerListExInnerItemRendererProps<T>
-    ) => React.ReactNode;
+  /**
+   * Grid height
+   */
+  height?: number;
 
-    /**
-     * Item renderer
-     */
-    itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
+  /**
+   * Inner item renderer
+   */
+  innerItemRenderer: (
+    props: ScrollerListExInnerItemRendererProps<T>
+  ) => React.ReactNode;
 
-    /**
-     * Item size, a function indicates its a variable size list
-     */
-    itemSize: ScrollerListExItemSize;
+  /**
+   * Item renderer
+   */
+  itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
 
-    /**
-     * Load data callback
-     */
-    loadData: (
-        data: GridJsonData & DataTypes.BasicTemplateType<F>
-    ) => PromiseLike<T[] | null | undefined>;
+  /**
+   * Item size, a function indicates its a variable size list
+   */
+  itemSize: ScrollerListExItemSize;
 
-    /**
-     * Methods
-     */
-    mRef?: React.MutableRefObject<GridMethodRef<T> | undefined>;
+  /**
+   * Load data callback
+   */
+  loadData: (
+    data: GridJsonData & DataTypes.BasicTemplateType<F>
+  ) => PromiseLike<T[] | null | undefined>;
 
-    /**
-     * Element ready callback
-     */
-    elementReady?: (element: HTMLElement, isDataGrid: boolean) => void;
+  /**
+   * Methods
+   */
+  mRef?: React.MutableRefObject<GridMethodRef<T> | undefined>;
 
-    /**
-     * Paddings
-     */
-    paddings?: Record<string, string | number>;
+  /**
+   * Element ready callback
+   */
+  elementReady?: (element: HTMLElement, isDataGrid: boolean) => void;
 
-    /**
-     * Pull to refresh data
-     */
-    pullToRefresh?: boolean;
+  /**
+   * Paddings
+   */
+  paddings?: Record<string, string | number>;
 
-    /**
-     * Quick action for double click or click under mobile
-     */
-    quickAction?: (data: T) => void;
+  /**
+   * Pull to refresh data
+   */
+  pullToRefresh?: boolean;
 
-    /**
-     * Size ready to read miliseconds span
-     */
-    sizeReadyMiliseconds?: number;
+  /**
+   * Quick action for double click or click under mobile
+   */
+  quickAction?: (data: T) => void;
+
+  /**
+   * Size ready to read miliseconds span
+   */
+  sizeReadyMiliseconds?: number;
 };
 
 interface LocalRefs<T> {
-    rect?: DOMRect;
-    ref?: GridMethodRef<T>;
-    mounted?: boolean;
+  rect?: DOMRect;
+  ref?: GridMethodRef<T>;
+  mounted?: boolean;
 }
 
 function defaultContainerBoxSx(
-    paddings: object,
-    hasField: boolean,
-    _dataGrid?: boolean
+  paddings: object,
+  hasField: boolean,
+  _dataGrid?: boolean
 ): SxProps<Theme> {
-    const half = MUGlobal.half(paddings);
-    return {
-        '& .SearchBox': {
-            marginBottom: hasField ? half : 0
-        }
-    };
+  const half = MUGlobal.half(paddings);
+  return {
+    "& .SearchBox": {
+      marginBottom: hasField ? half : 0
+    }
+  };
 }
 
 /**
@@ -158,237 +163,232 @@ function defaultContainerBoxSx(
  * @returns Layout
  */
 export function ResponsibleContainer<
-    T extends object,
-    F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
-    D extends DataTypes.Keys<T> = IdDefaultType<T>
+  T extends object,
+  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
+  D extends DataTypes.Keys<T> = IdDefaultType<T>
 >(props: ResponsibleContainerProps<T, F, D>) {
-    // Destruct
-    const {
-        adjustHeight,
-        columns,
-        containerBoxSx = defaultContainerBoxSx,
-        dataGridMinWidth = Math.max(576, DataGridExCalColumns(columns).total),
-        elementReady,
-        fields,
-        fieldTemplate,
-        height,
-        loadData,
-        mRef,
-        paddings = MUGlobal.pagePaddings,
-        pullToRefresh = true,
-        quickAction,
-        sizeReadyMiliseconds = 0,
-        ...rest
-    } = props;
+  // Destruct
+  const {
+    adjustHeight,
+    columns,
+    containerBoxSx = defaultContainerBoxSx,
+    dataGridMinWidth = Math.max(576, DataGridExCalColumns(columns).total),
+    elementReady,
+    fields,
+    fieldTemplate,
+    height,
+    topHeight,
+    loadData,
+    mRef,
+    paddings = MUGlobal.pagePaddings,
+    pullToRefresh = true,
+    quickAction,
+    sizeReadyMiliseconds = 0,
+    ...rest
+  } = props;
 
-    // Labels
-    const labels = Labels.CommonPage;
+  // Labels
+  const labels = Labels.CommonPage;
 
-    // Refs
-    const refs = React.useRef<LocalRefs<T>>({});
-    const state = refs.current;
+  // Refs
+  const refs = React.useRef<LocalRefs<T>>({});
+  const state = refs.current;
 
-    const mRefs = useCombinedRefs(mRef, (ref: GridMethodRef<T>) => {
-        if (ref == null) return;
-        state.ref = ref;
-    });
+  const mRefs = useCombinedRefs(mRef, (ref: GridMethodRef<T>) => {
+    if (ref == null) return;
+    state.ref = ref;
+  });
 
-    // Update mounted state
-    React.useEffect(() => {
-        return () => {
-            state.mounted = false;
-        };
-    }, []);
-
-    // Has fields
-    const hasFields = fields != null && fields.length > 0;
-
-    // Load data
-    const localLoadData = (props: GridLoadDataProps) => {
-        state.mounted = true;
-        const data = GridDataGet(props, fieldTemplate);
-        return loadData(data);
+  // Update mounted state
+  React.useEffect(() => {
+    return () => {
+      state.mounted = false;
     };
+  }, []);
 
-    // On submit callback
-    const onSubmit = (data: FormData, _reset: boolean) => {
-        if (data == null || state.ref == null) return;
-        state.ref.reset({ data });
-    };
+  // Has fields
+  const hasFields = fields != null && fields.length > 0;
 
-    // Watch container
-    const { dimensions } = useDimensions(
-        1,
-        undefined,
-        sizeReadyMiliseconds,
-        (_preRect, rect) => {
-            // Check
-            if (rect == null) return true;
+  // Load data
+  const localLoadData = (props: GridLoadDataProps) => {
+    state.mounted = true;
+    const data = GridDataGet(props, fieldTemplate);
+    return loadData(data);
+  };
 
-            // Last rect
-            const lastRect = state.rect;
+  // On submit callback
+  const onSubmit = (data: FormData, _reset: boolean) => {
+    if (data == null || state.ref == null) return;
+    state.ref.reset({ data });
+  };
 
-            // 32 = scroll bar width
-            if (
-                lastRect != null &&
-                state.mounted !== true &&
-                Math.abs(rect.width - lastRect.width) <= 32 &&
-                Math.abs(rect.height - lastRect.height) <= 32
-            )
-                return true;
+  // Watch container
+  const { dimensions } = useDimensions(
+    1,
+    undefined,
+    sizeReadyMiliseconds,
+    (_preRect, rect) => {
+      // Check
+      if (rect == null) return true;
 
-            // Hold the new rect
-            state.rect = rect;
+      // Last rect
+      const lastRect = state.rect;
 
-            return false;
-        }
-    );
+      // 32 = scroll bar width
+      if (
+        lastRect != null &&
+        state.mounted !== true &&
+        Math.abs(rect.width - lastRect.width) <= 32 &&
+        Math.abs(rect.height - lastRect.height) <= 32
+      )
+        return true;
 
-    // Rect
-    const rect = dimensions[0][2];
+      // Hold the new rect
+      state.rect = rect;
 
-    // Create list
-    const [list, showDataGrid] = (() => {
-        // No layout
-        if (rect == null) return [null, undefined];
+      return false;
+    }
+  );
 
-        // Width
-        const width = rect.width;
+  // Rect
+  const rect = dimensions[0][2];
 
-        // Show DataGrid or List dependng on width
-        const showDataGrid = width >= dataGridMinWidth;
+  // Create list
+  const [list, showDataGrid] = (() => {
+    // No layout
+    if (rect == null) return [null, undefined];
 
-        // Height
-        let heightLocal: number;
-        if (height != null) {
-            heightLocal = height;
-        } else {
-            // Auto calculation
-            heightLocal =
-                document.documentElement.clientHeight -
-                Math.round(rect.bottom + 1);
+    // Width
+    const width = rect.width;
 
-            const style = window.getComputedStyle(dimensions[0][1]!);
-            const boxMargin = parseFloat(style.marginBottom);
-            if (!isNaN(boxMargin)) heightLocal -= 3 * boxMargin; // 1 - Box, 2 - Page bottom
+    // Show DataGrid or List dependng on width
+    const showDataGrid = width >= dataGridMinWidth;
 
-            if (adjustHeight != null) {
-                heightLocal -= adjustHeight(heightLocal);
-            }
-        }
+    // Height
+    let heightLocal: number;
+    if (height != null) {
+      heightLocal = height;
+    } else {
+      // Auto calculation
+      heightLocal =
+        document.documentElement.clientHeight -
+        (topHeight ?? Math.round(rect.bottom + 1));
 
-        if (showDataGrid) {
-            // Delete
-            delete rest.itemRenderer;
+      const style = window.getComputedStyle(dimensions[0][1]!);
+      const boxMargin = parseFloat(style.marginBottom);
+      if (!isNaN(boxMargin)) heightLocal -= 3 * boxMargin; // 1 - Box, 2 - Page bottom
 
-            return [
-                <Box className="DataGridBox">
-                    <DataGridEx<T, D>
-                        autoLoad={!hasFields}
-                        height={heightLocal}
-                        width={rect.width}
-                        loadData={localLoadData}
-                        mRef={mRefs}
-                        onDoubleClick={(_, data) =>
-                            quickAction && quickAction(data)
-                        }
-                        outerRef={(element?: HTMLDivElement) => {
-                            if (element != null && elementReady)
-                                elementReady(element, true);
-                        }}
-                        columns={columns}
-                        {...rest}
-                    />
-                </Box>,
-                true
-            ];
-        }
+      if (adjustHeight != null) {
+        heightLocal -= adjustHeight(heightLocal);
+      }
+    }
 
-        // Delete
-        delete rest.checkable;
-        delete rest.borderRowsCount;
-        delete rest.bottomHeight;
-        delete rest.footerItemRenderer;
-        delete rest.headerHeight;
-        delete rest.hideFooter;
-        delete rest.hoverColor;
-        delete rest.selectable;
+    if (showDataGrid) {
+      // Delete
+      delete rest.itemRenderer;
 
-        return [
-            <Box className="ListBox" sx={{ height: heightLocal }}>
-                <ScrollerListEx<T, D>
-                    autoLoad={!hasFields}
-                    height={heightLocal}
-                    loadData={localLoadData}
-                    mRef={mRefs}
-                    onClick={(event, data) =>
-                        quickAction &&
-                        ReactUtils.isSafeClick(event) &&
-                        quickAction(data)
-                    }
-                    oRef={(element) => {
-                        if (element != null && elementReady)
-                            elementReady(element, false);
-                    }}
-                    {...rest}
-                />
-            </Box>,
-            false
-        ];
-    })();
+      return [
+        <Box className="DataGridBox">
+          <DataGridEx<T, D>
+            autoLoad={!hasFields}
+            height={heightLocal}
+            width={rect.width}
+            loadData={localLoadData}
+            mRef={mRefs}
+            onDoubleClick={(_, data) => quickAction && quickAction(data)}
+            outerRef={(element?: HTMLDivElement) => {
+              if (element != null && elementReady) elementReady(element, true);
+            }}
+            columns={columns}
+            {...rest}
+          />
+        </Box>,
+        true
+      ];
+    }
 
-    const searchBar = React.useMemo(() => {
-        if (!hasFields || showDataGrid == null) return;
-        return (
-            <SearchBar
-                fields={fields}
-                onSubmit={onSubmit}
-                className={`searchBar${showDataGrid ? 'Grid' : 'List'}`}
-            />
-        );
-    }, [showDataGrid, hasFields]);
+    // Delete
+    delete rest.checkable;
+    delete rest.borderRowsCount;
+    delete rest.bottomHeight;
+    delete rest.footerItemRenderer;
+    delete rest.headerHeight;
+    delete rest.hideFooter;
+    delete rest.hoverColor;
+    delete rest.selectable;
 
-    // Pull container
-    const pullContainer =
-        showDataGrid == null
-            ? undefined
-            : showDataGrid
-            ? '.DataGridEx-Body'
-            : '.ScrollerListEx-Body';
+    return [
+      <Box className="ListBox" sx={{ height: heightLocal }}>
+        <ScrollerListEx<T, D>
+          autoLoad={!hasFields}
+          height={heightLocal}
+          loadData={localLoadData}
+          mRef={mRefs}
+          onClick={(event, data) =>
+            quickAction && ReactUtils.isSafeClick(event) && quickAction(data)
+          }
+          oRef={(element) => {
+            if (element != null && elementReady) elementReady(element, false);
+          }}
+          {...rest}
+        />
+      </Box>,
+      false
+    ];
+  })();
 
-    // Layout
+  const searchBar = React.useMemo(() => {
+    if (!hasFields || showDataGrid == null) return;
     return (
-        <Box
-            sx={
-                containerBoxSx == null
-                    ? undefined
-                    : containerBoxSx(paddings, hasFields, showDataGrid)
-            }
-        >
-            <Stack>
-                <Box
-                    ref={dimensions[0][0]}
-                    className="SearchBox"
-                    sx={{ height: hasFields ? 40 : 0 }}
-                >
-                    {searchBar}
-                </Box>
-                {list}
-            </Stack>
-            {pullToRefresh && pullContainer && (
-                <PullToRefreshUI
-                    mainElement={pullContainer}
-                    triggerElement={pullContainer}
-                    instructionsPullToRefresh={labels.pullToRefresh}
-                    instructionsReleaseToRefresh={labels.releaseToRefresh}
-                    instructionsRefreshing={labels.refreshing}
-                    onRefresh={() => state.ref?.reset()}
-                    shouldPullToRefresh={() => {
-                        const container = document.querySelector(pullContainer);
-                        return !container?.scrollTop;
-                    }}
-                />
-            )}
-        </Box>
+      <SearchBar
+        fields={fields}
+        onSubmit={onSubmit}
+        className={`searchBar${showDataGrid ? "Grid" : "List"}`}
+      />
     );
+  }, [showDataGrid, hasFields]);
+
+  // Pull container
+  const pullContainer =
+    showDataGrid == null
+      ? undefined
+      : showDataGrid
+      ? ".DataGridEx-Body"
+      : ".ScrollerListEx-Body";
+
+  // Layout
+  return (
+    <Box
+      sx={
+        containerBoxSx == null
+          ? undefined
+          : containerBoxSx(paddings, hasFields, showDataGrid)
+      }
+    >
+      <Stack>
+        <Box
+          ref={dimensions[0][0]}
+          className="SearchBox"
+          sx={{ height: hasFields ? 40 : 0 }}
+        >
+          {searchBar}
+        </Box>
+        {list}
+      </Stack>
+      {pullToRefresh && pullContainer && (
+        <PullToRefreshUI
+          mainElement={pullContainer}
+          triggerElement={pullContainer}
+          instructionsPullToRefresh={labels.pullToRefresh}
+          instructionsReleaseToRefresh={labels.releaseToRefresh}
+          instructionsRefreshing={labels.refreshing}
+          onRefresh={() => state.ref?.reset()}
+          shouldPullToRefresh={() => {
+            const container = document.querySelector(pullContainer);
+            return !container?.scrollTop;
+          }}
+        />
+      )}
+    </Box>
+  );
 }
