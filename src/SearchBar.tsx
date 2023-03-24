@@ -305,20 +305,20 @@ export function SearchBar(props: SearchBarProps) {
           alignItems="center"
           direction="row"
           spacing={1}
+          width="100%"
+          overflow="hidden"
           sx={{
             "& > :not(style)": {
               flexBasis: "auto",
               flexGrow: 0,
               flexShrink: 0,
-              maxWidth: "180px",
-              visibility: "hidden"
+              maxWidth: "180px"
             },
             "& > .hiddenChild": {
               display: "none"
             },
             "& > .showChild": {
-              display: "block",
-              visibility: "visible"
+              display: "block"
             }
           }}
         >
