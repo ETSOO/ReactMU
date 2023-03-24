@@ -312,11 +312,11 @@ export function SearchBar(props: SearchBarProps) {
           spacing={1}
           width="100%"
           sx={{
-            overflowX: "hidden",
             "& > :not(style)": {
-              flexBasis: `${itemWidth}px`,
+              flexBasis: "auto",
               flexGrow: 0,
               flexShrink: 0,
+              maxWidth: `${itemWidth}px`,
               visibility: "hidden"
             },
             "& > .hiddenChild": {
