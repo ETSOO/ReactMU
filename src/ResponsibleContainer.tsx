@@ -184,7 +184,7 @@ export function ResponsibleContainer<
     pullToRefresh = true,
     quickAction,
     sizeReadyMiliseconds = 0,
-    searchBarHeight,
+    searchBarHeight = 45.6,
     ...rest
   } = props;
 
@@ -342,7 +342,6 @@ export function ResponsibleContainer<
         fields={fields}
         onSubmit={onSubmit}
         className={`searchBar${showDataGrid ? "Grid" : "List"}`}
-        innerHeight={searchBarHeight}
       />
     );
   }, [showDataGrid, hasFields, searchBarHeight]);
@@ -368,7 +367,7 @@ export function ResponsibleContainer<
         <Box
           ref={dimensions[0][0]}
           className="SearchBox"
-          sx={{ height: hasFields ? 40 : 0 }}
+          sx={{ height: hasFields ? searchBarHeight : 0 }}
         >
           {searchBar}
         </Box>
