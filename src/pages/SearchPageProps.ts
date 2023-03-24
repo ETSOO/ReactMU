@@ -38,11 +38,6 @@ export type SearchPageProps<
   sizeReadyMiliseconds?: number;
 
   /**
-   * Top height
-   */
-  topHeight?: number;
-
-  /**
    * SearchBar height
    */
   searchBarHeight?: number;

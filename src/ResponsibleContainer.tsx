@@ -42,12 +42,7 @@ export type ResponsibleContainerProps<
    * Height will be deducted
    * @param height Current calcuated height
    */
-  adjustHeight?: (height: number) => number;
-
-  /**
-   * Top height
-   */
-  topHeight?: number;
+  adjustHeight?: (height: number, rect: DOMRect) => number;
 
   /**
    * Columns
@@ -182,7 +177,6 @@ export function ResponsibleContainer<
     fields,
     fieldTemplate,
     height,
-    topHeight,
     loadData,
     mRef,
     paddings = MUGlobal.pagePaddings,
@@ -277,16 +271,13 @@ export function ResponsibleContainer<
     } else {
       // Auto calculation
       heightLocal =
-        document.documentElement.clientHeight -
-        (topHeight ?? Math.round(rect.bottom + 1));
+        document.documentElement.clientHeight - Math.round(rect.bottom + 1);
 
       const style = window.getComputedStyle(dimensions[0][1]!);
       const boxMargin = parseFloat(style.marginBottom);
       if (!isNaN(boxMargin)) heightLocal -= 3 * boxMargin; // 1 - Box, 2 - Page bottom
 
-      if (adjustHeight != null) {
-        heightLocal -= adjustHeight(heightLocal);
-      }
+      if (adjustHeight != null) heightLocal -= adjustHeight(heightLocal, rect);
     }
 
     if (showDataGrid) {
