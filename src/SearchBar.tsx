@@ -332,7 +332,12 @@ export function SearchBar(props: SearchBarProps) {
             <React.Fragment key={index}>{item}</React.Fragment>
           ))}
 
-          <IconButton aria-label="delete" size="medium" onClick={handleMore}>
+          <IconButton
+            title={labels.more}
+            size="medium"
+            sx={{ height: "40px" }}
+            onClick={handleMore}
+          >
             <MoreHorizIcon />
           </IconButton>
           <Button
