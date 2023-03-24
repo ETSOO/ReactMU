@@ -339,12 +339,12 @@ export function SearchBar(props: SearchBarProps) {
           </Button>
         </Stack>
       </form>
-      {index != null && index < fields.length && (
+      {index != null && index < fields.length && open && (
         <Drawer
           anchor="right"
           sx={{ minWidth: "250px" }}
           ModalProps={{
-            keepMounted: true // Better open performance on mobile.
+            keepMounted: false
           }}
           open={open}
           onClose={() => updateOpen(false)}
