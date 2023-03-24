@@ -41,6 +41,7 @@ export type ResponsibleContainerProps<
   /**
    * Height will be deducted
    * @param height Current calcuated height
+   * @param rect Current rect data
    */
   adjustHeight?: (height: number, rect: DOMRect) => number;
 
