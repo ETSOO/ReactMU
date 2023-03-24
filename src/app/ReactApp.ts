@@ -133,10 +133,11 @@ export interface IReactAppBase {
   setPageData(data: IPageData): void;
 
   /**
-   * Set page title and data
-   * @param key Page title resource key
+   * Set page title and subtitle
+   * @param title Page title
+   * @param subtitle Page subtitle
    */
-  setPageKey(key: string): void;
+  setPageTitle(title: string, subtitle?: string): void;
 
   /**
    * Set page title and data
@@ -425,12 +426,13 @@ export class ReactApp<
   }
 
   /**
-   * Set page title and data
+   * Set page title and subtitle
    * @param title Page title
+   * @param subtitle Page subtitle
    */
-  setPageTitle(title: string): void {
+  setPageTitle(title: string, subtitle?: string): void {
     // Data
-    const data = { title } as P;
+    const data = { title, subtitle } as P;
 
     // Dispatch the change
     if (this.pageStateDispatch != null) {

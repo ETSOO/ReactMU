@@ -136,6 +136,11 @@ export type ResponsibleContainerProps<
    * Size ready to read miliseconds span
    */
   sizeReadyMiliseconds?: number;
+
+  /**
+   * SearchBar height
+   */
+  searchBarHeight?: number;
 };
 
 interface LocalRefs<T> {
@@ -184,6 +189,7 @@ export function ResponsibleContainer<
     pullToRefresh = true,
     quickAction,
     sizeReadyMiliseconds = 0,
+    searchBarHeight,
     ...rest
   } = props;
 
@@ -344,9 +350,10 @@ export function ResponsibleContainer<
         fields={fields}
         onSubmit={onSubmit}
         className={`searchBar${showDataGrid ? "Grid" : "List"}`}
+        innerHeight={searchBarHeight}
       />
     );
-  }, [showDataGrid, hasFields]);
+  }, [showDataGrid, hasFields, searchBarHeight]);
 
   // Pull container
   const pullContainer =

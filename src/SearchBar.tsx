@@ -83,7 +83,7 @@ const setChildState = (child: Element, enabled: boolean) => {
  */
 export function SearchBar(props: SearchBarProps) {
   // Destruct
-  const { className, fields, innerHeight = 40, onSubmit } = props;
+  const { className, fields, innerHeight = 45.6, onSubmit } = props;
 
   // Labels
   const labels = Labels.CommonPage;
@@ -311,15 +311,13 @@ export function SearchBar(props: SearchBarProps) {
           alignItems="center"
           direction="row"
           spacing={1}
-          height={innerHeight}
+          height={innerHeight < 1 ? undefined : innerHeight}
           sx={{
             "& > :not(style)": {
               flexBasis: "auto",
               flexGrow: 0,
               flexShrink: 0,
-              maxWidth: "180px"
-            },
-            "& > :not:first-child": {
+              maxWidth: "180px",
               visibility: "hidden"
             },
             "& > .hiddenChild": {
