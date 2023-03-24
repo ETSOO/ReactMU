@@ -1,71 +1,71 @@
-import { CustomFabProps } from './CustomFabProps';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import React from 'react';
+import { CustomFabProps } from "./CustomFabProps";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import React from "react";
 import {
-    Divider,
-    Fab,
-    IconButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    PaperProps,
-    PopoverOrigin
-} from '@mui/material';
-import { Link } from 'react-router-dom';
-import { ListItemReact } from '@etsoo/react';
+  Divider,
+  Fab,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  PaperProps,
+  PopoverOrigin
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { ListItemReact } from "@etsoo/react";
 
 /**
  * More fab props
  */
 export interface MoreFabProps extends CustomFabProps {
-    /**
-     * Actions
-     */
-    actions?: (ListItemReact | boolean)[];
+  /**
+   * Actions
+   */
+  actions?: (ListItemReact | boolean)[];
 
-    /**
-     * Dray arrow
-     */
-    drawArrow?: boolean;
+  /**
+   * Dray arrow
+   */
+  drawArrow?: boolean;
 
-    /**
-     * Main icon
-     */
-    icon?: React.ReactNode;
+  /**
+   * Main icon
+   */
+  icon?: React.ReactNode;
 
-    /**
-     * Show as icon button
-     */
-    iconButton?: boolean;
+  /**
+   * Show as icon button
+   */
+  iconButton?: boolean;
 
-    /**
-     * This is the point on the anchor where the popover's
-     * `anchorEl` will attach to
-     */
-    anchorOrigin?: PopoverOrigin;
+  /**
+   * This is the point on the anchor where the popover's
+   * `anchorEl` will attach to
+   */
+  anchorOrigin?: PopoverOrigin;
 
-    /**
-     * Props applied to the [`Paper`](/api/paper/) element.
-     * @default {}
-     */
-    PaperProps?: Partial<PaperProps>;
+  /**
+   * Props applied to the [`Paper`](/api/paper/) element.
+   * @default {}
+   */
+  PaperProps?: Partial<PaperProps>;
 
-    /**
-     * This is the point on the popover which
-     * will attach to the anchor's origin
-     */
-    transformOrigin?: PopoverOrigin;
+  /**
+   * This is the point on the popover which
+   * will attach to the anchor's origin
+   */
+  transformOrigin?: PopoverOrigin;
 }
 
 function getActions(input: (ListItemReact | boolean)[]): ListItemReact[] {
-    // Actions
-    const actions: ListItemReact[] = [];
-    input.forEach((action) => {
-        if (typeof action === 'boolean') return;
-        actions.push(action);
-    });
-    return actions;
+  // Actions
+  const actions: ListItemReact[] = [];
+  input.forEach((action) => {
+    if (typeof action === "boolean") return;
+    actions.push(action);
+  });
+  return actions;
 }
 
 /**
@@ -73,139 +73,133 @@ function getActions(input: (ListItemReact | boolean)[]): ListItemReact[] {
  * @returns Component
  */
 export function MoreFab(props: MoreFabProps) {
-    // Destruct
-    const {
-        actions,
-        drawArrow = true,
-        anchorOrigin = {
-            vertical: 'top',
-            horizontal: 'right'
-        },
-        color = 'primary',
-        icon = <MoreHorizIcon />,
-        iconButton = false,
-        PaperProps = drawArrow
-            ? {
-                  elevation: 0,
-                  sx: {
-                      overflow: 'visible',
-                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                      mt: -0.4,
-                      '& .MuiAvatar-root': {
-                          width: 32,
-                          height: 32,
-                          ml: -0.5,
-                          mr: 1
-                      },
-                      '&:before': {
-                          content: '""',
-                          display: 'block',
-                          position: 'absolute',
-                          top: 0,
-                          right: 14,
-                          width: 10,
-                          height: 10,
-                          bgcolor: 'background.paper',
-                          transform: 'translateY(-50%) rotate(45deg)',
-                          zIndex: 0
-                      }
-                  }
-              }
-            : undefined,
-        size,
-        title,
-        transformOrigin = {
-            vertical: 'bottom',
-            horizontal: 'right'
+  // Destruct
+  const {
+    actions,
+    drawArrow = true,
+    anchorOrigin = {
+      vertical: "top",
+      horizontal: "right"
+    },
+    color = "primary",
+    icon = <MoreHorizIcon />,
+    iconButton = false,
+    PaperProps = drawArrow
+      ? {
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: -0.4,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1
+            },
+            "&:before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0
+            }
+          }
         }
-    } = props;
+      : undefined,
+    size,
+    title,
+    transformOrigin = {
+      vertical: "bottom",
+      horizontal: "right"
+    }
+  } = props;
 
-    // State
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement>();
+  // State
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement>();
 
-    // Open state
-    const open = Boolean(anchorEl);
+  // Open state
+  const open = Boolean(anchorEl);
 
-    // Handle click
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
+  // Handle click
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    // Handle close
-    const handleClose = () => {
-        setAnchorEl(undefined);
-    };
+  // Handle close
+  const handleClose = () => {
+    setAnchorEl(undefined);
+  };
 
-    // No actions
-    if (actions == null || actions.length == 0) return <React.Fragment />;
+  // No actions
+  if (actions == null || actions.length == 0) return <React.Fragment />;
 
-    // Actions
-    const actionsLocal = getActions(actions);
+  // Actions
+  const actionsLocal = getActions(actions);
 
-    // Has any icon
-    const hasIcon = actionsLocal.some((action) => action.icon != null);
+  // Has any icon
+  const hasIcon = actionsLocal.some((action) => action.icon != null);
 
-    // Main
-    const main = iconButton ? (
-        <IconButton
-            color={color}
-            size={size}
-            title={title}
-            onClick={handleClick}
-        >
-            {icon}
-        </IconButton>
-    ) : (
-        <Fab color={color} size={size} title={title} onClick={handleClick}>
-            {icon}
-        </Fab>
-    );
+  // Main
+  const main = iconButton ? (
+    <IconButton color={color} size={size} title={title} onClick={handleClick}>
+      {icon}
+    </IconButton>
+  ) : (
+    <Fab color={color} size={size} title={title} onClick={handleClick}>
+      {icon}
+    </Fab>
+  );
 
-    return (
-        <React.Fragment>
-            {main}
-            <Menu
-                disableScrollLock={true}
-                anchorEl={anchorEl}
-                anchorOrigin={anchorOrigin}
-                keepMounted
-                transformOrigin={transformOrigin}
-                open={open}
-                onClose={handleClose}
-                PaperProps={PaperProps}
+  return (
+    <React.Fragment>
+      {main}
+      <Menu
+        disableScrollLock={true}
+        anchorEl={anchorEl}
+        anchorOrigin={anchorOrigin}
+        keepMounted
+        transformOrigin={transformOrigin}
+        open={open}
+        onClose={handleClose}
+        PaperProps={PaperProps}
+      >
+        {actionsLocal.map(({ label, icon, action }, index) =>
+          label === "-" ? (
+            <Divider key={index} />
+          ) : (
+            <MenuItem
+              key={label}
+              {...(typeof action === "string"
+                ? action.includes("://")
+                  ? {
+                      component: "a",
+                      href: action,
+                      target: "_blank"
+                    }
+                  : { component: Link, to: action }
+                : Array.isArray(action)
+                ? { component: Link, to: action[0], state: action[1] }
+                : {
+                    onClick: () => {
+                      handleClose();
+                      if (typeof action === "function") action();
+                    }
+                  })}
             >
-                {actionsLocal.map(({ label, icon, action }, index) =>
-                    label === '-' ? (
-                        <Divider key={index} />
-                    ) : (
-                        <MenuItem
-                            key={label}
-                            {...(typeof action === 'string'
-                                ? action.includes('://')
-                                    ? {
-                                          component: 'a',
-                                          href: action,
-                                          target: '_blank'
-                                      }
-                                    : { component: Link, to: action }
-                                : {
-                                      onClick: () => {
-                                          handleClose();
-                                          if (typeof action === 'function')
-                                              action();
-                                      }
-                                  })}
-                        >
-                            {icon != null && (
-                                <ListItemIcon>{icon}</ListItemIcon>
-                            )}
-                            <ListItemText inset={icon == null && hasIcon}>
-                                {label}
-                            </ListItemText>
-                        </MenuItem>
-                    )
-                )}
-            </Menu>
-        </React.Fragment>
-    );
+              {icon != null && <ListItemIcon>{icon}</ListItemIcon>}
+              <ListItemText inset={icon == null && hasIcon}>
+                {label}
+              </ListItemText>
+            </MenuItem>
+          )
+        )}
+      </Menu>
+    </React.Fragment>
+  );
 }
