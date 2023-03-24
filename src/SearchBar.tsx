@@ -15,9 +15,9 @@ export interface SearchBarProps {
   className?: string;
 
   /**
-   * Item max width
+   * Item width
    */
-  itemMaxWidth?: number;
+  itemWidth?: number;
 
   /**
    * Fields
@@ -82,7 +82,7 @@ const setChildState = (child: Element, enabled: boolean) => {
  */
 export function SearchBar(props: SearchBarProps) {
   // Destruct
-  const { className, fields, onSubmit, itemMaxWidth = 160 } = props;
+  const { className, fields, onSubmit, itemWidth = 160 } = props;
 
   // Labels
   const labels = Labels.CommonPage;
@@ -314,10 +314,9 @@ export function SearchBar(props: SearchBarProps) {
           sx={{
             overflowX: "hidden",
             "& > :not(style)": {
-              flexBasis: "auto",
+              flexBasis: `${itemWidth}px`,
               flexGrow: 0,
               flexShrink: 0,
-              maxWidth: `${itemMaxWidth}px`,
               visibility: "hidden"
             },
             "& > .hiddenChild": {
