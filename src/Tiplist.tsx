@@ -1,6 +1,7 @@
 import { ReactUtils, useDelayedExecutor } from "@etsoo/react";
 import { DataTypes, IdDefaultType, ListType } from "@etsoo/shared";
 import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
+import { width } from "@mui/system";
 import React from "react";
 import { globalApp } from "./app/ReactApp";
 import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
@@ -27,6 +28,11 @@ export type TiplistProps<T extends object, D extends DataTypes.Keys<T>> = Omit<
    * Max items to read and display
    */
   maxItems?: number;
+
+  /**
+   * Width
+   */
+  width?: number;
 };
 
 // Multiple states
@@ -71,6 +77,7 @@ export function Tiplist<
     defaultValue,
     value,
     maxItems = 16,
+    width,
     name,
     readOnly,
     onChange,
@@ -80,8 +87,11 @@ export function Tiplist<
     openText = openDefault,
     getOptionLabel,
     getOptionDisabled,
+    sx = {},
     ...rest
   } = props;
+
+  if (width && sx) Object.assign(sx, { width: `${width}px` });
 
   // Value input ref
   const inputRef = React.createRef<HTMLInputElement>();
@@ -314,6 +324,7 @@ export function Tiplist<
         isOptionEqualToValue={(option: T, value: T) =>
           option[idField] === value[idField]
         }
+        sx={sx}
         noOptionsText={noOptionsText}
         loadingText={loadingText}
         openText={openText}
