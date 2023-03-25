@@ -75,7 +75,6 @@ export function Tiplist<
     readOnly,
     onChange,
     openOnFocus = true,
-    sx = { minWidth: "180px" },
     noOptionsText = noOptions,
     loadingText = loading,
     openText = openDefault,
@@ -282,7 +281,6 @@ export function Tiplist<
           });
         }}
         loading={states.loading}
-        sx={sx}
         renderInput={(params) =>
           search ? (
             <SearchField
