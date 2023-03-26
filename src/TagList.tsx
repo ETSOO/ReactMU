@@ -94,6 +94,9 @@ export function TagList(props: TagListProps) {
 
     if (len >= maxItems) {
       result.push(moreLabel);
+    } else if (len === 0) {
+      // When no result, hide the popup
+      setOpen(false);
     }
     setOptions(result);
     setLoading(false);
@@ -117,6 +120,7 @@ export function TagList(props: TagListProps) {
       options={options}
       loading={loading}
       disableCloseOnSelect={disableCloseOnSelect}
+      clearOnBlur
       openOnFocus={openOnFocus}
       renderOption={renderOption}
       renderTags={renderTags}

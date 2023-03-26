@@ -108,7 +108,11 @@ export function TagListPro<D extends DataType = DataType>(
 
     if (len >= maxItems) {
       result.push({ id: -1, name: moreLabel } as D);
+    } else if (len === 0) {
+      // When no result, hide the popup
+      setOpen(false);
     }
+
     setOptions(result);
     setLoading(false);
   };

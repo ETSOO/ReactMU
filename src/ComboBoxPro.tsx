@@ -100,6 +100,7 @@ export function ComboBoxPro<D extends DataType = DataType>(
       value={localValue}
       open={open}
       freeSolo
+      clearOnBlur={false}
       onOpen={() => {
         setOpen(true);
       }}
@@ -110,7 +111,16 @@ export function ComboBoxPro<D extends DataType = DataType>(
       loading={loading}
       openOnFocus={openOnFocus}
       renderInput={(params) => (
-        <InputField {...inputProps} {...params} label={label} name={name} />
+        <InputField
+          {...inputProps}
+          {...params}
+          label={label}
+          name={name}
+          onBlur={(event) => {
+            if (onChange)
+              onChange(event, event.target.value, "blur", undefined);
+          }}
+        />
       )}
       getOptionLabel={(item) =>
         typeof item === "object" ? getLabel(item) : item
