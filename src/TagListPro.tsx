@@ -5,9 +5,13 @@ import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { globalApp } from "./app/ReactApp";
 
-export type TagListProps = Omit<
-  AutocompleteProps<string, true, false, true>,
-  "open" | "multiple" | "freeSolo" | "options" | "renderInput"
+type DataType = {
+  id: number | string;
+} & ({ label: string } | { name: string });
+
+export type TagListProProps<D extends DataType = DataType> = Omit<
+  AutocompleteProps<D, true, false, false>,
+  "open" | "multiple" | "options" | "renderInput"
 > & {
   /**
    * Label
@@ -19,8 +23,8 @@ export type TagListProps = Omit<
    */
   loadData: (
     keyword: string | undefined,
-    maxItems: number
-  ) => PromiseLike<string[] | null | undefined>;
+    items: number
+  ) => PromiseLike<D[] | null | undefined>;
 
   /**
    * Input props
@@ -33,7 +37,9 @@ export type TagListProps = Omit<
   maxItems?: number;
 };
 
-export function TagList(props: TagListProps) {
+export function TagListPro<D extends DataType = DataType>(
+  props: TagListProProps<D>
+) {
   // Labels
   const {
     noOptions,
@@ -44,22 +50,31 @@ export function TagList(props: TagListProps) {
 
   const moreLabel = more + "...";
 
+  const getLabel = (item: D) =>
+    "label" in item ? item.label : "name" in item ? item.name : "";
+
   // Destruct
   const {
     renderOption = (props, option, { selected }) => (
       <li {...props}>
-        <Checkbox
-          icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-          checkedIcon={<CheckBoxIcon fontSize="small" />}
-          style={{ marginRight: 8 }}
-          checked={selected}
-        />
-        {option}
+        <>
+          <Checkbox
+            icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+            checkedIcon={<CheckBoxIcon fontSize="small" />}
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {getLabel(option)}
+        </>
       </li>
     ),
-    renderTags = (value: readonly string[], getTagProps) =>
+    renderTags = (value: readonly D[], getTagProps) =>
       value.map((option, index) => (
-        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+        <Chip
+          variant="outlined"
+          label={getLabel(option)}
+          {...getTagProps({ index })}
+        />
       )),
     noOptionsText = noOptions,
     loadingText = loadingLabel,
@@ -76,33 +91,31 @@ export function TagList(props: TagListProps) {
   } = props;
 
   const [open, setOpen] = React.useState(false);
-  const [options, setOptions] = React.useState<readonly string[]>([]);
+  const [options, setOptions] = React.useState<readonly D[]>([]);
   const [loading, setLoading] = React.useState(false);
 
-  const currentValue = React.useRef<readonly string[]>([]);
+  const currentValue = React.useRef<readonly D[]>([]);
   currentValue.current = value ?? [];
 
   const loadDataLocal = async (keyword?: string) => {
     setLoading(true);
     const result = (await loadData(keyword, maxItems)) ?? [];
-
     const len = result.length;
 
     currentValue.current.forEach((item) => {
-      if (!result.includes(item)) result.push(item);
+      if (!result.some((r) => r.id === item.id)) result.push(item);
     });
 
     if (len >= maxItems) {
-      result.push(moreLabel);
+      result.push({ id: -1, name: moreLabel } as D);
     }
     setOptions(result);
     setLoading(false);
   };
 
   return (
-    <Autocomplete<string, true, false, true>
+    <Autocomplete<D, true, false, false>
       multiple
-      freeSolo
       filterOptions={(options, _state) => options}
       open={open}
       onOpen={() => {
@@ -136,8 +149,14 @@ export function TagList(props: TagListProps) {
         />
       )}
       getOptionDisabled={(item) => {
-        return item === moreLabel;
+        return (
+          typeof item.id === "number" &&
+          item.id < 0 &&
+          getLabel(item) === moreLabel
+        );
       }}
+      getOptionLabel={(item) => getLabel(item)}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       noOptionsText={noOptionsText}
       loadingText={loadingText}
       openText={openText}

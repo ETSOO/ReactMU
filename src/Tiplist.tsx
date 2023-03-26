@@ -321,7 +321,7 @@ export function Tiplist<
             />
           )
         }
-        isOptionEqualToValue={(option: T, value: T) =>
+        isOptionEqualToValue={(option, value) =>
           option[idField] === value[idField]
         }
         sx={sx}
