@@ -72,7 +72,7 @@ export function ComboBoxPro<D extends DataType = DataType>(
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    if (value == null) return;
+    if (value === undefined) return;
     setValue(value);
   }, [value]);
 
@@ -80,6 +80,7 @@ export function ComboBoxPro<D extends DataType = DataType>(
     if (idValue == null) return;
     const option = localOptions.find((option) => option.id === idValue);
     if (option) setValue(option);
+    else setValue(null);
   }, [localOptions]);
 
   React.useEffect(() => {
@@ -97,7 +98,7 @@ export function ComboBoxPro<D extends DataType = DataType>(
   return (
     <Autocomplete<D, false, false, true>
       id={name}
-      value={localValue}
+      value={localValue == null ? "" : localValue}
       open={open}
       freeSolo
       clearOnBlur={false}
@@ -117,7 +118,7 @@ export function ComboBoxPro<D extends DataType = DataType>(
           label={label}
           name={name}
           onBlur={(event) => {
-            if (onChange)
+            if (localValue == null && onChange)
               onChange(event, event.target.value, "blur", undefined);
           }}
         />
