@@ -313,12 +313,9 @@ export function SearchBar(props: SearchBarProps) {
           direction="row"
           spacing={1}
           width="100%"
+          overflow="hidden"
+          paddingTop="6px"
           sx={{
-            scrollbarWidth: 0,
-            "-ms-overflow-style": "none",
-            "&::-webkit-scrollbar": {
-              display: "none"
-            },
             "& > :not(style)": {
               flexBasis: "auto",
               flexGrow: 0,
