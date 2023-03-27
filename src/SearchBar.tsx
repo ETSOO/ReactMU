@@ -237,6 +237,7 @@ export function SearchBar(props: SearchBarProps) {
       moreItems.push(<React.Fragment key={i}>{fields[i]}</React.Fragment>);
     }
   }
+  const hasMoreItems = moreItems.length > 0;
 
   // Handle main form
   const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
@@ -293,6 +294,14 @@ export function SearchBar(props: SearchBarProps) {
     };
   }, [className]);
 
+  React.useEffect(() => {
+    if (!hasMoreItems || state.form == null) return;
+    const stack = state.form.querySelector<HTMLDivElement>(
+      ".SearchBarContainer"
+    );
+    if (stack) stack.style.overflow = "visbile";
+  }, [hasMoreItems]);
+
   // Layout
   return (
     <React.Fragment>
@@ -306,12 +315,13 @@ export function SearchBar(props: SearchBarProps) {
       >
         <Stack
           ref={dimensions[0][0]}
+          className="SearchBarContainer"
           justifyContent="center"
           alignItems="center"
           direction="row"
           spacing={1}
           width="100%"
-          overflow="hidden"
+          overflow={hasMoreItems ? "hidden" : undefined}
           sx={{
             "& > :not(style)": {
               flexBasis: "auto",
@@ -351,7 +361,7 @@ export function SearchBar(props: SearchBarProps) {
           </Button>
         </Stack>
       </form>
-      {index != null && index < fields.length && (
+      {hasMoreItems && (
         <Drawer
           anchor="right"
           sx={{ minWidth: "250px" }}
