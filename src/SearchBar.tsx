@@ -294,14 +294,6 @@ export function SearchBar(props: SearchBarProps) {
     };
   }, [className]);
 
-  React.useEffect(() => {
-    if (!hasMoreItems || state.form == null) return;
-    const stack = state.form.querySelector<HTMLDivElement>(
-      ".SearchBarContainer"
-    );
-    if (stack) stack.style.overflow = "visbile";
-  }, [hasMoreItems]);
-
   // Layout
   return (
     <React.Fragment>
@@ -321,8 +313,12 @@ export function SearchBar(props: SearchBarProps) {
           direction="row"
           spacing={1}
           width="100%"
-          overflow={hasMoreItems ? "hidden" : undefined}
           sx={{
+            scrollbarWidth: 0,
+            "-ms-overflow-style": "none",
+            "&::-webkit-scrollbar": {
+              display: "none"
+            },
             "& > :not(style)": {
               flexBasis: "auto",
               flexGrow: 0,
