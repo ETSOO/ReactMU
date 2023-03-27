@@ -311,6 +311,7 @@ export function SearchBar(props: SearchBarProps) {
           direction="row"
           spacing={1}
           width="100%"
+          overflow="hidden"
           sx={{
             "& > :not(style)": {
               flexBasis: "auto",
