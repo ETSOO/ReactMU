@@ -1,14 +1,19 @@
-import { Button, ButtonProps } from '@mui/material';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Button, ButtonProps } from "@mui/material";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 /**
  * ButtonLink props
  */
-export type ButtonLinkProps = Omit<ButtonProps, 'href' | 'onClick'> & {
-    /**
-     * To href
-     */
-    href: string;
+export type ButtonLinkProps = Omit<ButtonProps, "href" | "onClick"> & {
+  /**
+   * To href
+   */
+  href: string;
+
+  /**
+   * Link state
+   */
+  state?: any;
 };
 
 /**
@@ -17,16 +22,16 @@ export type ButtonLinkProps = Omit<ButtonProps, 'href' | 'onClick'> & {
  * @returns Component
  */
 export function ButtonLink(props: ButtonLinkProps) {
-    // Destruct
-    const { href, ...rest } = props;
+  // Destruct
+  const { href, state, ...rest } = props;
 
-    // Navigate
-    const navigate = useNavigate();
+  // Navigate
+  const navigate = useNavigate();
 
-    const onClick = href.includes('://')
-        ? () => window.open(href, '_blank')
-        : () => navigate(href);
+  const onClick = href.includes("://")
+    ? () => window.open(href, "_blank")
+    : () => navigate(href, { state });
 
-    // Layout
-    return <Button {...rest} onClick={onClick} />;
+  // Layout
+  return <Button {...rest} onClick={onClick} />;
 }
