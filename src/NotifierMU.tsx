@@ -126,7 +126,7 @@ export class NotificationMU extends NotificationReact {
             <IconButton
               className="closeButton"
               size="small"
-              onClick={() => this.dismiss()}
+              onClick={() => this.returnValue("CLOSE")}
             >
               <CloseIcon />
             </IconButton>
@@ -197,7 +197,7 @@ export class NotificationMU extends NotificationReact {
             <IconButton
               className="closeButton"
               size="small"
-              onClick={() => this.dismiss()}
+              onClick={() => this.returnValue("CLOSE")}
             >
               <CloseIcon />
             </IconButton>
@@ -262,7 +262,10 @@ export class NotificationMU extends NotificationReact {
           {...setupProps}
           action={
             closable ? (
-              <IconButton size="small" onClick={() => this.dismiss()}>
+              <IconButton
+                size="small"
+                onClick={() => this.returnValue("CLOSE")}
+              >
                 <CloseIcon />
               </IconButton>
             ) : undefined
@@ -415,7 +418,7 @@ export class NotificationMU extends NotificationReact {
               <IconButton
                 className="closeButton"
                 size="small"
-                onClick={() => this.dismiss()}
+                onClick={() => this.returnValue("CLOSE")}
               >
                 <CloseIcon />
               </IconButton>
