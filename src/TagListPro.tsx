@@ -4,12 +4,9 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { globalApp } from "./app/ReactApp";
+import { ListType2 } from "@etsoo/shared";
 
-type DataType = {
-  id: number | string;
-} & ({ label: string } | { name: string });
-
-export type TagListProProps<D extends DataType = DataType> = Omit<
+export type TagListProProps<D extends ListType2 = ListType2> = Omit<
   AutocompleteProps<D, true, false, false>,
   "open" | "multiple" | "options" | "renderInput"
 > & {
@@ -37,7 +34,7 @@ export type TagListProProps<D extends DataType = DataType> = Omit<
   maxItems?: number;
 };
 
-export function TagListPro<D extends DataType = DataType>(
+export function TagListPro<D extends ListType2 = ListType2>(
   props: TagListProProps<D>
 ) {
   // Labels

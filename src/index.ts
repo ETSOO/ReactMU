@@ -74,6 +74,7 @@ export * from "./OptionGroup";
 export * from "./PList";
 export * from "./ProgressCount";
 export * from "./PullToRefreshUI";
+export * from "./QuickList";
 export * from "./ResponsibleContainer";
 export * from "./ScrollerListEx";
 export * from "./ScrollTopFab";

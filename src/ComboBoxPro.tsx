@@ -2,12 +2,9 @@ import { Autocomplete, AutocompleteProps } from "@mui/material";
 import React from "react";
 import { globalApp } from "./app/ReactApp";
 import { InputField, InputFieldProps } from "./InputField";
+import { ListType2 } from "@etsoo/shared";
 
-type DataType = {
-  id: number | string;
-} & ({ label: string } | { name: string });
-
-export type ComboBoxProProps<D extends DataType = DataType> = Omit<
+export type ComboBoxProProps<D extends ListType2 = ListType2> = Omit<
   AutocompleteProps<D, false, false, true>,
   "open" | "multiple" | "options" | "renderInput"
 > & {
@@ -37,7 +34,7 @@ export type ComboBoxProProps<D extends DataType = DataType> = Omit<
   inputProps?: Omit<InputFieldProps, "onChange">;
 };
 
-export function ComboBoxPro<D extends DataType = DataType>(
+export function ComboBoxPro<D extends ListType2 = ListType2>(
   props: ComboBoxProProps<D>
 ) {
   // Labels
