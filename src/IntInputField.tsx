@@ -1,4 +1,4 @@
-import { Box, IconButton, InputAdornment, InputBaseProps } from "@mui/material";
+import { Box, IconButton, InputAdornment } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React from "react";
@@ -10,34 +10,53 @@ import { InputField, InputFieldProps } from "./InputField";
 export type IntInputFieldProps = Omit<
   InputFieldProps,
   "type" | "inputProps" | "value"
-> &
-  InputBaseProps["inputProps"] & {
-    /**
-     * Display minus and plus buttons
-     */
-    buttons?: boolean;
+> & {
+  /**
+   * Minimum value
+   */
+  min?: number;
 
-    /**
-     * End symbol
-     */
-    endSymbol?: string;
+  /**
+   * Maximum value
+   */
+  max?: number;
 
-    /**
-     * Start (Currency) symbol
-     */
-    symbol?: string;
+  /**
+   * Step value
+   */
+  step?: number;
 
-    /**
-     * Value
-     */
-    value?: number;
+  /**
+   * Display minus and plus buttons
+   */
+  buttons?: boolean;
 
-    /**
-     * On value change callback
-     * @param value Value
-     */
-    onValueChange?: (value: number | undefined, init: boolean) => void;
-  };
+  /**
+   * End symbol
+   */
+  endSymbol?: string;
+
+  /**
+   * Start (Currency) symbol
+   */
+  symbol?: string;
+
+  /**
+   * Value
+   */
+  value?: number;
+
+  /**
+   * Input field style
+   */
+  inputStyle?: React.CSSProperties;
+
+  /**
+   * On value change callback
+   * @param value Value
+   */
+  onValueChange?: (value: number | undefined, init: boolean) => void;
+};
 
 /**
  * Integer input field
@@ -51,7 +70,7 @@ export const IntInputField = React.forwardRef<
     min = 0,
     step = 1,
     max = 9999999,
-    style = { textAlign: "right" },
+    inputStyle = { textAlign: "right" },
     buttons,
     endSymbol,
     symbol,
@@ -75,11 +94,11 @@ export const IntInputField = React.forwardRef<
   }, [value]);
 
   React.useEffect(() => {
-    if (defaultValue == null || typeof defaultValue === "object") return;
+    if (defaultValue == null) return;
     const value =
       typeof defaultValue === "number"
         ? defaultValue
-        : parseFloat(defaultValue);
+        : parseFloat(`${defaultValue}`);
     if (!isNaN(value)) setValue(value, true);
   }, [defaultValue]);
 
@@ -93,7 +112,7 @@ export const IntInputField = React.forwardRef<
         min,
         step,
         max,
-        style,
+        style: inputStyle,
         inputMode: "numeric"
       }}
       InputProps={{
