@@ -54,8 +54,14 @@ export type IntInputFieldProps = Omit<
   /**
    * On value change callback
    * @param value Value
+   * @param source Source value
+   * @param init Initial action
    */
-  onValueChange?: (value: number | undefined, init: boolean) => void;
+  onValueChange?: (
+    value: number | undefined,
+    source: unknown,
+    init: boolean
+  ) => number | undefined;
 };
 
 /**
@@ -76,21 +82,28 @@ export const IntInputField = React.forwardRef<
     symbol,
     value,
     defaultValue,
-    onChange,
+    onChangeDelay,
     onValueChange,
+    required,
     ...rest
   } = props;
 
   // State
   const [localValue, setLocalValue] = React.useState<number>();
 
-  const setValue = (value: number | undefined, init: boolean = false) => {
-    setLocalValue(value);
-    if (onValueChange) onValueChange(value, init);
+  const setValue = (
+    value: number | undefined,
+    source: unknown,
+    init: boolean = false
+  ) => {
+    if (onValueChange) {
+      const newValue = onValueChange(value, source, init);
+      setLocalValue(newValue);
+    }
   };
 
   React.useEffect(() => {
-    setValue(value, true);
+    setValue(value, undefined, true);
   }, [value]);
 
   React.useEffect(() => {
@@ -99,7 +112,7 @@ export const IntInputField = React.forwardRef<
       typeof defaultValue === "number"
         ? defaultValue
         : parseFloat(`${defaultValue}`);
-    if (!isNaN(value)) setValue(value, true);
+    if (!isNaN(value)) setValue(value, defaultValue, true);
   }, [defaultValue]);
 
   // Layout
@@ -107,7 +120,7 @@ export const IntInputField = React.forwardRef<
     <InputField
       ref={ref}
       type="number"
-      value={localValue == null ? "" : localValue}
+      value={localValue == null ? (required ? min : "") : localValue}
       inputProps={{
         min,
         step,
@@ -135,13 +148,16 @@ export const IntInputField = React.forwardRef<
           margin: 0
         }
       }}
-      onChange={(event) => {
-        const value = parseFloat(event.target.value);
-        if (isNaN(value)) setValue(undefined);
-        else if (value > max) setValue(max);
-        else if (value < min) setValue(min);
-        else setValue(value);
-        if (onChange) onChange(event);
+      onChangeDelay={(event) => {
+        const source = event.target.value;
+        const value = parseFloat(source);
+        if (isNaN(value)) setValue(undefined, source);
+        else if (value > max) setValue(max, source);
+        else if (value < min) setValue(value === 0 ? undefined : min, source);
+        // 0 is a special case
+        else setValue(value, source);
+
+        if (onChangeDelay) onChangeDelay(event);
       }}
       {...rest}
     />
@@ -154,8 +170,8 @@ export const IntInputField = React.forwardRef<
           size="small"
           onClick={() => {
             if (localValue == null) return;
-            if (localValue <= min) setValue(undefined);
-            else setValue(localValue - step);
+            if (localValue <= min) setValue(undefined, "SUB");
+            else setValue(localValue - step, "SUB");
           }}
         >
           <RemoveIcon />
@@ -165,11 +181,11 @@ export const IntInputField = React.forwardRef<
           size="small"
           onClick={() => {
             if (localValue == null) {
-              setValue(min);
+              setValue(min, "ADD");
               return;
             }
             if (localValue >= max) return;
-            else setValue(localValue + step);
+            else setValue(localValue + step, "ADD");
           }}
         >
           <AddIcon color={localValue == null ? undefined : "primary"} />
