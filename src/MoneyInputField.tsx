@@ -1,15 +1,10 @@
-import { InputBaseProps } from "@mui/material";
 import React from "react";
-import { InputField, InputFieldProps } from "./InputField";
+import { IntInputField, IntInputFieldProps } from "./IntInputField";
 
 /**
  * Money input field props
  */
-export type MoneyInputFieldProps = Omit<
-  InputFieldProps,
-  "type" | "inputProps"
-> &
-  InputBaseProps["inputProps"];
+export type MoneyInputFieldProps = IntInputFieldProps & {};
 
 /**
  * Money input field
@@ -19,15 +14,8 @@ export const MoneyInputField = React.forwardRef<
   MoneyInputFieldProps
 >((props, ref) => {
   // Destruct
-  const { min = 0, step = 0.01, max = 9999999, ...rest } = props;
+  const { step = 0.01, ...rest } = props;
 
   // Layout
-  return (
-    <InputField
-      ref={ref}
-      type="number"
-      inputProps={{ min, step, max, inputMode: "numeric" }}
-      {...rest}
-    />
-  );
+  return <IntInputField ref={ref} step={step} {...rest} />;
 });
