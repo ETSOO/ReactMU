@@ -61,7 +61,7 @@ export type IntInputFieldProps = Omit<
     value: number | undefined,
     source: unknown,
     init: boolean
-  ) => number | undefined;
+  ) => number | boolean | null | void;
 };
 
 /**
@@ -98,7 +98,15 @@ export const IntInputField = React.forwardRef<
   ) => {
     if (onValueChange) {
       const newValue = onValueChange(value, source, init);
-      setLocalValue(newValue);
+      if (newValue === false) return;
+
+      if (newValue === null) {
+        setLocalValue(undefined);
+        return;
+      }
+
+      if (newValue === true || newValue === undefined) setLocalValue(value);
+      else setLocalValue(newValue);
     }
   };
 
