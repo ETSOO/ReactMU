@@ -2,6 +2,7 @@ import { Box, IconButton, InputAdornment } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React from "react";
+import { NumberUtils } from "@etsoo/shared";
 import { InputField, InputFieldProps } from "./InputField";
 
 /**
@@ -9,7 +10,7 @@ import { InputField, InputFieldProps } from "./InputField";
  */
 export type IntInputFieldProps = Omit<
   InputFieldProps,
-  "type" | "inputProps" | "value"
+  "type" | "inputProps" | "value" | "defaultValue"
 > & {
   /**
    * Minimum value
@@ -81,15 +82,16 @@ export const IntInputField = React.forwardRef<
     endSymbol,
     symbol,
     value,
-    defaultValue,
+    changeDelay = 600,
     onChangeDelay,
+    onChange,
     onValueChange,
     required,
     ...rest
   } = props;
 
   // State
-  const [localValue, setLocalValue] = React.useState<number>();
+  const [localValue, setLocalValue] = React.useState<number | string>();
 
   const setValue = (
     value: number | undefined,
@@ -113,15 +115,6 @@ export const IntInputField = React.forwardRef<
   React.useEffect(() => {
     setValue(value, undefined, true);
   }, [value]);
-
-  React.useEffect(() => {
-    if (defaultValue == null) return;
-    const value =
-      typeof defaultValue === "number"
-        ? defaultValue
-        : parseFloat(`${defaultValue}`);
-    if (!isNaN(value)) setValue(value, defaultValue, true);
-  }, [defaultValue]);
 
   // Layout
   const layout = (
@@ -156,6 +149,13 @@ export const IntInputField = React.forwardRef<
           margin: 0
         }
       }}
+      onChange={(event) => {
+        const source = event.target.value;
+        setLocalValue(source);
+
+        if (onChange) onChange(event);
+      }}
+      changeDelay={changeDelay}
       onChangeDelay={(event) => {
         const source = event.target.value;
         const value = parseFloat(source);
@@ -178,8 +178,12 @@ export const IntInputField = React.forwardRef<
           size="small"
           onClick={() => {
             if (localValue == null) return;
-            if (localValue <= min) setValue(undefined, "SUB");
-            else setValue(localValue - step, "SUB");
+
+            const value = NumberUtils.parse(localValue);
+            if (isNaN(value)) return;
+
+            if (value <= min) setValue(undefined, "SUB");
+            else setValue(value - step, "SUB");
           }}
         >
           <RemoveIcon />
@@ -192,8 +196,12 @@ export const IntInputField = React.forwardRef<
               setValue(min, "ADD");
               return;
             }
-            if (localValue >= max) return;
-            else setValue(localValue + step, "ADD");
+
+            const value = NumberUtils.parse(localValue);
+            if (isNaN(value)) return;
+
+            if (value >= max) return;
+            else setValue(value + step, "ADD");
           }}
         >
           <AddIcon color={localValue == null ? undefined : "primary"} />
