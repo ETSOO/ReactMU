@@ -167,6 +167,7 @@ export const IntInputField = React.forwardRef<
 
         if (onChangeDelay) onChangeDelay(event);
       }}
+      required={required}
       {...rest}
     />
   );
