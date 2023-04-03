@@ -184,7 +184,7 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
 
   return (
     <TextField
-      autoComplete="new-password"
+      autoComplete="off"
       InputLabelProps={InputLabelProps}
       inputProps={{ style: { cursor: "pointer" } }}
       InputProps={{
