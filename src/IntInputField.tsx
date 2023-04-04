@@ -109,6 +109,8 @@ export const IntInputField = React.forwardRef<
 
       if (newValue === true || newValue === undefined) setLocalValue(value);
       else setLocalValue(newValue);
+    } else {
+      setLocalValue(value);
     }
   };
 
