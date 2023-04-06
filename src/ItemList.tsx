@@ -6,13 +6,13 @@ import {
   ListItemText,
   DialogContent,
   Button,
-  ListItemButton,
+  ListItemButton
 } from "@mui/material";
 import {
   DataTypes,
   IdDefaultType,
   LabelDefaultType,
-  ListType,
+  ListType
 } from "@etsoo/shared";
 
 /**
@@ -118,7 +118,7 @@ export function ItemList<
     selectedValue,
     size = "medium",
     title,
-    variant = "outlined",
+    variant = "outlined"
   } = props;
 
   // Get label
@@ -143,8 +143,10 @@ export function ItemList<
 
   // Click handler
   const clickHandler = () => {
-    // More than one language
-    if (items.length < 2) {
+    if (
+      items.length < 1 ||
+      (items.length === 1 && !keepClick && defaultItem != null)
+    ) {
       return;
     }
 
