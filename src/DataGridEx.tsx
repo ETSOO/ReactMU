@@ -498,7 +498,8 @@ export function DataGridEx<
     rowIndex,
     style,
     data,
-    selectedItems
+    selectedItems,
+    setItems
   }: ScrollerGridItemRendererProps<T>) => {
     // Column
     const {
@@ -564,7 +565,8 @@ export function DataGridEx<
       rowIndex,
       columnIndex,
       cellProps,
-      renderProps
+      renderProps,
+      setItems
     });
 
     return (
