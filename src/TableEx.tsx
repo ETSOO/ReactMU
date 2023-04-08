@@ -288,6 +288,13 @@ export function TableEx<
     reset({ orderBy: field, orderByAsc: asc });
   };
 
+  // Set items for rerenderer
+  const setItems = (callback: (items: T[]) => T[] | undefined) => {
+    const result = callback(rows);
+    if (result == null) return;
+    setRows(result);
+  };
+
   // Destruct states
   const {
     autoLoad: stateAutoLoad,
@@ -485,7 +492,7 @@ export function TableEx<
                           rowIndex,
                           columnIndex,
                           cellProps,
-                          setItems: setRows
+                          setItems
                         })
                       ) : (
                         <React.Fragment>&nbsp;</React.Fragment>
