@@ -289,7 +289,7 @@ export function TableEx<
   };
 
   // Set items for rerenderer
-  const setItems = (callback: (items: T[]) => T[] | undefined) => {
+  const setItems = (callback: (items: T[]) => T[] | undefined | void) => {
     const result = callback(rows);
     if (result == null) return;
     setRows(result);
