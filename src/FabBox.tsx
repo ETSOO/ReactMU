@@ -1,25 +1,28 @@
-import { Box, BoxProps, Paper, useTheme } from "@mui/material";
+import { Box, BoxProps, Paper, PaperProps, useTheme } from "@mui/material";
 import React from "react";
+
+type SharedProps = keyof BoxProps & keyof PaperProps;
 
 /**
  * Fabs container box props
  */
-export type FabBoxProps = BoxProps & {
-  /**
-   * Item gap
-   */
-  itemGap?: number;
+export type FabBoxProps = Pick<BoxProps, SharedProps> &
+  Pick<PaperProps, SharedProps> & {
+    /**
+     * Item gap
+     */
+    itemGap?: number;
 
-  /**
-   * Flex direction, row or column
-   */
-  columnDirection?: boolean;
+    /**
+     * Flex direction, row or column
+     */
+    columnDirection?: boolean;
 
-  /**
-   * Add panel to the Fab
-   */
-  fabPanel?: boolean;
-};
+    /**
+     * Add panel to the Fab
+     */
+    fabPanel?: boolean;
+  };
 
 /**
  * Fabs container box
@@ -30,7 +33,7 @@ export function FabBox(props: FabBoxProps) {
   // Destruct
   const {
     columnDirection,
-    fabPanel = columnDirection === false ? true : false,
+    fabPanel = columnDirection,
     itemGap = 1,
     sx,
     ...rest
@@ -47,7 +50,20 @@ export function FabBox(props: FabBoxProps) {
     ? { marginTop: spaceGap }
     : { marginLeft: spaceGap };
 
-  const box = (
+  return fabPanel ? (
+    <Paper
+      sx={{
+        position: "fixed",
+        display: "flex",
+        alignItems: "center",
+        padding: spaceGap,
+        flexDirection: columnDirection ? "column" : "row",
+        "& > :not(style) + :not(style)": margin,
+        ...sx
+      }}
+      {...rest}
+    />
+  ) : (
     <Box
       sx={{
         position: "fixed",
@@ -60,6 +76,4 @@ export function FabBox(props: FabBoxProps) {
       {...rest}
     />
   );
-
-  return fabPanel ? <Paper sx={{ padding: spaceGap }}>{box}</Paper> : box;
 }
