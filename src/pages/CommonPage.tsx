@@ -4,7 +4,7 @@ import { ScrollTopFab } from "../ScrollTopFab";
 import { MUGlobal } from "../MUGlobal";
 import { CommonPageProps } from "./CommonPageProps";
 import { MoreFab } from "../MoreFab";
-import { Container, Fab, Paper } from "@mui/material";
+import { Container, Fab } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { BackButton } from "../BackButton";
 import { Labels } from "../app/Labels";
@@ -26,7 +26,7 @@ export function CommonPage(props: CommonPageProps) {
     disableGutters = true,
     fabButtons,
     fabColumnDirection,
-    fabPanel = fabColumnDirection,
+    fabPanel,
     fabPaddingAdjust = 1.5,
     fabSize = "small",
     maxWidth = false,
@@ -66,38 +66,6 @@ export function CommonPage(props: CommonPageProps) {
       }
     : undefined;
 
-  const fab = (
-    <FabBox
-      sx={{
-        zIndex: 1,
-        bottom: (theme) => MUGlobal.updateWithTheme(fabPadding, theme.spacing),
-        right: (theme) => MUGlobal.updateWithTheme(fabPadding, theme.spacing)
-      }}
-      columnDirection={fabColumnDirection}
-    >
-      {scrollContainer && (
-        <ScrollTopFab
-          size={fabSize}
-          target={scrollContainer}
-          title={labels.scrollTop}
-        />
-      )}
-      {fabButtons}
-      {onRefresh != null && (
-        <Fab
-          title={labels.refresh}
-          size={fabSize}
-          onClick={onRefresh}
-          sx={{ display: { xs: "none", md: "inherit" } }}
-        >
-          <RefreshIcon />
-        </Fab>
-      )}
-      <MoreFab size={fabSize} title={labels.more} actions={moreActions} />
-      {supportBack && <BackButton title={labels.back} size={fabSize} />}
-    </FabBox>
-  );
-
   // Return the UI
   return (
     <React.Fragment>
@@ -111,7 +79,38 @@ export function CommonPage(props: CommonPageProps) {
         id="page-container"
         {...rest}
       >
-        {fabPanel ? <Paper sx={{ padding: 2 }}>{fab}</Paper> : fab}
+        <FabBox
+          sx={{
+            zIndex: 1,
+            bottom: (theme) =>
+              MUGlobal.updateWithTheme(fabPadding, theme.spacing),
+            right: (theme) =>
+              MUGlobal.updateWithTheme(fabPadding, theme.spacing)
+          }}
+          columnDirection={fabColumnDirection}
+          fabPanel={fabPanel}
+        >
+          {scrollContainer && (
+            <ScrollTopFab
+              size={fabSize}
+              target={scrollContainer}
+              title={labels.scrollTop}
+            />
+          )}
+          {fabButtons}
+          {onRefresh != null && (
+            <Fab
+              title={labels.refresh}
+              size={fabSize}
+              onClick={onRefresh}
+              sx={{ display: { xs: "none", md: "inherit" } }}
+            >
+              <RefreshIcon />
+            </Fab>
+          )}
+          <MoreFab size={fabSize} title={labels.more} actions={moreActions} />
+          {supportBack && <BackButton title={labels.back} size={fabSize} />}
+        </FabBox>
         {children}
       </Container>
     </React.Fragment>

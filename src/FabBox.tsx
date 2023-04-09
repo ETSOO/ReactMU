@@ -1,4 +1,4 @@
-import { Box, BoxProps, useTheme } from "@mui/material";
+import { Box, BoxProps, Paper, useTheme } from "@mui/material";
 import React from "react";
 
 /**
@@ -14,6 +14,11 @@ export type FabBoxProps = BoxProps & {
    * Flex direction, row or column
    */
   columnDirection?: boolean;
+
+  /**
+   * Add panel to the Fab
+   */
+  fabPanel?: boolean;
 };
 
 /**
@@ -23,7 +28,13 @@ export type FabBoxProps = BoxProps & {
  */
 export function FabBox(props: FabBoxProps) {
   // Destruct
-  const { columnDirection, itemGap = 1, sx, ...rest } = props;
+  const {
+    columnDirection,
+    fabPanel = columnDirection,
+    itemGap = 1,
+    sx,
+    ...rest
+  } = props;
 
   // Theme
   const theme = useTheme();
@@ -36,7 +47,7 @@ export function FabBox(props: FabBoxProps) {
     ? { marginTop: spaceGap }
     : { marginLeft: spaceGap };
 
-  return (
+  const box = (
     <Box
       sx={{
         position: "fixed",
@@ -49,4 +60,6 @@ export function FabBox(props: FabBoxProps) {
       {...rest}
     />
   );
+
+  return fabPanel ? <Paper sx={{ padding: spaceGap }}>{box}</Paper> : box;
 }
