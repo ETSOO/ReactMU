@@ -1,19 +1,19 @@
-import { Box, BoxProps, useTheme } from '@mui/material';
-import React from 'react';
+import { Box, BoxProps, useTheme } from "@mui/material";
+import React from "react";
 
 /**
  * Fabs container box props
  */
 export type FabBoxProps = BoxProps & {
-    /**
-     * Item gap
-     */
-    itemGap?: number;
+  /**
+   * Item gap
+   */
+  itemGap?: number;
 
-    /**
-     * Flex direction, row or column
-     */
-    columnDirection?: boolean;
+  /**
+   * Flex direction, row or column
+   */
+  columnDirection?: boolean;
 };
 
 /**
@@ -22,30 +22,32 @@ export type FabBoxProps = BoxProps & {
  * @returns Component
  */
 export function FabBox(props: FabBoxProps) {
-    // Destruct
-    const { columnDirection, itemGap = 1, sx = {}, ...rest } = props;
+  // Destruct
+  const { columnDirection, itemGap = 1, sx, ...rest } = props;
 
-    // Theme
-    const theme = useTheme();
-    const spaceGap = theme.spacing(itemGap);
+  // Theme
+  const theme = useTheme();
+  const spaceGap = theme.spacing(itemGap);
 
-    if (columnDirection == null) return <React.Fragment />;
+  if (columnDirection == null) return <React.Fragment />;
 
-    // margin
-    const margin = columnDirection
-        ? { marginTop: spaceGap }
-        : { marginLeft: spaceGap };
+  // margin
+  const margin = columnDirection
+    ? { marginTop: spaceGap }
+    : { marginLeft: spaceGap };
 
-    // Default style
-    if (typeof sx === 'object') {
-        Object.assign(sx as any, {
-            position: 'fixed',
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: columnDirection ? 'column' : 'row',
-            '& > :not(style) + :not(style)': margin
-        });
-    }
-
-    return <Box sx={sx} {...rest} />;
+  return (
+    <Box
+      sx={{
+        position: "fixed",
+        display: "flex",
+        alignItems: "center",
+        background: "rgba(255, 255, 255, .4)",
+        flexDirection: columnDirection ? "column" : "row",
+        "& > :not(style) + :not(style)": margin,
+        ...sx
+      }}
+      {...rest}
+    />
+  );
 }

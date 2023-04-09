@@ -64,6 +64,7 @@ export * from "./ListItemRightIcon";
 export * from "./ListMoreDisplay";
 export * from "./LoadingButton";
 export * from "./MaskInput";
+export * from "./MenuButton";
 export * from "./MobileListItemRenderer";
 export * from "./MoneyInputField";
 export * from "./MoreFab";

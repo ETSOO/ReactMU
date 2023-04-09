@@ -42,8 +42,9 @@ export type ResponsibleContainerProps<
    * Height will be deducted
    * @param height Current calcuated height
    * @param rect Current rect data
+   * @param isGrid Is displaying DataGrid
    */
-  adjustHeight?: (height: number, rect: DOMRect) => number;
+  adjustHeight?: (height: number, rect: DOMRect, isGrid: boolean) => number;
 
   /**
    * Columns
@@ -278,7 +279,8 @@ export function ResponsibleContainer<
       const boxMargin = parseFloat(style.marginBottom);
       if (!isNaN(boxMargin)) heightLocal -= 3 * boxMargin; // 1 - Box, 2 - Page bottom
 
-      if (adjustHeight != null) heightLocal -= adjustHeight(heightLocal, rect);
+      if (adjustHeight != null)
+        heightLocal -= adjustHeight(heightLocal, rect, showDataGrid);
     }
 
     if (showDataGrid) {
