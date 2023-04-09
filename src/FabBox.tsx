@@ -42,7 +42,6 @@ export function FabBox(props: FabBoxProps) {
         position: "fixed",
         display: "flex",
         alignItems: "center",
-        background: "rgba(255, 255, 255, .4)",
         flexDirection: columnDirection ? "column" : "row",
         "& > :not(style) + :not(style)": margin,
         ...sx

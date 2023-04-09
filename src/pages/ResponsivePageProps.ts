@@ -1,57 +1,65 @@
-import { GridMethodRef } from '@etsoo/react';
-import { DataTypes, IdDefaultType } from '@etsoo/shared';
-import { ListChildComponentProps } from 'react-window';
+import { GridMethodRef } from "@etsoo/react";
+import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import { ListChildComponentProps } from "react-window";
 import {
-    ScrollerListExInnerItemRendererProps,
-    ScrollerListExItemSize
-} from '../ScrollerListEx';
-import { DataGridPageProps } from './DataGridPageProps';
+  ScrollerListExInnerItemRendererProps,
+  ScrollerListExItemSize
+} from "../ScrollerListEx";
+import { DataGridPageProps } from "./DataGridPageProps";
 
 /**
  * Response page props
  */
 export type ResponsePageProps<
-    T extends object,
-    F extends DataTypes.BasicTemplate,
-    D extends DataTypes.Keys<T> = IdDefaultType<T>
+  T extends object,
+  F extends DataTypes.BasicTemplate,
+  D extends DataTypes.Keys<T> = IdDefaultType<T>
 > = Omit<
-    DataGridPageProps<T, F, D>,
-    'mRef' | 'itemKey' | 'onScroll' | 'onItemsRendered'
+  DataGridPageProps<T, F, D>,
+  "mRef" | "itemKey" | "onScroll" | "onItemsRendered"
 > & {
-    /**
-     * Min width to show Datagrid
-     */
-    dataGridMinWidth?: number;
+  /**
+   *
+   * @param height Current height
+   * @param isGrid Is displaying DataGrid
+   * @returns Adjusted height
+   */
+  adjustFabHeight?: (height: number, isGrid: boolean) => number;
 
-    /**
-     * Inner item renderer
-     */
-    innerItemRenderer: (
-        props: ScrollerListExInnerItemRendererProps<T>
-    ) => React.ReactNode;
+  /**
+   * Min width to show Datagrid
+   */
+  dataGridMinWidth?: number;
 
-    /**
-     * Item renderer
-     */
-    itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
+  /**
+   * Inner item renderer
+   */
+  innerItemRenderer: (
+    props: ScrollerListExInnerItemRendererProps<T>
+  ) => React.ReactNode;
 
-    /**
-     * Item size, a function indicates its a variable size list
-     */
-    itemSize: ScrollerListExItemSize;
+  /**
+   * Item renderer
+   */
+  itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
 
-    /**
-     * Methods
-     */
-    mRef?: React.MutableRefObject<GridMethodRef<T> | undefined>;
+  /**
+   * Item size, a function indicates its a variable size list
+   */
+  itemSize: ScrollerListExItemSize;
 
-    /**
-     * Pull to refresh data
-     */
-    pullToRefresh?: boolean;
+  /**
+   * Methods
+   */
+  mRef?: React.MutableRefObject<GridMethodRef<T> | undefined>;
 
-    /**
-     * Quick action for double click or click under mobile
-     */
-    quickAction?: (data: T) => void;
+  /**
+   * Pull to refresh data
+   */
+  pullToRefresh?: boolean;
+
+  /**
+   * Quick action for double click or click under mobile
+   */
+  quickAction?: (data: T) => void;
 };
