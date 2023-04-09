@@ -30,7 +30,7 @@ export function FabBox(props: FabBoxProps) {
   // Destruct
   const {
     columnDirection,
-    fabPanel = columnDirection,
+    fabPanel = columnDirection === false ? true : false,
     itemGap = 1,
     sx,
     ...rest

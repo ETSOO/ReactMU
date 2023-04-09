@@ -1,6 +1,6 @@
-import { Paper, PaperProps } from '@mui/material';
-import React from 'react';
-import Draggable from 'react-draggable';
+import { Paper, PaperProps } from "@mui/material";
+import React from "react";
+import Draggable from "react-draggable";
 
 /**
  * Draggable paper component
@@ -8,12 +8,12 @@ import Draggable from 'react-draggable';
  * @returns Component
  */
 export function DraggablePaperComponent(props: PaperProps) {
-    return (
-        <Draggable
-            handle=".draggable-dialog-title"
-            cancel={'[class*="MuiDialogContent-root"]'}
-        >
-            <Paper {...props} />
-        </Draggable>
-    );
+  return (
+    <Draggable
+      handle=".draggable-dialog-title"
+      cancel={'[class*="MuiDialogContent-root"]'}
+    >
+      <Paper {...props} />
+    </Draggable>
+  );
 }

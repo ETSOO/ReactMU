@@ -55,7 +55,7 @@ const IconDialogTitle = styled(DialogTitle)`
             text-overflow: ellipsis;
             padding-left: ${theme.spacing(1)};
         }
-        & .closeButton {
+        & .MuiDialogContent-root-close-button {
             padding-left: ${theme.spacing(1)};
         }
     `}
@@ -124,7 +124,7 @@ export class NotificationMU extends NotificationReact {
           <span className="dialogTitle">{title}</span>
           {closable && (
             <IconButton
-              className="closeButton"
+              className="MuiDialogContent-root-close-button"
               size="small"
               onClick={() => this.returnValue("CLOSE")}
             >
@@ -195,7 +195,7 @@ export class NotificationMU extends NotificationReact {
           <span className="dialogTitle">{title}</span>
           {closable && (
             <IconButton
-              className="closeButton"
+              className="MuiDialogContent-root-close-button"
               size="small"
               onClick={() => this.returnValue("CLOSE")}
             >
@@ -416,7 +416,7 @@ export class NotificationMU extends NotificationReact {
             <span className="dialogTitle">{title}</span>
             {closable && (
               <IconButton
-                className="closeButton"
+                className="MuiDialogContent-root-close-button"
                 size="small"
                 onClick={() => this.returnValue("CLOSE")}
               >
