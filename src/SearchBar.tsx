@@ -357,7 +357,7 @@ export function SearchBar(props: SearchBarProps) {
       {hasMoreItems && (
         <Drawer
           anchor="right"
-          sx={{ minWidth: "250px" }}
+          sx={{ minWidth: "180px" }}
           ModalProps={{
             keepMounted: true
           }}
