@@ -1,25 +1,23 @@
 import { ReactUtils, useDelayedExecutor } from "@etsoo/react";
-import { DataTypes, IdDefaultType, ListType } from "@etsoo/shared";
-import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
-import React from "react";
+import { ListType2 } from "@etsoo/shared";
+import { Autocomplete, AutocompleteProps } from "@mui/material";
+import React, { ChangeEventHandler } from "react";
+import { InputField, InputFieldProps } from "./InputField";
 import { globalApp } from "./app/ReactApp";
-import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
-import { InputField } from "./InputField";
-import { SearchField } from "./SearchField";
 
 /**
- * Tiplist props
+ * TiplistPro props
  */
-export type TiplistProps<T extends object, D extends DataTypes.Keys<T>> = Omit<
-  AutocompleteExtendedProps<T, D, undefined>,
-  "open" | "multiple"
+export type TiplistProProps<T extends ListType2 = ListType2> = Omit<
+  AutocompleteProps<T, false, false, true>,
+  "open" | "multiple" | "options" | "renderInput"
 > & {
   /**
    * Load data callback
    */
   loadData: (
     keyword: string | undefined,
-    id: T[D] | undefined,
+    id: T["id"] | undefined,
     maxItems: number
   ) => PromiseLike<T[] | null | undefined>;
 
@@ -32,25 +30,49 @@ export type TiplistProps<T extends object, D extends DataTypes.Keys<T>> = Omit<
    * Width
    */
   width?: number;
+
+  /**
+   * Label
+   */
+  label?: string;
+
+  /**
+   * Field name
+   */
+  name?: string;
+
+  /**
+   * Id value
+   */
+  idValue?: T["id"] | null;
+
+  /**
+   * Input onChange hanlder
+   */
+  inputOnChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+
+  /**
+   * Input props
+   */
+  inputProps?: Omit<InputFieldProps, "onChange">;
 };
 
 // Multiple states
 interface States<T extends object> {
   open: boolean;
   options: T[];
-  value?: T | null;
+  value?: T | string | null | undefined;
   loading?: boolean;
 }
 
 /**
- * Tiplist
+ * TiplistPro
  * @param props Props
  * @returns Component
  */
-export function Tiplist<
-  T extends object = ListType,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: TiplistProps<T, D>) {
+export function TiplistPro<T extends ListType2 = ListType2>(
+  props: TiplistProProps<T>
+) {
   // Labels
   const {
     noOptions,
@@ -61,32 +83,24 @@ export function Tiplist<
 
   // Destruct
   const {
-    search = false,
-    idField = "id" as D,
-    idValue,
-    inputAutoComplete = "off",
-    inputError,
-    inputHelperText,
-    inputMargin,
-    inputOnChange,
-    inputRequired,
-    inputVariant,
     label,
     loadData,
     defaultValue,
     value,
+    idValue,
     maxItems = 16,
     width,
     name,
-    readOnly,
-    onChange,
+    inputOnChange,
+    inputProps,
+    sx,
     openOnFocus = true,
     noOptionsText = noOptions,
     loadingText = loading,
     openText = openDefault,
-    getOptionLabel,
     getOptionDisabled,
-    sx = {},
+    getOptionLabel,
+    onChange,
     ...rest
   } = props;
 
@@ -100,7 +114,10 @@ export function Tiplist<
 
   // One time calculation for input's default value (uncontrolled)
   const localIdValue =
-    idValue ?? DataTypes.getValue(localValue, idField as any);
+    idValue ??
+    (localValue != null && typeof localValue === "object"
+      ? localValue.id
+      : null);
 
   // Changable states
   const [states, stateUpdate] = React.useReducer(
@@ -115,15 +132,18 @@ export function Tiplist<
     }
   );
 
+  React.useEffect(() => {
+    if (localValue != value) stateUpdate({ value: localValue });
+  }, [localValue]);
+
   // Input value
   const inputValue = React.useMemo(
-    () => states.value && states.value[idField],
+    () =>
+      states.value && typeof states.value === "object"
+        ? states.value.id
+        : undefined,
     [states.value]
   );
-
-  React.useEffect(() => {
-    if (localValue != null) stateUpdate({ value: localValue });
-  }, [localValue]);
 
   // State
   const [state] = React.useState<{
@@ -131,19 +151,6 @@ export function Tiplist<
     idSet?: boolean;
   }>({});
   const isMounted = React.useRef(true);
-
-  // Add readOnly
-  const addReadOnly = (params: AutocompleteRenderInputParams) => {
-    if (readOnly != null) {
-      Object.assign(params, { readOnly });
-    }
-
-    // https://stackoverflow.com/questions/15738259/disabling-chrome-autofill
-    // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html
-    Object.assign(params.inputProps, { autoComplete: inputAutoComplete });
-
-    return params;
-  };
 
   // Change handler
   const changeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,7 +168,7 @@ export function Tiplist<
   };
 
   // Directly load data
-  const loadDataDirect = (keyword?: string, id?: T[D]) => {
+  const loadDataDirect = (keyword?: string, id?: T["id"]) => {
     // Reset options
     // setOptions([]);
 
@@ -188,7 +195,7 @@ export function Tiplist<
       if (!isMounted.current) return;
 
       if (options != null && options.length >= maxItems) {
-        options.push({ [idField]: "n/a" } as T);
+        options.push({ id: -1, name: "n/a" } as T);
       }
 
       // Indicates loading completed
@@ -208,7 +215,7 @@ export function Tiplist<
     const input = inputRef.current;
     if (input) {
       // Update value
-      const newValue = DataTypes.getStringValue(value, idField) ?? "";
+      const newValue = value?.id.toString() ?? "";
       if (newValue !== input.value) {
         // Different value, trigger change event
         ReactUtils.triggerChange(input, newValue, false);
@@ -246,18 +253,22 @@ export function Tiplist<
         type="text"
         style={{ display: "none" }}
         name={name}
-        value={`${inputValue ?? ""}`}
+        value={inputValue ?? ""}
         readOnly
         onChange={inputOnChange}
       />
       {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
-      <Autocomplete<T, undefined, false, false>
+      <Autocomplete<T, false, false, true>
         filterOptions={(options, _state) => options}
         value={states.value}
         options={states.options}
+        freeSolo
+        clearOnBlur={false}
         onChange={(event, value, reason, details) => {
-          // Set value
-          setInputValue(value);
+          if (typeof value === "object") {
+            // Set value
+            setInputValue(value);
+          }
 
           // Custom
           if (onChange != null) onChange(event, value, reason, details);
@@ -280,7 +291,9 @@ export function Tiplist<
           if (loading)
             loadDataDirect(
               undefined,
-              states.value == null ? undefined : states.value[idField]
+              states.value && typeof states.value === "object"
+                ? states.value.id
+                : undefined
             );
         }}
         onClose={() => {
@@ -290,57 +303,34 @@ export function Tiplist<
           });
         }}
         loading={states.loading}
-        renderInput={(params) =>
-          search ? (
-            <SearchField
-              onChange={changeHandle}
-              {...addReadOnly(params)}
-              readOnly={readOnly}
-              label={label}
-              name={name + "Input"}
-              margin={inputMargin}
-              variant={inputVariant}
-              required={inputRequired}
-              autoComplete={inputAutoComplete}
-              error={inputError}
-              helperText={inputHelperText}
-            />
-          ) : (
-            <InputField
-              onChange={changeHandle}
-              {...addReadOnly(params)}
-              label={label}
-              name={name + "Input"}
-              margin={inputMargin}
-              variant={inputVariant}
-              required={inputRequired}
-              autoComplete={inputAutoComplete}
-              error={inputError}
-              helperText={inputHelperText}
-            />
-          )
-        }
-        isOptionEqualToValue={(option, value) =>
-          option[idField] === value[idField]
-        }
+        renderInput={(params) => (
+          <InputField
+            {...inputProps}
+            {...params}
+            onChange={changeHandle}
+            label={label}
+            name={name + "Input"}
+            onBlur={(event) => {
+              if (states.value == null && onChange)
+                onChange(event, event.target.value, "blur", undefined);
+            }}
+          />
+        )}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         sx={sx}
         noOptionsText={noOptionsText}
         loadingText={loadingText}
         openText={openText}
         getOptionDisabled={(item) => {
-          if (item[idField] === "n/a") return true;
+          if (item.id === -1) return true;
           return getOptionDisabled ? getOptionDisabled(item) : false;
         }}
         getOptionLabel={(item) => {
-          if (typeof item !== "object") return `${item}`;
-          if (item[idField] === "n/a") return (more ?? "More") + "...";
-          return getOptionLabel
-            ? getOptionLabel(item)
-            : "label" in item
-            ? `${item.label}`
-            : "name" in item
-            ? `${item.name}`
-            : `${item}`;
+          if (typeof item === "string") return item;
+          if (item["id"] === -1) return (more ?? "More") + "...";
+          if (getOptionLabel == null)
+            return "label" in item ? item.label : item.name;
+          return getOptionLabel(item);
         }}
         {...rest}
       />

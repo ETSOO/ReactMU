@@ -44,9 +44,6 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
     open: openDefault
   } = globalApp?.getLabels("noOptions", "loading", "open") ?? {};
 
-  const getLabel = (item: D) =>
-    "label" in item ? item.label : "name" in item ? item.name : "";
-
   // Destruct
   const {
     noOptionsText = noOptions,
@@ -121,7 +118,11 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
         />
       )}
       getOptionLabel={(item) =>
-        typeof item === "object" ? getLabel(item) : item
+        typeof item === "object"
+          ? "label" in item
+            ? item.label
+            : item.name
+          : item
       }
       isOptionEqualToValue={(option, value) => option.id === value.id}
       noOptionsText={noOptionsText}

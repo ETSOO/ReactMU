@@ -92,6 +92,7 @@ export * from "./TabBox";
 export * from "./TableEx";
 export * from "./TextFieldEx";
 export * from "./Tiplist";
+export * from "./TiplistPro";
 export * from "./TagList";
 export * from "./TagListPro";
 export * from "./TwoFieldInput";
