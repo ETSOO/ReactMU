@@ -45,11 +45,6 @@ export function FabBox(props: FabBoxProps) {
 
   if (columnDirection == null) return <React.Fragment />;
 
-  // margin
-  const margin = columnDirection
-    ? { marginTop: spaceGap }
-    : { marginLeft: spaceGap };
-
   return fabPanel ? (
     <Paper
       sx={{
@@ -58,7 +53,7 @@ export function FabBox(props: FabBoxProps) {
         alignItems: "center",
         padding: spaceGap,
         flexDirection: columnDirection ? "column" : "row",
-        "& > :not(style) + :not(style)": margin,
+        gap: spaceGap,
         ...sx
       }}
       {...rest}
@@ -70,7 +65,7 @@ export function FabBox(props: FabBoxProps) {
         display: "flex",
         alignItems: "center",
         flexDirection: columnDirection ? "column" : "row",
-        "& > :not(style) + :not(style)": margin,
+        gap: spaceGap,
         ...sx
       }}
       {...rest}
