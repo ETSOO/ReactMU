@@ -200,6 +200,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
     paddings = MUGlobal.pagePaddings,
     supportRefresh = true,
     fabColumnDirection = true,
+    fabTop = true,
     supportBack = true,
     pullToRefresh = true,
     gridRef,
@@ -230,6 +231,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
       {...rest}
       scrollContainer={globalThis}
       fabColumnDirection={fabColumnDirection}
+      fabTop={fabTop}
       supportBack={supportBack}
     >
       {data == null ? (

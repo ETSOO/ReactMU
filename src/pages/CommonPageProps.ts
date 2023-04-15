@@ -34,6 +34,11 @@ export interface CommonPageProps extends Omit<ContainerProps, "id"> {
   fabPanel?: boolean;
 
   /**
+   * Fab lays in the top
+   */
+  fabTop?: boolean;
+
+  /**
    * More actions
    */
   moreActions?: ListItemReact[];

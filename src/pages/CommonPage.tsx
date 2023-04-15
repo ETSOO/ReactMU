@@ -4,7 +4,7 @@ import { ScrollTopFab } from "../ScrollTopFab";
 import { MUGlobal } from "../MUGlobal";
 import { CommonPageProps } from "./CommonPageProps";
 import { MoreFab } from "../MoreFab";
-import { Container, Fab } from "@mui/material";
+import { Container, Fab, useTheme } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { BackButton } from "../BackButton";
 import { Labels } from "../app/Labels";
@@ -24,6 +24,7 @@ export function CommonPage(props: CommonPageProps) {
   const {
     children,
     disableGutters = true,
+    fabTop,
     fabButtons,
     fabColumnDirection,
     fabPanel,
@@ -66,6 +67,12 @@ export function CommonPage(props: CommonPageProps) {
       }
     : undefined;
 
+  const theme = useTheme();
+  const distance = React.useMemo(
+    () => MUGlobal.updateWithTheme(fabPadding, theme.spacing),
+    [fabPadding, theme.spacing]
+  );
+
   // Return the UI
   return (
     <React.Fragment>
@@ -82,10 +89,15 @@ export function CommonPage(props: CommonPageProps) {
         <FabBox
           sx={{
             zIndex: 1,
-            bottom: (theme) =>
-              MUGlobal.updateWithTheme(fabPadding, theme.spacing),
-            right: (theme) =>
-              MUGlobal.updateWithTheme(fabPadding, theme.spacing)
+            ...(fabTop
+              ? {
+                  top: distance,
+                  right: distance
+                }
+              : {
+                  bottom: distance,
+                  right: distance
+                })
           }}
           columnDirection={fabColumnDirection}
           fabPanel={fabPanel}

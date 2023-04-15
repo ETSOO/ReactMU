@@ -2,7 +2,7 @@ import { Box, BoxProps, Paper, PaperProps, useTheme } from "@mui/material";
 import React from "react";
 
 type SharedProps = keyof BoxProps & keyof PaperProps;
-const initOpactiy = 0.1;
+const initOpactiy = 0.15;
 
 /**
  * Fabs container box props
