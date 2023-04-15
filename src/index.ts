@@ -72,6 +72,8 @@ export * from "./MUGlobal";
 export * from "./NotifierMU";
 export * from "./OptionBool";
 export * from "./OptionGroup";
+export * from "./PercentCircularProgress";
+export * from "./PercentLinearProgress";
 export * from "./PList";
 export * from "./ProgressCount";
 export * from "./PullToRefreshUI";
