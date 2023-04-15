@@ -1,6 +1,6 @@
 import { UserKey } from "@etsoo/appscript";
 import { IStateUpdate, ListItemReact } from "@etsoo/react";
-import { ContainerProps } from "@mui/material";
+import { ContainerProps, Theme } from "@mui/material";
 import { CustomFabSize } from "../CustomFabProps";
 
 /**
@@ -36,7 +36,7 @@ export interface CommonPageProps extends Omit<ContainerProps, "id"> {
   /**
    * Fab lays in the top
    */
-  fabTop?: boolean;
+  fabTop?: ((theme: Theme, padding: {}) => object) | boolean;
 
   /**
    * More actions

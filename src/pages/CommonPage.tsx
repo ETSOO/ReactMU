@@ -89,9 +89,14 @@ export function CommonPage(props: CommonPageProps) {
         <FabBox
           sx={{
             zIndex: 1,
-            ...(fabTop
+            ...(typeof fabTop === "function"
+              ? fabTop(theme, fabPadding)
+              : fabTop
               ? {
-                  top: distance,
+                  top: MUGlobal.updateWithTheme(
+                    MUGlobal.increase(fabPadding, 7),
+                    theme.spacing
+                  ),
                   right: distance
                 }
               : {
