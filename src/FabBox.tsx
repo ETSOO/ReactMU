@@ -2,6 +2,7 @@ import { Box, BoxProps, Paper, PaperProps, useTheme } from "@mui/material";
 import React from "react";
 
 type SharedProps = keyof BoxProps & keyof PaperProps;
+const initOpactiy = 0.1;
 
 /**
  * Fabs container box props
@@ -42,6 +43,7 @@ export function FabBox(props: FabBoxProps) {
   // Theme
   const theme = useTheme();
   const spaceGap = theme.spacing(itemGap);
+  const [opacity, setOpacity] = React.useState(initOpactiy);
 
   if (columnDirection == null) return <React.Fragment />;
 
@@ -54,8 +56,11 @@ export function FabBox(props: FabBoxProps) {
         padding: spaceGap,
         flexDirection: columnDirection ? "column" : "row",
         gap: spaceGap,
+        opacity: opacity,
         ...sx
       }}
+      onMouseEnter={() => setOpacity(1)}
+      onMouseLeave={() => setOpacity(initOpactiy)}
       {...rest}
     />
   ) : (
