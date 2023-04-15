@@ -247,7 +247,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
           <Grid
             container
             justifyContent="left"
-            spacing={paddings}
+            spacing={spacing}
             className="ET-ViewPage"
             ref={gridRef}
             sx={{
