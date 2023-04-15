@@ -98,6 +98,11 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
   pullToRefresh?: boolean;
 
   /**
+   * Grid spacing
+   */
+  spacing?: Record<string, string | number>;
+
+  /**
    * Support refresh
    */
   supportRefresh?: boolean;
@@ -198,6 +203,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
     fields,
     loadData,
     paddings = MUGlobal.pagePaddings,
+    spacing = MUGlobal.half(MUGlobal.pagePaddings),
     supportRefresh = true,
     fabColumnDirection = true,
     fabTop = true,
