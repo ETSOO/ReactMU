@@ -89,6 +89,7 @@ export function ComboBox<
     dataReadonly = true,
     readOnly,
     onChange,
+    onValueChange,
     openOnFocus = true,
     value,
     disableCloseOnSelect = false,
@@ -135,6 +136,7 @@ export function ComboBox<
   React.useEffect(() => {
     if (localValue != null && localValue != stateValue) {
       setStateValue(localValue);
+      if (onValueChange) onValueChange(localValue);
     }
   }, [localValue]);
 
@@ -232,6 +234,8 @@ export function ComboBox<
 
           // Custom
           if (onChange != null) onChange(event, value, reason, details);
+
+          if (onValueChange) onValueChange(value);
         }}
         openOnFocus={openOnFocus}
         sx={sx}

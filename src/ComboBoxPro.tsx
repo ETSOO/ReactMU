@@ -32,6 +32,12 @@ export type ComboBoxProProps<D extends ListType2 = ListType2> = Omit<
    * Input props
    */
   inputProps?: Omit<InputFieldProps, "onChange">;
+
+  /**
+   * Value change handler
+   * @param value New value
+   */
+  onValueChange?: (value: D | null) => void;
 };
 
 export function ComboBoxPro<D extends ListType2 = ListType2>(
@@ -57,6 +63,7 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
     value,
     idValue,
     onChange,
+    onValueChange,
     ...rest
   } = props;
 
@@ -73,9 +80,11 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
   React.useEffect(() => {
     if (idValue == null) return;
     const option = localOptions.find((option) => option.id === idValue);
-    if (option) setValue(option);
-    else setValue(null);
-  }, [localOptions]);
+    if (option) {
+      setValue(option);
+      if (onValueChange) onValueChange(option);
+    } else setValue(null);
+  }, [localOptions, idValue]);
 
   React.useEffect(() => {
     if (typeof options === "function") {
@@ -131,6 +140,10 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
       onChange={(event, value, reason, details) => {
         setValue(value);
         if (onChange) onChange(event, value, reason, details);
+        if (onValueChange) {
+          if (typeof value === "object")
+            onValueChange(value == null ? null : value);
+        }
       }}
       {...rest}
     />

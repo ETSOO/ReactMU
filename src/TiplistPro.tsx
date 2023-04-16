@@ -55,6 +55,12 @@ export type TiplistProProps<T extends ListType2 = ListType2> = Omit<
    * Input props
    */
   inputProps?: Omit<InputFieldProps, "onChange">;
+
+  /**
+   * Value change handler
+   * @param value New value
+   */
+  onValueChange?: (value: T | null) => void;
 };
 
 // Multiple states
@@ -101,6 +107,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     getOptionDisabled,
     getOptionLabel,
     onChange,
+    onValueChange,
     ...rest
   } = props;
 
@@ -198,6 +205,11 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         options.push({ id: -1, name: "n/a" } as T);
       }
 
+      if (id && options && onValueChange) {
+        const option = options.find((o) => o["id"] === id);
+        if (option) onValueChange(option);
+      }
+
       // Indicates loading completed
       stateUpdate({
         loading: false,
@@ -272,6 +284,11 @@ export function TiplistPro<T extends ListType2 = ListType2>(
 
           // Custom
           if (onChange != null) onChange(event, value, reason, details);
+
+          if (onValueChange) {
+            if (typeof value === "object")
+              onValueChange(value == null ? null : value);
+          }
 
           // For clear case
           if (reason === "clear") {

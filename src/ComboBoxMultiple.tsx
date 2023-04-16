@@ -31,7 +31,7 @@ export type ComboBoxMultipleProps<
   T extends object = ListType,
   D extends DataTypes.Keys<T> = IdDefaultType<T>,
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
-> = AutocompleteExtendedProps<T, D, true> & {
+> = Omit<AutocompleteExtendedProps<T, D, true>, "onValueChange"> & {
   /**
    * Auto add blank item
    */

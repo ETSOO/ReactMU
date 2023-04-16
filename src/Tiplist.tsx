@@ -80,6 +80,7 @@ export function Tiplist<
     name,
     readOnly,
     onChange,
+    onValueChange,
     openOnFocus = true,
     noOptionsText = noOptions,
     loadingText = loading,
@@ -191,6 +192,11 @@ export function Tiplist<
         options.push({ [idField]: "n/a" } as T);
       }
 
+      if (id && options && onValueChange) {
+        const option = options.find((o) => o[idField] === id);
+        if (option) onValueChange(option);
+      }
+
       // Indicates loading completed
       stateUpdate({
         loading: false,
@@ -261,6 +267,8 @@ export function Tiplist<
 
           // Custom
           if (onChange != null) onChange(event, value, reason, details);
+
+          if (onValueChange) onValueChange(value);
 
           // For clear case
           if (reason === "clear") {

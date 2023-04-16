@@ -69,7 +69,7 @@ export interface ItemListProps<
   onClose?(item: T | undefined, changed: boolean): void;
 
   /**
-   * Current selected language
+   * Current selected id
    */
   selectedValue?: T[D];
 
