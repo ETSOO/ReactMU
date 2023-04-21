@@ -1,4 +1,4 @@
-import { Box, IconButton, InputAdornment } from "@mui/material";
+import { Box, BoxProps, IconButton, InputAdornment } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React from "react";
@@ -63,6 +63,11 @@ export type IntInputFieldProps = Omit<
     source: unknown,
     init: boolean
   ) => number | boolean | null | void;
+
+  /**
+   * Box props
+   */
+  boxProps?: BoxProps;
 };
 
 /**
@@ -78,6 +83,7 @@ export const IntInputField = React.forwardRef<
     step = 1,
     max = 9999999,
     inputStyle = { textAlign: "right" },
+    boxProps,
     buttons,
     endSymbol,
     symbol,
@@ -141,16 +147,20 @@ export const IntInputField = React.forwardRef<
           <InputAdornment position="end">{endSymbol}</InputAdornment>
         ) : undefined
       }}
-      sx={{
-        "& input[type=number]::-webkit-inner-spin-button": {
-          WebkitAppearance: "none",
-          margin: 0
-        },
-        "& input[type=number]::-webkit-outer-spin-button": {
-          WebkitAppearance: "none",
-          margin: 0
-        }
-      }}
+      sx={
+        buttons
+          ? {
+              "& input[type=number]::-webkit-inner-spin-button": {
+                WebkitAppearance: "none",
+                margin: 0
+              },
+              "& input[type=number]::-webkit-outer-spin-button": {
+                WebkitAppearance: "none",
+                margin: 0
+              }
+            }
+          : undefined
+      }
       onChange={(event) => {
         const source = event.target.value;
         setLocalValue(source);
@@ -176,7 +186,15 @@ export const IntInputField = React.forwardRef<
 
   if (buttons)
     return (
-      <Box sx={{ display: "flex", alignItems: "flex-end", gap: 0.5 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          gap: 0.5,
+          ...boxProps
+        }}
+      >
         <IconButton
           size="small"
           onClick={() => {
