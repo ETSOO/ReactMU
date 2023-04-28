@@ -76,7 +76,7 @@ export function Tiplist<
     defaultValue,
     value,
     maxItems = 16,
-    width,
+    width = search ? 160 : undefined,
     name,
     readOnly,
     onChange,
