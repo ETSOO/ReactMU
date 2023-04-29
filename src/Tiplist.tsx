@@ -2,10 +2,10 @@ import { ReactUtils, useDelayedExecutor } from "@etsoo/react";
 import { DataTypes, IdDefaultType, ListType } from "@etsoo/shared";
 import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
 import React from "react";
-import { globalApp } from "./app/ReactApp";
 import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
-import { InputField } from "./InputField";
+import { globalApp } from "./app/ReactApp";
 import { SearchField } from "./SearchField";
+import { InputField } from "./InputField";
 
 /**
  * Tiplist props
@@ -118,7 +118,10 @@ export function Tiplist<
 
   // Input value
   const inputValue = React.useMemo(
-    () => states.value && states.value[idField],
+    () =>
+      states.value && typeof states.value === "object"
+        ? states.value[idField]
+        : undefined,
     [states.value]
   );
 
@@ -222,19 +225,23 @@ export function Tiplist<
     }
   };
 
-  if (localIdValue != null && (localIdValue as any) !== "") {
-    if (state.idLoaded) {
-      // Set default
-      if (!state.idSet && states.options.length == 1) {
-        stateUpdate({ value: states.options[0] });
-        state.idSet = true;
+  React.useEffect(() => {
+    if (localIdValue == null && inputValue != null) {
+      setInputValue(null);
+    } else if (localIdValue != null && (localIdValue as any) !== "") {
+      if (state.idLoaded) {
+        // Set default
+        if (!state.idSet && states.options.length == 1) {
+          stateUpdate({ value: states.options[0] });
+          state.idSet = true;
+        }
+      } else {
+        // Load id data
+        loadDataDirect(undefined, localIdValue);
+        state.idLoaded = true;
       }
-    } else {
-      // Load id data
-      loadDataDirect(undefined, localIdValue);
-      state.idLoaded = true;
     }
-  }
+  }, [state, localIdValue]);
 
   React.useEffect(() => {
     return () => {

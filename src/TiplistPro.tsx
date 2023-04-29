@@ -235,19 +235,23 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     }
   };
 
-  if (localIdValue != null && (localIdValue as any) !== "") {
-    if (state.idLoaded) {
-      // Set default
-      if (!state.idSet && states.options.length == 1) {
-        stateUpdate({ value: states.options[0] });
-        state.idSet = true;
+  React.useEffect(() => {
+    if (localIdValue == null && inputValue != null) {
+      setInputValue(null);
+    } else if (localIdValue != null && (localIdValue as any) !== "") {
+      if (state.idLoaded) {
+        // Set default
+        if (!state.idSet && states.options.length == 1) {
+          stateUpdate({ value: states.options[0] });
+          state.idSet = true;
+        }
+      } else {
+        // Load id data
+        loadDataDirect(undefined, localIdValue);
+        state.idLoaded = true;
       }
-    } else {
-      // Load id data
-      loadDataDirect(undefined, localIdValue);
-      state.idLoaded = true;
     }
-  }
+  }, [state, localIdValue]);
 
   React.useEffect(() => {
     return () => {
