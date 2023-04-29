@@ -241,7 +241,7 @@ export function Tiplist<
         state.idLoaded = true;
       }
     }
-  }, [state, localIdValue]);
+  }, [state.idLoaded, state.idSet, localIdValue, states.options]);
 
   React.useEffect(() => {
     return () => {

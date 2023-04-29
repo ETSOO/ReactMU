@@ -251,7 +251,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         state.idLoaded = true;
       }
     }
-  }, [state, localIdValue]);
+  }, [state.idLoaded, state.idSet, localIdValue, states.options]);
 
   React.useEffect(() => {
     return () => {
