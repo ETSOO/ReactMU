@@ -236,10 +236,13 @@ export function Tiplist<
       if (state.idLoaded) {
         // Set default
         if (!state.idSet && states.options.length > 0) {
-          stateUpdate({
-            value: states.options.find((o) => o[idField] === localIdValue)
-          });
-          state.idSet = true;
+          const item = states.options.find((o) => o[idField] === localIdValue);
+          if (item) {
+            stateUpdate({
+              value: states.options[0]
+            });
+            state.idSet = true;
+          }
         }
       } else {
         // Load id data
