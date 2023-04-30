@@ -236,8 +236,11 @@ export function TiplistPro<T extends ListType2 = ListType2>(
   };
 
   React.useEffect(() => {
-    if (localIdValue == null && inputValue != null) {
-      setInputValue(null);
+    if (localIdValue == null) {
+      if (inputValue != null) setInputValue(null);
+    } else if (state.idLoaded) {
+      state.idLoaded = false;
+      state.idSet = false;
     }
   }, [localIdValue]);
 

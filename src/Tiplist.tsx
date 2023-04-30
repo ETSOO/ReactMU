@@ -226,8 +226,11 @@ export function Tiplist<
   };
 
   React.useEffect(() => {
-    if (localIdValue == null && inputValue != null) {
-      setInputValue(null);
+    if (localIdValue == null) {
+      if (inputValue != null) setInputValue(null);
+    } else if (state.idLoaded) {
+      state.idLoaded = false;
+      state.idSet = false;
     }
   }, [localIdValue]);
 
