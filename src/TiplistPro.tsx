@@ -238,11 +238,17 @@ export function TiplistPro<T extends ListType2 = ListType2>(
   React.useEffect(() => {
     if (localIdValue == null && inputValue != null) {
       setInputValue(null);
-    } else if (localIdValue != null && (localIdValue as any) !== "") {
+    }
+  }, [localIdValue]);
+
+  React.useEffect(() => {
+    if (localIdValue != null && (localIdValue as any) !== "") {
       if (state.idLoaded) {
         // Set default
-        if (!state.idSet && states.options.length == 1) {
-          stateUpdate({ value: states.options[0] });
+        if (!state.idSet && states.options.length > 0) {
+          stateUpdate({
+            value: states.options.find((o) => o.id === localIdValue)
+          });
           state.idSet = true;
         }
       } else {
