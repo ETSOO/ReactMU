@@ -1,4 +1,8 @@
-import { GridColumnRenderProps, GridDataType } from "@etsoo/react";
+import {
+  GridColumnRenderProps,
+  GridDataType,
+  ScrollRestoration
+} from "@etsoo/react";
 import { DataTypes, DateUtils, Utils } from "@etsoo/shared";
 import {
   Grid,
@@ -317,6 +321,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
               }}
             />
           )}
+          <ScrollRestoration />
         </React.Fragment>
       )}
     </CommonPage>
