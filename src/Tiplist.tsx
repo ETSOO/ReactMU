@@ -291,7 +291,7 @@ export function Tiplist<
 
           // For clear case
           if (reason === "clear") {
-            stateUpdate({ options: [] });
+            stateUpdate({ options: [], open: true });
             loadDataDirect();
           }
         }}
