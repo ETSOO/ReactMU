@@ -278,7 +278,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         type="text"
         style={{ display: "none" }}
         name={name}
-        value={inputValue ?? ""}
+        value={inputValue ?? localIdValue ?? ""}
         readOnly
         onChange={inputOnChange}
       />

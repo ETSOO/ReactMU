@@ -271,7 +271,7 @@ export function Tiplist<
         type="text"
         style={{ display: "none" }}
         name={name}
-        value={`${inputValue ?? ""}`}
+        value={`${inputValue ?? localIdValue ?? ""}`}
         readOnly
         onChange={inputOnChange}
       />
