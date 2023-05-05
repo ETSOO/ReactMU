@@ -152,12 +152,12 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     [states.value]
   );
 
-  // State
-  const [state] = React.useState<{
-    idLoaded?: boolean;
-    idSet?: boolean;
-  }>({});
-  const isMounted = React.useRef(true);
+  // Ref
+  const state = React.useRef({
+    idLoaded: false,
+    idSet: false,
+    isMounted: false
+  });
 
   // Change handler
   const changeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -199,7 +199,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
 
     // Load list
     loadData(keyword, id, maxItems).then((options) => {
-      if (!isMounted.current) return;
+      if (!state.current.isMounted) return;
 
       if (options != null && options.length >= maxItems) {
         options.push({ id: -1, name: "n/a" } as T);
@@ -238,33 +238,37 @@ export function TiplistPro<T extends ListType2 = ListType2>(
   React.useEffect(() => {
     if (localIdValue == null) {
       if (inputValue != null) setInputValue(null);
-    } else if (state.idLoaded) {
-      state.idLoaded = false;
-      state.idSet = false;
+      return;
+    }
+
+    if (state.current.idLoaded) {
+      state.current.idLoaded = false;
+      state.current.idSet = false;
     }
   }, [localIdValue]);
 
   React.useEffect(() => {
     if (localIdValue != null && (localIdValue as any) !== "") {
-      if (state.idLoaded) {
+      if (state.current.idLoaded) {
         // Set default
-        if (!state.idSet && states.options.length > 0) {
+        if (!state.current.idSet && states.options.length > 0) {
           stateUpdate({
             value: states.options.find((o) => o.id === localIdValue)
           });
-          state.idSet = true;
+          state.current.idSet = true;
         }
       } else {
         // Load id data
         loadDataDirect(undefined, localIdValue);
-        state.idLoaded = true;
+        state.current.idLoaded = true;
       }
     }
-  }, [state.idLoaded, state.idSet, localIdValue, states.options]);
+  }, [localIdValue, states.options]);
 
   React.useEffect(() => {
+    state.current.isMounted = true;
     return () => {
-      isMounted.current = false;
+      state.current.isMounted = false;
       delayed.clear();
     };
   }, []);
@@ -278,7 +282,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         type="text"
         style={{ display: "none" }}
         name={name}
-        value={inputValue ?? localIdValue ?? ""}
+        value={inputValue ?? (state.current.idSet ? "" : localIdValue ?? "")}
         readOnly
         onChange={inputOnChange}
       />
