@@ -135,6 +135,22 @@ export function ComboBoxMultiple<
   const [localOptions, setOptions] = React.useState(options ?? []);
   const isMounted = React.useRef(true);
 
+  // Local default value
+  const localValue: T[] | null | undefined =
+    idValue != null
+      ? localOptions.filter((o) => o[idField] === idValue)
+      : idValues != null
+      ? localOptions.filter((o) => idValues?.includes(o[idField]))
+      : defaultValue ?? value;
+
+  // State
+  // null for controlled
+  const [stateValue, setStateValue] = React.useState<T[] | null>(null);
+
+  React.useEffect(() => {
+    setStateValue(localValue ?? []);
+  }, [localValue]);
+
   // When options change
   // [options] will cause infinite loop
   const propertyWay = loadData == null;
@@ -156,24 +172,6 @@ export function ComboBoxMultiple<
       }
     }
   }, [options, propertyWay]);
-
-  // Local default value
-  const localValue: T | T[] | null | undefined =
-    idValue != null
-      ? localOptions.filter((o) => o[idField] === idValue)
-      : idValues != null
-      ? localOptions.filter((o) => idValues?.includes(o[idField]))
-      : defaultValue ?? value;
-
-  // State
-  // null for controlled
-  const [stateValue, setStateValue] = React.useState<T | T[] | null>(null);
-
-  React.useEffect(() => {
-    if (localValue != null && localValue != stateValue) {
-      setStateValue(localValue);
-    }
-  }, [localValue]);
 
   // Add readOnly
   const addReadOnly = (params: AutocompleteRenderInputParams) => {
@@ -200,14 +198,12 @@ export function ComboBoxMultiple<
     return params;
   };
 
-  const getValue = (value: T | T[] | null): string => {
+  const getValue = (value: T[] | null): string => {
     if (value == null) return "";
-    if (Array.isArray(value))
-      return value.map((item) => item[idField]).join(",");
-    return `${value[idField]}`;
+    return value.map((item) => item[idField]).join(",");
   };
 
-  const setInputValue = (value: T | T[] | null) => {
+  const setInputValue = (value: T[] | null) => {
     // Set state
     setStateValue(value);
 
@@ -266,6 +262,7 @@ export function ComboBoxMultiple<
         }
         disableCloseOnSelect={disableCloseOnSelect}
         getOptionLabel={getOptionLabel}
+        multiple
         isOptionEqualToValue={(option: T, value: T) =>
           option[idField] === value[idField]
         }
