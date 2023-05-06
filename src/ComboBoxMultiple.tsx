@@ -259,7 +259,7 @@ export function ComboBoxMultiple<
       <Autocomplete<T, true, false, false>
         value={
           stateValue == null
-            ? undefined
+            ? []
             : Array.isArray(stateValue)
             ? stateValue
             : [stateValue]
