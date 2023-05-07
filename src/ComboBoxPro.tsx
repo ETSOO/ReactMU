@@ -121,8 +121,11 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
           label={label}
           name={name}
           onBlur={(event) => {
-            if (localValue == null && onChange)
-              onChange(event, event.target.value, "blur", undefined);
+            if (onChange) {
+              const value = event.target.value;
+              if (!localValue && localValue != value)
+                onChange(event, value, "blur", undefined);
+            }
           }}
         />
       )}
