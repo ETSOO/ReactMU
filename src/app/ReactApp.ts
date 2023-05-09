@@ -312,20 +312,20 @@ export class ReactApp<
    */
   override changeCulture(culture: DataTypes.CultureDefinition) {
     // Super call to update cultrue
-    super.changeCulture(culture);
-
-    // Update component labels
-    Labels.setLabels(culture.resources, {
-      notificationMU: {
-        alertTitle: "warning",
-        alertOK: "ok",
-        confirmTitle: "confirm",
-        confirmYes: "ok",
-        confirmNo: "cancel",
-        promptTitle: "prompt",
-        promptCancel: "cancel",
-        promptOK: "ok"
-      }
+    super.changeCulture(culture, (resources) => {
+      // Update component labels
+      Labels.setLabels(resources, {
+        notificationMU: {
+          alertTitle: "warning",
+          alertOK: "ok",
+          confirmTitle: "confirm",
+          confirmYes: "ok",
+          confirmNo: "cancel",
+          promptTitle: "prompt",
+          promptCancel: "cancel",
+          promptOK: "ok"
+        }
+      });
     });
 
     // Document title

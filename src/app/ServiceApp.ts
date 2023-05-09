@@ -226,7 +226,7 @@ export class ServiceApp<
             }
 
             // Set password for the action
-            rq.pwd = this.encrypt(this.hash(pwd));
+            rq.pwd = await this.encrypt(await this.hash(pwd));
 
             // Submit again
             const result = await this.api.put<LoginResult>(
@@ -325,11 +325,10 @@ export class ServiceApp<
    */
   userLoginEx(user: ISmartERPUser, refreshToken: string, serviceUser: U) {
     // Service user login
-    this.servicePassphrase =
-      this.decrypt(
-        serviceUser.servicePassphrase,
-        this.settings.serviceId.toString()
-      ) ?? "";
+    this.decrypt(
+      serviceUser.servicePassphrase,
+      this.settings.serviceId.toString()
+    ).then((result) => (this.servicePassphrase = result ?? ""));
 
     // Service user
     this.serviceUser = serviceUser;
