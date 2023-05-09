@@ -30,7 +30,7 @@ export interface IServiceApp extends ReactAppType {
   serviceDecrypt(
     messageEncrypted: string,
     passphrase?: string
-  ): Promise<string | undefined>;
+  ): string | undefined;
 
   /**
    * Service encrypt message
@@ -43,5 +43,5 @@ export interface IServiceApp extends ReactAppType {
     message: string,
     passphrase?: string,
     iterations?: number
-  ): Promise<string | undefined>;
+  ): string | undefined;
 }

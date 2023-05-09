@@ -325,10 +325,11 @@ export class ServiceApp<
    */
   userLoginEx(user: ISmartERPUser, refreshToken: string, serviceUser: U) {
     // Service user login
-    this.decrypt(
-      serviceUser.servicePassphrase,
-      this.settings.serviceId.toString()
-    ).then((result) => (this.servicePassphrase = result ?? ""));
+    this.servicePassphrase =
+      this.decrypt(
+        serviceUser.servicePassphrase,
+        this.settings.serviceId.toString()
+      ) ?? "";
 
     // Service user
     this.serviceUser = serviceUser;
