@@ -1,5 +1,8 @@
-import React from 'react';
-import PullToRefresh, { Options } from 'pulltorefreshjs';
+import React from "react";
+import type { Options } from "pulltorefreshjs";
+import type PullToRefresh from "pulltorefreshjs";
+
+type p = typeof PullToRefresh;
 
 /**
  * PullToRefresh UI
@@ -8,14 +11,18 @@ import PullToRefresh, { Options } from 'pulltorefreshjs';
  * @returns Component
  */
 export function PullToRefreshUI(props: Options) {
-    // Ready
-    React.useEffect(() => {
-        PullToRefresh.init(props);
+  // Ready
+  React.useEffect(() => {
+    let pr: p | null;
+    import("pulltorefreshjs").then((PullToRefresh) => {
+      PullToRefresh.init(props);
+      pr = PullToRefresh;
+    });
 
-        return () => {
-            PullToRefresh.destroyAll();
-        };
-    }, [props]);
+    return () => {
+      if (pr) pr.destroyAll();
+    };
+  }, [props]);
 
-    return <React.Fragment />;
+  return <React.Fragment />;
 }
