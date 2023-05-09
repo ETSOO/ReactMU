@@ -167,7 +167,7 @@ export class ServiceApp<
       const serviceResult = await this.serviceApi.put<ServiceLoginResult<U>>(
         "Auth/ExchangeToken",
         {
-          token: this.encryptEnhanced(
+          token: await this.encryptEnhanced(
             userData.token,
             this.settings.serviceId.toString()
           )
