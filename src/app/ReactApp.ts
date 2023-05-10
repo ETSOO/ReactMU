@@ -310,22 +310,22 @@ export class ReactApp<
    * Change culture
    * @param culture New culture definition
    */
-  override changeCulture(culture: DataTypes.CultureDefinition) {
+  override async changeCulture(culture: DataTypes.CultureDefinition) {
     // Super call to update cultrue
-    super.changeCulture(culture, (resources) => {
-      // Update component labels
-      Labels.setLabels(resources, {
-        notificationMU: {
-          alertTitle: "warning",
-          alertOK: "ok",
-          confirmTitle: "confirm",
-          confirmYes: "ok",
-          confirmNo: "cancel",
-          promptTitle: "prompt",
-          promptCancel: "cancel",
-          promptOK: "ok"
-        }
-      });
+    const resources = await super.changeCulture(culture);
+
+    // Update component labels
+    Labels.setLabels(resources, {
+      notificationMU: {
+        alertTitle: "warning",
+        alertOK: "ok",
+        confirmTitle: "confirm",
+        confirmYes: "ok",
+        confirmNo: "cancel",
+        promptTitle: "prompt",
+        promptCancel: "cancel",
+        promptOK: "ok"
+      }
     });
 
     // Document title
@@ -339,6 +339,8 @@ export class ReactApp<
     } else {
       document.title = title;
     }
+
+    return resources;
   }
 
   /**
