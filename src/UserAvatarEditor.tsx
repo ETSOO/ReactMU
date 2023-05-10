@@ -76,6 +76,8 @@ const defaultState: EditorState = {
   rotate: 0
 };
 
+const AE = React.lazy(() => import("react-avatar-editor"));
+
 /**
  * User avatar editor
  * https://github.com/mosch/react-avatar-editor
@@ -106,8 +108,6 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
   // Ref
   const ref = React.createRef<AvatarEditor>();
-
-  const [AE, setAvatarEditor] = React.useState<typeof AvatarEditor>();
 
   // Button ref
   const buttonRef = React.createRef<HTMLButtonElement>();
@@ -214,12 +214,6 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     }
   };
 
-  React.useEffect(() => {
-    import("react-avatar-editor").then((result) =>
-      setAvatarEditor(result.default)
-    );
-  }, []);
-
   return (
     <Stack direction="column" spacing={0.5} width={containerWidth}>
       <Button
@@ -240,9 +234,11 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
         />
       </Button>
       <Stack direction="row" spacing={0.5}>
-        {AE == null ? (
-          <Skeleton variant="rounded" width={width} height={height} />
-        ) : (
+        <React.Suspense
+          fallback={
+            <Skeleton variant="rounded" width={width} height={height} />
+          }
+        >
           <AE
             ref={ref}
             border={border}
@@ -253,7 +249,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
             scale={editorState.scale}
             rotate={editorState.rotate}
           />
-        )}
+        </React.Suspense>
         <ButtonGroup size="small" orientation="vertical" disabled={!ready}>
           <Button onClick={() => handleRotate(90)} title={labels.rotateRight}>
             <RotateRightIcon />

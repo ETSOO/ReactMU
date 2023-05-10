@@ -355,11 +355,11 @@ export class ReactApp<
     // Same?
     if (culture.name === this.culture) return;
 
-    // Dispatch action
-    dispatch(culture);
-
     // Super call
-    this.changeCulture(culture);
+    this.changeCulture(culture).then(() => {
+      // Dispatch action
+      dispatch(culture);
+    });
   }
 
   /**
