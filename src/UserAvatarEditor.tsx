@@ -76,8 +76,6 @@ const defaultState: EditorState = {
   rotate: 0
 };
 
-const AE = React.lazy(() => import("react-avatar-editor"));
-
 /**
  * User avatar editor
  * https://github.com/mosch/react-avatar-editor
@@ -213,6 +211,9 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
       onDone(data, toBlob);
     }
   };
+
+  // Load the component
+  const AE = React.lazy(() => import("react-avatar-editor"));
 
   return (
     <Stack direction="column" spacing={0.5} width={containerWidth}>
