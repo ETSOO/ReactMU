@@ -107,7 +107,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   // Ref
   const ref = React.createRef<AvatarEditor>();
 
-  const [AE, setAE] = React.useState<typeof AvatarEditor>();
+  const [AE, setAvatarEditor] = React.useState<typeof AvatarEditor>();
 
   // Button ref
   const buttonRef = React.createRef<HTMLButtonElement>();
@@ -215,7 +215,9 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   };
 
   React.useEffect(() => {
-    import("react-avatar-editor").then((result) => setAE(result.default));
+    import("react-avatar-editor").then((result) =>
+      setAvatarEditor(result.default)
+    );
   }, []);
 
   return (

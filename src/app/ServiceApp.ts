@@ -167,7 +167,7 @@ export class ServiceApp<
       const serviceResult = await this.serviceApi.put<ServiceLoginResult<U>>(
         "Auth/ExchangeToken",
         {
-          token: await this.encryptEnhanced(
+          token: this.encryptEnhanced(
             userData.token,
             this.settings.serviceId.toString()
           )
@@ -226,7 +226,7 @@ export class ServiceApp<
             }
 
             // Set password for the action
-            rq.pwd = await this.encrypt(await this.hash(pwd));
+            rq.pwd = this.encrypt(this.hash(pwd));
 
             // Submit again
             const result = await this.api.put<LoginResult>(

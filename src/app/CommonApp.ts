@@ -144,7 +144,7 @@ export abstract class CommonApp<
             }
 
             // Set password for the action
-            rq.pwd = await this.encrypt(await this.hash(pwd));
+            rq.pwd = this.encrypt(this.hash(pwd));
 
             // Submit again
             const result = await this.api.put<LoginResult>(
