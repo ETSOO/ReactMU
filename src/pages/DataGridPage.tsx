@@ -1,7 +1,10 @@
 import {
   GridDataGet,
   GridLoadDataProps,
+  GridLoaderStates,
+  GridOnScrollProps,
   ScrollerGridForwardRef,
+  VariableSizeGrid,
   useCombinedRefs,
   useDimensions
 } from "@etsoo/react";
@@ -13,6 +16,7 @@ import { MUGlobal } from "../MUGlobal";
 import { SearchBar } from "../SearchBar";
 import { CommonPage } from "./CommonPage";
 import { DataGridPageProps } from "./DataGridPageProps";
+import { GridDataCacheType } from "../GridDataCacheType";
 
 interface LocalStates<T> {
   data?: FormData;
@@ -41,6 +45,8 @@ export function DataGridPage<
     mRef,
     sizeReadyMiliseconds = 100,
     pageProps = {},
+    cacheKey,
+    cacheMinutes = 120,
     ...rest
   } = props;
 
@@ -65,6 +71,8 @@ export function DataGridPage<
     }
   );
 
+  const initLoadedRef = React.useRef<boolean>();
+
   // On submit callback
   const onSubmit = (data: FormData, _reset: boolean) => {
     setStates({ data });
@@ -72,7 +80,62 @@ export function DataGridPage<
 
   const localLoadData = (props: GridLoadDataProps) => {
     const data = GridDataGet(props, fieldTemplate);
+
+    if (cacheKey)
+      sessionStorage.setItem(`${cacheKey}-searchbar`, JSON.stringify(data));
+
     return loadData(data);
+  };
+
+  type DataType = GridDataCacheType<T>;
+
+  const onUpdateRows = (rows: T[], state: GridLoaderStates<T>) => {
+    if (state.currentPage > 0 && cacheKey) {
+      const data: DataType = { rows, state, creation: new Date().valueOf() };
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
+    }
+  };
+
+  const onInitLoad = (
+    ref: VariableSizeGrid<T>
+  ): [T[], Partial<GridLoaderStates<T>>?] | null | undefined => {
+    // Avoid repeatedly load from cache
+    if (initLoadedRef.current || !cacheKey) return undefined;
+
+    // Cache data
+    const cacheData = sessionStorage.getItem(cacheKey);
+    if (cacheData) {
+      const { rows, state, creation } = JSON.parse(cacheData) as DataType;
+
+      // 120 minutes
+      if (new Date().valueOf() - creation > cacheMinutes * 60000) {
+        sessionStorage.removeItem(cacheKey);
+        return undefined;
+      }
+
+      // Scroll position
+      const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
+      if (scrollData) {
+        const { scrollLeft, scrollTop } = JSON.parse(
+          scrollData
+        ) as GridOnScrollProps;
+
+        globalThis.setTimeout(() => ref.scrollTo({ scrollLeft, scrollTop }), 0);
+      }
+
+      // Update flag value
+      initLoadedRef.current = true;
+
+      // Return cached rows and state
+      return [rows, state];
+    }
+
+    return undefined;
+  };
+
+  const onGridScroll = (props: GridOnScrollProps) => {
+    if (!cacheKey || !initLoadedRef.current) return;
+    sessionStorage.setItem(`${cacheKey}-scroll`, JSON.stringify(props));
   };
 
   // Watch container
@@ -105,6 +168,9 @@ export function DataGridPage<
         height={gridHeight}
         loadData={localLoadData}
         mRef={refs}
+        onUpdateRows={onUpdateRows}
+        onInitLoad={onInitLoad}
+        onScroll={onGridScroll}
         outerRef={(element?: HTMLDivElement) => {
           if (element != null) setStates({ element });
         }}
@@ -119,6 +185,15 @@ export function DataGridPage<
     ref.reset({ data });
   }, [ref, data]);
 
+  const f =
+    typeof fields == "function"
+      ? fields(
+          JSON.parse(
+            sessionStorage.getItem(`${cacheKey}-searchbar`) ?? "{}"
+          ) as DataTypes.BasicTemplateType<F>
+        )
+      : fields;
+
   // Layout
   return (
     <CommonPage {...pageProps} scrollContainer={states.element}>
@@ -129,7 +204,7 @@ export function DataGridPage<
             paddingBottom: pageProps.paddings
           }}
         >
-          <SearchBar fields={fields} onSubmit={onSubmit} />
+          <SearchBar fields={f} onSubmit={onSubmit} />
         </Box>
         {list}
       </Stack>

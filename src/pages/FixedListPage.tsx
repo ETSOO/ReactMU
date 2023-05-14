@@ -1,7 +1,10 @@
 import {
   GridDataGet,
   GridLoadDataProps,
+  GridLoaderStates,
+  ListOnScrollProps,
   ScrollerListForwardRef,
+  ScrollerListRef,
   useCombinedRefs,
   useDimensions
 } from "@etsoo/react";
@@ -13,6 +16,7 @@ import { ScrollerListEx } from "../ScrollerListEx";
 import { SearchBar } from "../SearchBar";
 import { CommonPage } from "./CommonPage";
 import { ListPageProps } from "./ListPageProps";
+import { GridDataCacheType } from "../GridDataCacheType";
 
 /**
  * Fixed height list page
@@ -42,6 +46,8 @@ export function FixedListPage<
     mRef,
     sizeReadyMiliseconds = 0,
     pageProps = {},
+    cacheKey,
+    cacheMinutes = 120,
     ...rest
   } = props;
 
@@ -52,6 +58,8 @@ export function FixedListPage<
     data?: FormData;
     ref?: ScrollerListForwardRef<T>;
   }>({});
+
+  const initLoadedRef = React.useRef<boolean>();
 
   // Scroll container
   const [scrollContainer, updateScrollContainer] = React.useState<
@@ -84,7 +92,59 @@ export function FixedListPage<
 
   const localLoadData = (props: GridLoadDataProps) => {
     const data = GridDataGet(props, fieldTemplate);
+
+    if (cacheKey)
+      sessionStorage.setItem(`${cacheKey}-searchbar`, JSON.stringify(data));
+
     return loadData(data);
+  };
+
+  type DataType = GridDataCacheType<T>;
+
+  const onUpdateRows = (rows: T[], state: GridLoaderStates<T>) => {
+    if (state.currentPage > 0 && cacheKey) {
+      const data: DataType = { rows, state, creation: new Date().valueOf() };
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
+    }
+  };
+
+  const onInitLoad = (
+    ref: ScrollerListRef
+  ): [T[], Partial<GridLoaderStates<T>>?] | null | undefined => {
+    // Avoid repeatedly load from cache
+    if (initLoadedRef.current || !cacheKey) return undefined;
+
+    // Cache data
+    const cacheData = sessionStorage.getItem(cacheKey);
+    if (cacheData) {
+      const { rows, state, creation } = JSON.parse(cacheData) as DataType;
+
+      // 120 minutes
+      if (new Date().valueOf() - creation > cacheMinutes * 60000) {
+        sessionStorage.removeItem(cacheKey);
+        return undefined;
+      }
+
+      // Scroll position
+      const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
+      if (scrollData) {
+        const { scrollOffset } = JSON.parse(scrollData) as ListOnScrollProps;
+        globalThis.setTimeout(() => ref.scrollTo(scrollOffset), 0);
+      }
+
+      // Update flag value
+      initLoadedRef.current = true;
+
+      // Return cached rows and state
+      return [rows, state];
+    }
+
+    return undefined;
+  };
+
+  const onListScroll = (props: ListOnScrollProps) => {
+    if (!cacheKey || !initLoadedRef.current) return;
+    sessionStorage.setItem(`${cacheKey}-scroll`, JSON.stringify(props));
   };
 
   // Watch container
@@ -110,6 +170,9 @@ export function FixedListPage<
             height={height}
             loadData={localLoadData}
             mRef={refs}
+            onUpdateRows={onUpdateRows}
+            onInitLoad={onInitLoad}
+            onScroll={onListScroll}
             oRef={(element) => {
               if (element != null) updateScrollContainer(element);
             }}
@@ -120,6 +183,15 @@ export function FixedListPage<
     }
   }, [rect]);
 
+  const f =
+    typeof fields == "function"
+      ? fields(
+          JSON.parse(
+            sessionStorage.getItem(`${cacheKey}-searchbar`) ?? "{}"
+          ) as DataTypes.BasicTemplateType<F>
+        )
+      : fields;
+
   const { paddings, ...pageRest } = pageProps;
 
   // Layout
@@ -127,7 +199,7 @@ export function FixedListPage<
     <CommonPage {...pageRest} paddings={{}} scrollContainer={scrollContainer}>
       <Stack>
         <Box ref={dimensions[0][0]} sx={{ padding: paddings }}>
-          <SearchBar fields={fields} onSubmit={onSubmit} />
+          <SearchBar fields={f} onSubmit={onSubmit} />
         </Box>
         {list}
       </Stack>

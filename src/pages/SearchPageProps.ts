@@ -10,9 +10,21 @@ export type SearchPageProps<
   F extends DataTypes.BasicTemplate
 > = Omit<GridLoader<T>, "loadData"> & {
   /**
+   * Cache key
+   */
+  cacheKey?: string;
+
+  /**
+   * Cache minutes
+   */
+  cacheMinutes?: number;
+
+  /**
    * Search fields
    */
-  fields: React.ReactElement[];
+  fields:
+    | React.ReactElement[]
+    | ((data: DataTypes.BasicTemplateType<F>) => React.ReactElement[]);
 
   /**
    * Search field template

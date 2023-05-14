@@ -33,6 +33,7 @@ import {
 } from "./ScrollerListEx";
 import { SearchBar } from "./SearchBar";
 import { Labels } from "./app/Labels";
+import { GridDataCacheType } from "./GridDataCacheType";
 
 /**
  * ResponsibleContainer props
@@ -66,16 +67,6 @@ export type ResponsibleContainerProps<
    * @returns Adjusted height
    */
   adjustFabHeight?: (height: number, isGrid: boolean) => number;
-
-  /**
-   * Cache key
-   */
-  cacheKey?: string;
-
-  /**
-   * Cache minutes
-   */
-  cacheMinutes?: number;
 
   /**
    * Columns
@@ -293,7 +284,7 @@ export function ResponsibleContainer<
     }
   );
 
-  type DataType = { rows: T[]; state: GridLoaderStates<T>; creation: number };
+  type DataType = GridDataCacheType<T>;
 
   const onUpdateRows = (rows: T[], state: GridLoaderStates<T>) => {
     if (state.currentPage > 0 && cacheKey) {

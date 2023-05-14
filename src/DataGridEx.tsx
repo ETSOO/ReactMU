@@ -52,6 +52,16 @@ export type DataGridExProps<
   alternatingColors?: [string?, string?];
 
   /**
+   * Cache key
+   */
+  cacheKey?: string;
+
+  /**
+   * Cache minutes
+   */
+  cacheMinutes?: number;
+
+  /**
    * Checkable to choose multiple items
    * @default false
    */
