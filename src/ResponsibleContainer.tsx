@@ -1,14 +1,21 @@
 import { DataTypes, IdDefaultType } from "@etsoo/shared";
 import { Box, Stack, SxProps, Theme } from "@mui/material";
 import React from "react";
-import { ListChildComponentProps } from "react-window";
+import {
+  GridOnScrollProps,
+  ListChildComponentProps,
+  ListOnScrollProps,
+  VariableSizeGrid
+} from "react-window";
 import {
   GridColumn,
   GridDataGet,
   GridJsonData,
   GridLoadDataProps,
+  GridLoaderStates,
   GridMethodRef,
   ReactUtils,
+  ScrollerListRef,
   useCombinedRefs,
   useDimensions
 } from "@etsoo/react";
@@ -36,7 +43,14 @@ export type ResponsibleContainerProps<
   D extends DataTypes.Keys<T> = IdDefaultType<T>
 > = Omit<
   DataGridExProps<T, D>,
-  "height" | "itemKey" | "loadData" | "mRef" | "onScroll" | "onItemsRendered"
+  | "height"
+  | "itemKey"
+  | "loadData"
+  | "mRef"
+  | "onScroll"
+  | "onItemsRendered"
+  | "onInitLoad"
+  | "onUpdateRows"
 > & {
   /**
    * Height will be deducted
@@ -52,6 +66,16 @@ export type ResponsibleContainerProps<
    * @returns Adjusted height
    */
   adjustFabHeight?: (height: number, isGrid: boolean) => number;
+
+  /**
+   * Cache key
+   */
+  cacheKey?: string;
+
+  /**
+   * Cache minutes
+   */
+  cacheMinutes?: number;
 
   /**
    * Columns
@@ -75,7 +99,9 @@ export type ResponsibleContainerProps<
   /**
    * Search fields
    */
-  fields?: React.ReactElement[];
+  fields?:
+    | React.ReactElement[]
+    | ((data: DataTypes.BasicTemplateType<F>) => React.ReactElement[]);
 
   /**
    * Search field template
@@ -151,6 +177,7 @@ interface LocalRefs<T> {
   rect?: DOMRect;
   ref?: GridMethodRef<T>;
   mounted?: boolean;
+  initLoaded?: boolean;
 }
 
 function defaultContainerBoxSx(
@@ -180,6 +207,8 @@ export function ResponsibleContainer<
   const {
     adjustHeight,
     adjustFabHeight,
+    cacheKey,
+    cacheMinutes = 120,
     columns,
     containerBoxSx = defaultContainerBoxSx,
     dataGridMinWidth = Math.max(576, DataGridExCalColumns(columns).total),
@@ -223,6 +252,10 @@ export function ResponsibleContainer<
   const localLoadData = (props: GridLoadDataProps) => {
     state.mounted = true;
     const data = GridDataGet(props, fieldTemplate);
+
+    if (cacheKey)
+      sessionStorage.setItem(`${cacheKey}-searchbar`, JSON.stringify(data));
+
     return loadData(data);
   };
 
@@ -259,6 +292,70 @@ export function ResponsibleContainer<
       return false;
     }
   );
+
+  type DataType = { rows: T[]; state: GridLoaderStates<T>; creation: number };
+
+  const onUpdateRows = (rows: T[], state: GridLoaderStates<T>) => {
+    if (state.currentPage > 0 && cacheKey) {
+      const data: DataType = { rows, state, creation: new Date().valueOf() };
+      sessionStorage.setItem(cacheKey, JSON.stringify(data));
+    }
+  };
+
+  const onInitLoad = (
+    ref: VariableSizeGrid<T> | ScrollerListRef
+  ): [T[], Partial<GridLoaderStates<T>>?] | null | undefined => {
+    // Avoid repeatedly load from cache
+    if (refs.current.initLoaded || !cacheKey) return undefined;
+
+    // Cache data
+    const cacheData = sessionStorage.getItem(cacheKey);
+    if (cacheData) {
+      const { rows, state, creation } = JSON.parse(cacheData) as DataType;
+
+      // 120 minutes
+      if (new Date().valueOf() - creation > cacheMinutes * 60000) {
+        sessionStorage.removeItem(cacheKey);
+        return undefined;
+      }
+
+      // Scroll position
+      const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
+      if (scrollData) {
+        if ("resetAfterColumnIndex" in ref) {
+          const { scrollLeft, scrollTop } = JSON.parse(
+            scrollData
+          ) as GridOnScrollProps;
+
+          globalThis.setTimeout(
+            () => ref.scrollTo({ scrollLeft, scrollTop }),
+            0
+          );
+        } else {
+          const { scrollOffset } = JSON.parse(scrollData) as ListOnScrollProps;
+
+          globalThis.setTimeout(() => ref.scrollTo(scrollOffset), 0);
+        }
+      }
+
+      // Update flag value
+      refs.current.initLoaded = true;
+
+      // Return cached rows and state
+      return [rows, state];
+    }
+
+    return undefined;
+  };
+
+  const onListScroll = (props: ListOnScrollProps) => {
+    if (!cacheKey || !refs.current.initLoaded) return;
+    sessionStorage.setItem(`${cacheKey}-scroll`, JSON.stringify(props));
+  };
+  const onGridScroll = (props: GridOnScrollProps) => {
+    if (!cacheKey || !refs.current.initLoaded) return;
+    sessionStorage.setItem(`${cacheKey}-scroll`, JSON.stringify(props));
+  };
 
   // Rect
   const rect = dimensions[0][2];
@@ -309,7 +406,10 @@ export function ResponsibleContainer<
             outerRef={(element?: HTMLDivElement) => {
               if (element != null && elementReady) elementReady(element, true);
             }}
+            onScroll={onGridScroll}
             columns={columns}
+            onUpdateRows={onUpdateRows}
+            onInitLoad={onInitLoad}
             {...rest}
           />
         </Box>,
@@ -333,6 +433,8 @@ export function ResponsibleContainer<
           autoLoad={!hasFields}
           height={heightLocal}
           loadData={localLoadData}
+          onUpdateRows={onUpdateRows}
+          onInitLoad={onInitLoad}
           mRef={mRefs}
           onClick={(event, data) =>
             quickAction && ReactUtils.isSafeClick(event) && quickAction(data)
@@ -340,6 +442,7 @@ export function ResponsibleContainer<
           oRef={(element) => {
             if (element != null && elementReady) elementReady(element, false);
           }}
+          onScroll={onListScroll}
           {...rest}
         />
       </Box>,
@@ -349,9 +452,19 @@ export function ResponsibleContainer<
 
   const searchBar = React.useMemo(() => {
     if (!hasFields || showDataGrid == null) return;
+
+    const f =
+      typeof fields == "function"
+        ? fields(
+            JSON.parse(
+              sessionStorage.getItem(`${cacheKey}-searchbar`) ?? "{}"
+            ) as DataTypes.BasicTemplateType<F>
+          )
+        : fields;
+
     return (
       <SearchBar
-        fields={fields}
+        fields={f}
         onSubmit={onSubmit}
         className={`searchBar${showDataGrid ? "Grid" : "List"}`}
       />
