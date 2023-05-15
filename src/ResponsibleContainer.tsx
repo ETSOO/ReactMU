@@ -9,7 +9,6 @@ import {
 } from "react-window";
 import {
   GridColumn,
-  GridDataGet,
   GridJsonData,
   GridLoadDataProps,
   GridLoaderStates,
@@ -33,7 +32,7 @@ import {
 } from "./ScrollerListEx";
 import { SearchBar } from "./SearchBar";
 import { Labels } from "./app/Labels";
-import { GridDataCacheType } from "./GridDataCacheType";
+import { GridUtils } from "./GridUtils";
 
 /**
  * ResponsibleContainer props
@@ -242,13 +241,11 @@ export function ResponsibleContainer<
   // Load data
   const localLoadData = (props: GridLoadDataProps) => {
     state.mounted = true;
-    const data = GridDataGet(props, fieldTemplate);
-
-    if (cacheKey)
-      sessionStorage.setItem(`${cacheKey}-searchbar`, JSON.stringify(data));
-
-    return loadData(data);
+    return loadData(GridUtils.createLoader<F>(props, fieldTemplate, cacheKey));
   };
+
+  // Search data
+  const searchData = GridUtils.getSearchData<F>(cacheKey);
 
   // On submit callback
   const onSubmit = (data: FormData, _reset: boolean) => {
@@ -284,15 +281,6 @@ export function ResponsibleContainer<
     }
   );
 
-  type DataType = GridDataCacheType<T>;
-
-  const onUpdateRows = (rows: T[], state: GridLoaderStates<T>) => {
-    if (state.currentPage > 0 && cacheKey) {
-      const data: DataType = { rows, state, creation: new Date().valueOf() };
-      sessionStorage.setItem(cacheKey, JSON.stringify(data));
-    }
-  };
-
   const onInitLoad = (
     ref: VariableSizeGrid<T> | ScrollerListRef
   ): [T[], Partial<GridLoaderStates<T>>?] | null | undefined => {
@@ -300,15 +288,11 @@ export function ResponsibleContainer<
     if (refs.current.initLoaded || !cacheKey) return undefined;
 
     // Cache data
-    const cacheData = sessionStorage.getItem(cacheKey);
+    const cacheData = GridUtils.getCacheData<T>(cacheKey, cacheMinutes);
     if (cacheData) {
-      const { rows, state, creation } = JSON.parse(cacheData) as DataType;
+      const { rows, state } = cacheData;
 
-      // 120 minutes
-      if (new Date().valueOf() - creation > cacheMinutes * 60000) {
-        sessionStorage.removeItem(cacheKey);
-        return undefined;
-      }
+      GridUtils.mergeSearchData(state, searchData);
 
       // Scroll position
       const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
@@ -399,7 +383,7 @@ export function ResponsibleContainer<
             }}
             onScroll={onGridScroll}
             columns={columns}
-            onUpdateRows={onUpdateRows}
+            onUpdateRows={GridUtils.getUpdateRowsHandler<T>(cacheKey)}
             onInitLoad={onInitLoad}
             {...rest}
           />
@@ -424,7 +408,7 @@ export function ResponsibleContainer<
           autoLoad={!hasFields}
           height={heightLocal}
           loadData={localLoadData}
-          onUpdateRows={onUpdateRows}
+          onUpdateRows={GridUtils.getUpdateRowsHandler<T>(cacheKey)}
           onInitLoad={onInitLoad}
           mRef={mRefs}
           onClick={(event, data) =>
@@ -444,14 +428,7 @@ export function ResponsibleContainer<
   const searchBar = React.useMemo(() => {
     if (!hasFields || showDataGrid == null) return;
 
-    const f =
-      typeof fields == "function"
-        ? fields(
-            JSON.parse(
-              sessionStorage.getItem(`${cacheKey}-searchbar`) ?? "{}"
-            ) as DataTypes.BasicTemplateType<F>
-          )
-        : fields;
+    const f = typeof fields == "function" ? fields(searchData ?? {}) : fields;
 
     return (
       <SearchBar

@@ -1,5 +1,4 @@
 import {
-  GridDataGet,
   GridLoadDataProps,
   GridLoaderStates,
   GridOnScrollProps,
@@ -16,7 +15,7 @@ import { MUGlobal } from "../MUGlobal";
 import { SearchBar } from "../SearchBar";
 import { CommonPage } from "./CommonPage";
 import { DataGridPageProps } from "./DataGridPageProps";
-import { GridDataCacheType } from "../GridDataCacheType";
+import { GridUtils } from "../GridUtils";
 
 interface LocalStates<T> {
   data?: FormData;
@@ -79,22 +78,11 @@ export function DataGridPage<
   };
 
   const localLoadData = (props: GridLoadDataProps) => {
-    const data = GridDataGet(props, fieldTemplate);
-
-    if (cacheKey)
-      sessionStorage.setItem(`${cacheKey}-searchbar`, JSON.stringify(data));
-
-    return loadData(data);
+    return loadData(GridUtils.createLoader<F>(props, fieldTemplate, cacheKey));
   };
 
-  type DataType = GridDataCacheType<T>;
-
-  const onUpdateRows = (rows: T[], state: GridLoaderStates<T>) => {
-    if (state.currentPage > 0 && cacheKey) {
-      const data: DataType = { rows, state, creation: new Date().valueOf() };
-      sessionStorage.setItem(cacheKey, JSON.stringify(data));
-    }
-  };
+  // Search data
+  const searchData = GridUtils.getSearchData<F>(cacheKey);
 
   const onInitLoad = (
     ref: VariableSizeGrid<T>
@@ -103,15 +91,11 @@ export function DataGridPage<
     if (initLoadedRef.current || !cacheKey) return undefined;
 
     // Cache data
-    const cacheData = sessionStorage.getItem(cacheKey);
+    const cacheData = GridUtils.getCacheData<T>(cacheKey, cacheMinutes);
     if (cacheData) {
-      const { rows, state, creation } = JSON.parse(cacheData) as DataType;
+      const { rows, state } = cacheData;
 
-      // 120 minutes
-      if (new Date().valueOf() - creation > cacheMinutes * 60000) {
-        sessionStorage.removeItem(cacheKey);
-        return undefined;
-      }
+      GridUtils.mergeSearchData(state, searchData);
 
       // Scroll position
       const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
@@ -168,7 +152,7 @@ export function DataGridPage<
         height={gridHeight}
         loadData={localLoadData}
         mRef={refs}
-        onUpdateRows={onUpdateRows}
+        onUpdateRows={GridUtils.getUpdateRowsHandler<T>(cacheKey)}
         onInitLoad={onInitLoad}
         onScroll={onGridScroll}
         outerRef={(element?: HTMLDivElement) => {
@@ -185,14 +169,7 @@ export function DataGridPage<
     ref.reset({ data });
   }, [ref, data]);
 
-  const f =
-    typeof fields == "function"
-      ? fields(
-          JSON.parse(
-            sessionStorage.getItem(`${cacheKey}-searchbar`) ?? "{}"
-          ) as DataTypes.BasicTemplateType<F>
-        )
-      : fields;
+  const f = typeof fields == "function" ? fields(searchData ?? {}) : fields;
 
   // Layout
   return (

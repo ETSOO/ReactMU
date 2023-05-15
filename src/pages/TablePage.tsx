@@ -1,5 +1,4 @@
 import {
-  GridDataGet,
   GridLoadDataProps,
   useCombinedRefs,
   useDimensions
@@ -12,6 +11,7 @@ import { SearchBar } from "../SearchBar";
 import { TableEx, TableExMethodRef, TableExMinWidth } from "../TableEx";
 import { CommonPage, CommonPageScrollContainer } from "./CommonPage";
 import { TablePageProps } from "./TablePageProps";
+import { GridUtils } from "../GridUtils";
 
 /**
  * Table page
@@ -70,13 +70,11 @@ export function TablePage<
   };
 
   const localLoadData = (props: GridLoadDataProps) => {
-    const data = GridDataGet(props, fieldTemplate);
-
-    if (cacheKey)
-      sessionStorage.setItem(`${cacheKey}-searchbar`, JSON.stringify(data));
-
-    return loadData(data);
+    return loadData(GridUtils.createLoader<F>(props, fieldTemplate, cacheKey));
   };
+
+  // Search data
+  const searchData = GridUtils.getSearchData<F>(cacheKey);
 
   // Total width
   const totalWidth = React.useMemo(
@@ -112,14 +110,7 @@ export function TablePage<
     }
   }, [rect]);
 
-  const f =
-    typeof fields == "function"
-      ? fields(
-          JSON.parse(
-            sessionStorage.getItem(`${cacheKey}-searchbar`) ?? "{}"
-          ) as DataTypes.BasicTemplateType<F>
-        )
-      : fields;
+  const f = typeof fields == "function" ? fields(searchData ?? {}) : fields;
 
   // Layout
   return (
