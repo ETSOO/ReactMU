@@ -309,7 +309,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
 
           // For clear case
           if (reason === "clear") {
-            stateUpdate({ options: [], open: true });
+            stateUpdate({ options: [], open: event.type === "click" });
             loadDataDirect();
           }
         }}

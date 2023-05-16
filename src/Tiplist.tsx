@@ -297,7 +297,7 @@ export function Tiplist<
 
           // For clear case
           if (reason === "clear") {
-            stateUpdate({ options: [], open: true });
+            stateUpdate({ options: [], open: event.type === "click" });
             loadDataDirect();
           }
         }}
