@@ -1,21 +1,23 @@
-import {
+import type {
   DndContext,
   DragEndEvent,
   DragStartEvent,
   UniqueIdentifier
 } from "@dnd-kit/core";
-import {
+import type {
   SortableContext,
   useSortable,
   verticalListSortingStrategy
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import type { CSS } from "@dnd-kit/utilities";
 import { DataTypes } from "@etsoo/shared";
-import { Theme, useTheme } from "@mui/material";
+import { Skeleton, Theme, useTheme } from "@mui/material";
 import React, { CSSProperties } from "react";
 
 function SortableItem(props: {
   id: UniqueIdentifier;
+  useSortableType: typeof useSortable;
+  CSSType: typeof CSS;
   itemRenderer: (
     nodeRef: React.ComponentProps<any>,
     actionNodeRef: React.ComponentProps<any>
@@ -23,7 +25,7 @@ function SortableItem(props: {
   style?: React.CSSProperties;
 }) {
   // Destruct
-  const { id, itemRenderer, style = {} } = props;
+  const { id, useSortableType, CSSType, itemRenderer, style = {} } = props;
 
   // Use sortable
   const {
@@ -33,11 +35,11 @@ function SortableItem(props: {
     transform,
     transition,
     setActivatorNodeRef
-  } = useSortable({ id });
+  } = useSortableType({ id });
 
   const allStyle = {
     ...style,
-    transform: CSS.Transform.toString(transform),
+    transform: CSSType.Transform.toString(transform),
     transition
   };
 
@@ -131,6 +133,11 @@ export interface DnDListPros<D extends object, K extends DataTypes.Keys<D>> {
   ) => React.ReactElement;
 
   /**
+   * Height
+   */
+  height?: string | number;
+
+  /**
    * List items
    */
   items: D[];
@@ -181,6 +188,7 @@ export function DnDList<
   // Destruct
   const {
     keyField,
+    height = 360,
     itemRenderer,
     labelField,
     mRef,
@@ -189,63 +197,36 @@ export function DnDList<
     onDragEnd
   } = props;
 
-  let getItemStyle = props.getItemStyle;
-  if (getItemStyle == null) {
-    // Theme
-    const theme = useTheme();
-    getItemStyle = (index, isDragging) =>
-      DnDItemStyle(index, isDragging, theme);
-  }
+  // Theme
+  const theme = useTheme();
 
   // States
   const [items, setItems] = React.useState<D[]>([]);
   const [activeId, setActiveId] = React.useState<UniqueIdentifier>();
 
-  const doFormChange = (newItems?: D[]) => {
-    if (onFormChange) onFormChange(newItems ?? items);
-  };
+  React.useEffect(() => {
+    setItems(props.items);
+  }, [props.items]);
 
-  const changeItems = (newItems: D[]) => {
-    // Possible to alter items with the handler
-    if (onChange) onChange(newItems);
+  const doFormChange = React.useCallback(
+    (newItems?: D[]) => {
+      if (onFormChange) onFormChange(newItems ?? items);
+    },
+    [items, onFormChange]
+  );
 
-    doFormChange(newItems);
+  const changeItems = React.useCallback(
+    (newItems: D[]) => {
+      // Possible to alter items with the handler
+      if (onChange) onChange(newItems);
 
-    // Update state
-    setItems(newItems);
-  };
+      doFormChange(newItems);
 
-  // Drag event handlers
-  function handleDragStart(event: DragStartEvent) {
-    const { active } = event;
-    setActiveId(active.id);
-  }
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-
-    if (over && active.id !== over.id) {
-      // Indices
-      const oldIndex = items.findIndex((item) => item.id === active.id);
-      const newIndex = items.findIndex((item) => item.id === over.id);
-
-      // Clone
-      const newItems = [...items];
-
-      // Removed item
-      const [removed] = newItems.splice(oldIndex, 1);
-
-      // Insert to the destination index
-      newItems.splice(newIndex, 0, removed);
-
-      changeItems(newItems);
-
-      // Drag end handler
-      if (onDragEnd) onDragEnd(newItems);
-    }
-
-    setActiveId(undefined);
-  }
+      // Update state
+      setItems(newItems);
+    },
+    [onChange, doFormChange]
+  );
 
   // Methods
   React.useImperativeHandle(
@@ -327,8 +308,92 @@ export function DnDList<
         }
       };
     },
-    [items]
+    [items, labelField, changeItems]
   );
+
+  // Dynamic import library
+  const [dnd, setDnd] =
+    React.useState<
+      [
+        typeof DndContext,
+        typeof SortableContext,
+        typeof useSortable,
+        typeof verticalListSortingStrategy,
+        typeof CSS
+      ]
+    >();
+
+  React.useEffect(() => {
+    Promise.all([
+      import("@dnd-kit/core"),
+      import("@dnd-kit/sortable"),
+      import("@dnd-kit/utilities")
+    ]).then(
+      ([
+        { DndContext },
+        { SortableContext, useSortable, verticalListSortingStrategy },
+        { CSS }
+      ]) => {
+        setDnd([
+          DndContext,
+          SortableContext,
+          useSortable,
+          verticalListSortingStrategy,
+          CSS
+        ]);
+      }
+    );
+  }, []);
+
+  if (dnd == null) {
+    return <Skeleton variant="rectangular" width="100%" height={height} />;
+  }
+
+  const [
+    DndContextType,
+    SortableContextType,
+    useSortableType,
+    verticalListSortingStrategyType,
+    CSSType
+  ] = dnd;
+
+  let getItemStyle = props.getItemStyle;
+  if (getItemStyle == null) {
+    getItemStyle = (index, isDragging) =>
+      DnDItemStyle(index, isDragging, theme);
+  }
+
+  // Drag event handlers
+  function handleDragStart(event: DragStartEvent) {
+    const { active } = event;
+    setActiveId(active.id);
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      // Indices
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
+
+      // Clone
+      const newItems = [...items];
+
+      // Removed item
+      const [removed] = newItems.splice(oldIndex, 1);
+
+      // Insert to the destination index
+      newItems.splice(newIndex, 0, removed);
+
+      changeItems(newItems);
+
+      // Drag end handler
+      if (onDragEnd) onDragEnd(newItems);
+    }
+
+    setActiveId(undefined);
+  }
 
   const setupDiv = (div: HTMLDivElement) => {
     // Inputs
@@ -353,18 +418,19 @@ export function DnDList<
       );
   };
 
-  React.useEffect(() => {
-    setItems(props.items);
-  }, [props.items]);
-
   const children = (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+    <DndContextType onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <SortableContextType
+        items={items}
+        strategy={verticalListSortingStrategyType}
+      >
         {items.map((item, index) => {
           const id = item[keyField] as unknown as UniqueIdentifier;
           return (
             <SortableItem
               id={id}
+              useSortableType={useSortableType}
+              CSSType={CSSType}
               key={id}
               style={getItemStyle!(index, id === activeId)}
               itemRenderer={(nodeRef, actionNodeRef) =>
@@ -373,8 +439,8 @@ export function DnDList<
             />
           );
         })}
-      </SortableContext>
-    </DndContext>
+      </SortableContextType>
+    </DndContextType>
   );
 
   if (onFormChange) {
