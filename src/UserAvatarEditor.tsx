@@ -1,4 +1,11 @@
-import { Button, ButtonGroup, Skeleton, Slider, Stack } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  IconButton,
+  Skeleton,
+  Slider,
+  Stack
+} from "@mui/material";
 import React from "react";
 import type AvatarEditor from "react-avatar-editor";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
@@ -6,6 +13,8 @@ import RotateRightIcon from "@mui/icons-material/RotateRight";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import ComputerIcon from "@mui/icons-material/Computer";
 import DoneIcon from "@mui/icons-material/Done";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 import { Labels } from "./app/Labels";
 
 /**
@@ -23,7 +32,11 @@ export interface UserAvatarEditorToBlob {
  * User avatar editor on done handler
  */
 export interface UserAvatarEditorOnDoneHandler {
-  (canvas: HTMLCanvasElement, toBlob: UserAvatarEditorToBlob): void;
+  (
+    canvas: HTMLCanvasElement,
+    toBlob: UserAvatarEditorToBlob,
+    type: string
+  ): void;
 }
 
 /**
@@ -64,6 +77,11 @@ export interface UserAvatarEditorProps {
    * Height of the editor
    */
   height?: number;
+
+  /**
+   * Value range
+   */
+  range?: [number, number, number];
 }
 
 interface EditorState {
@@ -91,7 +109,8 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     onDone,
     scaledResult = false,
     width = 200,
-    height = 200
+    height = 200,
+    range = [0.1, 2, 0.1]
   } = props;
 
   // Container width
@@ -107,6 +126,9 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   // Ref
   const ref = React.createRef<AvatarEditor>();
 
+  // Image type
+  const type = React.useRef<string>("image/jpeg");
+
   // Button ref
   const buttonRef = React.createRef<HTMLButtonElement>();
 
@@ -119,6 +141,23 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   // Editor states
   const [editorState, setEditorState] = React.useState(defaultState);
 
+  // Range
+  const [min, max, step] = range;
+  const marks = [
+    {
+      value: min,
+      label: min.toString()
+    },
+    {
+      value: max,
+      label: max.toString()
+    }
+  ];
+
+  if (min < 1) {
+    marks.splice(1, 0, { value: 1, label: "1" });
+  }
+
   // Handle zoom
   const handleZoom = (
     _event: Event,
@@ -126,8 +165,16 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     _activeThumb: number
   ) => {
     const scale = typeof value === "number" ? value : value[0];
+    setScale(scale);
+  };
+
+  const setScale = (scale: number) => {
     const newState = { ...editorState, scale };
     setEditorState(newState);
+  };
+
+  const adjustScale = (isAdd: boolean) => {
+    setScale(editorState.scale + (isAdd ? step : -step));
   };
 
   // Handle image load
@@ -144,7 +191,9 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     handleReset();
 
     // Set new preview image
-    setPreviewImage(files[0]);
+    const file = files[0];
+    type.current = file.type;
+    setPreviewImage(file);
 
     // Set ready state
     setReady(false);
@@ -183,7 +232,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     // Convenience method, similar to canvas.toBlob(), but with promise interface & polyfill for old browsers.
     const toBlob = (
       canvas: HTMLCanvasElement,
-      mimeType: string = "image/jpeg",
+      mimeType: string = type.current,
       quality: number = 1
     ) => {
       return picaInstance.toBlob(canvas, mimeType, quality);
@@ -206,9 +255,9 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
           unsharpRadius: 0.6,
           unsharpThreshold: 1
         })
-        .then((result) => onDone(result, toBlob));
+        .then((result) => onDone(result, toBlob, type.current));
     } else {
-      onDone(data, toBlob);
+      onDone(data, toBlob, type.current);
     }
   };
 
@@ -263,15 +312,39 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
           </Button>
         </ButtonGroup>
       </Stack>
-      <Slider
-        title={labels.zoom}
-        disabled={!ready}
-        min={1}
-        max={5}
-        step={0.01}
-        value={editorState.scale}
-        onChange={handleZoom}
-      />
+      <Stack
+        spacing={0.5}
+        direction="row"
+        sx={{ paddingBottom: 2 }}
+        alignItems="center"
+      >
+        <IconButton
+          size="small"
+          disabled={!ready || editorState.scale <= min}
+          onClick={() => adjustScale(false)}
+        >
+          <RemoveIcon />
+        </IconButton>
+        <Slider
+          title={labels.zoom}
+          disabled={!ready}
+          min={min}
+          max={max}
+          step={step}
+          value={editorState.scale}
+          valueLabelDisplay="auto"
+          valueLabelFormat={(value) => `${Math.round(100 * value) / 100}`}
+          marks={marks}
+          onChange={handleZoom}
+        />
+        <IconButton
+          size="small"
+          disabled={!ready || editorState.scale >= max}
+          onClick={() => adjustScale(true)}
+        >
+          <AddIcon />
+        </IconButton>
+      </Stack>
       <Button
         ref={buttonRef}
         variant="contained"

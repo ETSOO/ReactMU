@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.2.52",
+  "version": "1.2.53",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -59,7 +59,7 @@
     "@mui/x-data-grid": "^6.7.0",
     "@types/pica": "^9.0.1",
     "@types/pulltorefreshjs": "^0.1.5",
-    "@types/react": "^18.2.9",
+    "@types/react": "^18.2.11",
     "@types/react-avatar-editor": "^13.0.0",
     "@types/react-dom": "^18.2.4",
     "@types/react-input-mask": "^3.0.2",
