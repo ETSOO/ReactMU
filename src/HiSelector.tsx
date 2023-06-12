@@ -175,7 +175,7 @@ export function HiSelector<
           value={values[0]}
           onChange={(event) => doChange(event, 0)}
           onItemChange={doItemChange}
-          inputRequired={required}
+          required={required}
           error={error}
           helperText={helperText}
         />
