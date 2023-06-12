@@ -44,11 +44,6 @@ export type SelectExProps<
   helperText?: React.ReactNode;
 
   /**
-   * Input required
-   */
-  inputRequired?: boolean;
-
-  /**
    * Id field
    */
   idField?: D;
@@ -120,7 +115,6 @@ export function SelectEx<
     idField = "id" as D,
     error,
     helperText,
-    inputRequired,
     itemIconRenderer,
     itemStyle,
     label,
@@ -138,6 +132,8 @@ export function SelectEx<
     value,
     onChange,
     fullWidth,
+    required,
+    variant = "outlined",
     ...rest
   } = props;
 
@@ -278,9 +274,11 @@ export function SelectEx<
       >
         <InputLabel
           id={labelId}
+          variant={variant}
           shrink={
             search ? MUGlobal.searchFieldShrink : MUGlobal.inputFieldShrink
           }
+          required={required}
         >
           {label}
         </InputLabel>
@@ -293,9 +291,7 @@ export function SelectEx<
               ? valueState
               : ""
           }
-          input={
-            <OutlinedInput notched label={label} required={inputRequired} />
-          }
+          input={<OutlinedInput notched label={label} required={required} />}
           labelId={labelId}
           name={name}
           multiple={multiple}
@@ -330,6 +326,8 @@ export function SelectEx<
           }}
           sx={{ minWidth: "150px" }}
           fullWidth={fullWidth}
+          required={required}
+          variant={variant}
           {...rest}
         >
           {localOptions.map((option) => {
