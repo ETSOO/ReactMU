@@ -115,6 +115,11 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
    * Grid container reference
    */
   gridRef?: React.Ref<HTMLDivElement>;
+
+  /**
+   * Refresh seed
+   */
+  refreshSeed?: number;
 }
 
 function formatItemData(fieldData: unknown): string | undefined {
@@ -214,6 +219,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
     supportBack = true,
     pullToRefresh = true,
     gridRef,
+    refreshSeed = 0,
     ...rest
   } = props;
 
@@ -227,11 +233,17 @@ export function ViewPage<T extends DataTypes.StringRecord>(
   const pullContainer = "#page-container";
 
   // Load data
-  const refresh = async () => {
+  const refresh = React.useCallback(async () => {
     const result = await loadData();
     if (result == null) return;
     setData(result);
-  };
+  }, [loadData]);
+
+  React.useEffect(() => {
+    // Only refresh after the first data load
+    if (refreshSeed === 0 || data == null) return;
+    refresh();
+  }, [refreshSeed]);
 
   return (
     <CommonPage
