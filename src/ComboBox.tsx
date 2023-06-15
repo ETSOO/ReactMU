@@ -5,10 +5,16 @@ import {
   LabelDefaultType,
   ListType
 } from "@etsoo/shared";
-import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
+import {
+  Autocomplete,
+  AutocompleteRenderInputParams,
+  IconButton,
+  Stack
+} from "@mui/material";
 import React from "react";
 import { Utils as SharedUtils } from "@etsoo/shared";
 import { ReactUtils } from "@etsoo/react";
+import AddIcon from "@mui/icons-material/Add";
 import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
@@ -51,6 +57,16 @@ export type ComboBoxProps<
    * Array of options.
    */
   options?: ReadonlyArray<T>;
+
+  /**
+   * Add label
+   */
+  addLabel?: string;
+
+  /**
+   * On add callback
+   */
+  onAdd?: (callback: () => void) => void;
 };
 
 /**
@@ -64,7 +80,7 @@ export function ComboBox<
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
 >(props: ComboBoxProps<T, D, L>) {
   // Labels
-  const labels = globalApp?.getLabels("noOptions", "loading", "open");
+  const labels = globalApp?.getLabels("noOptions", "loading", "open", "add");
 
   // Destruct
   const {
@@ -94,10 +110,12 @@ export function ComboBox<
     value,
     disableCloseOnSelect = false,
     getOptionLabel = (option: T) => `${option[labelField]}`,
-    sx = { minWidth: "150px" },
+    sx = { minWidth: "150px", flexGrow: 2 },
     noOptionsText = labels?.noOptions,
     loadingText = labels?.loading,
     openText = labels?.open,
+    addLabel = labels?.add,
+    onAdd,
     ...rest
   } = props;
 
@@ -189,8 +207,8 @@ export function ComboBox<
     }
   };
 
-  React.useEffect(() => {
-    if (propertyWay || loadData == null) return;
+  const doLoadData = React.useCallback(() => {
+    if (loadData == null) return;
     loadData().then((result) => {
       if (result == null || !isMounted.current) return;
       if (onLoadData) onLoadData(result);
@@ -199,7 +217,12 @@ export function ComboBox<
       }
       setOptions(result);
     });
-  }, [propertyWay, autoAddBlankItem, idField, labelField]);
+  }, [loadData, autoAddBlankItem, idField, labelField]);
+
+  React.useEffect(() => {
+    if (propertyWay) return;
+    doLoadData();
+  }, [propertyWay, doLoadData]);
 
   React.useEffect(() => {
     return () => {
@@ -221,55 +244,68 @@ export function ComboBox<
         onChange={inputOnChange}
       />
       {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
-      <Autocomplete<T, false, false, false>
-        value={stateValue}
-        disableCloseOnSelect={disableCloseOnSelect}
-        getOptionLabel={getOptionLabel}
-        isOptionEqualToValue={(option: T, value: T) =>
-          option[idField] === value[idField]
-        }
-        onChange={(event, value, reason, details) => {
-          // Set value
-          setInputValue(value);
+      <Stack gap={0.5} direction="row" width="100%">
+        <Autocomplete<T, false, false, false>
+          value={stateValue}
+          disableCloseOnSelect={disableCloseOnSelect}
+          getOptionLabel={getOptionLabel}
+          isOptionEqualToValue={(option: T, value: T) =>
+            option[idField] === value[idField]
+          }
+          onChange={(event, value, reason, details) => {
+            // Set value
+            setInputValue(value);
 
-          // Custom
-          if (onChange != null) onChange(event, value, reason, details);
+            // Custom
+            if (onChange != null) onChange(event, value, reason, details);
 
-          if (onValueChange) onValueChange(value);
-        }}
-        openOnFocus={openOnFocus}
-        sx={sx}
-        renderInput={(params) =>
-          search ? (
-            <SearchField
-              {...addReadOnly(params)}
-              label={label}
-              name={name + "Input"}
-              margin={inputMargin}
-              variant={inputVariant}
-              required={inputRequired}
-              error={inputError}
-              helperText={inputHelperText}
-            />
-          ) : (
-            <InputField
-              {...addReadOnly(params)}
-              label={label}
-              name={name + "Input"}
-              margin={inputMargin}
-              variant={inputVariant}
-              required={inputRequired}
-              error={inputError}
-              helperText={inputHelperText}
-            />
-          )
-        }
-        options={localOptions}
-        noOptionsText={noOptionsText}
-        loadingText={loadingText}
-        openText={openText}
-        {...rest}
-      />
+            if (onValueChange) onValueChange(value);
+          }}
+          openOnFocus={openOnFocus}
+          sx={sx}
+          renderInput={(params) =>
+            search ? (
+              <SearchField
+                {...addReadOnly(params)}
+                label={label}
+                name={name + "Input"}
+                margin={inputMargin}
+                variant={inputVariant}
+                required={inputRequired}
+                error={inputError}
+                helperText={inputHelperText}
+              />
+            ) : (
+              <InputField
+                {...addReadOnly(params)}
+                label={label}
+                name={name + "Input"}
+                margin={inputMargin}
+                variant={inputVariant}
+                required={inputRequired}
+                error={inputError}
+                helperText={inputHelperText}
+              />
+            )
+          }
+          options={localOptions}
+          noOptionsText={noOptionsText}
+          loadingText={loadingText}
+          openText={openText}
+          {...rest}
+        />
+        {onAdd && (
+          <IconButton
+            size="small"
+            onClick={() => {
+              onAdd(doLoadData);
+            }}
+            title={addLabel}
+          >
+            <AddIcon />
+          </IconButton>
+        )}
+      </Stack>
     </div>
   );
 }
