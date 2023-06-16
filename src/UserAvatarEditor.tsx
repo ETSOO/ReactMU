@@ -16,6 +16,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { Labels } from "./app/Labels";
+import { FileUploadButton } from "./FileUploadButton";
 
 /**
  * User avatar editor to Blob helper
@@ -182,11 +183,8 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     setReady(true);
   };
 
-  // Handle file change
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files == null || files.length == 0) return;
-
+  // Handle file upload
+  const handleFileUpload = (files: FileList) => {
     // Reset all settings
     handleReset();
 
@@ -266,23 +264,16 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
   return (
     <Stack direction="column" spacing={0.5} width={containerWidth}>
-      <Button
+      <FileUploadButton
         variant="outlined"
         size="medium"
-        component="label"
         startIcon={<ComputerIcon />}
         fullWidth
+        onUploadFiles={handleFileUpload}
+        inputProps={{ multiple: false, accept: "image/png, image/jpeg" }}
       >
         {labels.upload}
-        <input
-          id="fileInput"
-          type="file"
-          accept="image/png, image/jpeg"
-          multiple={false}
-          hidden
-          onChange={handleFileChange}
-        />
-      </Button>
+      </FileUploadButton>
       <Stack direction="row" spacing={0.5}>
         <React.Suspense
           fallback={

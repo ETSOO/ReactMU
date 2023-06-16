@@ -50,6 +50,7 @@ export * from "./DnDList";
 export * from "./DraggablePaperComponent";
 export * from "./EmailInput";
 export * from "./FabBox";
+export * from "./FileUploadButton";
 export * from "./FlexBox";
 export * from "./GridDataFormat";
 export * from "./HiSelector";
