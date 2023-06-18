@@ -65,7 +65,7 @@ type ViewPageFieldTypeNarrow<T extends object> =
  */
 export type ViewPageFieldType<T extends object> =
   | ViewPageFieldTypeNarrow<T>
-  | ((data: T) => React.ReactNode);
+  | ((data: T, refresh: () => Promise<void>) => React.ReactNode);
 
 /**
  * View page props
@@ -276,7 +276,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
               // Get data
               if (typeof field === "function") {
                 // Most flexible way, do whatever you want
-                return field(data);
+                return field(data, refresh);
               }
 
               const [itemData, itemLabel, gridProps] = getItemField(
