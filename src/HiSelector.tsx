@@ -126,7 +126,6 @@ export function HiSelector<
   const doChange = (event: SelectChangeEvent<unknown>, index: number) => {
     const value = event.target.value;
     const itemValue = value === "" ? undefined : (value as T[D]);
-    updateValue(itemValue);
 
     const newValues = [...localValues.slice(0, index)];
     if (itemValue != null) newValues.push(itemValue);
@@ -143,13 +142,13 @@ export function HiSelector<
   };
 
   React.useEffect(() => {
-    if (values.length > 0) {
-      setValues(values);
-      updateValue(values.at(-1));
-    }
+    setValues(values);
   }, [values]);
 
   const currentValue = localValues.at(-1);
+  React.useEffect(() => {
+    updateValue(currentValue);
+  }, [currentValue]);
 
   return (
     <React.Fragment>

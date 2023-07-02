@@ -130,22 +130,20 @@ export function HiSelectorTL<
       if (event.isDefaultPrevented()) return;
     }
 
-    const itemValue = value ? value[idField] : undefined;
-    updateValue(itemValue);
-
     const newValues = [...localValues.slice(0, index)];
-    if (itemValue != null) newValues.push(itemValue);
+    if (value) newValues.push(value[idField]);
+
     setValues(newValues);
   };
 
   React.useEffect(() => {
-    if (values.length > 0) {
-      setValues(values);
-      updateValue(values.at(-1));
-    }
-  }, [values.toString()]);
+    setValues(values);
+  }, [values]);
 
   const currentValue = localValues.at(-1);
+  React.useEffect(() => {
+    updateValue(currentValue);
+  }, [currentValue]);
 
   return (
     <React.Fragment>

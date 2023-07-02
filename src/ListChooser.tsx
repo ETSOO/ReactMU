@@ -36,6 +36,11 @@ export type ListChooserProps<
   Q extends object
 > = ListProps & {
   /**
+   * Condition field name
+   */
+  conditionField?: string;
+
+  /**
    * Condition renderer
    */
   conditionRenderer?: (
@@ -116,11 +121,12 @@ export function ListChooser<
 
   // Destruct
   const {
+    conditionField = "title",
     conditionRenderer = (rq: Partial<Q>, delayed: DelayedExecutorType) => (
       <TextField
         autoFocus
         margin="dense"
-        name="title"
+        name={conditionField}
         label={title}
         fullWidth
         variant="standard"
