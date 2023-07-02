@@ -138,7 +138,7 @@ export function HiSelectorTL<
 
   React.useEffect(() => {
     setValues(values);
-  }, [values]);
+  }, [values.toString()]);
 
   const currentValue = localValues.at(-1);
   React.useEffect(() => {
