@@ -51,7 +51,14 @@ export function DataTable<R extends GridValidRowModel = any>(
   props: DataTableProps<R>
 ) {
   // Destructor
-  const { localeText = {}, onCellSelection, toolbarCreator, ...rest } = props;
+  const {
+    localeText = {},
+    onCellSelection,
+    toolbarCreator,
+    onProcessRowUpdateError = (error) =>
+      console.log("onProcessRowUpdateError", error),
+    ...rest
+  } = props;
 
   // Labels
   const { noRows } = globalApp?.getLabels("noRows") ?? {};
@@ -98,8 +105,9 @@ export function DataTable<R extends GridValidRowModel = any>(
       localeText={localeText}
       cellModesModel={cellModesModel}
       onCellModesModelChange={(model) => setCellModesModel(model)}
-      components={{
-        Toolbar: toolbarCreator
+      onProcessRowUpdateError={onProcessRowUpdateError}
+      slots={{
+        toolbar: toolbarCreator
           ? ({ selectedCellParams, setCellModesModel, cellModesModel }) =>
               toolbarCreator(
                 selectedCellParams,
@@ -108,7 +116,7 @@ export function DataTable<R extends GridValidRowModel = any>(
               )
           : undefined
       }}
-      componentsProps={{
+      slotProps={{
         toolbar: {
           selectedCellParams,
           setCellModesModel,
