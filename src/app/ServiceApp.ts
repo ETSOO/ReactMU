@@ -95,6 +95,9 @@ export class ServiceApp<
       DomUtils.CultureField
     }=${this.culture}${tryLogin ? "" : "&tryLogin=false"}`;
 
+    // Make sure apply new device id for new login
+    this.clearDeviceId();
+
     if (BridgeUtils.host == null) {
       const coreUrl = this.settings.webUrl;
       window.location.href = coreUrl + parameters;

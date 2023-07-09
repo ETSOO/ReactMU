@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.2.65",
+  "version": "1.2.66",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -50,13 +50,13 @@
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@etsoo/appscript": "^1.4.22",
+    "@etsoo/appscript": "^1.4.24",
     "@etsoo/notificationbase": "^1.1.25",
-    "@etsoo/react": "^1.6.95",
+    "@etsoo/react": "^1.6.96",
     "@etsoo/shared": "^1.2.7",
     "@mui/icons-material": "^5.13.7",
     "@mui/material": "^5.13.7",
-    "@mui/x-data-grid": "^6.9.1",
+    "@mui/x-data-grid": "^6.9.2",
     "@types/pica": "^9.0.1",
     "@types/pulltorefreshjs": "^0.1.5",
     "@types/react": "^18.2.14",
@@ -76,9 +76,9 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.22.6",
-    "@babel/core": "^7.22.6",
-    "@babel/plugin-transform-runtime": "^7.22.6",
-    "@babel/preset-env": "^7.22.6",
+    "@babel/core": "^7.22.8",
+    "@babel/plugin-transform-runtime": "^7.22.7",
+    "@babel/preset-env": "^7.22.7",
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
     "@babel/runtime-corejs3": "^7.22.6",
@@ -87,8 +87,8 @@
     "@types/jest": "^29.5.2",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
-    "jest": "^29.6.0",
-    "jest-environment-jsdom": "^29.6.0",
+    "jest": "^29.6.1",
+    "jest-environment-jsdom": "^29.6.1",
     "typescript": "^5.1.6"
   }
 }
