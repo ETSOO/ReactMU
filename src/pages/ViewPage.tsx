@@ -136,15 +136,15 @@ function getResp(singleRow: ViewPageRowType) {
   return typeof singleRow === "object"
     ? singleRow
     : singleRow === "default"
-    ? { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 }
+    ? { xs: 12, sm: 12, md: 6, lg: 4, xl: 3 }
     : singleRow === true
     ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
     : {
         xs: singleRow === false ? 12 : 6,
         sm: 6,
-        md: 6,
-        lg: 4,
-        xl: 3
+        md: 4,
+        lg: 3,
+        xl: 2
       };
 }
 
