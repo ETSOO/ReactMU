@@ -21,6 +21,40 @@ import { CommonPage } from "./CommonPage";
 import { CommonPageProps } from "./CommonPageProps";
 
 /**
+ * View page grid item properties
+ */
+export type ViewPageGridItemProps = GridProps & {
+  data: React.ReactNode;
+  label?: React.ReactNode;
+};
+
+/**
+ * View page grid item
+ * @param props Props
+ * @returns Result
+ */
+export function ViewPageGridItem(props: ViewPageGridItemProps) {
+  // Destruct
+  const { data, label, ...gridProps } = props;
+
+  // Layout
+  return (
+    <Grid item {...gridProps}>
+      {label != null && (
+        <Typography variant="caption" component="div">
+          {label}:
+        </Typography>
+      )}
+      {typeof data === "object" ? (
+        data
+      ) : (
+        <Typography variant="subtitle2">{data}</Typography>
+      )}
+    </Grid>
+  );
+}
+
+/**
  * View page row width type
  */
 export type ViewPageRowType = boolean | "default" | "small" | "medium" | object;
@@ -289,18 +323,13 @@ export function ViewPage<T extends DataTypes.StringRecord>(
 
               // Layout
               return (
-                <Grid item {...gridProps} key={index}>
-                  {itemLabel != null && (
-                    <Typography variant="caption" component="div">
-                      {itemLabel}:
-                    </Typography>
-                  )}
-                  {typeof itemData === "object" ? (
-                    itemData
-                  ) : (
-                    <Typography variant="subtitle2">{itemData}</Typography>
-                  )}
-                </Grid>
+                <ViewPageGridItem
+                  item
+                  {...gridProps}
+                  key={index}
+                  data={itemData}
+                  label={itemLabel}
+                />
               );
             })}
           </Grid>
