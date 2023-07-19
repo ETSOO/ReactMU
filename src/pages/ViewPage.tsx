@@ -23,7 +23,7 @@ import { CommonPageProps } from "./CommonPageProps";
 /**
  * View page row width type
  */
-export type ViewPageRowType = boolean | "default" | "small" | object;
+export type ViewPageRowType = boolean | "default" | "small" | "medium" | object;
 
 /**
  * View page display field
@@ -135,7 +135,7 @@ function formatItemData(fieldData: unknown): string | undefined {
 function getResp(singleRow: ViewPageRowType) {
   return typeof singleRow === "object"
     ? singleRow
-    : singleRow === "default"
+    : singleRow === "medium"
     ? { xs: 12, sm: 12, md: 6, lg: 4, xl: 3 }
     : singleRow === true
     ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
