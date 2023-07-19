@@ -26,6 +26,7 @@ import { CommonPageProps } from "./CommonPageProps";
 export type ViewPageGridItemProps = GridProps & {
   data: React.ReactNode;
   label?: React.ReactNode;
+  singleRow?: ViewPageRowType;
 };
 
 /**
@@ -35,11 +36,19 @@ export type ViewPageGridItemProps = GridProps & {
  */
 export function ViewPageGridItem(props: ViewPageGridItemProps) {
   // Destruct
-  const { data, label, ...gridProps } = props;
+  const { data, label, singleRow, ...gridProps } = props;
+
+  // Default options
+  let options = {};
+  if (gridProps.xs == null && gridProps.md == null) {
+    options = getResp(singleRow ?? "small");
+  } else if (singleRow != null) {
+    options = getResp(singleRow ?? "small");
+  }
 
   // Layout
   return (
-    <Grid item {...gridProps}>
+    <Grid item {...gridProps} {...options}>
       {label != null && (
         <Typography variant="caption" component="div">
           {label}:
@@ -156,12 +165,7 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
   refreshSeed?: number;
 }
 
-/**
- * View page format item data
- * @param fieldData Field data
- * @returns Result
- */
-export function formatItemData(fieldData: unknown): string | undefined {
+function formatItemData(fieldData: unknown): string | undefined {
   if (fieldData == null) return undefined;
   if (typeof fieldData === "string") return fieldData;
   if (fieldData instanceof Date)
@@ -171,12 +175,7 @@ export function formatItemData(fieldData: unknown): string | undefined {
   return `${fieldData}`;
 }
 
-/**
- * View page get row options
- * @param singleRow Row option
- * @returns Result
- */
-export function getResp(singleRow: ViewPageRowType) {
+function getResp(singleRow: ViewPageRowType) {
   return typeof singleRow === "object"
     ? singleRow
     : singleRow === "medium"
