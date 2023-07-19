@@ -156,7 +156,12 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
   refreshSeed?: number;
 }
 
-function formatItemData(fieldData: unknown): string | undefined {
+/**
+ * View page format item data
+ * @param fieldData Field data
+ * @returns Result
+ */
+export function formatItemData(fieldData: unknown): string | undefined {
   if (fieldData == null) return undefined;
   if (typeof fieldData === "string") return fieldData;
   if (fieldData instanceof Date)
@@ -166,7 +171,12 @@ function formatItemData(fieldData: unknown): string | undefined {
   return `${fieldData}`;
 }
 
-function getResp(singleRow: ViewPageRowType) {
+/**
+ * View page get row options
+ * @param singleRow Row option
+ * @returns Result
+ */
+export function getResp(singleRow: ViewPageRowType) {
   return typeof singleRow === "object"
     ? singleRow
     : singleRow === "medium"
