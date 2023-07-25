@@ -91,9 +91,11 @@ export class ServiceApp<
    * @param tryLogin Try to login again
    */
   override toLoginPage(tryLogin?: boolean) {
-    const parameters = `?serviceId=${this.settings.serviceId}&${
-      DomUtils.CultureField
-    }=${this.culture}${tryLogin ? "" : "&tryLogin=false"}`;
+    const parameters =
+      `?serviceId=${this.settings.serviceId}&${DomUtils.CultureField}=${
+        this.culture
+      }${tryLogin ? "" : "&tryLogin=false"}&url=` +
+      encodeURIComponent(location.href);
 
     // Make sure apply new device id for new login
     this.clearDeviceId();
