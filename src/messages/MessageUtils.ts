@@ -21,8 +21,12 @@ export namespace MessageUtils {
    * 发出操作信息
    * @param seed Refresh seed
    */
-  export function emitOperationMessage() {
-    eventEmitter.emit(OperationMessageName);
+  export function emitOperationMessage(
+    user: SignalRUser | undefined,
+    isSelf: boolean,
+    message: OperationMessageDto
+  ) {
+    eventEmitter.emit(OperationMessageName, user, isSelf, message);
   }
 
   /**
@@ -32,12 +36,8 @@ export namespace MessageUtils {
    * @param isSelf Is current user self
    * @param message Message
    */
-  export function emitRefresh(
-    user: SignalRUser | undefined,
-    isSelf: boolean,
-    message: OperationMessageDto
-  ) {
-    eventEmitter.emit(RefreshName, user, isSelf, message);
+  export function emitRefresh() {
+    eventEmitter.emit(RefreshName);
   }
 
   /**
