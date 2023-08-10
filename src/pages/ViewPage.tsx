@@ -19,6 +19,9 @@ import { MUGlobal } from "../MUGlobal";
 import { PullToRefreshUI } from "../PullToRefreshUI";
 import { CommonPage } from "./CommonPage";
 import { CommonPageProps } from "./CommonPageProps";
+import { OperationMessageHandler } from "../messages/OperationMessageHandler";
+import { MessageUtils } from "../messages/MessageUtils";
+import { RefreshHandler } from "../messages/RefreshHandler";
 
 /**
  * View page grid item properties
@@ -160,9 +163,9 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
   gridRef?: React.Ref<HTMLDivElement>;
 
   /**
-   * Refresh seed
+   * Operation message handler
    */
-  refreshSeed?: number;
+  operationMessageHandler?: OperationMessageHandler | string[];
 }
 
 function formatItemData(fieldData: unknown): string | undefined {
@@ -262,7 +265,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
     supportBack = true,
     pullToRefresh = true,
     gridRef,
-    refreshSeed = 0,
+    operationMessageHandler,
     ...rest
   } = props;
 
@@ -283,10 +286,27 @@ export function ViewPage<T extends DataTypes.StringRecord>(
   }, [loadData]);
 
   React.useEffect(() => {
-    // Only refresh after the first data load
-    if (refreshSeed === 0 || data == null) return;
-    refresh();
-  }, [refreshSeed]);
+    const handler: OperationMessageHandler = (user, isSelf, message) => {
+      if (operationMessageHandler == null) return;
+      if (Array.isArray(operationMessageHandler)) {
+        if (!operationMessageHandler.includes(message.operationType)) return;
+      } else {
+        if (operationMessageHandler(user, isSelf, message) === false) return;
+      }
+      refresh();
+    };
+    MessageUtils.onOperationMessage(handler);
+
+    const refreshHandler: RefreshHandler = async () => {
+      await refresh();
+    };
+    MessageUtils.onRefresh(refreshHandler);
+
+    return () => {
+      MessageUtils.offOperationMessage(handler);
+      MessageUtils.offRefresh(refreshHandler);
+    };
+  }, []);
 
   return (
     <CommonPage

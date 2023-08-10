@@ -6,6 +6,7 @@ import {
   ScrollerListExItemSize
 } from "../ScrollerListEx";
 import { DataGridPageProps } from "./DataGridPageProps";
+import { OperationMessageHandler } from "../messages/OperationMessageHandler";
 
 /**
  * Response page props
@@ -62,4 +63,9 @@ export type ResponsePageProps<
    * Quick action for double click or click under mobile
    */
   quickAction?: (data: T) => void;
+
+  /**
+   * Operation message handler
+   */
+  operationMessageHandler?: OperationMessageHandler;
 };

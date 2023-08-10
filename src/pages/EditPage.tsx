@@ -7,6 +7,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BackButton } from "../BackButton";
 import { Labels } from "../app/Labels";
+import { MessageUtils } from "../messages/MessageUtils";
+import { OperationMessageHandler } from "../messages/OperationMessageHandler";
 
 /**
  * Add / Edit page props
@@ -42,6 +44,11 @@ export interface EditPageProps extends Omit<CommonPageProps, "onSubmit"> {
    * Top part
    */
   topPart?: React.ReactNode;
+
+  /**
+   * Operation message handler
+   */
+  operationMessageHandler?: OperationMessageHandler;
 }
 
 /**
@@ -60,11 +67,22 @@ export function EditPage(props: EditPageProps) {
     supportBack = true,
     submitDisabled = false,
     topPart,
+    operationMessageHandler,
     ...rest
   } = props;
 
   // Labels
   const labels = Labels.CommonPage;
+
+  React.useEffect(() => {
+    if (operationMessageHandler == null) return;
+
+    MessageUtils.onOperationMessage(operationMessageHandler);
+
+    return () => {
+      MessageUtils.offOperationMessage(operationMessageHandler);
+    };
+  }, []);
 
   return (
     <CommonPage paddings={paddings} scrollContainer={scrollContainer} {...rest}>

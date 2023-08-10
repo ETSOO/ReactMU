@@ -4,6 +4,7 @@ import { MUGlobal } from "../MUGlobal";
 import { ResponsibleContainer } from "../ResponsibleContainer";
 import { CommonPage } from "./CommonPage";
 import { ResponsePageProps } from "./ResponsivePageProps";
+import { MessageUtils } from "../messages/MessageUtils";
 
 /**
  * Fixed height list page
@@ -16,7 +17,7 @@ export function ResponsivePage<
   D extends DataTypes.Keys<T> = IdDefaultType<T>
 >(props: ResponsePageProps<T, F, D>) {
   // Destruct
-  const { pageProps = {}, ...rest } = props;
+  const { pageProps = {}, operationMessageHandler, ...rest } = props;
 
   pageProps.paddings ??= MUGlobal.pagePaddings;
   const { paddings, fabColumnDirection, ...pageRest } = pageProps;
@@ -24,6 +25,16 @@ export function ResponsivePage<
   // State
   const [scrollContainer, setScrollContainer] = React.useState<HTMLElement>();
   const [direction, setDirection] = React.useState(fabColumnDirection);
+
+  React.useEffect(() => {
+    if (operationMessageHandler == null) return;
+
+    MessageUtils.onOperationMessage(operationMessageHandler);
+
+    return () => {
+      MessageUtils.offOperationMessage(operationMessageHandler);
+    };
+  }, []);
 
   // Layout
   return (
