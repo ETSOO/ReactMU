@@ -165,7 +165,10 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
   /**
    * Operation message handler
    */
-  operationMessageHandler?: OperationMessageHandler | string[];
+  operationMessageHandler?: [
+    id: number | undefined,
+    handler: OperationMessageHandler | string[]
+  ];
 }
 
 function formatItemData(fieldData: unknown): string | undefined {
@@ -288,12 +291,16 @@ export function ViewPage<T extends DataTypes.StringRecord>(
   React.useEffect(() => {
     const handler: OperationMessageHandler = (user, isSelf, message) => {
       if (operationMessageHandler == null) return;
-      if (Array.isArray(operationMessageHandler)) {
-        if (!operationMessageHandler.includes(message.operationType)) return;
-      } else {
-        if (operationMessageHandler(user, isSelf, message) === false) return;
+
+      const [id, handler] = operationMessageHandler;
+      if ((id == null && message.id == null) || id === message.id) {
+        if (Array.isArray(handler)) {
+          if (!handler.includes(message.operationType)) return;
+        } else {
+          if (handler(user, isSelf, message) === false) return;
+        }
+        refresh();
       }
-      refresh();
     };
     MessageUtils.onOperationMessage(handler);
 
