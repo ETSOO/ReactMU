@@ -166,7 +166,9 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
   /**
    * Operation message handler
    */
-  operationMessageHandler?: OperationMessageHandlerAll;
+  operationMessageHandler?:
+    | OperationMessageHandlerAll
+    | { id: number; types: string[] };
 }
 
 function formatItemData(fieldData: unknown): string | undefined {
@@ -272,10 +274,6 @@ export function ViewPage<T extends DataTypes.StringRecord>(
 
   // Data
   const [data, setData] = React.useState<T>();
-  const refs = React.useRef<{ seed: number; mounted: boolean }>({
-    seed: 0,
-    mounted: false
-  });
 
   // Labels
   const labels = Labels.CommonPage;
@@ -317,7 +315,17 @@ export function ViewPage<T extends DataTypes.StringRecord>(
       ) : (
         <React.Fragment>
           {operationMessageHandler && (
-            <OperationMessageContainer handler={operationMessageHandler} />
+            <OperationMessageContainer
+              handler={
+                "id" in operationMessageHandler
+                  ? [
+                      operationMessageHandler.types,
+                      refresh,
+                      operationMessageHandler.id
+                    ]
+                  : operationMessageHandler
+              }
+            />
           )}
           <Grid
             container

@@ -20,7 +20,7 @@ export type OperationMessageHandler = (
    * Message
    */
   message: OperationMessageDto
-) => void | boolean;
+) => void;
 
 /**
  * Operation message handler type for pages
