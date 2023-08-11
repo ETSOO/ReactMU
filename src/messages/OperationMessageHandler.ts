@@ -3,7 +3,7 @@ import { SignalRUser } from "./SignalRUser";
 
 /**
  * Operation message handler type
- * 操作信息处理程序类型
+ * 操作消息处理程序类型
  */
 export type OperationMessageHandler = (
   /**
@@ -21,3 +21,12 @@ export type OperationMessageHandler = (
    */
   message: OperationMessageDto
 ) => void | boolean;
+
+/**
+ * Operation message handler type for pages
+ * 操作消息处理程序类型（页面）
+ */
+export type OperationMessageHandlerAll =
+  | [types: string[], handler: () => void]
+  | [types: string[], handler: () => void, id: number]
+  | OperationMessageHandler;

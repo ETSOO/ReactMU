@@ -6,7 +6,7 @@ import {
   ScrollerListExItemSize
 } from "../ScrollerListEx";
 import { DataGridPageProps } from "./DataGridPageProps";
-import { OperationMessageHandler } from "../messages/OperationMessageHandler";
+import { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
 
 /**
  * Response page props
@@ -67,5 +67,5 @@ export type ResponsePageProps<
   /**
    * Operation message handler
    */
-  operationMessageHandler?: OperationMessageHandler;
+  operationMessageHandler?: OperationMessageHandlerAll;
 };

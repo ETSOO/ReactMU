@@ -19,9 +19,10 @@ import { MUGlobal } from "../MUGlobal";
 import { PullToRefreshUI } from "../PullToRefreshUI";
 import { CommonPage } from "./CommonPage";
 import { CommonPageProps } from "./CommonPageProps";
-import { OperationMessageHandler } from "../messages/OperationMessageHandler";
+import { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
 import { MessageUtils } from "../messages/MessageUtils";
 import { RefreshHandler } from "../messages/RefreshHandler";
+import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 
 /**
  * View page grid item properties
@@ -165,10 +166,7 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
   /**
    * Operation message handler
    */
-  operationMessageHandler?: [
-    id: number | undefined,
-    handler: OperationMessageHandler | string[]
-  ];
+  operationMessageHandler?: OperationMessageHandlerAll;
 }
 
 function formatItemData(fieldData: unknown): string | undefined {
@@ -274,6 +272,10 @@ export function ViewPage<T extends DataTypes.StringRecord>(
 
   // Data
   const [data, setData] = React.useState<T>();
+  const refs = React.useRef<{ seed: number; mounted: boolean }>({
+    seed: 0,
+    mounted: false
+  });
 
   // Labels
   const labels = Labels.CommonPage;
@@ -289,28 +291,12 @@ export function ViewPage<T extends DataTypes.StringRecord>(
   }, [loadData]);
 
   React.useEffect(() => {
-    const handler: OperationMessageHandler = (user, isSelf, message) => {
-      if (operationMessageHandler == null) return;
-
-      const [id, handler] = operationMessageHandler;
-      if ((id == null && message.id == null) || id === message.id) {
-        if (Array.isArray(handler)) {
-          if (!handler.includes(message.operationType)) return;
-        } else {
-          if (handler(user, isSelf, message) === false) return;
-        }
-        refresh();
-      }
-    };
-    MessageUtils.onOperationMessage(handler);
-
     const refreshHandler: RefreshHandler = async () => {
       await refresh();
     };
     MessageUtils.onRefresh(refreshHandler);
 
     return () => {
-      MessageUtils.offOperationMessage(handler);
       MessageUtils.offRefresh(refreshHandler);
     };
   }, []);
@@ -330,6 +316,9 @@ export function ViewPage<T extends DataTypes.StringRecord>(
         <LinearProgress />
       ) : (
         <React.Fragment>
+          {operationMessageHandler && (
+            <OperationMessageContainer handler={operationMessageHandler} />
+          )}
           <Grid
             container
             justifyContent="left"

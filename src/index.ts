@@ -9,6 +9,7 @@ export * from "./app/ReactApp";
 export * from "./app/ServiceApp";
 
 export * from "./messages/MessageUtils";
+export * from "./messages/OperationMessageContainer";
 export * from "./messages/OperationMessageDto";
 export * from "./messages/OperationMessageHandler";
 export * from "./messages/RefreshHandler";

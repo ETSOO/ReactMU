@@ -7,8 +7,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BackButton } from "../BackButton";
 import { Labels } from "../app/Labels";
-import { MessageUtils } from "../messages/MessageUtils";
-import { OperationMessageHandler } from "../messages/OperationMessageHandler";
+import { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
+import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 
 /**
  * Add / Edit page props
@@ -48,7 +48,7 @@ export interface EditPageProps extends Omit<CommonPageProps, "onSubmit"> {
   /**
    * Operation message handler
    */
-  operationMessageHandler?: OperationMessageHandler;
+  operationMessageHandler?: OperationMessageHandlerAll;
 }
 
 /**
@@ -74,18 +74,11 @@ export function EditPage(props: EditPageProps) {
   // Labels
   const labels = Labels.CommonPage;
 
-  React.useEffect(() => {
-    if (operationMessageHandler == null) return;
-
-    MessageUtils.onOperationMessage(operationMessageHandler);
-
-    return () => {
-      MessageUtils.offOperationMessage(operationMessageHandler);
-    };
-  }, []);
-
   return (
     <CommonPage paddings={paddings} scrollContainer={scrollContainer} {...rest}>
+      {operationMessageHandler && (
+        <OperationMessageContainer handler={operationMessageHandler} />
+      )}
       {topPart}
       <form onSubmit={onSubmit}>
         <Grid container justifyContent="left" spacing={paddings} paddingTop={1}>
