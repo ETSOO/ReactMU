@@ -51,7 +51,7 @@ export function OperationMessageContainer(
             const [types, callback, id] = handler;
             if (id == null || id === message.id) {
               // Check types & isSelf
-              if (!isSelf || !types.includes(message.operationType)) return;
+              if (isSelf || !types.includes(message.operationType)) return;
 
               resetSeed();
 
