@@ -5,10 +5,10 @@ import { IActionResult, IUser } from "@etsoo/appscript";
  */
 export interface ISmartERPUser extends IUser {
   /**
-   * Global user id
-   * 全局用户编号
+   * Global user GUID
+   * 全局用户GUID编号
    */
-  readonly uid?: string;
+  readonly uid: string;
 
   /**
    * Service refresh token

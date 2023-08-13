@@ -20,4 +20,10 @@ export type OperationMessageDto = {
    * 目标对象编号
    */
   id?: number;
+
+  /**
+   * Related fields to pass more data
+   * 相关字段，便于传递更多数据
+   */
+  fields?: unknown[];
 };
