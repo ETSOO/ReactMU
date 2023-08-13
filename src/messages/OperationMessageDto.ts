@@ -10,6 +10,12 @@ export type OperationMessageDto = {
   operationType: string;
 
   /**
+   * Device id
+   * 设备编号
+   */
+  deviceId: number;
+
+  /**
    * Target object id
    * 目标对象编号
    */

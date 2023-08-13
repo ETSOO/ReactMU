@@ -5,14 +5,25 @@ import { IActionResult, IUser } from "@etsoo/appscript";
  */
 export interface IServiceUser extends IUser {
   /**
+   * Global user id
+   * 全局用户编号
+   */
+  readonly uid?: string;
+
+  /**
+   * Organization name
+   */
+  readonly organizationName: string;
+
+  /**
    * Service device id
    */
-  serviceDeviceId: string;
+  readonly serviceDeviceId: string;
 
   /**
    * Service passphrase encrypted
    */
-  servicePassphrase: string;
+  readonly servicePassphrase: string;
 }
 
 /**

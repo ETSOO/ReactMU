@@ -47,10 +47,11 @@ export function OperationMessageContainer(
     const my: OperationMessageHandler =
       typeof handler === "function"
         ? handler
-        : (_user, _isSelf, message) => {
+        : (_user, isSelf, message) => {
             const [types, callback, id] = handler;
             if (id == null || id === message.id) {
-              if (!types.includes(message.operationType)) return;
+              // Check types & isSelf
+              if (!isSelf || !types.includes(message.operationType)) return;
 
               resetSeed();
 

@@ -5,8 +5,8 @@ import { UserRole } from "@etsoo/appscript";
  */
 export type SignalRUser = {
   /**
-   * Id
-   * 编号
+   * Global id, not local system user id
+   * 全局用户编号，不是子系统用户编号
    */
   id: number;
 
@@ -26,7 +26,7 @@ export type SignalRUser = {
    * Device id
    * 设备编号
    */
-  deviceId: number | number[];
+  deviceId: number;
 
   /**
    * Role
