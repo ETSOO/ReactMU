@@ -8,7 +8,7 @@ export interface IServiceUser extends IUser {
    * Global user id
    * 全局用户编号
    */
-  readonly uid?: string;
+  readonly uid: string;
 
   /**
    * Organization name
