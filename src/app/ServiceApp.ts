@@ -89,14 +89,14 @@ export class ServiceApp<
   /**
    * Go to the login page
    * @param tryLogin Try to login again
+   * @param removeUrl Remove current URL for reuse
    */
-  override toLoginPage(tryLogin?: boolean) {
-    const parameters =
-      `?serviceId=${this.settings.serviceId}&${DomUtils.CultureField}=${
-        this.culture
-      }${tryLogin ? "" : "&tryLogin=false"}&url=` +
-      encodeURIComponent(location.href);
-
+  override toLoginPage(tryLogin?: boolean, removeUrl?: boolean) {
+    const parameters = `?serviceId=${this.settings.serviceId}&${
+      DomUtils.CultureField
+    }=${this.culture}${tryLogin ? "" : "&tryLogin=false"}${
+      removeUrl ? "" : "&url=" + encodeURIComponent(location.href)
+    }`;
     // Make sure apply new device id for new login
     this.clearDeviceId();
 
