@@ -512,13 +512,17 @@ export class ReactApp<
   /**
    * User logout
    * @param clearToken Clear refresh token or not
+   * @param noTrigger No trigger for state change
    */
-  override userLogout(clearToken: boolean = true): void {
+  override userLogout(
+    clearToken: boolean = true,
+    noTrigger: boolean = false
+  ): void {
     // Super call
     super.userLogout(clearToken);
 
     // Dispatch action
-    if (this.userStateDispatch != null)
+    if (!noTrigger && this.userStateDispatch != null)
       this.userStateDispatch({
         type: UserActionType.Logout
       });
