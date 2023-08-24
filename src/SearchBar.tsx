@@ -41,11 +41,12 @@ const resetForm = (form: HTMLFormElement) => {
 
     // All non hidden inputs
     if (input instanceof HTMLInputElement) {
-      // Ignore hidden input
-      if (input.type === "hidden") continue;
+      // Ignore hidden and data-reset=false input
+      var reset = input.dataset.reset;
+      if (input.type === "hidden" || reset === "false") continue;
 
       // Ignore readOnly without data-reset=true inputs
-      if (!input.readOnly || input.dataset.reset === "true") {
+      if (!input.readOnly || reset === "true") {
         ReactUtils.triggerChange(input, "", true);
       }
       continue;
