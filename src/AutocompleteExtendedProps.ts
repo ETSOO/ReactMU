@@ -57,6 +57,11 @@ export type AutocompleteExtendedProps<
   inputRequired?: boolean;
 
   /**
+   * Set 'data-reset'
+   */
+  inputReset?: boolean;
+
+  /**
    * The variant to use.
    * @default 'outlined'
    */

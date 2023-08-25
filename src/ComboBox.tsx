@@ -93,6 +93,7 @@ export function ComboBox<
     inputMargin,
     inputOnChange,
     inputRequired,
+    inputReset,
     inputVariant,
     defaultValue,
     label,
@@ -274,6 +275,7 @@ export function ComboBox<
                 required={inputRequired}
                 error={inputError}
                 helperText={inputHelperText}
+                data-reset={inputReset}
               />
             ) : (
               <InputField
@@ -285,6 +287,7 @@ export function ComboBox<
                 required={inputRequired}
                 error={inputError}
                 helperText={inputHelperText}
+                data-reset={inputReset}
               />
             )
           }

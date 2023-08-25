@@ -70,6 +70,7 @@ export function Tiplist<
     inputMargin,
     inputOnChange,
     inputRequired,
+    inputReset,
     inputVariant,
     label,
     loadData,
@@ -337,6 +338,7 @@ export function Tiplist<
               autoComplete={inputAutoComplete}
               error={inputError}
               helperText={inputHelperText}
+              data-reset={inputReset}
             />
           ) : (
             <InputField
@@ -350,6 +352,7 @@ export function Tiplist<
               autoComplete={inputAutoComplete}
               error={inputError}
               helperText={inputHelperText}
+              data-reset={inputReset}
             />
           )
         }
