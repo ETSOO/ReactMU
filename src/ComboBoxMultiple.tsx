@@ -178,11 +178,9 @@ export function ComboBoxMultiple<
   const addReadOnly = (params: AutocompleteRenderInputParams) => {
     if (readOnly != null) {
       Object.assign(params, { readOnly });
-
-      if (readOnly) {
-        Object.assign(params.inputProps, { "data-reset": true });
-      }
     }
+
+    Object.assign(params.inputProps, { "data-reset": inputReset });
 
     if (dataReadonly) {
       params.inputProps.onKeyDown = (event) => {
@@ -287,7 +285,6 @@ export function ComboBoxMultiple<
               required={inputRequired}
               error={inputError}
               helperText={inputHelperText}
-              data-reset={inputReset}
             />
           ) : (
             <InputField
@@ -299,7 +296,6 @@ export function ComboBoxMultiple<
               required={inputRequired}
               error={inputError}
               helperText={inputHelperText}
-              data-reset={inputReset}
             />
           )
         }

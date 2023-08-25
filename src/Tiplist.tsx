@@ -145,7 +145,10 @@ export function Tiplist<
 
     // https://stackoverflow.com/questions/15738259/disabling-chrome-autofill
     // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html
-    Object.assign(params.inputProps, { autoComplete: inputAutoComplete });
+    Object.assign(params.inputProps, {
+      autoComplete: inputAutoComplete,
+      "data-reset": inputReset
+    });
 
     return params;
   };
@@ -338,7 +341,6 @@ export function Tiplist<
               autoComplete={inputAutoComplete}
               error={inputError}
               helperText={inputHelperText}
-              data-reset={inputReset}
             />
           ) : (
             <InputField
@@ -352,7 +354,6 @@ export function Tiplist<
               autoComplete={inputAutoComplete}
               error={inputError}
               helperText={inputHelperText}
-              data-reset={inputReset}
             />
           )
         }
