@@ -275,7 +275,7 @@ export function Tiplist<
     <div>
       <input
         ref={inputRef}
-        data-reset="true"
+        data-reset={inputReset ?? true}
         type="text"
         style={{ display: "none" }}
         name={name}

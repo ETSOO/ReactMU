@@ -57,6 +57,11 @@ export type TiplistProProps<T extends ListType2 = ListType2> = Omit<
   inputProps?: Omit<InputFieldProps, "onChange">;
 
   /**
+   * Set 'data-reset'
+   */
+  inputReset?: boolean;
+
+  /**
    * Value change handler
    * @param value New value
    */
@@ -99,6 +104,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     name,
     inputOnChange,
     inputProps,
+    inputReset,
     sx,
     openOnFocus = true,
     noOptionsText = noOptions,
@@ -278,7 +284,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     <div>
       <input
         ref={inputRef}
-        data-reset="true"
+        data-reset={inputReset ?? true}
         type="text"
         style={{ display: "none" }}
         name={name}
@@ -348,6 +354,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
               if (states.value == null && onChange)
                 onChange(event, event.target.value, "blur", undefined);
             }}
+            data-reset={inputReset}
           />
         )}
         isOptionEqualToValue={(option, value) => option.id === value.id}
