@@ -186,9 +186,9 @@ export function MoreFab(props: MoreFabProps) {
                 : Array.isArray(action)
                 ? { component: Link, to: action[0], state: action[1] }
                 : {
-                    onClick: () => {
+                    onClick: (event: React.MouseEvent) => {
                       handleClose();
-                      if (typeof action === "function") action();
+                      if (typeof action === "function") action(event);
                     }
                   })}
             >

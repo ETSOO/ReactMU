@@ -66,29 +66,31 @@ export function MenuButton<T extends DataTypes.IdItem>(
       )}
 
       <Menu
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: "visible",
-            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-            "& .MuiAvatar-root": {
-              width: 32,
-              height: 32
-            },
-            "&:before": {
-              content: '""',
-              display: "block",
-              position: "absolute",
-              top: isTop ? 0 : undefined,
-              bottom: isTop ? undefined : -10,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: "background.paper",
-              transform: "translateY(-50%) rotate(45deg)",
-              zIndex: 0
-            },
-            ...{ sx }
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: "visible",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+              "& .MuiAvatar-root": {
+                width: 32,
+                height: 32
+              },
+              "&:before": {
+                content: '""',
+                display: "block",
+                position: "absolute",
+                top: isTop ? 0 : undefined,
+                bottom: isTop ? undefined : -10,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: "background.paper",
+                transform: "translateY(-50%) rotate(45deg)",
+                zIndex: 0
+              },
+              ...{ sx }
+            }
           }
         }}
         disableScrollLock

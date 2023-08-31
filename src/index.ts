@@ -78,6 +78,7 @@ export * from "./MobileListItemRenderer";
 export * from "./MoneyInputField";
 export * from "./MoreFab";
 export * from "./MUGlobal";
+export * from "./MUUtils";
 export * from "./NotifierMU";
 export * from "./OptionBool";
 export * from "./OptionGroup";

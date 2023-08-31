@@ -13,6 +13,7 @@ import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { globalApp } from "./app/ReactApp";
 import { VBox } from "./FlexBox";
+import { MUUtils } from "./MUUtils";
 
 /**
  * Quick list props
@@ -82,7 +83,7 @@ export function QuickList<T extends ListType2 = ListType2>(
     buttonProps = {},
     label,
     inputProps,
-    itemLabel = (item: T) => ("label" in item ? item.label : item.name),
+    itemLabel = MUUtils.getListItemLabel,
     itemRenderer = (item: T) => itemLabel(item),
     itemProps,
     loadData,

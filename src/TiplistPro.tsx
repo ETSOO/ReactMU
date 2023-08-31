@@ -4,6 +4,7 @@ import { Autocomplete, AutocompleteProps } from "@mui/material";
 import React, { ChangeEventHandler } from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { globalApp } from "./app/ReactApp";
+import { MUUtils } from "./MUUtils";
 
 /**
  * TiplistPro props
@@ -369,8 +370,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         getOptionLabel={(item) => {
           if (typeof item === "string") return item;
           if (item["id"] === -1) return (more ?? "More") + "...";
-          if (getOptionLabel == null)
-            return "label" in item ? item.label : item.name;
+          if (getOptionLabel == null) return MUUtils.getListItemLabel(item);
           return getOptionLabel(item);
         }}
         {...rest}

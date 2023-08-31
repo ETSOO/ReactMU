@@ -22,6 +22,7 @@ import {
   DialogTitle,
   Fade,
   IconButton,
+  Popover,
   Slider,
   Snackbar,
   styled,
@@ -101,7 +102,7 @@ export class NotificationMU extends NotificationReact {
     };
 
     // Setup callback
-    if (this.renderSetup) this.renderSetup(setupProps);
+    const options = this.renderSetup ? this.renderSetup(setupProps) : undefined;
 
     // Callback
     const callback = async (_event: React.MouseEvent<HTMLButtonElement>) => {
@@ -118,6 +119,7 @@ export class NotificationMU extends NotificationReact {
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         fullScreen={fullScreen}
+        {...options}
       >
         <IconDialogTitle className="draggable-dialog-title">
           {icon}
@@ -172,6 +174,9 @@ export class NotificationMU extends NotificationReact {
       closable = false
     } = this.inputProps ?? {};
 
+    // Setup callback
+    const options = this.renderSetup ? this.renderSetup({}) : undefined;
+
     const callback = async (
       _event: React.MouseEvent<HTMLButtonElement>,
       value: boolean
@@ -189,6 +194,7 @@ export class NotificationMU extends NotificationReact {
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         fullScreen={fullScreen}
+        {...options}
       >
         <IconDialogTitle className="draggable-dialog-title">
           <Help color="action" />
@@ -254,12 +260,13 @@ export class NotificationMU extends NotificationReact {
     };
 
     // Setup callback
-    if (this.renderSetup) this.renderSetup(setupProps);
+    const options = this.renderSetup ? this.renderSetup(setupProps) : undefined;
 
     return (
       <Fade in={true} key={this.id}>
         <Alert
           {...setupProps}
+          {...options}
           action={
             closable ? (
               <IconButton
@@ -390,6 +397,9 @@ export class NotificationMU extends NotificationReact {
       localInputs = inputs;
     }
 
+    // Setup callback
+    const options = this.renderSetup ? this.renderSetup({}) : undefined;
+
     return (
       <Dialog
         key={this.id}
@@ -399,6 +409,7 @@ export class NotificationMU extends NotificationReact {
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         fullScreen={fullScreen}
+        {...options}
       >
         <form
           onSubmit={(event) => {
@@ -467,6 +478,20 @@ export class NotificationMU extends NotificationReact {
     );
   }
 
+  private createPopup(_props: NotificationRenderProps, className?: string) {
+    // Destruct
+    const { content, open, renderSetup } = this;
+
+    // Setup callback
+    const options = this.renderSetup ? this.renderSetup({}) : undefined;
+
+    return (
+      <Popover open={open} className={className} {...options}>
+        {content}
+      </Popover>
+    );
+  }
+
   // Create loading
   private createLoading(_props: NotificationRenderProps, className?: string) {
     // Properties
@@ -482,7 +507,7 @@ export class NotificationMU extends NotificationReact {
     if (content === "@") content = labels.loading.toString();
 
     // Setup callback
-    if (this.renderSetup) this.renderSetup(setupProps);
+    const options = this.renderSetup ? this.renderSetup(setupProps) : undefined;
 
     return (
       <Backdrop
@@ -493,6 +518,7 @@ export class NotificationMU extends NotificationReact {
           zIndex: (theme) => theme.zIndex.modal + 1
         }}
         open={this.open}
+        {...options}
       >
         <Box
           display="flex"
@@ -530,6 +556,8 @@ export class NotificationMU extends NotificationReact {
       return this.createConfirm(props, className);
     } else if (this.type === NotificationType.Prompt) {
       return this.createPrompt(props, className);
+    } else if (this.type === NotificationType.Popup) {
+      return this.createPopup(props, className);
     } else if (
       this.type === NotificationType.Error ||
       (this.modal && this.type in NotificationMessageType)
