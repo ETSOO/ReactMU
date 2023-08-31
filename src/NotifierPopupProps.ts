@@ -3,4 +3,4 @@ import { PopoverProps } from "@mui/material";
 /**
  * Notifier Popup pros
  */
-export type NotifierPopupProps = Omit<PopoverProps, "open">;
+export type NotifierPopupProps = Omit<PopoverProps, "open" | "onClose">;
