@@ -480,13 +480,13 @@ export class NotificationMU extends NotificationReact {
 
   private createPopup(_props: NotificationRenderProps, className?: string) {
     // Destruct
-    const { content, open, renderSetup } = this;
+    const { content, id, open, renderSetup } = this;
 
     // Setup callback
     const options = this.renderSetup ? this.renderSetup({}) : undefined;
 
     return (
-      <Popover open={open} className={className} {...options}>
+      <Popover key={id} open={open} className={className} {...options}>
         {content}
       </Popover>
     );
