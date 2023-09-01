@@ -19,7 +19,7 @@ export function PercentLinearProgress(props: PercentLinearProgressProps) {
 
   // Component
   return (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Box sx={{ display: "flex", alignItems: "center", flexGrow: 2 }}>
       <Box sx={{ width: "100%", mr: 1 }}>
         <LinearProgress variant="determinate" {...rest} />
       </Box>
