@@ -91,6 +91,7 @@ export const IntInputField = React.forwardRef<
     changeDelay = 600,
     onChangeDelay,
     onChange,
+    onFocus = (event) => event.currentTarget.select(),
     onValueChange,
     required,
     ...rest
@@ -179,6 +180,7 @@ export const IntInputField = React.forwardRef<
 
         if (onChangeDelay) onChangeDelay(event);
       }}
+      onFocus={onFocus}
       required={required}
       {...rest}
     />
