@@ -203,8 +203,16 @@ export class ServiceApp<
       }
 
       // Login
-      if (appApi) appApi.authorize(serviceResult.data.token);
-      else this.userLoginEx(userData, refreshToken, serviceResult.data);
+      if (appApi) {
+        // Authorize external service application API
+        appApi.authorize(serviceResult.data.token);
+
+        // Update core system token, otherwise will be failed for upcoming calls
+        this.userLogin(userData, refreshToken, true);
+      } else {
+        // Authorize local service
+        this.userLoginEx(userData, refreshToken, serviceResult.data);
+      }
 
       // Success callback
       if (failCallback) failCallback(true);
