@@ -1,6 +1,7 @@
-import { IApi } from "@etsoo/appscript";
+import { IApi, RefreshTokenResult } from "@etsoo/appscript";
 import { IServiceUser } from "./IServiceUser";
 import { ReactAppType } from "./ReactApp";
+import { IAppApi } from "./IAppApi";
 
 /**
  * Service application interface
@@ -15,6 +16,16 @@ export interface IServiceApp extends ReactAppType {
    * Service user
    */
   readonly serviceUser?: IServiceUser;
+
+  /**
+   * Service application API login
+   * @param appApi Service application API
+   * @param callback Callback
+   */
+  apiLogin(
+    appApi: IAppApi,
+    callback?: (result: RefreshTokenResult, successData?: string) => void
+  ): Promise<boolean>;
 
   /**
    * Load SmartERP core

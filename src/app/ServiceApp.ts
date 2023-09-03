@@ -85,6 +85,24 @@ export class ServiceApp<
   }
 
   /**
+   * Service application API login
+   * @param appApi Service application API
+   * @param callback Callback
+   */
+  apiLogin(
+    appApi: IAppApi,
+    callback?: (result: RefreshTokenResult, successData?: string) => void
+  ) {
+    return this.refreshToken({
+      callback,
+      data: appApi.getrefreshTokenData(),
+      relogin: false,
+      showLoading: false,
+      appApi
+    });
+  }
+
+  /**
    * Load SmartERP core
    */
   loadSmartERP() {
