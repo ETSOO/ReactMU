@@ -229,12 +229,6 @@ export class ServiceApp<
 
       // Login
       if (appApi) {
-        if (!appApi.onceAuthorized) {
-          // API handling
-          this.setApiLoading(appApi.api);
-          this.setApiErrorHandler(appApi.api, true);
-        }
-
         // Authorize external service application API
         appApi.authorize(userData, refreshToken, serviceResult.data);
       } else {

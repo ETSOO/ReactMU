@@ -19,11 +19,6 @@ export interface IAppApi {
   readonly serviceId: number;
 
   /**
-   * Is once authorized
-   */
-  get onceAuthorized(): boolean;
-
-  /**
    * Authorize the API
    * @param user SmartERP user
    * @param refreshToken SmartERP user refresh token
