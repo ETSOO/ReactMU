@@ -33,5 +33,5 @@ export interface IAppApi {
   /**
    * Get refresh token data
    */
-  getrefreshTokenData(): Partial<RefreshTokenRQ>;
+  getRefreshTokenData(): Partial<RefreshTokenRQ>;
 }
