@@ -201,7 +201,7 @@ export class ServiceApp<
         {
           token: this.encryptEnhanced(
             userData.token,
-            this.settings.serviceId.toString()
+            (appApi?.serviceId ?? this.settings.serviceId).toString()
           )
         },
         {
