@@ -117,6 +117,7 @@ export class ServiceApp<
   ) {
     // Destruct
     const {
+      appApi,
       callback,
       data,
       relogin = false,
@@ -169,7 +170,8 @@ export class ServiceApp<
       const userData = result.data;
 
       // Use core system access token to service api to exchange service access token
-      const serviceResult = await this.serviceApi.put<ServiceLoginResult<U>>(
+      const api = appApi ? appApi.api : this.serviceApi;
+      const serviceResult = await api.put<ServiceLoginResult<U>>(
         "Auth/ExchangeToken",
         {
           token: this.encryptEnhanced(
@@ -201,7 +203,8 @@ export class ServiceApp<
       }
 
       // Login
-      this.userLoginEx(userData, refreshToken, serviceResult.data);
+      if (appApi) appApi.authorize(serviceResult.data.token);
+      else this.userLoginEx(userData, refreshToken, serviceResult.data);
 
       // Success callback
       if (failCallback) failCallback(true);
