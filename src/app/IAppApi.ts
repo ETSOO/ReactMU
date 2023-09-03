@@ -1,6 +1,7 @@
 import { IApi } from "@etsoo/restclient";
 import { ISmartERPUser } from "./ISmartERPUser";
 import { RefreshTokenRQ } from "@etsoo/appscript";
+import { IServiceUser } from "./IServiceUser";
 
 /**
  * Service application API, Implement interface calls between different services
@@ -26,9 +27,13 @@ export interface IAppApi {
    * Authorize the API
    * @param user SmartERP user
    * @param refreshToken SmartERP user refresh token
-   * @param token Access token
+   * @param serviceUser Service user
    */
-  authorize(user: ISmartERPUser, refreshToken: string, token: string): void;
+  authorize(
+    user: ISmartERPUser,
+    refreshToken: string,
+    serviceUser: IServiceUser
+  ): void;
 
   /**
    * Get refresh token data

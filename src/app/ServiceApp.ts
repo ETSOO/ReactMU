@@ -236,7 +236,7 @@ export class ServiceApp<
         }
 
         // Authorize external service application API
-        appApi.authorize(userData, refreshToken, serviceResult.data.token);
+        appApi.authorize(userData, refreshToken, serviceResult.data);
       } else {
         // Authorize local service
         this.userLoginEx(userData, refreshToken, serviceResult.data);
