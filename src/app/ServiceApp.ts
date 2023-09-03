@@ -16,6 +16,15 @@ import { IServicePageData } from "./IServicePage";
 import { IServiceUser, ServiceLoginResult } from "./IServiceUser";
 import { ISmartERPUser } from "./ISmartERPUser";
 import { ReactApp } from "./ReactApp";
+import { IAppApi } from "./IAppApi";
+
+/**
+ * Service application refresh token properties
+ */
+export interface ServiceRefreshTokenProps
+  extends RefreshTokenProps<Partial<RefreshTokenRQ>> {
+  appApi?: IAppApi;
+}
 
 /**
  * Core Service App
@@ -112,9 +121,7 @@ export class ServiceApp<
    * Refresh token
    * @param props Props
    */
-  override async refreshToken<D extends object = RefreshTokenRQ>(
-    props?: RefreshTokenProps<D>
-  ) {
+  override async refreshToken(props?: ServiceRefreshTokenProps) {
     // Destruct
     const {
       appApi,
@@ -204,11 +211,14 @@ export class ServiceApp<
 
       // Login
       if (appApi) {
-        // Authorize external service application API
-        appApi.authorize(serviceResult.data.token);
+        if (!appApi.onceAuthorized) {
+          // API handling
+          this.setApiLoading(appApi.api);
+          this.setApiErrorHandler(appApi.api, true);
+        }
 
-        // Update core system token, otherwise will be failed for upcoming calls
-        this.userLogin(userData, refreshToken, true);
+        // Authorize external service application API
+        appApi.authorize(userData, refreshToken, serviceResult.data.token);
       } else {
         // Authorize local service
         this.userLoginEx(userData, refreshToken, serviceResult.data);

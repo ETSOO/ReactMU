@@ -56,7 +56,7 @@ export abstract class CommonApp<
    * Refresh token
    * @param props Props
    */
-  override async refreshToken<D extends object = RefreshTokenRQ>(
+  override async refreshToken<D extends object = Partial<RefreshTokenRQ>>(
     props?: RefreshTokenProps<D>
   ) {
     // Destruct
