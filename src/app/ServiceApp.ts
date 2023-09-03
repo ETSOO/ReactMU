@@ -95,7 +95,7 @@ export class ServiceApp<
   ) {
     return this.refreshToken({
       callback,
-      data: appApi.getrefreshTokenData(),
+      data: appApi.getRefreshTokenData(),
       relogin: false,
       showLoading: false,
       appApi
