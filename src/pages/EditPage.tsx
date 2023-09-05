@@ -41,6 +41,11 @@ export interface EditPageProps extends Omit<CommonPageProps, "onSubmit"> {
   supportBack?: boolean;
 
   /**
+   * Bottom part
+   */
+  bottomPart?: React.ReactNode;
+
+  /**
    * Top part
    */
   topPart?: React.ReactNode;
@@ -66,6 +71,7 @@ export function EditPage(props: EditPageProps) {
     scrollContainer = CommonPageScrollContainer,
     supportBack = true,
     submitDisabled = false,
+    bottomPart,
     topPart,
     operationMessageHandler,
     ...rest
@@ -118,6 +124,7 @@ export function EditPage(props: EditPageProps) {
           {supportBack && <BackButton title={labels.back} />}
         </Grid>
       </form>
+      {bottomPart}
     </CommonPage>
   );
 }
