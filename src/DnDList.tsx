@@ -4,8 +4,12 @@ import type {
   DragStartEvent,
   UniqueIdentifier
 } from "@dnd-kit/core";
-import type {
+import {
   SortableContext,
+  SortingStrategy,
+  horizontalListSortingStrategy,
+  rectSortingStrategy,
+  rectSwappingStrategy,
   useSortable,
   verticalListSortingStrategy
 } from "@dnd-kit/sortable";
@@ -158,6 +162,16 @@ export interface DnDListPros<D extends object, K extends DataTypes.Keys<D>> {
   mRef?: React.Ref<DnDListRef<D>>;
 
   /**
+   * Sorting strategy
+   */
+  sortingStrategy?:
+    | "rect"
+    | "vertical"
+    | "horizontal"
+    | "rectSwapping"
+    | (() => SortingStrategy);
+
+  /**
    * Data change handler
    */
   onChange?: (items: D[]) => void;
@@ -192,6 +206,7 @@ export function DnDList<
     itemRenderer,
     labelField,
     mRef,
+    sortingStrategy,
     onChange,
     onFormChange,
     onDragEnd
@@ -318,6 +333,9 @@ export function DnDList<
         typeof DndContext,
         typeof SortableContext,
         typeof useSortable,
+        typeof rectSortingStrategy,
+        typeof rectSwappingStrategy,
+        typeof horizontalListSortingStrategy,
         typeof verticalListSortingStrategy,
         typeof CSS
       ]
@@ -331,13 +349,23 @@ export function DnDList<
     ]).then(
       ([
         { DndContext },
-        { SortableContext, useSortable, verticalListSortingStrategy },
+        {
+          SortableContext,
+          useSortable,
+          rectSortingStrategy,
+          rectSwappingStrategy,
+          horizontalListSortingStrategy,
+          verticalListSortingStrategy
+        },
         { CSS }
       ]) => {
         setDnd([
           DndContext,
           SortableContext,
           useSortable,
+          rectSortingStrategy,
+          rectSwappingStrategy,
+          horizontalListSortingStrategy,
           verticalListSortingStrategy,
           CSS
         ]);
@@ -353,9 +381,25 @@ export function DnDList<
     DndContextType,
     SortableContextType,
     useSortableType,
+    rectSortingStrategyType,
+    rectSwappingStrategyType,
+    horizontalListSortingStrategyType,
     verticalListSortingStrategyType,
     CSSType
   ] = dnd;
+
+  const strategy: SortingStrategy | undefined =
+    typeof sortingStrategy === "function"
+      ? sortingStrategy()
+      : sortingStrategy === "rect"
+      ? rectSortingStrategyType
+      : sortingStrategy === "rectSwapping"
+      ? rectSwappingStrategyType
+      : sortingStrategy === "horizontal"
+      ? horizontalListSortingStrategyType
+      : sortingStrategy === "vertical"
+      ? verticalListSortingStrategyType
+      : undefined;
 
   let getItemStyle = props.getItemStyle;
   if (getItemStyle == null) {
@@ -420,10 +464,7 @@ export function DnDList<
 
   const children = (
     <DndContextType onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <SortableContextType
-        items={items}
-        strategy={verticalListSortingStrategyType}
-      >
+      <SortableContextType items={items} strategy={strategy}>
         {items.map((item, index) => {
           const id = item[keyField] as unknown as UniqueIdentifier;
           return (
