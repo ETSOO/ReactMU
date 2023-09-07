@@ -142,7 +142,7 @@ export function ComboBoxMultiple<
       ? localOptions.filter((o) => o[idField] === idValue)
       : idValues != null
       ? localOptions.filter((o) => idValues?.includes(o[idField]))
-      : defaultValue ?? value;
+      : defaultValue?.concat() ?? value?.concat();
 
   // State
   // null for controlled
@@ -267,7 +267,7 @@ export function ComboBoxMultiple<
         }
         onChange={(event, value, reason, details) => {
           // Set value
-          setInputValue(value);
+          setInputValue(value.concat());
 
           // Custom
           if (onChange != null) onChange(event, value, reason, details);
