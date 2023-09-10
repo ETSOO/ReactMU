@@ -575,7 +575,8 @@ export function DataGridEx<
       rowIndex,
       columnIndex,
       cellProps,
-      renderProps,
+      renderProps:
+        typeof renderProps === "function" ? renderProps(data) : renderProps,
       setItems
     });
 
