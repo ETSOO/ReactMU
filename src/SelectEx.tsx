@@ -49,6 +49,11 @@ export type SelectExProps<
   idField?: D;
 
   /**
+   * Set 'data-reset'
+   */
+  inputReset?: boolean;
+
+  /**
    * Item icon renderer
    */
   itemIconRenderer?: (id: T[D]) => React.ReactNode;
@@ -115,6 +120,7 @@ export function SelectEx<
     idField = "id" as D,
     error,
     helperText,
+    inputReset,
     itemIconRenderer,
     itemStyle,
     label,
@@ -291,7 +297,14 @@ export function SelectEx<
               ? valueState
               : ""
           }
-          input={<OutlinedInput notched label={label} required={required} />}
+          input={
+            <OutlinedInput
+              notched
+              label={label}
+              required={required}
+              data-reset={inputReset}
+            />
+          }
           labelId={labelId}
           name={name}
           multiple={multiple}
