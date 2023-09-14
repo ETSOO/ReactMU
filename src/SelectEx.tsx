@@ -302,7 +302,7 @@ export function SelectEx<
               notched
               label={label}
               required={required}
-              data-reset={inputReset}
+              inputProps={{ "data-reset": inputReset }}
             />
           }
           labelId={labelId}
