@@ -71,7 +71,7 @@ export type IntInputFieldProps = Omit<
 };
 
 /**
- * Integer input field
+ * Integer input field (controlled)
  */
 export const IntInputField = React.forwardRef<
   HTMLDivElement,

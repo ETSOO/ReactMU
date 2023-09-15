@@ -83,6 +83,7 @@ export * from "./MUGlobal";
 export * from "./MUUtils";
 export * from "./NotifierMU";
 export * from "./NotifierPopupProps";
+export * from "./NumberInputField";
 export * from "./OptionBool";
 export * from "./OptionGroup";
 export * from "./PercentCircularProgress";

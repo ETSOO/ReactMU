@@ -7,7 +7,7 @@ import { IntInputField, IntInputFieldProps } from "./IntInputField";
 export type MoneyInputFieldProps = IntInputFieldProps & {};
 
 /**
- * Money input field
+ * Money input field (controlled)
  */
 export const MoneyInputField = React.forwardRef<
   HTMLDivElement,
