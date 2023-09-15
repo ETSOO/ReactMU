@@ -45,7 +45,7 @@ export function DataGridPage<
     sizeReadyMiliseconds = 100,
     pageProps = {},
     cacheKey,
-    cacheMinutes = 120,
+    cacheMinutes = 15,
     ...rest
   } = props;
 

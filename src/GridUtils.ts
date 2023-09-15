@@ -42,6 +42,7 @@ export namespace GridUtils {
     if (cacheSource) {
       const cacheData = JSON.parse(cacheSource) as GridDataCacheType<T>;
       if (new Date().valueOf() - cacheData.creation > cacheMinutes * 60000) {
+        sessionStorage.removeItem(`${cacheKey}-searchbar`);
         sessionStorage.removeItem(cacheKey);
         return;
       }

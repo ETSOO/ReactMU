@@ -34,7 +34,7 @@ export function ListPage<
     mRef,
     pageProps = {},
     cacheKey,
-    cacheMinutes = 120,
+    cacheMinutes = 15,
     ...rest
   } = props;
 

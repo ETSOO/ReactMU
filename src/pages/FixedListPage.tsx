@@ -46,7 +46,7 @@ export function FixedListPage<
     sizeReadyMiliseconds = 0,
     pageProps = {},
     cacheKey,
-    cacheMinutes = 120,
+    cacheMinutes = 15,
     ...rest
   } = props;
 

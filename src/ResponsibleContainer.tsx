@@ -198,7 +198,7 @@ export function ResponsibleContainer<
     adjustHeight,
     adjustFabHeight,
     cacheKey,
-    cacheMinutes = 120,
+    cacheMinutes = 15,
     columns,
     containerBoxSx = defaultContainerBoxSx,
     dataGridMinWidth = Math.max(576, DataGridExCalColumns(columns).total),
