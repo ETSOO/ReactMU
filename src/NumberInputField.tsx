@@ -35,13 +35,7 @@ export type NumberInputFieldProps = Omit<
  * @returns Component
  */
 export function NumberInputField(props: NumberInputFieldProps) {
-  const {
-    inputStyle = { textAlign: "right" },
-    min = 0,
-    step = 1,
-    max = 9999999,
-    ...rest
-  } = props;
+  const { inputStyle, min = 0, step = 1, max = 9999999, ...rest } = props;
 
   return (
     <InputField
