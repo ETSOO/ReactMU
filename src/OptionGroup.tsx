@@ -320,7 +320,11 @@ export function OptionGroup<
           {group}
         </Box>
       </FormControl>
-      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      {helperText && (
+        <FormHelperText sx={{ marginLeft: 2, marginRight: 2 }}>
+          {helperText}
+        </FormHelperText>
+      )}
     </React.Fragment>
   );
 }
