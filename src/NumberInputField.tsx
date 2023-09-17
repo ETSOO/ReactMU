@@ -39,6 +39,7 @@ export function NumberInputField(props: NumberInputFieldProps) {
 
   return (
     <InputField
+      type="number"
       inputProps={{
         min,
         step,
