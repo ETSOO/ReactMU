@@ -12,6 +12,8 @@ export type CultureDataTableProps = Omit<DataTableProps, "columns"> & {
   cultureLabel?: string;
   editable?: boolean;
   titleLabel?: string;
+  hasDescription?: boolean;
+  descriptionLabel?: string;
 };
 
 /**
@@ -26,6 +28,8 @@ export function CultureDataTable(props: CultureDataTableProps) {
     cultureLabel = globalApp?.get("culture"),
     editable = true,
     titleLabel,
+    hasDescription = false,
+    descriptionLabel = globalApp?.get("description"),
     ...rest
   } = props;
 
@@ -52,7 +56,18 @@ export function CultureDataTable(props: CultureDataTableProps) {
           flex: 1,
           editable,
           sortable: false
-        }
+        },
+        ...(hasDescription
+          ? [
+              {
+                field: "description",
+                headerName: descriptionLabel,
+                flex: 1,
+                editable,
+                sortable: false
+              }
+            ]
+          : [])
       ]}
       {...rest}
     />
