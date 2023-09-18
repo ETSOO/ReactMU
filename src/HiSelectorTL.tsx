@@ -47,6 +47,11 @@ export type HiSelectorTLProps<
   label?: string;
 
   /**
+   * Labels for each select
+   */
+  labels?: string[];
+
+  /**
    * Load data callback
    */
   loadData: (
@@ -103,6 +108,7 @@ export function HiSelectorTL<
     helperText,
     name,
     label = name,
+    labels = ["1", "2", "3", "4"],
     loadData,
     onChange,
     onItemChange,
@@ -161,7 +167,7 @@ export function HiSelectorTL<
       <Grid item {...breakPoints}>
         <Tiplist<T, D>
           idField={idField}
-          label="1"
+          label={labels[0]}
           name="tab1"
           search={search}
           fullWidth
@@ -177,7 +183,7 @@ export function HiSelectorTL<
         <Grid item {...breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[0]}`}
-            label="2"
+            label={labels[1]}
             idField={idField}
             name="tab2"
             search={search}
@@ -196,7 +202,7 @@ export function HiSelectorTL<
         <Grid item {...breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[1]}`}
-            label="3"
+            label={labels[2]}
             idField={idField}
             name="tab3"
             search={search}
@@ -215,7 +221,7 @@ export function HiSelectorTL<
         <Grid item {...breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[2]}`}
-            label="4"
+            label={labels[3]}
             idField={idField}
             name="tab4"
             search={search}

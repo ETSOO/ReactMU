@@ -47,6 +47,11 @@ export type HiSelectorProps<
   label?: string;
 
   /**
+   * Labels for each select
+   */
+  labels?: string[];
+
+  /**
    * Label field
    */
   labelField?: L;
@@ -106,6 +111,7 @@ export function HiSelector<
     name,
     label,
     labelField = "name" as L,
+    labels = ["1", "2", "3", "4"],
     loadData,
     onChange,
     onSelectChange,
@@ -166,6 +172,7 @@ export function HiSelector<
       <Grid item {...breakPoints}>
         <SelectEx<T, D, L>
           idField={idField}
+          label={labels[0]}
           labelField={labelField}
           name="tab1"
           search={search}
@@ -184,6 +191,7 @@ export function HiSelector<
           <SelectEx<T, D, L>
             key={`${localValues[0]}`}
             idField={idField}
+            label={labels[1]}
             labelField={labelField}
             name="tab2"
             search={search}
@@ -200,6 +208,7 @@ export function HiSelector<
           <SelectEx<T, D, L>
             key={`${localValues[1]}`}
             idField={idField}
+            label={labels[2]}
             labelField={labelField}
             name="tab3"
             search={search}
@@ -216,6 +225,7 @@ export function HiSelector<
           <SelectEx<T, D, L>
             key={`${localValues[2]}`}
             idField={idField}
+            label={labels[3]}
             labelField={labelField}
             name="tab4"
             search={search}
