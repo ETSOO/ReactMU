@@ -354,6 +354,7 @@ export function SelectEx<
             return (
               <MenuItem
                 key={id}
+                value={id as any}
                 onClick={(event) => {
                   if (onItemClick) {
                     onItemClick(event, option);
