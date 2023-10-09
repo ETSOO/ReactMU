@@ -20,7 +20,7 @@ it("Render SelectEx", async () => {
   });
 
   // Render component
-  const { baseElement } = render(
+  render(
     <SelectEx<T>
       options={options}
       name="test"
@@ -34,7 +34,7 @@ it("Render SelectEx", async () => {
   expect(itemChangeCallback).toBeCalled();
 
   // Act, click to show the list
-  const button = screen.getByRole("button");
+  const button = screen.getByRole("combobox");
 
   // https://davidwcai.medium.com/react-testing-library-and-the-not-wrapped-in-act-errors-491a5629193b
   act(() => {
@@ -89,7 +89,7 @@ it("Render multiple SelectEx", async () => {
   expect(itemChangeCallback).toBeCalled();
 
   // Act, click to show the list
-  const button = screen.getByRole("button");
+  const button = screen.getByRole("combobox");
   fireEvent.mouseDown(button); // Not click
 
   // Get list item
