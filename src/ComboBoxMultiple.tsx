@@ -285,7 +285,6 @@ export function ComboBoxMultiple<
               required={inputRequired}
               error={inputError}
               helperText={inputHelperText}
-              value={getValue(stateValue)}
             />
           ) : (
             <InputField
@@ -297,7 +296,6 @@ export function ComboBoxMultiple<
               required={inputRequired}
               error={inputError}
               helperText={inputHelperText}
-              value={getValue(stateValue)}
             />
           )
         }
