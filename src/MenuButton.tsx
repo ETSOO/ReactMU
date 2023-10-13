@@ -7,7 +7,7 @@ export type MenuButtonProps<T extends DataTypes.IdItem> = Omit<
   "open"
 > & {
   items: T[];
-  labelField: DataTypes.Keys<T, string>;
+  labelField: DataTypes.Keys<T, string> | ((data: T) => string);
   button:
     | ((
         clickHandler: React.MouseEventHandler<HTMLButtonElement>
@@ -57,6 +57,11 @@ export function MenuButton<T extends DataTypes.IdItem>(
     setAnchorEl(undefined);
   };
 
+  const labelFormatter =
+    typeof labelField === "function"
+      ? labelField
+      : (item: T) => item[labelField] as string;
+
   return (
     <React.Fragment>
       {typeof button === "function" ? (
@@ -104,7 +109,7 @@ export function MenuButton<T extends DataTypes.IdItem>(
         {...rest}
       >
         {items.map((item) => {
-          const label = item[labelField] as string;
+          const label = labelFormatter(item);
           return (
             <MenuItem key={item.id} disabled>
               {label}
