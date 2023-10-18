@@ -84,6 +84,7 @@ export function LeftDrawer(props: React.PropsWithChildren<LeftDrawerProps>) {
       anchor="left"
       variant={mdUp ? "persistent" : "temporary"}
       open={open}
+      transitionDuration={0}
       onClose={mdUp ? undefined : handleDrawerClose}
       ModalProps={{
         keepMounted: true // Better open performance on mobile.

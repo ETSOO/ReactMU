@@ -135,7 +135,11 @@ export class NotificationMU extends NotificationReact {
           )}
         </IconDialogTitle>
         <DialogContent>
-          <DialogContentText>{this.content}</DialogContentText>
+          {typeof this.content === "string" ? (
+            <DialogContentText>{this.content}</DialogContentText>
+          ) : (
+            this.content
+          )}
           {inputs}
         </DialogContent>
         <DialogActions>
@@ -210,7 +214,11 @@ export class NotificationMU extends NotificationReact {
           )}
         </IconDialogTitle>
         <DialogContent>
-          <DialogContentText>{this.content}</DialogContentText>
+          {typeof this.content === "string" ? (
+            <DialogContentText>{this.content}</DialogContentText>
+          ) : (
+            this.content
+          )}
           {inputs}
         </DialogContent>
         <DialogActions>
@@ -436,7 +444,11 @@ export class NotificationMU extends NotificationReact {
             )}
           </IconDialogTitle>
           <DialogContent>
-            <DialogContentText>{this.content}</DialogContentText>
+            {typeof this.content === "string" ? (
+              <DialogContentText>{this.content}</DialogContentText>
+            ) : (
+              this.content
+            )}
             {localInputs}
             <Typography
               variant="caption"
