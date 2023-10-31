@@ -203,7 +203,7 @@ export const IntInputField = React.forwardRef<
             if (localValue == null) return;
 
             const value = NumberUtils.parse(localValue);
-            if (isNaN(value)) return;
+            if (value == null) return;
 
             if (value <= min) setValue(undefined, "SUB");
             else setValue(value - step, "SUB");
@@ -221,7 +221,7 @@ export const IntInputField = React.forwardRef<
             }
 
             const value = NumberUtils.parse(localValue);
-            if (isNaN(value)) return;
+            if (value == null) return;
 
             if (value >= max) return;
             else setValue(value + step, "ADD");
