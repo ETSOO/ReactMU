@@ -182,6 +182,20 @@ export function TableEx<
   React.useImperativeHandle(
     mRef,
     () => ({
+      delete(index) {
+        const item = rows.at(index);
+        if (item) {
+          const newRows = [...rows];
+          newRows.splice(index, 1);
+          setRows(newRows);
+        }
+        return item;
+      },
+      insert(item, start) {
+        const newRows = [...rows];
+        newRows.splice(start, 0, item);
+        setRows(newRows);
+      },
       /**
        * Refresh data
        */
@@ -192,7 +206,14 @@ export function TableEx<
       /**
        * Reset
        */
-      reset
+      reset,
+      scrollToRef(scrollOffset: number): void {
+        // Not implemented
+      },
+
+      scrollToItemRef(index: number): void {
+        // Not implemented
+      }
     }),
     []
   );
