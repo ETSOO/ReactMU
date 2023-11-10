@@ -1,7 +1,6 @@
 import {
   BridgeUtils,
   createClient,
-  IActionResult,
   IApi,
   IApiPayload,
   RefreshTokenProps,
@@ -9,7 +8,7 @@ import {
   RefreshTokenRQ
 } from "@etsoo/appscript";
 import { CoreConstants } from "@etsoo/react";
-import { DomUtils } from "@etsoo/shared";
+import { DomUtils, IActionResult } from "@etsoo/shared";
 import { IServiceApp } from "./IServiceApp";
 import { IServiceAppSettings } from "./IServiceAppSettings";
 import { IServicePageData } from "./IServicePage";

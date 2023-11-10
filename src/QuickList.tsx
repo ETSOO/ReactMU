@@ -1,4 +1,4 @@
-import { ListType2 } from "@etsoo/shared";
+import { DataTypes, ListType2 } from "@etsoo/shared";
 import {
   LinearProgress,
   List,
@@ -13,7 +13,6 @@ import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { globalApp } from "./app/ReactApp";
 import { VBox } from "./FlexBox";
-import { MUUtils } from "./MUUtils";
 
 /**
  * Quick list props
@@ -83,7 +82,7 @@ export function QuickList<T extends ListType2 = ListType2>(
     buttonProps = {},
     label,
     inputProps,
-    itemLabel = MUUtils.getListItemLabel,
+    itemLabel = DataTypes.getListItemLabel,
     itemRenderer = (item: T) => itemLabel(item),
     itemProps,
     loadData,

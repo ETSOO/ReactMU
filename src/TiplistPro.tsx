@@ -1,10 +1,9 @@
 import { ReactUtils, useDelayedExecutor } from "@etsoo/react";
-import { ListType2 } from "@etsoo/shared";
+import { DataTypes, ListType2 } from "@etsoo/shared";
 import { Autocomplete, AutocompleteProps } from "@mui/material";
 import React, { ChangeEventHandler } from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { globalApp } from "./app/ReactApp";
-import { MUUtils } from "./MUUtils";
 
 /**
  * TiplistPro props
@@ -370,7 +369,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         getOptionLabel={(item) => {
           if (typeof item === "string") return item;
           if (item["id"] === -1) return (more ?? "More") + "...";
-          if (getOptionLabel == null) return MUUtils.getListItemLabel(item);
+          if (getOptionLabel == null) return DataTypes.getListItemLabel(item);
           return getOptionLabel(item);
         }}
         {...rest}

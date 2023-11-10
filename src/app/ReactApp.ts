@@ -2,7 +2,6 @@ import {
   BridgeUtils,
   CoreApp,
   createClient,
-  IActionResult,
   IApp,
   IAppSettings,
   ICoreApp,
@@ -14,7 +13,7 @@ import {
   NotificationRenderProps,
   NotificationReturn
 } from "@etsoo/notificationbase";
-import { DataTypes, WindowStorage } from "@etsoo/shared";
+import { DataTypes, IActionResult, WindowStorage } from "@etsoo/shared";
 import React from "react";
 import { NotifierMU } from "../NotifierMU";
 import { ProgressCount } from "../ProgressCount";

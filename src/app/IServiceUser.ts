@@ -1,4 +1,5 @@
-import { IActionResult, IUser } from "@etsoo/appscript";
+import { IUser } from "@etsoo/appscript";
+import { IActionResult } from "@etsoo/shared";
 
 /**
  * Service user interface

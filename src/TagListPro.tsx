@@ -4,7 +4,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { globalApp } from "./app/ReactApp";
-import { ListType2 } from "@etsoo/shared";
+import { DataTypes, ListType2 } from "@etsoo/shared";
 
 export type TagListProProps<D extends ListType2 = ListType2> = Omit<
   AutocompleteProps<D, true, false, false>,
@@ -47,8 +47,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
 
   const moreLabel = more + "...";
 
-  const getLabel = (item: D) =>
-    "label" in item ? item.label : "name" in item ? item.name : "";
+  const getLabel = (item: D) => DataTypes.getListItemLabel(item);
 
   // Destruct
   const {

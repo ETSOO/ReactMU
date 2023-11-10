@@ -2,8 +2,7 @@ import { Autocomplete, AutocompleteProps } from "@mui/material";
 import React from "react";
 import { globalApp } from "./app/ReactApp";
 import { InputField, InputFieldProps } from "./InputField";
-import { ListType2 } from "@etsoo/shared";
-import { MUUtils } from "./MUUtils";
+import { DataTypes, ListType2 } from "@etsoo/shared";
 
 export type ComboBoxProProps<D extends ListType2 = ListType2> = Omit<
   AutocompleteProps<D, false, false, true>,
@@ -131,7 +130,7 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
         />
       )}
       getOptionLabel={(item) =>
-        typeof item === "object" ? MUUtils.getListItemLabel(item) : item
+        typeof item === "object" ? DataTypes.getListItemLabel(item) : item
       }
       isOptionEqualToValue={(option, value) => option.id === value.id}
       noOptionsText={noOptionsText}

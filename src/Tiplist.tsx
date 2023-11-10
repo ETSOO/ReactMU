@@ -1,5 +1,5 @@
 import { ReactUtils, useDelayedExecutor } from "@etsoo/react";
-import { DataTypes, IdDefaultType, ListType } from "@etsoo/shared";
+import { DataTypes, IdDefaultType, ListType2 } from "@etsoo/shared";
 import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
 import React from "react";
 import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
@@ -48,7 +48,7 @@ interface States<T extends object> {
  * @returns Component
  */
 export function Tiplist<
-  T extends object = ListType,
+  T extends object = ListType2,
   D extends DataTypes.Keys<T> = IdDefaultType<T>
 >(props: TiplistProps<T, D>) {
   // Labels
@@ -373,11 +373,7 @@ export function Tiplist<
           if (item[idField] === "n/a") return (more ?? "More") + "...";
           return getOptionLabel
             ? getOptionLabel(item)
-            : "label" in item
-            ? `${item.label}`
-            : "name" in item
-            ? `${item.name}`
-            : `${item}`;
+            : DataTypes.getObjectItemLabel(item);
         }}
         {...rest}
       />

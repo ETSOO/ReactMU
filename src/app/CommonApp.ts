@@ -1,5 +1,4 @@
 import {
-  IActionResult,
   IApiPayload,
   IAppSettings,
   IUser,
@@ -9,6 +8,7 @@ import {
 } from "@etsoo/appscript";
 import { CoreConstants, IPageData } from "@etsoo/react";
 import { ReactApp } from "./ReactApp";
+import { IActionResult } from "@etsoo/shared";
 
 /**
  * Common independent application

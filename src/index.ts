@@ -86,6 +86,7 @@ export * from "./NotifierPopupProps";
 export * from "./NumberInputField";
 export * from "./OptionBool";
 export * from "./OptionGroup";
+export * from "./OptionGroupFlag";
 export * from "./PercentCircularProgress";
 export * from "./PercentLinearProgress";
 export * from "./PList";
