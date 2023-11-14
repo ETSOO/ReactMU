@@ -12,10 +12,7 @@ import { SwitchAnt } from "./SwitchAnt";
 /**
  * SwitchField props
  */
-export type SwitchFieldProps = Omit<
-  FormControlProps<"fieldset">,
-  "defaultValue"
-> & {
+export type SwitchFieldProps = Omit<FormControlProps, "defaultValue"> & {
   /**
    * Helper text
    */
@@ -25,6 +22,11 @@ export type SwitchFieldProps = Omit<
    * Label
    */
   label?: string;
+
+  /**
+   * Field name
+   */
+  name: string;
 
   /**
    * Checked
@@ -47,11 +49,6 @@ export type SwitchFieldProps = Omit<
   endLabel?: string;
 
   /**
-   * Height in px
-   */
-  height?: number;
-
-  /**
    * Value, default is true
    */
   value?: unknown;
@@ -71,12 +68,10 @@ export function SwitchField(props: SwitchFieldProps) {
     value = true,
 
     fullWidth,
-    height = 56,
     helperText,
     label,
     name,
     required,
-    sx = {},
     checked,
     variant = "outlined",
     ...rest
@@ -85,47 +80,49 @@ export function SwitchField(props: SwitchFieldProps) {
   // Outlined
   const outlined = variant === "outlined";
 
-  if (sx) {
-    Object.assign(sx, { height: outlined ? `${height}px` : undefined });
-  }
+  // Group
+  const group = (
+    <SwitchAnt
+      activeColor={activeColor}
+      name={name}
+      startLabel={startLabel}
+      endLabel={endLabel}
+      value={value}
+      checked={checked}
+    />
+  );
 
   // Layout
   return (
     <React.Fragment>
-      <FormControl component="fieldset" fullWidth={fullWidth} sx={sx} {...rest}>
+      <FormControl fullWidth={fullWidth} {...rest}>
         {label && (
           <InputLabel required={required} variant={variant} shrink>
             {label}
           </InputLabel>
         )}
-        {outlined && (
+        {outlined ? (
           <NotchedOutline
             label={label && required ? label + " *" : label}
             notched
+            endAdornment={group}
             sx={{
               cursor: "default",
-              position: "absolute",
+              display: "flex",
+              gap: 1,
+              paddingX: 2,
+              paddingY: "7px",
               width: fullWidth ? "100%" : "auto",
               "& input": {
-                visibility: "hidden"
+                display: "none"
               }
             }}
           />
+        ) : (
+          <Box paddingLeft={2} paddingY="7px">
+            {group}
+          </Box>
         )}
-        <Box
-          paddingLeft={2}
-          paddingY="7px"
-          position={outlined ? "absolute" : undefined}
-        >
-          <SwitchAnt
-            activeColor={activeColor}
-            name={name}
-            startLabel={startLabel}
-            endLabel={endLabel}
-            value={value}
-            checked={checked}
-          />
-        </Box>
       </FormControl>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </React.Fragment>

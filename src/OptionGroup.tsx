@@ -38,7 +38,7 @@ export type OptionGroupProps<
   T extends object,
   D extends DataTypes.Keys<T>,
   L extends DataTypes.Keys<T, string>
-> = Omit<FormControlProps<"fieldset">, "defaultValue"> & {
+> = Omit<FormControlProps, "defaultValue"> & {
   /**
    * Default value
    */
@@ -105,11 +105,6 @@ export type OptionGroupProps<
   itemSize?: "small" | "medium";
 
   /**
-   * Item height in px
-   */
-  itemHeight?: number;
-
-  /**
    * Helper text
    */
   helperText?: React.ReactNode;
@@ -140,27 +135,15 @@ export function OptionGroup<
     readOnly,
     row,
     itemSize,
-    itemHeight = row ? 56 : 42,
     helperText,
     variant,
     required,
     fullWidth,
-    sx = {},
     ...rest
   } = props;
 
   // Outlined
   const outlined = variant === "outlined";
-
-  if (sx) {
-    Object.assign(sx, {
-      height: outlined
-        ? row
-          ? `${itemHeight}px`
-          : `${options.length * itemHeight + 14}px`
-        : undefined
-    });
-  }
 
   // Get option value
   // D type should be the source id type
@@ -292,33 +275,34 @@ export function OptionGroup<
   // Layout
   return (
     <React.Fragment>
-      <FormControl component="fieldset" fullWidth={fullWidth} sx={sx} {...rest}>
+      <FormControl fullWidth={fullWidth} {...rest}>
         {label && (
           <InputLabel required={required} variant={variant} shrink>
             {label}
           </InputLabel>
         )}
-        {outlined && (
+        {outlined ? (
           <NotchedOutline
             label={label && required ? label + " *" : label}
             notched
+            endAdornment={group}
             sx={{
               cursor: "default",
-              position: "absolute",
+              display: "flex",
+              gap: 1,
+              paddingX: 2,
+              paddingY: "7px",
               width: fullWidth ? "100%" : "auto",
               "& input": {
-                visibility: "hidden"
+                display: "none"
               }
             }}
           />
+        ) : (
+          <Box paddingLeft={2} paddingY="7px">
+            {group}
+          </Box>
         )}
-        <Box
-          paddingLeft={2}
-          paddingY="7px"
-          position={outlined ? "absolute" : undefined}
-        >
-          {group}
-        </Box>
       </FormControl>
       {helperText && (
         <FormHelperText sx={{ marginLeft: 2, marginRight: 2 }}>
