@@ -90,6 +90,11 @@ export type HiSelectorProps<
    * Values
    */
   values?: T[D][];
+
+  /**
+   * Variant
+   */
+  variant?: "outlined" | "standard" | "filled";
 };
 
 /**
@@ -118,7 +123,8 @@ export function HiSelector<
     onItemChange,
     required,
     search = true,
-    values = []
+    values = [],
+    variant = "outlined"
   } = props;
 
   // Value type
@@ -184,6 +190,7 @@ export function HiSelector<
           required={required}
           error={error}
           helperText={helperText}
+          variant={variant}
         />
       </Grid>
       {localValues[0] != null && (
@@ -200,6 +207,7 @@ export function HiSelector<
             value={values[1]}
             onChange={(event) => doChange(event, 1)}
             onItemChange={doItemChange}
+            variant={variant}
           />
         </Grid>
       )}
@@ -217,6 +225,7 @@ export function HiSelector<
             value={values[2]}
             onChange={(event) => doChange(event, 2)}
             onItemChange={doItemChange}
+            variant={variant}
           />
         </Grid>
       )}
@@ -234,6 +243,7 @@ export function HiSelector<
             value={values[3]}
             onChange={(event) => doChange(event, 3)}
             onItemChange={doItemChange}
+            variant={variant}
           />
         </Grid>
       )}
