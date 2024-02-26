@@ -9,6 +9,7 @@ import {
   OutlinedInput,
   Select,
   SelectProps,
+  SelectVariants,
   Stack
 } from "@mui/material";
 import React from "react";
@@ -32,7 +33,7 @@ export type SelectExProps<
   T extends object,
   D extends DataTypes.Keys<T> = IdDefaultType<T>,
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
-> = Omit<SelectProps, "labelId" | "input" | "native"> & {
+> = Omit<SelectProps, "labelId" | "input" | "native" | "variant"> & {
   /**
    * Auto add blank item
    */
@@ -102,6 +103,11 @@ export type SelectExProps<
    * Is search case?
    */
   search?: boolean;
+
+  /**
+   * Variant
+   */
+  variant?: SelectVariants;
 };
 
 /**
