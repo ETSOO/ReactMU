@@ -1,7 +1,7 @@
 import { Button, Grid } from "@mui/material";
 import React, { FormEventHandler } from "react";
 import { MUGlobal } from "../MUGlobal";
-import { CommonPage, CommonPageScrollContainer } from "./CommonPage";
+import { CommonPage } from "./CommonPage";
 import { CommonPageProps } from "./CommonPageProps";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -68,7 +68,7 @@ export function EditPage(props: EditPageProps) {
     onDelete,
     onSubmit,
     paddings = MUGlobal.pagePaddings,
-    scrollContainer = CommonPageScrollContainer,
+    scrollContainer = globalThis,
     supportBack = true,
     submitDisabled = false,
     bottomPart,

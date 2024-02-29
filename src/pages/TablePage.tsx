@@ -9,7 +9,7 @@ import React from "react";
 import { MUGlobal } from "../MUGlobal";
 import { SearchBar } from "../SearchBar";
 import { TableEx, TableExMethodRef, TableExMinWidth } from "../TableEx";
-import { CommonPage, CommonPageScrollContainer } from "./CommonPage";
+import { CommonPage } from "./CommonPage";
 import { TablePageProps } from "./TablePageProps";
 import { GridUtils } from "../GridUtils";
 
@@ -114,7 +114,7 @@ export function TablePage<
 
   // Layout
   return (
-    <CommonPage {...pageProps} scrollContainer={CommonPageScrollContainer}>
+    <CommonPage {...pageProps} scrollContainer={globalThis}>
       <Stack>
         <Box
           ref={dimensions[0][0]}

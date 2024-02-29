@@ -11,11 +11,6 @@ import { Labels } from "../app/Labels";
 import { ReactAppStateDetector } from "../app/ReactApp";
 
 /**
- * Default scroll container
- */
-export const CommonPageScrollContainer = global;
-
-/**
  * Common page
  * @param props Props
  */

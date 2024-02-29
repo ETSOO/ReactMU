@@ -12,7 +12,7 @@ import React from "react";
 import { MUGlobal } from "../MUGlobal";
 import { ScrollerListEx } from "../ScrollerListEx";
 import { SearchBar } from "../SearchBar";
-import { CommonPage, CommonPageScrollContainer } from "./CommonPage";
+import { CommonPage } from "./CommonPage";
 import { ListPageProps } from "./ListPageProps";
 import { GridUtils } from "../GridUtils";
 
@@ -115,7 +115,7 @@ export function ListPage<
 
   // Layout
   return (
-    <CommonPage {...pageProps} scrollContainer={CommonPageScrollContainer}>
+    <CommonPage {...pageProps} scrollContainer={globalThis}>
       <Stack>
         <Box
           sx={{
