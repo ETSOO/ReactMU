@@ -1,7 +1,7 @@
-import EventEmitter from "node:events";
 import { SignalRUser } from "./SignalRUser";
 import { OperationMessageDto } from "./OperationMessageDto";
 import { OperationMessageHandler } from "./OperationMessageHandler";
+import EventEmitter from "eventemitter3";
 
 /**
  * Message utilities
