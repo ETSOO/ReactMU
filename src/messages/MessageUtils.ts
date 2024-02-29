@@ -1,4 +1,4 @@
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { SignalRUser } from "./SignalRUser";
 import { OperationMessageDto } from "./OperationMessageDto";
 import { OperationMessageHandler } from "./OperationMessageHandler";
