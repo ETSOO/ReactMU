@@ -6,7 +6,7 @@ import {
   ScrollerListRef,
   useCombinedRefs
 } from "@etsoo/react";
-import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import { DataTypes } from "@etsoo/shared";
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
@@ -23,9 +23,8 @@ import { GridUtils } from "../GridUtils";
  */
 export function ListPage<
   T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: ListPageProps<T, F, D>) {
+  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
+>(props: ListPageProps<T, F>) {
   // Destruct
   const {
     fields,
@@ -124,7 +123,7 @@ export function ListPage<
         >
           <SearchBar fields={f} onSubmit={onSubmit} />
         </Box>
-        <ScrollerListEx<T, D>
+        <ScrollerListEx<T>
           autoLoad={false}
           loadData={localLoadData}
           onUpdateRows={GridUtils.getUpdateRowsHandler<T>(cacheKey)}

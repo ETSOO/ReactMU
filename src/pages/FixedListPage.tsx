@@ -7,7 +7,7 @@ import {
   useCombinedRefs,
   useDimensions
 } from "@etsoo/react";
-import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import { DataTypes } from "@etsoo/shared";
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
@@ -24,10 +24,9 @@ import { GridUtils } from "../GridUtils";
  */
 export function FixedListPage<
   T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
+  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
 >(
-  props: ListPageProps<T, F, D> & {
+  props: ListPageProps<T, F> & {
     /**
      * Height will be deducted
      * @param height Current calcuated height
@@ -149,7 +148,7 @@ export function FixedListPage<
             height: height + "px"
           }}
         >
-          <ScrollerListEx<T, D>
+          <ScrollerListEx<T>
             autoLoad={false}
             height={height}
             loadData={localLoadData}

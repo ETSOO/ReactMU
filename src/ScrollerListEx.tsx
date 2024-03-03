@@ -1,106 +1,106 @@
-import { css } from '@emotion/css';
-import { ScrollerList, ScrollerListProps } from '@etsoo/react';
-import { DataTypes, IdDefaultType, Utils } from '@etsoo/shared';
-import { useTheme } from '@mui/material';
-import React from 'react';
-import { ListChildComponentProps } from 'react-window';
-import { MouseEventWithDataHandler, MUGlobal } from './MUGlobal';
+import { css } from "@emotion/css";
+import { ScrollerList, ScrollerListProps } from "@etsoo/react";
+import { DataTypes, Utils } from "@etsoo/shared";
+import { useTheme } from "@mui/material";
+import React from "react";
+import { ListChildComponentProps } from "react-window";
+import { MouseEventWithDataHandler, MUGlobal } from "./MUGlobal";
 
 // Scroll bar size
 const scrollbarSize = 16;
 
 // Selected class name
-const selectedClassName = 'ScrollerListEx-Selected';
+const selectedClassName = "ScrollerListEx-Selected";
 
 const createGridStyle = (
-    alternatingColors: [string?, string?],
-    selectedColor: string
+  alternatingColors: [string?, string?],
+  selectedColor: string
 ) => {
-    return css({
-        '& .ScrollerListEx-Selected': {
-            backgroundColor: selectedColor
-        },
-        '& .ScrollerListEx-Row0:not(.ScrollerListEx-Selected)': {
-            backgroundColor: alternatingColors[0]
-        },
-        '& .ScrollerListEx-Row1:not(.ScrollerListEx-Selected)': {
-            backgroundColor: alternatingColors[1]
-        },
-        '@media (min-width: 800px)': {
-            '::-webkit-scrollbar': {
-                width: scrollbarSize,
-                height: scrollbarSize,
-                backgroundColor: '#f6f6f6'
-            },
-            '::-webkit-scrollbar-thumb': {
-                backgroundColor: 'rgba(0,0,0,0.4)',
-                borderRadius: '2px'
-            },
-            '::-webkit-scrollbar-track-piece:start': {
-                background: 'transparent'
-            },
-            '::-webkit-scrollbar-track-piece:end': {
-                background: 'transparent'
-            }
-        }
-    });
+  return css({
+    "& .ScrollerListEx-Selected": {
+      backgroundColor: selectedColor
+    },
+    "& .ScrollerListEx-Row0:not(.ScrollerListEx-Selected)": {
+      backgroundColor: alternatingColors[0]
+    },
+    "& .ScrollerListEx-Row1:not(.ScrollerListEx-Selected)": {
+      backgroundColor: alternatingColors[1]
+    },
+    "@media (min-width: 800px)": {
+      "::-webkit-scrollbar": {
+        width: scrollbarSize,
+        height: scrollbarSize,
+        backgroundColor: "#f6f6f6"
+      },
+      "::-webkit-scrollbar-thumb": {
+        backgroundColor: "rgba(0,0,0,0.4)",
+        borderRadius: "2px"
+      },
+      "::-webkit-scrollbar-track-piece:start": {
+        background: "transparent"
+      },
+      "::-webkit-scrollbar-track-piece:end": {
+        background: "transparent"
+      }
+    }
+  });
 };
 
 // Default margin
 const defaultMargin = (margin: object, isNarrow?: boolean) => {
+  const half = MUGlobal.half(margin);
+
+  if (isNarrow == null) {
     const half = MUGlobal.half(margin);
-
-    if (isNarrow == null) {
-        const half = MUGlobal.half(margin);
-        return {
-            marginLeft: margin,
-            marginRight: margin,
-            marginTop: half,
-            marginBottom: half
-        };
-    }
-
-    if (isNarrow) {
-        return {
-            marginLeft: 0,
-            marginRight: 0,
-            marginTop: half,
-            marginBottom: half
-        };
-    }
-
     return {
-        marginLeft: half,
-        marginRight: half,
-        marginTop: half,
-        marginBottom: half
+      marginLeft: margin,
+      marginRight: margin,
+      marginTop: half,
+      marginBottom: half
     };
+  }
+
+  if (isNarrow) {
+    return {
+      marginLeft: 0,
+      marginRight: 0,
+      marginTop: half,
+      marginBottom: half
+    };
+  }
+
+  return {
+    marginLeft: half,
+    marginRight: half,
+    marginTop: half,
+    marginBottom: half
+  };
 };
 
 /**
  * Extended ScrollerList inner item renderer props
  */
 export interface ScrollerListExInnerItemRendererProps<T>
-    extends ListChildComponentProps<T> {
-    /**
-     * Item selected
-     */
-    selected: boolean;
+  extends ListChildComponentProps<T> {
+  /**
+   * Item selected
+   */
+  selected: boolean;
 
-    /**
-     * Item height
-     */
-    itemHeight: number;
+  /**
+   * Item height
+   */
+  itemHeight: number;
 
-    /**
-     * Item space
-     */
-    space: number;
+  /**
+   * Item space
+   */
+  space: number;
 
-    /**
-     * Default margins
-     */
-    margins: object;
+  /**
+   * Default margins
+   */
+  margins: object;
 }
 
 /**
@@ -110,146 +110,144 @@ export interface ScrollerListExInnerItemRendererProps<T>
  * 3. Dynamic calculation
  */
 export type ScrollerListExItemSize =
-    | ((index: number) => [number, number] | [number, number, object])
-    | [number, number]
-    | [number, object, boolean?];
+  | ((index: number) => [number, number] | [number, number, object])
+  | [number, number]
+  | [number, object, boolean?];
 
 /**
  * Extended ScrollerList Props
  */
-export type ScrollerListExProps<
-    T extends object,
-    D extends DataTypes.Keys<T>
-> = Omit<ScrollerListProps<T, D>, 'itemRenderer' | 'itemSize'> & {
-    /**
-     * Alternating colors for odd/even rows
-     */
-    alternatingColors?: [string?, string?];
+export type ScrollerListExProps<T extends object> = Omit<
+  ScrollerListProps<T>,
+  "itemRenderer" | "itemSize"
+> & {
+  /**
+   * Alternating colors for odd/even rows
+   */
+  alternatingColors?: [string?, string?];
 
-    /**
-     * Inner item renderer
-     */
-    innerItemRenderer: (
-        props: ScrollerListExInnerItemRendererProps<T>
-    ) => React.ReactNode;
+  /**
+   * Inner item renderer
+   */
+  innerItemRenderer: (
+    props: ScrollerListExInnerItemRendererProps<T>
+  ) => React.ReactNode;
 
-    /**
-     * Item renderer
-     */
-    itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
+  /**
+   * Item renderer
+   */
+  itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
 
-    /**
-     * Item size, a function indicates its a variable size list
-     */
-    itemSize: ScrollerListExItemSize;
+  /**
+   * Item size, a function indicates its a variable size list
+   */
+  itemSize: ScrollerListExItemSize;
 
-    /**
-     * Double click handler
-     */
-    onDoubleClick?: MouseEventWithDataHandler<T>;
+  /**
+   * Double click handler
+   */
+  onDoubleClick?: MouseEventWithDataHandler<T>;
 
-    /**
-     * Click handler
-     */
-    onClick?: MouseEventWithDataHandler<T>;
+  /**
+   * Click handler
+   */
+  onClick?: MouseEventWithDataHandler<T>;
 
-    /**
-     * On items select change
-     */
-    onSelectChange?: (selectedItems: T[]) => void;
+  /**
+   * On items select change
+   */
+  onSelectChange?: (selectedItems: T[]) => void;
 
-    /**
-     * Selected color
-     */
-    selectedColor?: string;
+  /**
+   * Selected color
+   */
+  selectedColor?: string;
 };
 
 interface defaultItemRendererProps<T> extends ListChildComponentProps<T> {
-    /**
-     * onMouseDown callback
-     */
-    onMouseDown: (div: HTMLDivElement, data: T) => void;
+  /**
+   * onMouseDown callback
+   */
+  onMouseDown: (div: HTMLDivElement, data: T) => void;
 
-    /**
-     * Inner item renderer
-     */
-    innerItemRenderer: (
-        props: ScrollerListExInnerItemRendererProps<T>
-    ) => React.ReactNode;
+  /**
+   * Inner item renderer
+   */
+  innerItemRenderer: (
+    props: ScrollerListExInnerItemRendererProps<T>
+  ) => React.ReactNode;
 
-    /**
-     * Item height
-     */
-    itemHeight: number;
+  /**
+   * Item height
+   */
+  itemHeight: number;
 
-    /**
-     * Double click handler
-     */
-    onDoubleClick?: MouseEventWithDataHandler<T>;
+  /**
+   * Double click handler
+   */
+  onDoubleClick?: MouseEventWithDataHandler<T>;
 
-    /**
-     * Click handler
-     */
-    onClick?: MouseEventWithDataHandler<T>;
+  /**
+   * Click handler
+   */
+  onClick?: MouseEventWithDataHandler<T>;
 
-    /**
-     * Item space
-     */
-    space: number;
+  /**
+   * Item space
+   */
+  space: number;
 
-    /**
-     * Default margins
-     */
-    margins: object;
+  /**
+   * Default margins
+   */
+  margins: object;
 
-    /**
-     * Item selected
-     */
-    selected: boolean;
+  /**
+   * Item selected
+   */
+  selected: boolean;
 }
 
 // Default itemRenderer
 function defaultItemRenderer<T>({
+  index,
+  innerItemRenderer,
+  data,
+  onMouseDown,
+  selected,
+  style,
+  itemHeight,
+  onClick,
+  onDoubleClick,
+  space,
+  margins
+}: defaultItemRendererProps<T>) {
+  // Child
+  const child = innerItemRenderer({
     index,
-    innerItemRenderer,
     data,
-    onMouseDown,
-    selected,
     style,
+    selected,
     itemHeight,
-    onClick,
-    onDoubleClick,
     space,
     margins
-}: defaultItemRendererProps<T>) {
-    // Child
-    const child = innerItemRenderer({
-        index,
-        data,
-        style,
-        selected,
-        itemHeight,
-        space,
-        margins
-    });
+  });
 
-    let rowClass = `ScrollerListEx-Row${index % 2}`;
-    if (selected) rowClass += ` ${selectedClassName}`;
+  let rowClass = `ScrollerListEx-Row${index % 2}`;
+  if (selected) rowClass += ` ${selectedClassName}`;
 
-    // Layout
-    return (
-        <div
-            className={rowClass}
-            style={style}
-            onMouseDown={(event) => onMouseDown(event.currentTarget, data)}
-            onClick={(event) => onClick && onClick(event, data)}
-            onDoubleClick={(event) =>
-                onDoubleClick && onDoubleClick(event, data)
-            }
-        >
-            {child}
-        </div>
-    );
+  // Layout
+  return (
+    <div
+      className={rowClass}
+      style={style}
+      onMouseDown={(event) => onMouseDown(event.currentTarget, data)}
+      onClick={(event) => onClick && onClick(event, data)}
+      onDoubleClick={(event) => onDoubleClick && onDoubleClick(event, data)}
+    >
+      {child}
+    </div>
+  );
 }
 
 /**
@@ -257,123 +255,115 @@ function defaultItemRenderer<T>({
  * @param props Props
  * @returns Component
  */
-export function ScrollerListEx<
-    T extends object,
-    D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: ScrollerListExProps<T, D>) {
-    // Selected item ref
-    const selectedItem = React.useRef<[HTMLDivElement, T]>();
+export function ScrollerListEx<T extends object>(
+  props: ScrollerListExProps<T>
+) {
+  // Selected item ref
+  const selectedItem = React.useRef<[HTMLDivElement, T]>();
 
-    const onMouseDown = (div: HTMLDivElement, data: T) => {
-        // Destruct
-        const [selectedDiv, selectedData] = selectedItem.current ?? [];
-
-        if (selectedData != null && selectedData[idField] === data[idField])
-            return;
-
-        selectedDiv?.classList.remove(selectedClassName);
-
-        div.classList.add(selectedClassName);
-
-        selectedItem.current = [div, data];
-
-        if (onSelectChange) onSelectChange([data]);
-    };
-
-    const isSelected = (data?: T) => {
-        const [_, selectedData] = selectedItem.current ?? [];
-        const selected =
-            selectedData && data && selectedData[idField] === data[idField]
-                ? true
-                : false;
-        return selected;
-    };
-
+  const onMouseDown = (div: HTMLDivElement, data: T) => {
     // Destruct
-    const {
-        alternatingColors = [undefined, undefined],
-        className,
-        idField = 'id' as D,
+    const [selectedDiv, selectedData] = selectedItem.current ?? [];
+
+    if (selectedData != null && selectedData[idField] === data[idField]) return;
+
+    selectedDiv?.classList.remove(selectedClassName);
+
+    div.classList.add(selectedClassName);
+
+    selectedItem.current = [div, data];
+
+    if (onSelectChange) onSelectChange([data]);
+  };
+
+  const isSelected = (data?: T) => {
+    const [_, selectedData] = selectedItem.current ?? [];
+    const selected =
+      selectedData && data && selectedData[idField] === data[idField]
+        ? true
+        : false;
+    return selected;
+  };
+
+  // Destruct
+  const {
+    alternatingColors = [undefined, undefined],
+    className,
+    idField = "id" as DataTypes.Keys<T>,
+    innerItemRenderer,
+    itemSize,
+    itemRenderer = (itemProps) => {
+      const [itemHeight, space, margins] = calculateItemSize(itemProps.index);
+      return defaultItemRenderer({
+        itemHeight,
         innerItemRenderer,
-        itemSize,
-        itemRenderer = (itemProps) => {
-            const [itemHeight, space, margins] = calculateItemSize(
-                itemProps.index
-            );
-            return defaultItemRenderer({
-                itemHeight,
-                innerItemRenderer,
-                onMouseDown,
-                onClick,
-                onDoubleClick,
-                space,
-                margins,
-                selected: isSelected(itemProps.data),
-                ...itemProps
-            });
-        },
+        onMouseDown,
         onClick,
         onDoubleClick,
-        onSelectChange,
-        selectedColor = '#edf4fb',
-        ...rest
-    } = props;
+        space,
+        margins,
+        selected: isSelected(itemProps.data),
+        ...itemProps
+      });
+    },
+    onClick,
+    onDoubleClick,
+    onSelectChange,
+    selectedColor = "#edf4fb",
+    ...rest
+  } = props;
 
-    // Theme
-    const theme = useTheme();
+  // Theme
+  const theme = useTheme();
 
-    // Cache calculation
-    const itemSizeResult = React.useMemo(():
-        | [number, number, object]
-        | undefined => {
-        if (typeof itemSize === 'function') return undefined;
-        const [size, spaces, isNarrow] = itemSize;
-        if (typeof spaces === 'number')
-            return [
-                size,
-                spaces,
-                defaultMargin(MUGlobal.pagePaddings, undefined)
-            ];
+  // Cache calculation
+  const itemSizeResult = React.useMemo(():
+    | [number, number, object]
+    | undefined => {
+    if (typeof itemSize === "function") return undefined;
+    const [size, spaces, isNarrow] = itemSize;
+    if (typeof spaces === "number")
+      return [size, spaces, defaultMargin(MUGlobal.pagePaddings, undefined)];
 
-        return [
-            size,
-            MUGlobal.getSpace(spaces, theme),
-            defaultMargin(spaces, isNarrow)
-        ];
-    }, [itemSize]);
+    return [
+      size,
+      MUGlobal.getSpace(spaces, theme),
+      defaultMargin(spaces, isNarrow)
+    ];
+  }, [itemSize]);
 
-    // Calculate size
-    const calculateItemSize = (index: number): [number, number, object] => {
-        // Callback function
-        if (typeof itemSize === 'function') {
-            const result = itemSize(index);
-            if (result.length == 2)
-                return [...result, defaultMargin(MUGlobal.pagePaddings)];
-            return result;
-        }
+  // Calculate size
+  const calculateItemSize = (index: number): [number, number, object] => {
+    // Callback function
+    if (typeof itemSize === "function") {
+      const result = itemSize(index);
+      if (result.length == 2)
+        return [...result, defaultMargin(MUGlobal.pagePaddings)];
+      return result;
+    }
 
-        // Calculation
-        return itemSizeResult!;
-    };
+    // Calculation
+    return itemSizeResult!;
+  };
 
-    // Local item size
-    const itemSizeLocal = (index: number) => {
-        const [size, space] = calculateItemSize(index);
-        return size + space;
-    };
+  // Local item size
+  const itemSizeLocal = (index: number) => {
+    const [size, space] = calculateItemSize(index);
+    return size + space;
+  };
 
-    // Layout
-    return (
-        <ScrollerList<T, D>
-            className={Utils.mergeClasses(
-                'ScrollerListEx-Body',
-                className,
-                createGridStyle(alternatingColors, selectedColor)
-            )}
-            idField={idField}
-            itemRenderer={itemRenderer}
-            itemSize={itemSizeLocal}
-            {...rest}
-        />
-    );
+  // Layout
+  return (
+    <ScrollerList<T>
+      className={Utils.mergeClasses(
+        "ScrollerListEx-Body",
+        className,
+        createGridStyle(alternatingColors, selectedColor)
+      )}
+      idField={idField}
+      itemRenderer={itemRenderer}
+      itemSize={itemSizeLocal}
+      {...rest}
+    />
+  );
 }

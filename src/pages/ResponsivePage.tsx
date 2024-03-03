@@ -1,4 +1,4 @@
-import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import { DataTypes } from "@etsoo/shared";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
 import { ResponsibleContainer } from "../ResponsibleContainer";
@@ -13,9 +13,8 @@ import { OperationMessageContainer } from "../messages/OperationMessageContainer
  */
 export function ResponsivePage<
   T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: ResponsePageProps<T, F, D>) {
+  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
+>(props: ResponsePageProps<T, F>) {
   // Destruct
   const { pageProps = {}, operationMessageHandler, ...rest } = props;
 
@@ -37,7 +36,7 @@ export function ResponsivePage<
       {operationMessageHandler && (
         <OperationMessageContainer handler={operationMessageHandler} />
       )}
-      <ResponsibleContainer<T, F, D>
+      <ResponsibleContainer<T, F>
         paddings={paddings}
         containerBoxSx={(paddings, hasField, _dataGrid) => {
           // Half

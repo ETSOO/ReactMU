@@ -12,7 +12,7 @@ import {
   ScrollerGridProps,
   useCombinedRefs
 } from "@etsoo/react";
-import { DataTypes, IdDefaultType, Utils } from "@etsoo/shared";
+import { DataTypes, Utils } from "@etsoo/shared";
 import {
   Box,
   BoxProps,
@@ -39,11 +39,8 @@ export type DataGridExFooterItemRendererProps<T extends object> = {
 /**
  * Extended DataGrid with VariableSizeGrid props
  */
-export type DataGridExProps<
-  T extends object,
-  D extends DataTypes.Keys<T>
-> = Omit<
-  ScrollerGridProps<T, D>,
+export type DataGridExProps<T extends object> = Omit<
+  ScrollerGridProps<T>,
   "itemRenderer" | "columnCount" | "columnWidth" | "width"
 > & {
   /**
@@ -216,10 +213,7 @@ export function DataGridExCalColumns<T>(columns: GridColumn<T>[]) {
  * @param props Props
  * @returns Component
  */
-export function DataGridEx<
-  T extends object,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: DataGridExProps<T, D>) {
+export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
   // Theme
   const theme = useTheme();
 
@@ -367,7 +361,7 @@ export function DataGridEx<
     footerItemRenderer = DataGridRenderers.defaultFooterItemRenderer,
     hideFooter = false,
     hoverColor = "#f6f9fb",
-    idField = "id" as D,
+    idField = "id" as DataTypes.Keys<T>,
     mRef = React.createRef(),
     onClick,
     onDoubleClick,
@@ -636,7 +630,7 @@ export function DataGridEx<
       : undefined;
 
     return (
-      <ScrollerGrid<T, D>
+      <ScrollerGrid<T>
         className={Utils.mergeClasses(
           "DataGridEx-Body",
           "DataGridEx-CustomBar",

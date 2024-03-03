@@ -7,7 +7,7 @@ import {
   useCombinedRefs,
   useDimensions
 } from "@etsoo/react";
-import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import { DataTypes } from "@etsoo/shared";
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import { DataGridEx } from "../DataGridEx";
@@ -31,9 +31,8 @@ interface LocalStates<T> {
  */
 export function DataGridPage<
   T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: DataGridPageProps<T, F, D>) {
+  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
+>(props: DataGridPageProps<T, F>) {
   // Destruct
   const {
     adjustHeight,
@@ -147,7 +146,7 @@ export function DataGridPage<
     if (gridHeight == null) return;
 
     return (
-      <DataGridEx<T, D>
+      <DataGridEx<T>
         autoLoad={false}
         height={gridHeight}
         loadData={localLoadData}

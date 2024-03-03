@@ -13,10 +13,9 @@ import { OperationMessageHandlerAll } from "../messages/OperationMessageHandler"
  */
 export type ResponsePageProps<
   T extends object,
-  F extends DataTypes.BasicTemplate,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
+  F extends DataTypes.BasicTemplate
 > = Omit<
-  DataGridPageProps<T, F, D>,
+  DataGridPageProps<T, F>,
   "mRef" | "itemKey" | "onScroll" | "onItemsRendered"
 > & {
   /**

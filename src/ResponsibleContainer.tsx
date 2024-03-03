@@ -1,4 +1,4 @@
-import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import { DataTypes } from "@etsoo/shared";
 import { Box, Stack, SxProps, Theme } from "@mui/material";
 import React from "react";
 import {
@@ -39,10 +39,9 @@ import { GridUtils } from "./GridUtils";
  */
 export type ResponsibleContainerProps<
   T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
+  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
 > = Omit<
-  DataGridExProps<T, D>,
+  DataGridExProps<T>,
   | "height"
   | "itemKey"
   | "loadData"
@@ -190,9 +189,8 @@ function defaultContainerBoxSx(
  */
 export function ResponsibleContainer<
   T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
-  D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: ResponsibleContainerProps<T, F, D>) {
+  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
+>(props: ResponsibleContainerProps<T, F>) {
   // Destruct
   const {
     adjustHeight,
@@ -371,7 +369,7 @@ export function ResponsibleContainer<
 
       return [
         <Box className="DataGridBox">
-          <DataGridEx<T, D>
+          <DataGridEx<T>
             autoLoad={!hasFields}
             height={heightLocal}
             width={rect.width}
@@ -404,7 +402,7 @@ export function ResponsibleContainer<
 
     return [
       <Box className="ListBox" sx={{ height: heightLocal }}>
-        <ScrollerListEx<T, D>
+        <ScrollerListEx<T>
           autoLoad={!hasFields}
           height={heightLocal}
           loadData={localLoadData}
