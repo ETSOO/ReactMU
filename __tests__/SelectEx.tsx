@@ -31,7 +31,7 @@ it("Render SelectEx", async () => {
     />
   );
 
-  expect(itemChangeCallback).toBeCalled();
+  expect(itemChangeCallback).toHaveBeenCalled();
 
   // Act, click to show the list
   const button = screen.getByRole("combobox");
@@ -110,5 +110,5 @@ it("Render multiple SelectEx", async () => {
 
   expect(checkbox3?.checked).toBeTruthy();
 
-  expect(itemChangeCallback).toBeCalledTimes(2);
+  expect(itemChangeCallback).toHaveBeenCalledTimes(2);
 });

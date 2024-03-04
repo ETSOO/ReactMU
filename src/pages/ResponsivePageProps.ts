@@ -1,5 +1,5 @@
 import { GridMethodRef } from "@etsoo/react";
-import { DataTypes, IdDefaultType } from "@etsoo/shared";
+import { DataTypes } from "@etsoo/shared";
 import { ListChildComponentProps } from "react-window";
 import {
   ScrollerListExInnerItemRendererProps,
