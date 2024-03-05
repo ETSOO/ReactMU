@@ -36,6 +36,11 @@ export type LeftDrawerProps = React.PropsWithRef<{
   appName?: string;
 
   /**
+   * Logo URL
+   */
+  logoUrl?: string;
+
+  /**
    * Is open or not
    */
   open?: boolean;
@@ -52,6 +57,7 @@ export function LeftDrawer(props: React.PropsWithChildren<LeftDrawerProps>) {
     mdUp,
     width,
     appName = globalApp?.get("appName"),
+    logoUrl = "/logo192.png",
     onMinimize,
     open = mdUp,
     children
@@ -98,7 +104,7 @@ export function LeftDrawer(props: React.PropsWithChildren<LeftDrawerProps>) {
           rel="noreferrer"
         >
           <Avatar
-            src={process.env.PUBLIC_URL + "/logo192.png"}
+            src={logoUrl}
             variant="square"
             sx={{ marginLeft: -0.5, marginRight: 1.5, marginBottom: 1 }}
           />
