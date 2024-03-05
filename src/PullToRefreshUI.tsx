@@ -15,8 +15,8 @@ export function PullToRefreshUI(props: Options) {
   React.useEffect(() => {
     let pr: p | null;
     import("pulltorefreshjs").then((PullToRefresh) => {
-      PullToRefresh.init(props);
-      pr = PullToRefresh;
+      pr = PullToRefresh.default;
+      pr.init(props);
     });
 
     return () => {
