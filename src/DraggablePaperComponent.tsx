@@ -8,12 +8,14 @@ import Draggable from "react-draggable";
  * @returns Component
  */
 export function DraggablePaperComponent(props: PaperProps) {
+  const nodeRef = React.useRef(null);
   return (
     <Draggable
       handle=".draggable-dialog-title"
       cancel={'[class*="MuiDialogContent-root"]'}
+      nodeRef={nodeRef}
     >
-      <Paper {...props} />
+      <Paper ref={nodeRef} {...props} />
     </Draggable>
   );
 }
