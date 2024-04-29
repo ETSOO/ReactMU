@@ -1,8 +1,7 @@
-import React from "react";
+import React, { act } from "react";
 import { SelectEx } from "../src";
 import { findByText, fireEvent, render, screen } from "@testing-library/react";
 import { ListType1, Utils } from "@etsoo/shared";
-import { act } from "react-dom/test-utils";
 
 it("Render SelectEx", async () => {
   // Arrange

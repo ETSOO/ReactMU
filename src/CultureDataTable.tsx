@@ -2,7 +2,7 @@ import { DataTable, DataTableProps } from "./DataTable";
 import React from "react";
 import { globalApp } from "./app/ReactApp";
 import { ListType1 } from "@etsoo/shared";
-import { GridValueFormatterParams } from "@mui/x-data-grid";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 
 /**
  * Culture table props
@@ -34,7 +34,7 @@ export function CultureDataTable(props: CultureDataTableProps) {
   } = props;
 
   const getCultureLabel = React.useCallback(
-    (value: GridValueFormatterParams) =>
+    (value: GridRenderCellParams) =>
       cultures.find((c) => c.id == value.id)?.label ?? `${value.value}`,
     [cultures]
   );
@@ -45,7 +45,7 @@ export function CultureDataTable(props: CultureDataTableProps) {
         {
           field: "id",
           headerName: cultureLabel,
-          valueFormatter: getCultureLabel,
+          renderCell: getCultureLabel,
           width: 150,
           editable: false,
           sortable: false

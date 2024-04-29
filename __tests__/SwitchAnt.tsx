@@ -1,6 +1,5 @@
 import { getByText, render } from "@testing-library/react";
-import React from "react";
-import { act } from "react-dom/test-utils";
+import React, { act } from "react";
 import { SwitchAnt } from "../src/SwitchAnt";
 
 it("SwitchAnt Tests", () => {
