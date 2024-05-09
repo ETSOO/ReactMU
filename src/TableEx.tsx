@@ -174,10 +174,6 @@ export function TableEx<
   const reset = (add?: GridLoaderPartialStates<T>) => {
     const { queryPaging, ...rest } = add ?? {};
     const resetState: GridLoaderPartialStates<T> = {
-      queryPaging: {
-        currentPage: 0,
-        ...queryPaging
-      },
       autoLoad: true,
       loadedItems: 0,
       hasNextPage: true,
@@ -186,6 +182,10 @@ export function TableEx<
       ...rest
     };
     Object.assign(state, resetState);
+    Object.assign(state.queryPaging, {
+      currentPage: 0,
+      ...queryPaging
+    });
   };
 
   React.useImperativeHandle(
