@@ -73,7 +73,7 @@ export namespace GridUtils {
    */
   export function getUpdateRowsHandler<T extends object>(cacheKey?: string) {
     return (rows: T[], state: GridLoaderStates<T>) => {
-      if (state.currentPage > 0 && cacheKey) {
+      if (state.queryPaging.currentPage > 0 && cacheKey) {
         const data: GridDataCacheType<T> = {
           rows,
           state,

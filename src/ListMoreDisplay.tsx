@@ -89,12 +89,14 @@ export function ListMoreDisplay<
 
   // Refs
   const refs = React.useRef<GridLoaderStates<T>>({
+    queryPaging: {
+      currentPage: 0,
+      orderBy: defaultOrderBy,
+      batchSize
+    },
     autoLoad,
-    currentPage: 0,
     hasNextPage: true,
     isNextPageLoading: false,
-    orderBy: defaultOrderBy,
-    batchSize,
     loadedItems: 0,
     selectedItems: [],
     idCache: {}
@@ -118,13 +120,10 @@ export function ListMoreDisplay<
     ref.isNextPageLoading = true;
 
     // Parameters
-    const { currentPage, batchSize, orderBy, orderByAsc, data } = ref;
+    const { queryPaging, data } = ref;
 
     const loadProps: GridLoadDataProps = {
-      currentPage,
-      batchSize,
-      orderBy,
-      orderByAsc,
+      queryPaging,
       data
     };
 
@@ -143,7 +142,8 @@ export function ListMoreDisplay<
     ref.hasNextPage = hasNextPage;
 
     // Next page
-    ref.currentPage = currentPage + 1;
+    var currentPage = ref.queryPaging.currentPage ?? 0;
+    ref.queryPaging.currentPage = currentPage + 1;
 
     // Update rows
     if (states.items == null || reset) {
@@ -162,7 +162,7 @@ export function ListMoreDisplay<
 
     // Reset page number
     ref.isNextPageLoading = false;
-    ref.currentPage = 0;
+    ref.queryPaging.currentPage = 0;
     ref.hasNextPage = true;
 
     // Load data

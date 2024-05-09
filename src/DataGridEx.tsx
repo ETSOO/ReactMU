@@ -5,6 +5,7 @@ import {
   GridCellRendererProps,
   GridColumn,
   GridHeaderCellRendererProps,
+  GridLoaderPartialStates,
   GridLoaderStates,
   ScrollerGrid,
   ScrollerGridForwardRef,
@@ -218,7 +219,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
   const theme = useTheme();
 
   const defaultHeaderRenderer = (states: GridLoaderStates<T>) => {
-    const { orderBy } = states;
+    const { orderBy } = states.queryPaging;
     return (
       <Box
         className="DataGridEx-Header"
@@ -437,11 +438,11 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
 
   // New sort
   const handleSort = (field: string, asc?: boolean) => {
-    reset({ orderBy: field, orderByAsc: asc });
+    reset({ queryPaging: { orderBy: field, orderByAsc: asc } });
   };
 
   // Reset
-  const reset = (add: object) => {
+  const reset = (add: GridLoaderPartialStates<T>) => {
     refs.current.ref?.reset(add);
   };
 

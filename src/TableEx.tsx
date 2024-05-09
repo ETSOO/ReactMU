@@ -4,6 +4,7 @@ import {
   GridColumn,
   GridLoadDataProps,
   GridLoader,
+  GridLoaderPartialStates,
   GridLoaderStates,
   GridSizeGet
 } from "@etsoo/react";
@@ -148,33 +149,41 @@ export function TableEx<
     updateRows(rows);
   };
 
+  var orderByAsc = defaultOrderBy
+    ? columns.find((column) => column.field === defaultOrderBy)?.sortAsc
+    : undefined;
+
   // States
   const stateRefs = React.useRef<GridLoaderStates<T>>({
+    queryPaging: {
+      currentPage: 0,
+      orderBy: defaultOrderBy,
+      orderByAsc,
+      batchSize: rowsPerPageLocal
+    },
     autoLoad,
-    currentPage: 0,
     loadedItems: 0,
     hasNextPage: true,
     isNextPageLoading: false,
-    orderBy: defaultOrderBy,
-    orderByAsc: defaultOrderBy
-      ? columns.find((column) => column.field === defaultOrderBy)?.sortAsc
-      : undefined,
-    batchSize: rowsPerPageLocal,
     selectedItems: [],
     idCache: {}
   });
   const state = stateRefs.current;
 
   // Reset the state and load again
-  const reset = (add?: Partial<GridLoaderStates<T>>) => {
-    const resetState: Partial<GridLoaderStates<T>> = {
+  const reset = (add?: GridLoaderPartialStates<T>) => {
+    const { queryPaging, ...rest } = add ?? {};
+    const resetState: GridLoaderPartialStates<T> = {
+      queryPaging: {
+        currentPage: 0,
+        ...queryPaging
+      },
       autoLoad: true,
-      currentPage: 0,
       loadedItems: 0,
       hasNextPage: true,
       isNextPageLoading: false,
       lastLoadedItems: undefined,
-      ...add
+      ...rest
     };
     Object.assign(state, resetState);
   };
@@ -227,14 +236,10 @@ export function TableEx<
     state.isNextPageLoading = true;
 
     // Parameters
-    const { currentPage, batchSize, orderBy, orderByAsc, data, isMounted } =
-      state;
+    const { queryPaging, data, isMounted } = state;
 
     const loadProps: GridLoadDataProps = {
-      currentPage,
-      batchSize,
-      orderBy,
-      orderByAsc,
+      queryPaging,
       data
     };
 
@@ -246,7 +251,7 @@ export function TableEx<
 
       const newItems = result.length;
       state.lastLoadedItems = newItems;
-      state.hasNextPage = newItems >= batchSize;
+      state.hasNextPage = newItems >= queryPaging.batchSize;
       state.isNextPageLoading = false;
 
       // Update rows
@@ -256,7 +261,7 @@ export function TableEx<
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     state.hasNextPage = true;
-    state.currentPage = newPage;
+    state.queryPaging.currentPage = newPage;
     loadDataLocal();
   };
 
@@ -264,7 +269,7 @@ export function TableEx<
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const batchSize = parseInt(event.target.value);
-    reset({ batchSize });
+    reset({ queryPaging: { batchSize } });
   };
 
   const handleSelect = (item: T, checked: Boolean) => {
@@ -306,7 +311,7 @@ export function TableEx<
 
   // New sort
   const handleSort = (field: string, asc?: boolean) => {
-    reset({ orderBy: field, orderByAsc: asc });
+    reset({ queryPaging: { orderBy: field, orderByAsc: asc } });
   };
 
   // Set items for rerenderer
@@ -318,14 +323,15 @@ export function TableEx<
 
   // Destruct states
   const {
+    queryPaging,
     autoLoad: stateAutoLoad,
-    currentPage,
     hasNextPage,
     lastLoadedItems,
-    orderBy,
-    batchSize,
     selectedItems
   } = state;
+
+  const currentPage = queryPaging.currentPage;
+  const batchSize = queryPaging.batchSize;
 
   // Current page selected items
   const pageSelectedItems = selectable
@@ -399,7 +405,7 @@ export function TableEx<
                 // Sortable
                 let sortLabel: React.ReactNode;
                 if (sortable && field != null) {
-                  const active = orderBy === field;
+                  const active = queryPaging.orderBy === field;
 
                   sortLabel = (
                     <TableSortLabel
@@ -448,7 +454,7 @@ export function TableEx<
               }
             }}
           >
-            {[...Array(batchSize)].map((_item, rowIndex) => {
+            {[...Array(queryPaging.batchSize)].map((_item, rowIndex) => {
               // Row
               const row = rowIndex < rows.length ? rows[rowIndex] : undefined;
 
