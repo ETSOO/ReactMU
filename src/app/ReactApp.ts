@@ -298,6 +298,7 @@ export class ReactApp<
           React.createElement("br"),
           React.createElement("span", { style: { fontSize: "9px" } }, tip)
         );
+
         this.notifier.alert(titleNode, callback);
         return;
       }
