@@ -12,7 +12,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src"]

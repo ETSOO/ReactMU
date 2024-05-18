@@ -1,6 +1,7 @@
 import { act, render } from "@testing-library/react";
 import { MUGlobal, MobileListItemRenderer, ResponsivePage } from "../src";
 import React from "react";
+import { DataTypes } from "@etsoo/shared";
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
@@ -14,20 +15,28 @@ type Data = { id: number; name: string };
 // https://jestjs.io/docs/en/timer-mocks
 jest.useFakeTimers();
 
+// TypeScript const assertions
+const fieldTemplate = {
+  id: "number",
+  name: "string"
+} as const;
+
 it("Render ResponsePage", async () => {
   // Act
   render(
-    <ResponsivePage<Data>
+    <ResponsivePage<Data, typeof fieldTemplate>
       fields={[]}
       columns={[
         { field: "id", header: "ID" },
         { field: "name", header: "Name" }
       ]}
       itemSize={[118, MUGlobal.pagePaddings]}
-      loadData={(_data) =>
+      fieldTemplate={fieldTemplate}
+      loadData={({ id }) =>
         Promise.resolve([
           { id: 1, name: "Name 1" },
-          { id: 2, name: "Name 2" }
+          { id: 2, name: "Name 2" },
+          { id: id ?? 0, name: "auto" }
         ])
       }
       innerItemRenderer={(props) =>
