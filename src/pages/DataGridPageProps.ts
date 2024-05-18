@@ -9,7 +9,7 @@ export type DataGridPageProps<
   T extends object,
   F extends DataTypes.BasicTemplate
 > = SearchPageProps<T, F> &
-  Omit<DataGridExProps<T>, "loadData" | "height"> & {
+  DataGridExProps<T> & {
     /**
      * Height will be deducted
      * @param height Current calcuated height
