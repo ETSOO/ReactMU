@@ -19,10 +19,7 @@ import type { OperationMessageHandlerAll } from "../messages/OperationMessageHan
 export type ResponsePageProps<
   T extends object,
   F extends DataTypes.BasicTemplate
-> = Omit<
-  DataGridPageProps<T, F>,
-  "mRef" | "itemKey" | "onScroll" | "onItemsRendered"
-> & {
+> = DataGridPageProps<T, F> & {
   /**
    *
    * @param height Current height
