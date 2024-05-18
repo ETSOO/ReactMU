@@ -10,11 +10,19 @@ import { DataTypes } from "@etsoo/shared";
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
-import { ScrollerListEx } from "../ScrollerListEx";
+import { ScrollerListEx, ScrollerListExProps } from "../ScrollerListEx";
 import { SearchBar } from "../SearchBar";
 import { CommonPage } from "./CommonPage";
-import { ListPageProps } from "./ListPageProps";
 import { GridUtils } from "../GridUtils";
+import type { SearchPageProps } from "./SearchPageProps";
+
+/**
+ * List page props
+ */
+export type ListPageProps<
+  T extends object,
+  F extends DataTypes.BasicTemplate
+> = SearchPageProps<T, F> & Omit<ScrollerListExProps<T>, "loadData">;
 
 /**
  * List page

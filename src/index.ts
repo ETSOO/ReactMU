@@ -17,7 +17,6 @@ export * from "./messages/RefreshHandler";
 export * from "./messages/SignalRUser";
 
 export * from "./pages/CommonPage";
-export * from "./pages/CommonPageProps";
 export * from "./pages/DataGridPage";
 export * from "./pages/DataGridPageProps";
 export * from "./pages/DrawerHeader";
@@ -25,9 +24,7 @@ export * from "./pages/EditPage";
 export * from "./pages/FixedListPage";
 export * from "./pages/LeftDrawer";
 export * from "./pages/ListPage";
-export * from "./pages/ListPageProps";
 export * from "./pages/ResponsivePage";
-export * from "./pages/ResponsivePageProps";
 export * from "./pages/SearchPageProps";
 export * from "./pages/TablePage";
 export * from "./pages/UserMenu";

@@ -8,10 +8,24 @@ import { Box, Stack } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
 import { SearchBar } from "../SearchBar";
-import { TableEx, TableExMethodRef, TableExMinWidth } from "../TableEx";
+import {
+  TableEx,
+  TableExMethodRef,
+  TableExMinWidth,
+  TableExProps
+} from "../TableEx";
 import { CommonPage } from "./CommonPage";
-import { TablePageProps } from "./TablePageProps";
 import { GridUtils } from "../GridUtils";
+import type { SearchPageProps } from "./SearchPageProps";
+
+/**
+ * Table page props
+ */
+export type TablePageProps<
+  T extends object,
+  F extends DataTypes.BasicTemplate,
+  D extends DataTypes.Keys<T>
+> = SearchPageProps<T, F> & Omit<TableExProps<T, D>, "loadData">;
 
 /**
  * Table page

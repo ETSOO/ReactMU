@@ -17,11 +17,10 @@ import { globalApp } from "../app/ReactApp";
 import { GridDataFormat } from "../GridDataFormat";
 import { MUGlobal } from "../MUGlobal";
 import { PullToRefreshUI } from "../PullToRefreshUI";
-import { CommonPage } from "./CommonPage";
-import { CommonPageProps } from "./CommonPageProps";
-import { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
+import { CommonPage, CommonPageProps } from "./CommonPage";
+import type { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
 import { MessageUtils } from "../messages/MessageUtils";
-import { RefreshHandler } from "../messages/RefreshHandler";
+import type { RefreshHandler } from "../messages/RefreshHandler";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 
 /**

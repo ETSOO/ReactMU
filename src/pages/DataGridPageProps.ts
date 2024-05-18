@@ -1,6 +1,6 @@
-import { DataTypes } from "@etsoo/shared";
-import { DataGridExProps } from "../DataGridEx";
-import { SearchPageProps } from "./SearchPageProps";
+import type { DataTypes } from "@etsoo/shared";
+import type { DataGridExProps } from "../DataGridEx";
+import type { SearchPageProps } from "./SearchPageProps";
 
 /**
  * DataGrid page props

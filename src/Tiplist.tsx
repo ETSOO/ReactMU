@@ -2,7 +2,7 @@ import { ReactUtils, useDelayedExecutor } from "@etsoo/react";
 import { DataTypes, IdDefaultType, ListType2 } from "@etsoo/shared";
 import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
 import React from "react";
-import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
+import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { globalApp } from "./app/ReactApp";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";

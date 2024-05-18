@@ -15,7 +15,7 @@ import React from "react";
 import { Utils as SharedUtils } from "@etsoo/shared";
 import { ReactUtils } from "@etsoo/react";
 import AddIcon from "@mui/icons-material/Add";
-import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
+import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
 import { globalApp } from "./app/ReactApp";

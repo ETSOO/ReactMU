@@ -14,7 +14,7 @@ import { DataGridEx } from "../DataGridEx";
 import { MUGlobal } from "../MUGlobal";
 import { SearchBar } from "../SearchBar";
 import { CommonPage } from "./CommonPage";
-import { DataGridPageProps } from "./DataGridPageProps";
+import type { DataGridPageProps } from "./DataGridPageProps";
 import { GridUtils } from "../GridUtils";
 
 interface LocalStates<T> {

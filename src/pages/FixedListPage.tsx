@@ -14,8 +14,8 @@ import { MUGlobal } from "../MUGlobal";
 import { ScrollerListEx } from "../ScrollerListEx";
 import { SearchBar } from "../SearchBar";
 import { CommonPage } from "./CommonPage";
-import { ListPageProps } from "./ListPageProps";
 import { GridUtils } from "../GridUtils";
+import type { ListPageProps } from "./ListPage";
 
 /**
  * Fixed height list page

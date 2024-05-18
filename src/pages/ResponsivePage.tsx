@@ -3,8 +3,76 @@ import React from "react";
 import { MUGlobal } from "../MUGlobal";
 import { ResponsibleContainer } from "../ResponsibleContainer";
 import { CommonPage } from "./CommonPage";
-import { ResponsePageProps } from "./ResponsivePageProps";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
+import type { DataGridPageProps } from "./DataGridPageProps";
+import type {
+  ScrollerListExInnerItemRendererProps,
+  ScrollerListExItemSize
+} from "../ScrollerListEx";
+import { ListChildComponentProps } from "react-window";
+import { GridMethodRef } from "@etsoo/react";
+import type { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
+
+/**
+ * Response page props
+ */
+export type ResponsePageProps<
+  T extends object,
+  F extends DataTypes.BasicTemplate
+> = Omit<
+  DataGridPageProps<T, F>,
+  "mRef" | "itemKey" | "onScroll" | "onItemsRendered"
+> & {
+  /**
+   *
+   * @param height Current height
+   * @param isGrid Is displaying DataGrid
+   * @returns Adjusted height
+   */
+  adjustFabHeight?: (height: number, isGrid: boolean) => number;
+
+  /**
+   * Min width to show Datagrid
+   */
+  dataGridMinWidth?: number;
+
+  /**
+   * Inner item renderer
+   */
+  innerItemRenderer: (
+    props: ScrollerListExInnerItemRendererProps<T>
+  ) => React.ReactNode;
+
+  /**
+   * Item renderer
+   */
+  itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
+
+  /**
+   * Item size, a function indicates its a variable size list
+   */
+  itemSize: ScrollerListExItemSize;
+
+  /**
+   * Methods
+   */
+  mRef?: React.MutableRefObject<GridMethodRef<T> | undefined>;
+
+  /**
+   * Pull to refresh data
+   */
+  pullToRefresh?: boolean;
+
+  /**
+   * Quick action for double click or click under mobile
+   */
+  quickAction?: (data: T) => void;
+
+  /**
+   * Operation message handler
+   */
+  operationMessageHandler?: OperationMessageHandlerAll;
+};
 
 /**
  * Fixed height list page
@@ -13,7 +81,7 @@ import { OperationMessageContainer } from "../messages/OperationMessageContainer
  */
 export function ResponsivePage<
   T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
+  F extends DataTypes.BasicTemplate = {}
 >(props: ResponsePageProps<T, F>) {
   // Destruct
   const { pageProps = {}, operationMessageHandler, ...rest } = props;

@@ -2,13 +2,91 @@ import React from "react";
 import { FabBox } from "../FabBox";
 import { ScrollTopFab } from "../ScrollTopFab";
 import { MUGlobal } from "../MUGlobal";
-import { CommonPageProps } from "./CommonPageProps";
 import { MoreFab } from "../MoreFab";
-import { Container, Fab, useTheme } from "@mui/material";
+import { Container, ContainerProps, Fab, Theme, useTheme } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { BackButton } from "../BackButton";
 import { Labels } from "../app/Labels";
 import { ReactAppStateDetector } from "../app/ReactApp";
+import type { CustomFabSize } from "../CustomFabProps";
+import type { IStateUpdate, ListItemReact } from "@etsoo/react";
+import type { UserKey } from "@etsoo/appscript";
+
+/**
+ * Common page props
+ * Default container id is 'pageContainer'
+ */
+export interface CommonPageProps extends Omit<ContainerProps, "id"> {
+  /**
+   * Fab buttons
+   */
+  fabButtons?: React.ReactNode;
+
+  /**
+   * Fab size
+   */
+  fabSize?: CustomFabSize;
+
+  /**
+   * Fab flex column direction, undefined to hide it
+   */
+  fabColumnDirection?: boolean;
+
+  /**
+   * Fab padding adjust
+   */
+  fabPaddingAdjust?: number;
+
+  /**
+   * Add panel to the Fab
+   */
+  fabPanel?: boolean;
+
+  /**
+   * Fab lays in the top
+   */
+  fabTop?: ((theme: Theme, padding: {}) => object) | boolean;
+
+  /**
+   * More actions
+   */
+  moreActions?: ListItemReact[];
+
+  /**
+   * On refresh callback, only when authorized = true
+   */
+  onRefresh?: () => void | PromiseLike<void>;
+
+  /**
+   * On page update, when authorized = null or true case, may uses onRefresh
+   */
+  onUpdate?: () => void | PromiseLike<void>;
+
+  /**
+   * On page update, all cases with authorized
+   */
+  onUpdateAll?: IStateUpdate;
+
+  /**
+   * Paddings
+   */
+  paddings?: Record<string, string | number>;
+
+  /**
+   * Scroll container
+   */
+  scrollContainer?: HTMLElement | object;
+
+  /**
+   * Support back click
+   */
+  supportBack?: boolean;
+
+  /**
+   * State last changed fields
+   */
+  targetFields?: UserKey[];
+}
 
 /**
  * Common page

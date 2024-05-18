@@ -16,7 +16,7 @@ import { ReactUtils } from "@etsoo/react";
 
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
+import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
 import { globalApp } from "./app/ReactApp";

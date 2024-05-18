@@ -1,7 +1,6 @@
 import { act, render } from "@testing-library/react";
 import { MUGlobal, MobileListItemRenderer, ResponsivePage } from "../src";
 import React from "react";
-import { DataTypes } from "@etsoo/shared";
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),

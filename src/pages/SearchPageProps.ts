@@ -1,6 +1,6 @@
-import { GridJsonData, GridLoader } from "@etsoo/react";
-import { DataTypes } from "@etsoo/shared";
-import { CommonPageProps } from "./CommonPageProps";
+import type { GridJsonData, GridLoader } from "@etsoo/react";
+import type { DataTypes } from "@etsoo/shared";
+import type { CommonPageProps } from "./CommonPage";
 
 /**
  * Search page props

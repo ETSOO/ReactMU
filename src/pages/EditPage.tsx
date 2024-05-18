@@ -1,13 +1,12 @@
 import { Button, Grid } from "@mui/material";
 import React, { FormEventHandler } from "react";
 import { MUGlobal } from "../MUGlobal";
-import { CommonPage } from "./CommonPage";
-import { CommonPageProps } from "./CommonPageProps";
+import { CommonPage, CommonPageProps } from "./CommonPage";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BackButton } from "../BackButton";
 import { Labels } from "../app/Labels";
-import { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
+import type { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 
 /**
