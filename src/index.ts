@@ -9,6 +9,8 @@ export * from "./app/Labels";
 export * from "./app/ReactApp";
 export * from "./app/ServiceApp";
 
+export * from "./custom/CustomFieldUtils";
+
 export * from "./messages/MessageUtils";
 export * from "./messages/OperationMessageContainer";
 export * from "./messages/OperationMessageDto";
