@@ -55,6 +55,7 @@ export const FieldSelect: ICustomFieldReact<IdType> = ({
       name={name}
       options={field.options}
       fullWidth
+      value={value}
       onChange={(event) => {
         const value = event.target.value;
         const newValue =

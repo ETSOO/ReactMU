@@ -19,7 +19,7 @@ it("Render SelectEx", async () => {
   });
 
   // Render component
-  render(
+  const { findByText } = render(
     <SelectEx<T>
       options={options}
       name="test"
@@ -44,12 +44,11 @@ it("Render SelectEx", async () => {
     jest.advanceTimersByTime(100);
   });
 
-  /*
   // Get list item
-  const itemName2 = await findByText(baseElement, "Name 2");
+  const itemName2 = await findByText("Name 2");
   expect(itemName2.nodeName).toBe("SPAN");
 
-  const itemBlank = await findByText(baseElement, "---");
+  const itemBlank = await findByText("---");
   expect(itemBlank.nodeName).toBe("SPAN");
 
   act(() => {
@@ -57,7 +56,6 @@ it("Render SelectEx", async () => {
   });
 
   expect(itemChangeCallback).toBeCalledTimes(2);
-  */
 });
 
 it("Render multiple SelectEx", async () => {

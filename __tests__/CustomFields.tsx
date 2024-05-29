@@ -1,5 +1,11 @@
 import React from "react";
-import { act, getByText, render } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  getByText,
+  render,
+  screen
+} from "@testing-library/react";
 import { CustomFieldData } from "@etsoo/appscript";
 import { CustomFieldUtils } from "../src/custom/CustomFieldUtils";
 import { CustomFieldReactCollection } from "@etsoo/react";
@@ -90,4 +96,59 @@ it("Render FieldCheckbox", () => {
   act(() => {
     checkboxItems[1].click();
   });
+});
+
+it("Render FieldSelect", async () => {
+  // Arrange
+  const fields: CustomFieldData[] = [
+    {
+      type: "select",
+      name: "select",
+      options: [
+        { id: "a", label: "A" },
+        { id: "b", label: "B" },
+        { id: "c", label: "C" }
+      ]
+    }
+  ];
+
+  const collections: CustomFieldReactCollection<CustomFieldData> = {};
+
+  act(() => {
+    render(
+      <div>
+        {CustomFieldUtils.create(
+          fields,
+          collections,
+          (field) => {
+            switch (field.type) {
+              case "select":
+                return "c";
+              default:
+                return undefined;
+            }
+          },
+          (name, value) => {
+            expect(name).toBe("checkbox");
+            expect(value).toStrictEqual(["a"]);
+          }
+        )}
+      </div>
+    );
+  });
+
+  const button = screen.getByRole("combobox");
+
+  act(() => {
+    // Act, click to open the dropdown list
+    jest.useFakeTimers();
+    fireEvent.mouseDown(button);
+    jest.advanceTimersByTime(100);
+  });
+
+  const input = document.querySelector<HTMLInputElement>("input");
+  expect(input?.value).toBe("c");
+
+  const listItems = document.querySelectorAll("li");
+  expect(listItems.length).toBe(3);
 });
