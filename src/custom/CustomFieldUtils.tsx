@@ -17,6 +17,10 @@ import { FieldInput } from "./FieldInput";
 import { FieldLabel } from "./FieldLabel";
 import { FieldNumberInput } from "./FieldNumberInput";
 import { FieldTexarea } from "./FieldTexarea";
+import { FieldJson } from "./FieldJson";
+import { FieldRadio } from "./FieldRadio";
+import { FieldSelect } from "./FieldSelect";
+import { FieldSwitch } from "./FieldSwitch";
 
 /**
  * Custom field utilities
@@ -35,8 +39,12 @@ export namespace CustomFieldUtils {
     date: FieldDateInput,
     divider: FieldDivider,
     input: FieldInput,
+    json: FieldJson,
     label: FieldLabel,
     number: FieldNumberInput,
+    radio: FieldRadio,
+    select: FieldSelect,
+    switch: FieldSwitch,
     textarea: FieldTexarea
   };
 
