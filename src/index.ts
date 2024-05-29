@@ -10,6 +10,7 @@ export * from "./app/ReactApp";
 export * from "./app/ServiceApp";
 
 export * from "./custom/CustomFieldUtils";
+export * from "./custom/CustomFieldViewer";
 export * from "./custom/CustomFieldWindow";
 
 export * from "./messages/MessageUtils";
