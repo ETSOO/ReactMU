@@ -17,6 +17,9 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { Labels } from "./app/Labels";
 import { FileUploadButton } from "./FileUploadButton";
+import { ImageState } from "react-avatar-editor";
+
+const defaultSize = 300;
 
 /**
  * User avatar editor to Blob helper
@@ -109,8 +112,8 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     maxWidth,
     onDone,
     scaledResult = false,
-    width = 200,
-    height = 200,
+    width = defaultSize,
+    height = defaultSize,
     range = [0.1, 2, 0.1]
   } = props;
 
@@ -119,7 +122,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
   // Calculated max width
   const maxWidthCalculated =
-    maxWidth == null || maxWidth < 200 ? 3 * width : maxWidth;
+    maxWidth == null || maxWidth < defaultSize ? 2 * width : maxWidth;
 
   // Labels
   const labels = Labels.UserAvatarEditor;
@@ -141,6 +144,13 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
   // Editor states
   const [editorState, setEditorState] = React.useState(defaultState);
+
+  // Height
+  // noHeight: height is not set and will be updated dynamically
+  const noHeight = height <= 0;
+  const [localHeight, setHeight] = React.useState(
+    noHeight ? defaultSize : height
+  );
 
   // Range
   const [min, max, step] = range;
@@ -179,7 +189,10 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   };
 
   // Handle image load
-  const handleLoad = () => {
+  const handleLoad = (imageInfo: ImageState) => {
+    if (noHeight) {
+      setHeight((imageInfo.height * width) / imageInfo.width);
+    }
     setReady(true);
   };
 
@@ -238,7 +251,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
     if (data.width > maxWidthCalculated) {
       // Target height
-      const heightCalculated = (height * maxWidthCalculated) / width;
+      const heightCalculated = (localHeight * maxWidthCalculated) / width;
 
       // Target
       const to = document.createElement("canvas");
@@ -277,14 +290,14 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
       <Stack direction="row" spacing={0.5}>
         <React.Suspense
           fallback={
-            <Skeleton variant="rounded" width={width} height={height} />
+            <Skeleton variant="rounded" width={width} height={localHeight} />
           }
         >
           <AE
             ref={ref}
             border={border}
             width={width}
-            height={height}
+            height={localHeight}
             onLoadSuccess={handleLoad}
             image={previewImage ?? ""}
             scale={editorState.scale}
