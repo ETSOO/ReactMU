@@ -2,6 +2,7 @@ import {
   BridgeUtils,
   CoreApp,
   createClient,
+  FormatResultCustomCallback,
   IApp,
   IAppSettings,
   ICoreApp,
@@ -278,13 +279,17 @@ export class ReactApp<
    * Override alert action result
    * @param result Action result
    * @param callback Callback
+   * @param forceToLocal Force to local labels
    */
   override alertResult(
     result: IActionResult | string,
-    callback?: NotificationReturn<void>
+    callback?: NotificationReturn<void>,
+    forceToLocal?: FormatResultCustomCallback
   ) {
     const message =
-      typeof result === "string" ? result : this.formatResult(result);
+      typeof result === "string"
+        ? result
+        : this.formatResult(result, forceToLocal);
     if (message.endsWith(")")) {
       const startPos = message.lastIndexOf("(");
       if (startPos > 0) {
