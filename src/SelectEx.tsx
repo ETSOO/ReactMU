@@ -171,10 +171,20 @@ export function SelectEx<
     onItemChange(option, userAction);
   };
 
-  const setOptionsAdd = (options: readonly T[]) => {
-    setOptions(options);
-    if (valueSource != null) doItemChange(options, valueSource, false);
-  };
+  // Local value
+  const v = defaultValue ?? value;
+  const valueSource = React.useMemo(
+    () => (multiple ? (v ? (Array.isArray(v) ? v : [v]) : []) : v ?? ""),
+    [multiple, v]
+  );
+
+  const setOptionsAdd = React.useCallback(
+    (options: readonly T[]) => {
+      setOptions(options);
+      if (valueSource != null) doItemChange(options, valueSource, false);
+    },
+    [valueSource]
+  );
 
   // When options change
   // [options] will cause infinite loop
@@ -182,14 +192,7 @@ export function SelectEx<
   React.useEffect(() => {
     if (options == null || !propertyWay) return;
     setOptionsAdd(options);
-  }, [options, propertyWay]);
-
-  // Local value
-  const v = defaultValue ?? value;
-  const valueSource = React.useMemo(
-    () => (multiple ? (v ? (Array.isArray(v) ? v : [v]) : []) : v ?? ""),
-    [multiple, v]
-  );
+  }, [options, propertyWay, setOptionsAdd]);
 
   // Value state
   const [valueState, setValueStateBase] = React.useState<unknown>(valueSource);
