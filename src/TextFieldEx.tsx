@@ -116,6 +116,7 @@ export const TextFieldEx = React.forwardRef<
     if (input != null) {
       input.value = "";
       input.focus();
+      input.dispatchEvent(new Event("change"));
     }
 
     if (errorText != null) {
