@@ -39,49 +39,31 @@ export const CountdownButton = React.forwardRef<
   // 0 - normal
   // 1 - loading
   // >= 2 - countdown seconds
-  const [state, updateState] = React.useState(initState);
+  const [state, updateState] = React.useState(0);
 
   // Ignore seconds
-  const seconds = 2;
+  const ignoreSeconds = 2;
 
-  // Countdown length
-  const [shared] = React.useState({ maxLength: 0 });
+  // Refs
+  const refs = React.useRef({ isMounted: false, maxLength: 0 });
 
-  const isMounted = React.useRef(true);
-
-  // endIcon
-  let endIcon: React.ReactNode;
-  if (state === 0) {
-    endIcon = undefined;
-  } else if (state === 1) {
-    endIcon = <CircularProgress size={12} />;
-  } else {
-    const countdown = (state - seconds)
-      .toString()
-      .padStart(shared.maxLength, "0");
-    endIcon = <span style={{ fontSize: "smaller" }}>{countdown}</span>;
-  }
-
-  // Disabled?
-  const disabled = state > 0;
-
-  // Action
-  const doAction = (result: number) => {
+  // Set state
+  const setState = React.useCallback((result: number) => {
     // Seconds to wait, 120
-    if (result > seconds) {
+    if (result > ignoreSeconds) {
       // Here 122
-      result += seconds;
+      result += ignoreSeconds;
       updateState(result);
 
       // Update max length
-      shared.maxLength = result.toString().length;
+      refs.current.maxLength = result.toString().length;
 
       const seed = setInterval(() => {
         // Mounted?
-        if (!isMounted.current) return;
+        if (!refs.current.isMounted) return;
 
         // Last 1 second and then complete
-        if (result > seconds + 1) {
+        if (result > ignoreSeconds + 1) {
           result--;
           updateState(result);
         } else {
@@ -92,7 +74,23 @@ export const CountdownButton = React.forwardRef<
     } else {
       updateState(0);
     }
-  };
+  }, []);
+
+  // endIcon
+  let endIcon: React.ReactNode;
+  if (state === 0) {
+    endIcon = undefined;
+  } else if (state === 1) {
+    endIcon = <CircularProgress size={12} />;
+  } else {
+    const countdown = (state - ignoreSeconds)
+      .toString()
+      .padStart(refs.current.maxLength, "0");
+    endIcon = <span style={{ fontSize: "smaller" }}>{countdown}</span>;
+  }
+
+  // Disabled?
+  const disabled = state > 0;
 
   // Local click
   const localClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -103,14 +101,19 @@ export const CountdownButton = React.forwardRef<
     if (onClick != null) onClick(event);
 
     // Return any countdown
-    onAction().then(doAction);
+    onAction().then(setState);
   };
 
   React.useEffect(() => {
+    refs.current.isMounted = true;
     return () => {
-      isMounted.current = false;
+      refs.current.isMounted = false;
     };
   }, []);
+
+  React.useEffect(() => {
+    setState(initState);
+  }, [initState]);
 
   return (
     <Button
