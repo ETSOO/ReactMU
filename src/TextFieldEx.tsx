@@ -116,15 +116,10 @@ export const TextFieldEx = React.forwardRef<
     if (input != null) {
       input.value = "";
       input.focus();
-      input.dispatchEvent(new Event("change"));
-    }
 
-    if (errorText != null) {
-      // Reset
-      updateErrorText(undefined);
+      // Trigger 'input' instead of 'change' (not working) event manually
+      input.dispatchEvent(new Event("input", { bubbles: true }));
     }
-
-    updateEmpty(true);
   };
 
   const preventDefault = (e: React.TouchEvent | React.MouseEvent) => {
