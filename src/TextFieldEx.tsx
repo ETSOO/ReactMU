@@ -8,7 +8,7 @@ import {
 import { MUGlobal } from "./MUGlobal";
 import { Clear, Visibility } from "@mui/icons-material";
 import { Keyboard } from "@etsoo/shared";
-import { useCombinedRefs, useDelayedExecutor } from "@etsoo/react";
+import { ReactUtils, useCombinedRefs, useDelayedExecutor } from "@etsoo/react";
 
 /**
  * Extended text field props
@@ -114,11 +114,8 @@ export const TextFieldEx = React.forwardRef<
 
   const clearClick = () => {
     if (input != null) {
-      input.value = "";
+      ReactUtils.triggerChange(input, "", false);
       input.focus();
-
-      // Trigger 'input' instead of 'change' (not working) event manually
-      input.dispatchEvent(new Event("input", { bubbles: true }));
     }
   };
 
