@@ -738,6 +738,10 @@ export class NotifierMU extends NotifierReact {
       ...rest
     } = data;
 
+    if (this.debug) {
+      console.debug("NotificationMU.addRaw", data);
+    }
+
     // Setup
     const n = new NotificationMU(type, content, title, align, timespan);
 
