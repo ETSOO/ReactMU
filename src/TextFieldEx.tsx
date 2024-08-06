@@ -20,9 +20,9 @@ export type TextFieldExProps = TextFieldProps & {
   changeDelay?: number;
 
   /**
-   * Click clear button callback, return false to prevent the clear action
+   * Click clear button callback
    */
-  onClear?: () => boolean | void;
+  onClear?: (doClear: () => void) => void;
 
   /**
    * On enter click
@@ -118,15 +118,18 @@ export const TextFieldEx = React.forwardRef<
     }
   };
 
-  const clearClick = () => {
+  const doClear = () => {
     if (input == null) return;
-
-    if (onClear) {
-      if (onClear() === false) return;
-    }
-
     ReactUtils.triggerChange(input, "", false);
     input.focus();
+  };
+
+  const clearClick = () => {
+    if (onClear) {
+      onClear(doClear);
+    } else {
+      doClear();
+    }
   };
 
   const preventDefault = (e: React.TouchEvent | React.MouseEvent) => {
