@@ -20,6 +20,11 @@ export type TextFieldExProps = TextFieldProps & {
   changeDelay?: number;
 
   /**
+   * Click clear button callback, return false to prevent the clear action
+   */
+  onClear?: () => boolean | void;
+
+  /**
    * On enter click
    */
   onEnter?: React.KeyboardEventHandler<HTMLDivElement>;
@@ -71,6 +76,7 @@ export const TextFieldEx = React.forwardRef<
     InputLabelProps = {},
     InputProps = {},
     onChange,
+    onClear,
     onKeyDown,
     onEnter,
     onVisibility,
@@ -113,10 +119,14 @@ export const TextFieldEx = React.forwardRef<
   };
 
   const clearClick = () => {
-    if (input != null) {
-      ReactUtils.triggerChange(input, "", false);
-      input.focus();
+    if (input == null) return;
+
+    if (onClear) {
+      if (onClear() === false) return;
     }
+
+    ReactUtils.triggerChange(input, "", false);
+    input.focus();
   };
 
   const preventDefault = (e: React.TouchEvent | React.MouseEvent) => {
