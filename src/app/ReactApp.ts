@@ -198,10 +198,9 @@ export class ReactApp<
     return this._notifierProvider;
   }
 
-  private static createNotifier() {
+  private static createNotifier(debug: boolean) {
     // Notifier
-    ReactApp._notifierProvider = NotifierMU.setup();
-
+    ReactApp._notifierProvider = NotifierMU.setup(undefined, debug);
     return NotifierMU.instance;
   }
 
@@ -249,14 +248,16 @@ export class ReactApp<
    * Constructor
    * @param settings Settings
    * @param name Application name
+   * @param debug Debug mode
    */
-  constructor(settings: S, name: string) {
+  constructor(settings: S, name: string, debug: boolean = false) {
     super(
       settings,
       createClient(),
-      ReactApp.createNotifier(),
+      ReactApp.createNotifier(debug),
       new WindowStorage(),
-      name
+      name,
+      debug
     );
 
     if (BridgeUtils.host) {

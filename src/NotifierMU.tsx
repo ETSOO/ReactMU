@@ -602,13 +602,19 @@ export class NotifierMU extends NotifierReact {
   /**
    * Create state and return provider
    * @param className Style class name
+   * @param debug Debug mode
    * @returns Provider
    */
-  static setup(className = "notifier-mu") {
+  static setup(className?: string, debug: boolean = false) {
+    className ??= "notifier-mu";
+
     // Create an instance
     const instance = new NotifierMU();
-    const provider = instance.createProvider(className);
+    instance.debug = debug;
+
+    const provider = instance.createProvider(className, debug);
     NotifierReact.updateInstance(instance);
+
     return provider;
   }
 

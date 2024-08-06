@@ -64,9 +64,10 @@ export class ServiceApp<
    * Constructor
    * @param settings Settings
    * @param name Application name
+   * @param debug Debug mode
    */
-  constructor(settings: S, name: string) {
-    super(settings, name);
+  constructor(settings: S, name: string, debug: boolean = false) {
+    super(settings, name, debug);
 
     // Check
     if (settings.serviceId == null || settings.serviceEndpoint == null) {
