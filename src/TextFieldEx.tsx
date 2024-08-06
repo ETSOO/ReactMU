@@ -9,6 +9,7 @@ import { MUGlobal } from "./MUGlobal";
 import { Clear, Visibility } from "@mui/icons-material";
 import { Keyboard } from "@etsoo/shared";
 import { ReactUtils, useCombinedRefs, useDelayedExecutor } from "@etsoo/react";
+import { globalApp } from "./app/ReactApp";
 
 /**
  * Extended text field props
@@ -18,6 +19,11 @@ export type TextFieldExProps = TextFieldProps & {
    * Change delay (ms) to avoid repeatly dispatch onChange
    */
   changeDelay?: number;
+
+  /**
+   * Clear button label
+   */
+  clearLabel?: string;
 
   /**
    * Click clear button callback
@@ -67,9 +73,14 @@ export const TextFieldEx = React.forwardRef<
   TextFieldExMethods,
   TextFieldExProps
 >((props, ref) => {
+  // Labels
+  const { showIt, clearInput } =
+    globalApp?.getLabels("showIt", "clearInput") ?? {};
+
   // Destructure
   const {
     changeDelay,
+    clearLabel = clearInput,
     error,
     fullWidth = true,
     helperText,
@@ -176,12 +187,13 @@ export const TextFieldEx = React.forwardRef<
             onTouchStart={touchStart}
             onTouchCancel={touchEnd}
             onTouchEnd={touchEnd}
+            title={showIt}
           >
             <Visibility />
           </IconButton>
         )}
         {showClear && (
-          <IconButton onClick={clearClick} tabIndex={-1}>
+          <IconButton onClick={clearClick} tabIndex={-1} title={clearLabel}>
             <Clear />
           </IconButton>
         )}
