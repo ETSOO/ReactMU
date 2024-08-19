@@ -160,6 +160,7 @@ export class ServiceApp<
     // Merge additional data passed
     const rq: RefreshTokenRQ = {
       deviceId: this.deviceId,
+      region: this.region,
       timezone: this.getTimeZone(),
       ...data
     };

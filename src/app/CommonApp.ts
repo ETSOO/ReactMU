@@ -77,6 +77,7 @@ export abstract class CommonApp<
     // Reqest data
     const rq: RefreshTokenRQ = {
       deviceId: this.deviceId,
+      region: this.region,
       timezone: this.getTimeZone(),
       ...data
     };
