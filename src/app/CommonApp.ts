@@ -132,6 +132,9 @@ export abstract class CommonApp<
     if (result == null) return false;
 
     if (!result.ok) {
+      // Remove the wrong token
+      this.clearCacheToken();
+
       if (result.type === "TokenExpired" && relogin) {
         // Try login
         // Dialog to receive password
