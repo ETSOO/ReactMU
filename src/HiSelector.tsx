@@ -1,12 +1,8 @@
 import { DataTypes, IdDefaultType, LabelDefaultType } from "@etsoo/shared";
-import {
-  FormLabel,
-  Grid,
-  RegularBreakpoints,
-  SelectChangeEvent
-} from "@mui/material";
+import { FormLabel, Grid, SelectChangeEvent } from "@mui/material";
 import React from "react";
 import { SelectEx } from "./SelectEx";
+import { RegularBreakpoints } from "@mui/material/Grid";
 
 /**
  * Hierarchy selector props

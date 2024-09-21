@@ -5,11 +5,12 @@ import {
   AddressRegionDb,
   AddressState
 } from "@etsoo/appscript";
-import { FormLabel, Grid, RegularBreakpoints } from "@mui/material";
+import { FormLabel, Grid } from "@mui/material";
 import React from "react";
 import { globalApp } from "./app/ReactApp";
 import { ComboBox } from "./ComboBox";
 import { Tiplist } from "./Tiplist";
+import { RegularBreakpoints } from "@mui/material/Grid";
 
 /**
  * Address field

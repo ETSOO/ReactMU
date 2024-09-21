@@ -3,11 +3,11 @@ import {
   AutocompleteChangeReason,
   AutocompleteValue,
   FormLabel,
-  Grid,
-  RegularBreakpoints
+  Grid
 } from "@mui/material";
 import React from "react";
 import { Tiplist } from "./Tiplist";
+import { RegularBreakpoints } from "@mui/material/Grid";
 
 /**
  * Hierarchy tiplist selector props

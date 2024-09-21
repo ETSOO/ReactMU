@@ -454,7 +454,7 @@ export class NotificationMU extends NotificationReact {
               variant="caption"
               display="block"
               ref={errorRef}
-              color={(theme) => theme.palette.error.main}
+              color="error"
             />
           </DialogContent>
           <DialogActions>

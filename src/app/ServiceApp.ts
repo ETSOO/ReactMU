@@ -374,7 +374,10 @@ export class ServiceApp<
     this.serviceUser = serviceUser;
 
     // Service API token
-    this.serviceApi.authorize(this.settings.authScheme, serviceUser.token);
+    this.serviceApi.authorize(
+      serviceUser.tokenScheme ?? "Bearer",
+      serviceUser.token
+    );
 
     // Keep = true, means service could hold the refresh token for long access
     // Trigger Context change and serviceUser is ready then
