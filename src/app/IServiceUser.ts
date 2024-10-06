@@ -17,11 +17,6 @@ export interface IServiceUser extends IUser {
   readonly organizationName: string;
 
   /**
-   * Service (App) device id
-   */
-  readonly serviceDeviceId: string;
-
-  /**
    * Service (App) passphrase encrypted
    */
   readonly servicePassphrase: string;

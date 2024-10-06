@@ -1,29 +1,11 @@
-import {
-  BridgeUtils,
-  createClient,
-  IApi,
-  IApiPayload,
-  RefreshTokenProps,
-  RefreshTokenResult,
-  RefreshTokenRQ
-} from "@etsoo/appscript";
-import { CoreConstants } from "@etsoo/react";
-import { DomUtils, IActionResult } from "@etsoo/shared";
+import { BridgeUtils, ExternalEndpoint, IApi } from "@etsoo/appscript";
 import { IServiceApp } from "./IServiceApp";
 import { IServiceAppSettings } from "./IServiceAppSettings";
 import { IServicePageData } from "./IServicePage";
-import { IServiceUser, ServiceLoginResult } from "./IServiceUser";
-import { ISmartERPUser } from "./ISmartERPUser";
+import { IServiceUser } from "./IServiceUser";
 import { ReactApp } from "./ReactApp";
-import { IAppApi } from "./IAppApi";
 
-/**
- * Service application refresh token properties
- */
-export interface ServiceRefreshTokenProps
-  extends RefreshTokenProps<Partial<RefreshTokenRQ>> {
-  appApi?: IAppApi;
-}
+const coreName = "core";
 
 /**
  * Core Service App
@@ -36,24 +18,18 @@ export class ServiceApp<
     P extends IServicePageData = IServicePageData,
     S extends IServiceAppSettings = IServiceAppSettings
   >
-  extends ReactApp<S, ISmartERPUser, P>
+  extends ReactApp<S, U, P>
   implements IServiceApp
 {
   /**
-   * Service API
+   * Core endpoint
    */
-  readonly serviceApi: IApi;
+  protected coreEndpoint: ExternalEndpoint;
 
-  private _serviceUser?: U;
   /**
-   * Service user
+   * Core system API
    */
-  get serviceUser() {
-    return this._serviceUser;
-  }
-  protected set serviceUser(value: U | undefined) {
-    this._serviceUser = value;
-  }
+  readonly coreApi: IApi;
 
   /**
    * Service passphrase
@@ -70,46 +46,27 @@ export class ServiceApp<
     super(settings, name, debug);
 
     // Check
-    if (settings.serviceId == null || settings.serviceEndpoint == null) {
-      throw new Error("No service settings");
+    if (settings.appId == null) {
+      throw new Error("Service Application ID is required.");
     }
 
-    // Service API
-    const api = createClient();
-    this.setApi(api);
+    const coreEndpoint = settings.endpoints?.core;
+    if (coreEndpoint == null) {
+      throw new Error("Core API endpont is required.");
+    }
+    this.coreEndpoint = coreEndpoint;
 
-    // Fix the baseUrl done by setupApi (Default is the settings.endpoint)
-    api.baseUrl = settings.serviceEndpoint;
-
-    this.serviceApi = api;
+    this.coreApi = this.createApi(coreName, coreEndpoint);
   }
 
   /**
-   * Service application API login
-   * @param appApi Service application API
-   * @param callback Callback
+   * Load core system UI
    */
-  apiLogin(
-    appApi: IAppApi,
-    callback?: (result: RefreshTokenResult, successData?: string) => void
-  ) {
-    return this.refreshToken({
-      callback,
-      data: appApi.getRefreshTokenData(),
-      relogin: false,
-      showLoading: false,
-      appApi
-    });
-  }
-
-  /**
-   * Load SmartERP core
-   */
-  loadSmartERP() {
+  loadCore() {
     if (BridgeUtils.host == null) {
-      window.location.href = this.settings.webUrl;
+      globalThis.location.href = this.coreEndpoint.webUrl;
     } else {
-      BridgeUtils.host.loadApp("core");
+      BridgeUtils.host.loadApp(coreName);
     }
   }
 
@@ -119,193 +76,53 @@ export class ServiceApp<
    * @param removeUrl Remove current URL for reuse
    */
   override toLoginPage(tryLogin?: boolean, removeUrl?: boolean) {
-    const parameters = `?serviceId=${this.settings.serviceId}&${
-      DomUtils.CultureField
-    }=${this.culture}${tryLogin ? "" : "&tryLogin=false"}${
-      removeUrl ? "" : "&url=" + encodeURIComponent(location.href)
-    }`;
+    // Cache current URL
+    this.cachedUrl = removeUrl ? undefined : globalThis.location.href;
+
     // Make sure apply new device id for new login
     this.clearDeviceId();
 
-    if (BridgeUtils.host == null) {
-      const coreUrl = this.settings.webUrl;
-      window.location.href = coreUrl + parameters;
-    } else {
-      BridgeUtils.host.loadApp("core", parameters);
-    }
+    //  Get the redirect URL
+    this.api
+      .get<string>("Auth/GetLogInUrl", {
+        region: this.region,
+        device: this.deviceId
+      })
+      .then((url) => {
+        if (!url) return;
+
+        url += `?tryLogin=${tryLogin ?? false}`;
+
+        if (BridgeUtils.host == null) {
+          globalThis.location.href = url;
+        } else {
+          BridgeUtils.host.loadApp(coreName, url);
+        }
+      });
   }
 
   /**
-   * Refresh token
-   * @param props Props
+   * User login extended
+   * @param user New user
+   * @param refreshToken Refresh token
+   * @param keep Keep in local storage or not
+   * @param dispatch User state dispatch
    */
-  override async refreshToken(props?: ServiceRefreshTokenProps) {
-    // Destruct
-    const {
-      appApi,
-      callback,
-      data,
-      relogin = false,
-      showLoading = false
-    } = props ?? {};
+  override userLogin(
+    user: U,
+    refreshToken: string,
+    keep?: boolean,
+    dispatch?: boolean
+  ): void {
+    // Super call, set token
+    super.userLogin(user, refreshToken, keep, dispatch);
 
-    // Token
-    const token = this.getCacheToken();
-    if (token == null || token === "") {
-      if (callback) callback(false);
-      return false;
-    }
-
-    // Reqest data
-    // Merge additional data passed
-    const rq: RefreshTokenRQ = {
-      deviceId: this.deviceId,
-      region: this.region,
-      timezone: this.getTimeZone(),
-      ...data
-    };
-
-    // Login result type
-    type LoginResult = IActionResult<U>;
-
-    // Payload
-    const payload: IApiPayload<LoginResult, any> = {
-      showLoading,
-      config: { headers: { [CoreConstants.TokenHeaderRefresh]: token } },
-      onError: (error) => {
-        if (callback) callback(error);
-
-        // Prevent further processing
-        return false;
-      }
-    };
-
-    // Success callback
-    const success = async (
-      result: LoginResult,
-      failCallback?: (result: RefreshTokenResult) => void
-    ) => {
-      // Token
-      const refreshToken = this.getResponseToken(payload.response);
-      if (refreshToken == null || result.data == null) {
-        if (failCallback) failCallback(this.get("noData")!);
-        return false;
-      }
-
-      // User data
-      const userData = result.data;
-
-      // Use core system access token to service api to exchange service access token
-      const api = appApi ? appApi.api : this.serviceApi;
-      const serviceResult = await api.put<ServiceLoginResult<U>>(
-        "Auth/ExchangeToken",
-        {
-          token: this.encryptEnhanced(
-            userData.token,
-            (appApi?.serviceId ?? this.settings.serviceId).toString()
-          )
-        },
-        {
-          showLoading,
-          onError: (error) => {
-            if (failCallback) failCallback(error);
-
-            // Prevent further processing
-            return false;
-          }
-        }
-      );
-
-      if (serviceResult == null) return false;
-
-      if (!serviceResult.ok) {
-        if (failCallback) failCallback(serviceResult);
-        return false;
-      }
-
-      if (serviceResult.data == null) {
-        if (failCallback) failCallback(this.get("noData")!);
-        return false;
-      }
-
-      // Login
-      if (appApi) {
-        // Authorize external service application API
-        appApi.authorize(userData, refreshToken, serviceResult.data);
-      } else {
-        // Authorize local service
-        this.userLoginEx(userData, refreshToken, serviceResult.data);
-      }
-
-      // Success callback
-      if (failCallback) failCallback(true);
-
-      return true;
-    };
-
-    // Call API
-    const result = await this.api.put<LoginResult>(
-      "Auth/RefreshToken",
-      rq,
-      payload
-    );
-    if (result == null) return false;
-
-    if (!result.ok) {
-      if (result.type === "TokenExpired" && relogin) {
-        // Try login
-        // Dialog to receive password
-        var labels = this.getLabels("reloginTip", "login");
-        this.notifier.prompt(
-          labels.reloginTip,
-          async (pwd) => {
-            if (pwd == null) {
-              this.toLoginPage();
-              return;
-            }
-
-            // Set password for the action
-            rq.pwd = this.encrypt(this.hash(pwd));
-
-            // Submit again
-            const result = await this.api.put<LoginResult>(
-              "Auth/RefreshToken",
-              rq,
-              payload
-            );
-
-            if (result == null) return;
-
-            if (result.ok) {
-              await success(result, (loginResult: RefreshTokenResult) => {
-                if (loginResult === true) {
-                  if (callback) callback(true);
-                  return;
-                }
-
-                const message = this.formatRefreshTokenResult(loginResult);
-                if (message) this.notifier.alert(message);
-              });
-              return;
-            }
-
-            // Popup message
-            this.alertResult(result);
-            return false;
-          },
-          labels.login,
-          { type: "password" }
-        );
-
-        // Fake truth to avoid reloading
-        return true;
-      }
-
-      if (callback) callback(result);
-      return false;
-    }
-
-    return await success(result, callback);
+    // Set service passphrase
+    this.servicePassphrase =
+      this.decrypt(
+        user.servicePassphrase,
+        `${user.uid}-${this.settings.appId}`
+      ) ?? "";
   }
 
   /**
@@ -331,56 +148,5 @@ export class ServiceApp<
       passphrase ?? this.servicePassphrase,
       iterations
     );
-  }
-
-  /**
-   * Try login
-   * @param data Additional data
-   * @param showLoading Show loading bar or not
-   * @returns Result
-   */
-  override async tryLogin<D extends object = {}>(
-    data?: D,
-    showLoading?: boolean
-  ) {
-    // Reset user state
-    const result = await super.tryLogin(data, showLoading);
-    if (!result) return false;
-
-    // Refresh token
-    return await this.refreshToken({
-      callback: (result) => this.doRefreshTokenResult(result),
-      data,
-      showLoading,
-      relogin: true
-    });
-  }
-
-  /**
-   * User login extended
-   * @param user Core system user
-   * @param refreshToken Refresh token
-   * @param serviceUser Service user
-   */
-  userLoginEx(user: ISmartERPUser, refreshToken: string, serviceUser: U) {
-    // Service user login
-    this.servicePassphrase =
-      this.decrypt(
-        serviceUser.servicePassphrase,
-        this.settings.serviceId.toString()
-      ) ?? "";
-
-    // Service user
-    this.serviceUser = serviceUser;
-
-    // Service API token
-    this.serviceApi.authorize(
-      serviceUser.tokenScheme ?? "Bearer",
-      serviceUser.token
-    );
-
-    // Keep = true, means service could hold the refresh token for long access
-    // Trigger Context change and serviceUser is ready then
-    super.userLogin(user, refreshToken, true);
   }
 }

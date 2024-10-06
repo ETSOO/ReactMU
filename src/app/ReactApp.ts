@@ -1,7 +1,6 @@
 import {
   BridgeUtils,
   CoreApp,
-  createClient,
   FormatResultCustomCallback,
   IApp,
   IAppSettings,
@@ -253,7 +252,7 @@ export class ReactApp<
   constructor(settings: S, name: string, debug: boolean = false) {
     super(
       settings,
-      createClient(),
+      null,
       ReactApp.createNotifier(debug),
       new WindowStorage(),
       name,

@@ -7,7 +7,7 @@ import { IdType } from "@etsoo/shared";
 export interface IServiceAppSettings<S extends IdType = number>
   extends IAppSettings {
   /**
-   * Service id
+   * Service application id
    */
-  readonly serviceId: S;
+  readonly appId: S;
 }

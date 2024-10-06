@@ -56,16 +56,9 @@ export abstract class CommonApp<
    * Refresh token
    * @param props Props
    */
-  override async refreshToken<D extends object = Partial<RefreshTokenRQ>>(
-    props?: RefreshTokenProps<D>
-  ) {
+  override async refreshToken(props?: RefreshTokenProps) {
     // Destruct
-    const {
-      callback,
-      data,
-      relogin = false,
-      showLoading = false
-    } = props ?? {};
+    const { callback, showLoading = false } = props ?? {};
 
     // Token
     const token = this.getCacheToken();
@@ -76,10 +69,7 @@ export abstract class CommonApp<
 
     // Reqest data
     const rq: RefreshTokenRQ = {
-      deviceId: this.deviceId,
-      region: this.region,
-      timezone: this.getTimeZone(),
-      ...data
+      deviceId: this.deviceId
     };
 
     // Login result type
@@ -135,56 +125,9 @@ export abstract class CommonApp<
       // Remove the wrong token
       this.clearCacheToken();
 
-      if (result.type === "TokenExpired" && relogin) {
-        // Try login
-        // Dialog to receive password
-        var labels = this.getLabels("reloginTip", "login");
-        this.notifier.prompt(
-          labels.reloginTip,
-          async (pwd) => {
-            if (pwd == null) {
-              this.toLoginPage();
-              return;
-            }
-
-            // Set password for the action
-            rq.pwd = this.encrypt(this.hash(pwd));
-
-            // Submit again
-            const result = await this.api.put<LoginResult>(
-              "Auth/RefreshToken",
-              rq,
-              payload
-            );
-
-            if (result == null) return;
-
-            if (result.ok) {
-              success(result, (loginResult: RefreshTokenResult) => {
-                if (loginResult === true) {
-                  if (callback) callback(true);
-                  return;
-                }
-
-                const message = this.formatRefreshTokenResult(loginResult);
-                if (message) this.notifier.alert(message);
-              });
-              return;
-            }
-
-            // Popup message
-            this.alertResult(result);
-            return false;
-          },
-          labels.login,
-          { type: "password" }
-        );
-
-        // Fake truth to avoid reloading
-        return true;
-      }
-
+      // Callback
       if (callback) callback(result);
+
       return false;
     }
 
@@ -193,24 +136,18 @@ export abstract class CommonApp<
 
   /**
    * Try login
-   * @param data Additional data
    * @param showLoading Show loading bar or not
    * @returns Result
    */
-  override async tryLogin<D extends object = RefreshTokenRQ>(
-    data?: D,
-    showLoading?: boolean
-  ) {
+  override async tryLogin(showLoading?: boolean) {
     // Reset user state
-    const result = await super.tryLogin(data);
+    const result = await super.tryLogin(showLoading);
     if (!result) return false;
 
     // Refresh token
     return await this.refreshToken({
       callback: (result) => this.doRefreshTokenResult(result),
-      data,
-      showLoading,
-      relogin: true
+      showLoading
     });
   }
 }
