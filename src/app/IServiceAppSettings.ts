@@ -1,13 +1,12 @@
 import { IAppSettings } from "@etsoo/appscript";
-import { IdType } from "@etsoo/shared";
 
 /**
  * Service app settings interface
  */
-export interface IServiceAppSettings<S extends IdType = number>
-  extends IAppSettings {
+export interface IServiceAppSettings extends IAppSettings {
   /**
-   * Service application id
+   * Application id
+   * 程序编号
    */
-  readonly appId: S;
+  appId: number;
 }

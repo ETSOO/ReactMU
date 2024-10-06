@@ -1,10 +1,4 @@
-import {
-  BridgeUtils,
-  ExternalEndpoint,
-  IApi,
-  InitCallDto,
-  InitCallResult
-} from "@etsoo/appscript";
+import { BridgeUtils, ExternalEndpoint, IApi } from "@etsoo/appscript";
 import { IServiceApp } from "./IServiceApp";
 import { IServiceAppSettings } from "./IServiceAppSettings";
 import { IServicePageData } from "./IServicePage";
@@ -38,11 +32,6 @@ export class ServiceApp<
   readonly coreApi: IApi;
 
   /**
-   * Service passphrase
-   */
-  protected servicePassphrase: string = "";
-
-  /**
    * Constructor
    * @param settings Settings
    * @param name Application name
@@ -50,11 +39,6 @@ export class ServiceApp<
    */
   constructor(settings: S, name: string, debug: boolean = false) {
     super(settings, name, debug);
-
-    // Check
-    if (settings.appId == null) {
-      throw new Error("Service Application ID is required.");
-    }
 
     const coreEndpoint = settings.endpoints?.core;
     if (coreEndpoint == null) {
@@ -74,15 +58,6 @@ export class ServiceApp<
     } else {
       BridgeUtils.host.loadApp(coreName);
     }
-  }
-
-  /**
-   * Api init call, for service application, call the core system API
-   * @param data Data
-   * @returns Result
-   */
-  override async apiInitCall(data: InitCallDto) {
-    return await this.coreApi.put<InitCallResult>(this.initCallApi, data);
   }
 
   /**
@@ -132,36 +107,13 @@ export class ServiceApp<
     // Super call, set token
     super.userLogin(user, refreshToken, keep, dispatch);
 
-    // Set service passphrase
-    this.servicePassphrase =
-      this.decrypt(
-        user.servicePassphrase,
+    if (user.passphrase) {
+      // Save the passphrase
+      const passphrase = this.decrypt(
+        user.passphrase,
         `${user.uid}-${this.settings.appId}`
-      ) ?? "";
-  }
-
-  /**
-   * Service decrypt message
-   * @param messageEncrypted Encrypted message
-   * @param passphrase Secret passphrase
-   * @returns Pure text
-   */
-  serviceDecrypt(messageEncrypted: string, passphrase?: string) {
-    return this.decrypt(messageEncrypted, passphrase ?? this.servicePassphrase);
-  }
-
-  /**
-   * Service encrypt message
-   * @param message Message
-   * @param passphrase Secret passphrase
-   * @param iterations Iterations, 1000 times, 1 - 99
-   * @returns Result
-   */
-  serviceEncrypt(message: string, passphrase?: string, iterations?: number) {
-    return this.encrypt(
-      message,
-      passphrase ?? this.servicePassphrase,
-      iterations
-    );
+      );
+      if (passphrase) this.updatePassphrase(passphrase);
+    }
   }
 }

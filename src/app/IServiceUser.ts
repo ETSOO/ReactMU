@@ -13,13 +13,15 @@ export interface IServiceUser extends IUser {
 
   /**
    * Organization name
+   * 机构名称
    */
   readonly organizationName: string;
 
   /**
    * Service (App) passphrase encrypted
+   * 服务（应用）加密密钥
    */
-  readonly servicePassphrase: string;
+  readonly passphrase?: string;
 }
 
 /**
