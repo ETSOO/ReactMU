@@ -1,4 +1,10 @@
-import { BridgeUtils, ExternalEndpoint, IApi } from "@etsoo/appscript";
+import {
+  BridgeUtils,
+  ExternalEndpoint,
+  IApi,
+  InitCallDto,
+  InitCallResult
+} from "@etsoo/appscript";
 import { IServiceApp } from "./IServiceApp";
 import { IServiceAppSettings } from "./IServiceAppSettings";
 import { IServicePageData } from "./IServicePage";
@@ -68,6 +74,15 @@ export class ServiceApp<
     } else {
       BridgeUtils.host.loadApp(coreName);
     }
+  }
+
+  /**
+   * Api init call, for service application, call the core system API
+   * @param data Data
+   * @returns Result
+   */
+  override async apiInitCall(data: InitCallDto) {
+    return await this.coreApi.put<InitCallResult>(this.initCallApi, data);
   }
 
   /**
