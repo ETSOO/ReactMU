@@ -1,8 +1,13 @@
-import { BridgeUtils, ExternalEndpoint, IApi } from "@etsoo/appscript";
+import {
+  ApiRefreshTokenDto,
+  BridgeUtils,
+  ExternalEndpoint,
+  IApi
+} from "@etsoo/appscript";
 import { IServiceApp } from "./IServiceApp";
 import { IServiceAppSettings } from "./IServiceAppSettings";
 import { IServicePageData } from "./IServicePage";
-import { IServiceUser } from "./IServiceUser";
+import { IServiceUser, ServiceUserToken } from "./IServiceUser";
 import { ReactApp } from "./ReactApp";
 
 const coreName = "core";
@@ -108,16 +113,44 @@ export class ServiceApp<
     // Super call, set token
     super.userLogin(user, refreshToken, keep, dispatch);
 
-    if (user.deviceId && user.passphrase) {
+    if (user.clientDeviceId && user.passphrase) {
       // Save the passphrase
       const passphrase = this.decrypt(
         user.passphrase,
         `${user.uid}-${this.settings.appId}`
       );
       if (passphrase) {
-        this.deviceId = user.deviceId;
+        this.deviceId = user.clientDeviceId;
         this.updatePassphrase(passphrase);
       }
     }
+  }
+
+  /**
+   *
+   * @param user Current user
+   * @param core Core system API token data
+   * @param keep Keep in local storage or not
+   * @param dispatch User state dispatch
+   */
+  userLoginEx(
+    user: U & ServiceUserToken,
+    core?: ApiRefreshTokenDto,
+    keep?: boolean,
+    dispatch?: boolean
+  ) {
+    // User login
+    const { refreshToken } = user;
+    this.userLogin(user, refreshToken, keep, dispatch);
+
+    // Core system login
+    core ??= {
+      refreshToken,
+      accessToken: user.token,
+      tokenType: user.tokenScheme ?? "Bearer",
+      expiresIn: user.seconds
+    };
+
+    this.exchangeTokenAll(core, coreName);
   }
 }

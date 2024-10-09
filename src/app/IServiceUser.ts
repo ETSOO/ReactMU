@@ -24,11 +24,23 @@ export interface IServiceUser extends IUser {
   readonly passphrase?: string;
 
   /**
-   * Device id
-   * 设备编号
+   * Client device id
+   * 客户端设备编号
    */
-  readonly deviceId?: string;
+  readonly clientDeviceId?: string;
 }
+
+/**
+ * Service user token return type
+ * 服务用户令牌返回类型
+ */
+export type ServiceUserToken = {
+  /**
+   * Refresh token
+   * 刷新令牌
+   */
+  readonly refreshToken: string;
+};
 
 /**
  * Service user login result
