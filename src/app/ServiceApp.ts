@@ -107,13 +107,16 @@ export class ServiceApp<
     // Super call, set token
     super.userLogin(user, refreshToken, keep, dispatch);
 
-    if (user.passphrase) {
+    if (user.deviceId && user.passphrase) {
       // Save the passphrase
       const passphrase = this.decrypt(
         user.passphrase,
         `${user.uid}-${this.settings.appId}`
       );
-      if (passphrase) this.updatePassphrase(passphrase);
+      if (passphrase) {
+        this.deviceId = user.deviceId;
+        this.updatePassphrase(passphrase);
+      }
     }
   }
 }

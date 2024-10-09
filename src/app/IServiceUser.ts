@@ -22,6 +22,12 @@ export interface IServiceUser extends IUser {
    * 服务（应用）加密密钥
    */
   readonly passphrase?: string;
+
+  /**
+   * Device id
+   * 设备编号
+   */
+  readonly deviceId?: string;
 }
 
 /**
