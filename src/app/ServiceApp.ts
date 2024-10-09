@@ -69,9 +69,6 @@ export class ServiceApp<
     // Cache current URL
     this.cachedUrl = removeUrl ? undefined : globalThis.location.href;
 
-    // Make sure apply new device id for new login
-    this.clearDeviceId();
-
     //  Get the redirect URL
     this.api
       .get<string>("Auth/GetLogInUrl", {
@@ -81,7 +78,8 @@ export class ServiceApp<
       .then((url) => {
         if (!url) return;
 
-        url += `?tryLogin=${tryLogin ?? false}`;
+        // Add try login flag
+        url = url.addUrlParam("tryLogin", tryLogin ?? false);
 
         if (BridgeUtils.host == null) {
           globalThis.location.href = url;
@@ -89,6 +87,9 @@ export class ServiceApp<
           BridgeUtils.host.loadApp(coreName, url);
         }
       });
+
+    // Make sure apply new device id for new login
+    this.clearDeviceId();
   }
 
   /**
