@@ -110,20 +110,21 @@ export class ServiceApp<
     keep?: boolean,
     dispatch?: boolean
   ): void {
-    // Super call, set token
-    super.userLogin(user, refreshToken, keep, dispatch);
-
     if (user.clientDeviceId && user.passphrase) {
       // Save the passphrase
+      // Interpolated string expressions are different between TypeScript and C# for the null value
       const passphrase = this.decrypt(
         user.passphrase,
-        `${user.uid}-${this.settings.appId}`
+        `${user.uid ?? ""}-${this.settings.appId}`
       );
       if (passphrase) {
         this.deviceId = user.clientDeviceId;
         this.updatePassphrase(passphrase);
       }
     }
+
+    // Super call, set token
+    super.userLogin(user, refreshToken, keep, dispatch);
   }
 
   /**
