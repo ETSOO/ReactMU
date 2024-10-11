@@ -1,5 +1,6 @@
 import {
   ApiRefreshTokenDto,
+  AuthApi,
   BridgeUtils,
   ExternalEndpoint,
   IApi
@@ -80,8 +81,8 @@ export class ServiceApp<
     this.cachedUrl = removeUrl ? undefined : globalThis.location.href;
 
     //  Get the redirect URL
-    this.api
-      .get<string>("Auth/GetLogInUrl", {
+    new AuthApi(this)
+      .getSigninUrl({
         region: this.region,
         device: this.deviceId
       })
