@@ -82,7 +82,7 @@ export class ServiceApp<
 
     //  Get the redirect URL
     new AuthApi(this)
-      .getSigninUrl({
+      .getLogInUrl({
         region: this.region,
         device: this.deviceId
       })
