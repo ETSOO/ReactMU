@@ -86,10 +86,18 @@ export class ServiceApp<
         // Add try login flag
         url = url.addUrlParam("tryLogin", tryLogin ?? false);
 
-        if (BridgeUtils.host == null) {
-          globalThis.location.href = url;
+        // Is it inside an iframe?
+        if (globalThis.self !== globalThis.parent) {
+          globalThis.parent.postMessage(
+            ["login", url],
+            new URL(this.coreEndpoint.webUrl).origin
+          );
         } else {
-          BridgeUtils.host.loadApp(coreName, url);
+          if (BridgeUtils.host == null) {
+            globalThis.location.href = url;
+          } else {
+            BridgeUtils.host.loadApp(coreName, url);
+          }
         }
       });
 

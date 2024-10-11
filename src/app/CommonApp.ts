@@ -37,22 +37,6 @@ export abstract class CommonApp<
   }
 
   /**
-   * Do user login
-   * @param data User data
-   * @param refreshToken Refresh token
-   * @param keep Keep login
-   * @returns Success data
-   */
-  protected doUserLogin(
-    data: U,
-    refreshToken: string,
-    keep: boolean
-  ): string | undefined {
-    this.userLogin(data, refreshToken, keep);
-    return undefined;
-  }
-
-  /**
    * Refresh token
    * @param props Props
    */
@@ -91,7 +75,7 @@ export abstract class CommonApp<
     // Success callback
     const success = (
       result: LoginResult,
-      failCallback?: (result: RefreshTokenResult, serviceToken?: string) => void
+      failCallback?: (result: RefreshTokenResult) => void
     ) => {
       // Token
       const refreshToken = this.getResponseToken(payload.response);
@@ -104,10 +88,10 @@ export abstract class CommonApp<
       const keep = this.storage.getData(CoreConstants.FieldLoginKeep, false);
 
       // User login
-      var successData = this.doUserLogin(result.data, refreshToken, keep);
+      this.userLogin(result.data, refreshToken, keep);
 
       // Callback
-      if (failCallback) failCallback(true, successData);
+      if (failCallback) failCallback(true);
 
       return true;
     };
