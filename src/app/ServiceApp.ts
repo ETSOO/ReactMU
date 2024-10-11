@@ -37,6 +37,11 @@ export class ServiceApp<
   readonly coreApi: IApi;
 
   /**
+   * Core system origin
+   */
+  readonly coreOrigin: string;
+
+  /**
    * Constructor
    * @param settings Settings
    * @param name Application name
@@ -50,7 +55,7 @@ export class ServiceApp<
       throw new Error("Core API endpont is required.");
     }
     this.coreEndpoint = coreEndpoint;
-
+    this.coreOrigin = new URL(coreEndpoint.webUrl).origin;
     this.coreApi = this.createApi(coreName, coreEndpoint);
   }
 
@@ -88,10 +93,7 @@ export class ServiceApp<
 
         // Is it inside an iframe?
         if (globalThis.self !== globalThis.parent) {
-          globalThis.parent.postMessage(
-            ["login", url],
-            new URL(this.coreEndpoint.webUrl).origin
-          );
+          globalThis.parent.postMessage(["login", url], this.coreOrigin);
         } else {
           if (BridgeUtils.host == null) {
             globalThis.location.href = url;

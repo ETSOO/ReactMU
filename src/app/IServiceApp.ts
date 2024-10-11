@@ -12,6 +12,11 @@ export interface IServiceApp extends ReactAppType {
   readonly coreApi: IApi;
 
   /**
+   * Core system origin
+   */
+  readonly coreOrigin: string;
+
+  /**
    * Load core system UI
    */
   loadCore(): void;
