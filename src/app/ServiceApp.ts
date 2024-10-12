@@ -92,8 +92,8 @@ export class ServiceApp<
         // Add try login flag
         url = url.addUrlParam("tryLogin", tryLogin ?? false);
 
-        // Is it inside an iframe?
-        if (globalThis.self !== globalThis.parent) {
+        // Is it embeded?
+        if (this.embedded) {
           globalThis.parent.postMessage(["login", url], this.coreOrigin);
         } else {
           if (BridgeUtils.host == null) {
