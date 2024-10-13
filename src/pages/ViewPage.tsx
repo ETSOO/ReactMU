@@ -5,8 +5,8 @@ import {
 } from "@etsoo/react";
 import { DataTypes, DateUtils, Utils } from "@etsoo/shared";
 import {
-  Grid,
-  GridProps,
+  Grid2,
+  Grid2Props,
   LinearProgress,
   Stack,
   Typography
@@ -26,7 +26,7 @@ import { OperationMessageContainer } from "../messages/OperationMessageContainer
 /**
  * View page grid item properties
  */
-export type ViewPageGridItemProps = GridProps & {
+export type ViewPageGridItemProps = Grid2Props & {
   data: React.ReactNode;
   label?: React.ReactNode;
   singleRow?: ViewPageRowType;
@@ -43,7 +43,7 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
 
   // Default options
   let options = {};
-  if (gridProps.xs == null && gridProps.md == null) {
+  if (gridProps.size == null) {
     options = getResp(singleRow ?? "small");
   } else if (singleRow != null) {
     options = getResp(singleRow ?? "small");
@@ -51,7 +51,7 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
 
   // Layout
   return (
-    <Grid item {...gridProps} {...options}>
+    <Grid2 {...gridProps} {...options}>
       {label != null && (
         <Typography variant="caption" component="div">
           {label}:
@@ -62,7 +62,7 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
       ) : (
         <Typography variant="subtitle2">{data}</Typography>
       )}
-    </Grid>
+    </Grid2>
   );
 }
 
@@ -74,7 +74,7 @@ export type ViewPageRowType = boolean | "default" | "small" | "medium" | object;
 /**
  * View page display field
  */
-export interface ViewPageField<T extends object> extends GridProps {
+export interface ViewPageField<T extends object> extends Grid2Props {
   /**
    * Data field
    */
@@ -181,29 +181,31 @@ function formatItemData(fieldData: unknown): string | undefined {
 }
 
 function getResp(singleRow: ViewPageRowType) {
-  return typeof singleRow === "object"
-    ? singleRow
-    : singleRow === "medium"
-    ? { xs: 12, sm: 12, md: 6, lg: 4, xl: 3 }
-    : singleRow === true
-    ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
-    : {
-        xs: singleRow === false ? 12 : 6,
-        sm: 6,
-        md: 4,
-        lg: 3,
-        xl: 2
-      };
+  const size =
+    typeof singleRow === "object"
+      ? singleRow
+      : singleRow === "medium"
+      ? { xs: 12, sm: 12, md: 6, lg: 4, xl: 3 }
+      : singleRow === true
+      ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
+      : {
+          xs: singleRow === false ? 12 : 6,
+          sm: 6,
+          md: 4,
+          lg: 3,
+          xl: 2
+        };
+  return { size };
 }
 
 function getItemField<T extends object>(
   field: ViewPageFieldTypeNarrow<T>,
   data: T
-): [React.ReactNode, React.ReactNode, GridProps] {
+): [React.ReactNode, React.ReactNode, Grid2Props] {
   // Item data and label
   let itemData: React.ReactNode,
     itemLabel: React.ReactNode,
-    gridProps: GridProps = {};
+    gridProps: Grid2Props = {};
 
   if (Array.isArray(field)) {
     const [fieldData, fieldType, renderProps, singleRow = "small"] = field;
@@ -326,7 +328,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
               }
             />
           )}
-          <Grid
+          <Grid2
             container
             justifyContent="left"
             spacing={spacing}
@@ -356,7 +358,6 @@ export function ViewPage<T extends DataTypes.StringRecord>(
               // Layout
               return (
                 <ViewPageGridItem
-                  item
                   {...gridProps}
                   key={index}
                   data={itemData}
@@ -364,7 +365,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
                 />
               );
             })}
-          </Grid>
+          </Grid2>
           {actions !== null && (
             <Stack
               className="ET-ViewPage-Actions"

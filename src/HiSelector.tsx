@@ -1,8 +1,8 @@
 import { DataTypes, IdDefaultType, LabelDefaultType } from "@etsoo/shared";
-import { FormLabel, Grid, SelectChangeEvent } from "@mui/material";
+import { FormLabel, Grid2, GridSize, SelectChangeEvent } from "@mui/material";
 import React from "react";
 import { SelectEx } from "./SelectEx";
-import { RegularBreakpoints } from "@mui/material/Grid";
+import { ResponsiveStyleValue } from "./ResponsiveStyleValue";
 
 /**
  * Hierarchy selector props
@@ -15,7 +15,7 @@ export type HiSelectorProps<
   /**
    * Break points
    */
-  breakPoints?: RegularBreakpoints;
+  breakPoints?: ResponsiveStyleValue<GridSize>;
 
   /**
    * Id field
@@ -161,17 +161,17 @@ export function HiSelector<
   return (
     <React.Fragment>
       {label && (
-        <Grid item xs={12}>
+        <Grid2 size={{ xs: 12 }}>
           <FormLabel
             required={required}
             sx={{ fontSize: (theme) => theme.typography.caption }}
           >
             {label}
           </FormLabel>
-        </Grid>
+        </Grid2>
       )}
       <input type="hidden" name={name} value={`${currentValue ?? ""}`} />
-      <Grid item {...breakPoints}>
+      <Grid2 size={breakPoints}>
         <SelectEx<T, D, L>
           idField={idField}
           label={labels[0]}
@@ -188,9 +188,9 @@ export function HiSelector<
           helperText={helperText}
           variant={variant}
         />
-      </Grid>
+      </Grid2>
       {localValues[0] != null && (
-        <Grid item {...breakPoints}>
+        <Grid2 size={breakPoints}>
           <SelectEx<T, D, L>
             key={`${localValues[0]}`}
             idField={idField}
@@ -205,10 +205,10 @@ export function HiSelector<
             onItemChange={doItemChange}
             variant={variant}
           />
-        </Grid>
+        </Grid2>
       )}
       {localValues[1] != null && (
-        <Grid item {...breakPoints}>
+        <Grid2 size={breakPoints}>
           <SelectEx<T, D, L>
             key={`${localValues[1]}`}
             idField={idField}
@@ -223,10 +223,10 @@ export function HiSelector<
             onItemChange={doItemChange}
             variant={variant}
           />
-        </Grid>
+        </Grid2>
       )}
       {localValues[2] != null && (
-        <Grid item {...breakPoints}>
+        <Grid2 size={breakPoints}>
           <SelectEx<T, D, L>
             key={`${localValues[2]}`}
             idField={idField}
@@ -241,7 +241,7 @@ export function HiSelector<
             onItemChange={doItemChange}
             variant={variant}
           />
-        </Grid>
+        </Grid2>
       )}
     </React.Fragment>
   );

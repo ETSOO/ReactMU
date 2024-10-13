@@ -1,5 +1,5 @@
 import { CustomFieldData } from "@etsoo/appscript";
-import { Grid, GridProps, Typography, TypographyProps } from "@mui/material";
+import { Grid2, Grid2Props, Typography, TypographyProps } from "@mui/material";
 import { CustomFieldUtils } from "./CustomFieldUtils";
 import { MUGlobal } from "../MUGlobal";
 import { VBox } from "../FlexBox";
@@ -20,7 +20,7 @@ export type CustomFieldViewerProps = {
    * Grid props
    * 网格属性
    */
-  gridProps?: GridProps;
+  gridProps?: Grid2Props;
 
   /**
    * JSON data
@@ -96,7 +96,7 @@ export function CustomFieldViewer(props: CustomFieldViewerProps) {
   }
 
   return (
-    <Grid
+    <Grid2
       container
       justifyContent="left"
       spacing={spacing}
@@ -116,11 +116,10 @@ export function CustomFieldViewer(props: CustomFieldViewerProps) {
         const value = Utils.getNestedValue(data, name);
 
         return (
-          <Grid
-            item
+          <Grid2
             key={name ?? index}
+            size={CustomFieldUtils.transformSpace(field.space)}
             {...field.gridItemProps}
-            {...CustomFieldUtils.transformSpace(field.space)}
           >
             <VBox gap={verticalGap}>
               <Typography fontWeight="bold" fontSize="small" {...titleProps}>
@@ -130,9 +129,9 @@ export function CustomFieldViewer(props: CustomFieldViewerProps) {
                 {valueLabelFormatter(value, field)}
               </Typography>
             </VBox>
-          </Grid>
+          </Grid2>
         );
       })}
-    </Grid>
+    </Grid2>
   );
 }

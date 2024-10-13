@@ -3,11 +3,12 @@ import {
   AutocompleteChangeReason,
   AutocompleteValue,
   FormLabel,
-  Grid
+  Grid2,
+  GridSize
 } from "@mui/material";
 import React from "react";
 import { Tiplist } from "./Tiplist";
-import { RegularBreakpoints } from "@mui/material/Grid";
+import { ResponsiveStyleValue } from "./ResponsiveStyleValue";
 
 /**
  * Hierarchy tiplist selector props
@@ -19,7 +20,7 @@ export type HiSelectorTLProps<
   /**
    * Break points
    */
-  breakPoints?: RegularBreakpoints;
+  breakPoints?: ResponsiveStyleValue<GridSize>;
 
   /**
    * Id field
@@ -154,17 +155,17 @@ export function HiSelectorTL<
   return (
     <React.Fragment>
       {label && (
-        <Grid item xs={12}>
+        <Grid2 size={{ xs: 12 }}>
           <FormLabel
             required={required}
             sx={{ fontSize: (theme) => theme.typography.caption }}
           >
             {label}
           </FormLabel>
-        </Grid>
+        </Grid2>
       )}
       <input type="hidden" name={name} value={`${currentValue ?? ""}`} />
-      <Grid item {...breakPoints}>
+      <Grid2 size={breakPoints}>
         <Tiplist<T, D>
           idField={idField}
           label={labels[0]}
@@ -178,9 +179,9 @@ export function HiSelectorTL<
           inputHelperText={helperText}
           onChange={(event, value, reason) => doChange(0, event, value, reason)}
         />
-      </Grid>
+      </Grid2>
       {localValues[0] != null && (
-        <Grid item {...breakPoints}>
+        <Grid2 size={breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[0]}`}
             label={labels[1]}
@@ -196,10 +197,10 @@ export function HiSelectorTL<
               doChange(1, event, value, reason)
             }
           />
-        </Grid>
+        </Grid2>
       )}
       {localValues[1] != null && (
-        <Grid item {...breakPoints}>
+        <Grid2 size={breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[1]}`}
             label={labels[2]}
@@ -215,10 +216,10 @@ export function HiSelectorTL<
               doChange(2, event, value, reason)
             }
           />
-        </Grid>
+        </Grid2>
       )}
       {localValues[2] != null && (
-        <Grid item {...breakPoints}>
+        <Grid2 size={breakPoints}>
           <Tiplist<T, D>
             key={`${localValues[2]}`}
             label={labels[3]}
@@ -234,7 +235,7 @@ export function HiSelectorTL<
               doChange(3, event, value, reason)
             }
           />
-        </Grid>
+        </Grid2>
       )}
     </React.Fragment>
   );

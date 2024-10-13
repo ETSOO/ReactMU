@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Grid2 } from "@mui/material";
 import React, { FormEventHandler } from "react";
 import { MUGlobal } from "../MUGlobal";
 import { CommonPage, CommonPageProps } from "./CommonPage";
@@ -86,10 +86,15 @@ export function EditPage(props: EditPageProps) {
       )}
       {topPart}
       <form onSubmit={onSubmit}>
-        <Grid container justifyContent="left" spacing={paddings} paddingTop={1}>
+        <Grid2
+          container
+          justifyContent="left"
+          spacing={paddings}
+          paddingTop={1}
+        >
           {children}
-        </Grid>
-        <Grid
+        </Grid2>
+        <Grid2
           container
           position="sticky"
           display="flex"
@@ -121,7 +126,7 @@ export function EditPage(props: EditPageProps) {
             {labels.save}
           </Button>
           {supportBack && <BackButton title={labels.back} />}
-        </Grid>
+        </Grid2>
       </form>
       {bottomPart}
     </CommonPage>

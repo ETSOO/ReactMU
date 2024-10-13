@@ -5,7 +5,7 @@ import {
 } from "@etsoo/appscript";
 import { CustomFieldReactCollection, ICustomFieldReact } from "@etsoo/react";
 import { IdType, ListType2 } from "@etsoo/shared";
-import { Grid, GridProps, Typography } from "@mui/material";
+import { Grid2, GridSize, Typography } from "@mui/material";
 import { TypographyProps } from "@mui/material/Typography";
 import React from "react";
 import { FieldCheckbox } from "./FieldCheckbox";
@@ -21,6 +21,7 @@ import { FieldJson } from "./FieldJson";
 import { FieldRadio } from "./FieldRadio";
 import { FieldSelect } from "./FieldSelect";
 import { FieldSwitch } from "./FieldSwitch";
+import { ResponsiveStyleValue } from "../ResponsiveStyleValue";
 
 /**
  * Custom field utilities
@@ -82,14 +83,13 @@ export namespace CustomFieldUtils {
       const creator = customFieldCreators[field.type];
       if (creator == null) {
         return (
-          <Grid
-            item
+          <Grid2
             key={index}
+            size={transformSpace(field.space)}
             {...field.gridItemProps}
-            {...transformSpace(field.space)}
           >
             {`Type ${field.type} is not supported currently`}
-          </Grid>
+          </Grid2>
         );
       }
 
@@ -115,14 +115,13 @@ export namespace CustomFieldUtils {
       }
 
       return (
-        <Grid
-          item
+        <Grid2
           key={name ?? index}
+          size={transformSpace(field.space)}
           {...field.gridItemProps}
-          {...transformSpace(field.space)}
         >
           {ui}
-        </Grid>
+        </Grid2>
       );
     });
   }
@@ -150,7 +149,7 @@ export namespace CustomFieldUtils {
    * @returns Result
    */
   export function transformSpace(space?: CustomFieldSpace) {
-    const props: GridProps =
+    const size: ResponsiveStyleValue<GridSize> =
       space === "full"
         ? { xs: 12 }
         : space === "quater"
@@ -162,7 +161,7 @@ export namespace CustomFieldUtils {
         : space === "half1"
         ? { xs: 12, sm: 6 }
         : { sm: 12, md: 6 };
-    return props;
+    return size;
   }
 
   /**

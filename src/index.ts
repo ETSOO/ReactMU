@@ -95,6 +95,7 @@ export * from "./ProgressCount";
 export * from "./PullToRefreshUI";
 export * from "./QuickList";
 export * from "./ResponsibleContainer";
+export * from "./ResponsiveStyleValue";
 export * from "./ScrollerListEx";
 export * from "./ScrollTopFab";
 export * from "./SearchBar";

@@ -1,7 +1,7 @@
 import { CustomFieldData } from "@etsoo/appscript";
 import { CustomFieldReactCollection } from "@etsoo/react";
 import { Utils } from "@etsoo/shared";
-import { Grid, GridProps, Stack } from "@mui/material";
+import { Grid2, Grid2Props, Stack } from "@mui/material";
 import React from "react";
 import { globalApp } from "../app/ReactApp";
 import { MUGlobal } from "../MUGlobal";
@@ -64,7 +64,7 @@ export type CustomFieldWindowProps<D extends CustomFieldData> = {
    * Grid props
    * 网格属性
    */
-  gridProps?: GridProps;
+  gridProps?: Grid2Props;
 
   /**
    * JSON data
@@ -156,7 +156,7 @@ export function CustomFieldWindow<D extends CustomFieldData = CustomFieldData>(
               fullScreen: app.smDown,
               inputs: (
                 <Stack marginTop={1.5}>
-                  <Grid
+                  <Grid2
                     container
                     justifyContent="left"
                     spacing={spacing}
@@ -178,7 +178,7 @@ export function CustomFieldWindow<D extends CustomFieldData = CustomFieldData>(
                         Utils.setNestedValue(data, name, value);
                       }
                     )}
-                  </Grid>
+                  </Grid2>
                 </Stack>
               )
             }
