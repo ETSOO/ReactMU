@@ -1,5 +1,6 @@
 import {
   ApiRefreshTokenDto,
+  AppLoginParams,
   AuthApi,
   BridgeUtils,
   ExternalEndpoint,
@@ -12,6 +13,7 @@ import { IServiceUser, ServiceUserToken } from "./IServiceUser";
 import { ReactApp } from "./ReactApp";
 
 const coreName = "core";
+const coreTokenKey = "core-refresh-token";
 
 /**
  * Core Service App
@@ -73,10 +75,12 @@ export class ServiceApp<
 
   /**
    * Go to the login page
-   * @param tryLogin Try to login again
-   * @param removeUrl Remove current URL for reuse
+   * @params Login parameters
    */
-  override toLoginPage(tryLogin?: boolean, removeUrl?: boolean) {
+  override toLoginPage(params?: AppLoginParams) {
+    // Destruct
+    const { removeUrl, showLoading, ...rest } = params ?? {};
+
     // Cache current URL
     this.cachedUrl = removeUrl ? undefined : globalThis.location.href;
 
@@ -90,7 +94,7 @@ export class ServiceApp<
         if (!url) return;
 
         // Add try login flag
-        url = url.addUrlParam("tryLogin", tryLogin ?? false);
+        url = url.addUrlParams(rest);
 
         // Is it embeded?
         if (this.embedded) {
@@ -112,15 +116,9 @@ export class ServiceApp<
    * User login extended
    * @param user New user
    * @param refreshToken Refresh token
-   * @param keep Keep in local storage or not
    * @param dispatch User state dispatch
    */
-  override userLogin(
-    user: U,
-    refreshToken: string,
-    keep?: boolean,
-    dispatch?: boolean
-  ): void {
+  override userLogin(user: U, refreshToken: string, dispatch?: boolean): void {
     if (user.clientDeviceId && user.passphrase) {
       // Save the passphrase
       // Interpolated string expressions are different between TypeScript and C# for the null value
@@ -135,7 +133,7 @@ export class ServiceApp<
     }
 
     // Super call, set token
-    super.userLogin(user, refreshToken, keep, dispatch);
+    super.userLogin(user, refreshToken, dispatch);
   }
 
   /**
@@ -148,12 +146,11 @@ export class ServiceApp<
   userLoginEx(
     user: U & ServiceUserToken,
     core?: ApiRefreshTokenDto,
-    keep?: boolean,
     dispatch?: boolean
   ) {
     // User login
     const { refreshToken } = user;
-    this.userLogin(user, refreshToken, keep, dispatch);
+    this.userLogin(user, refreshToken, dispatch);
 
     // Core system login
     core ??= {
@@ -162,6 +159,9 @@ export class ServiceApp<
       tokenType: user.tokenScheme ?? "Bearer",
       expiresIn: user.seconds
     };
+
+    // Cache the core system refresh token
+    this.storage.setData(coreTokenKey, core.refreshToken);
 
     this.exchangeTokenAll(core, coreName);
   }
