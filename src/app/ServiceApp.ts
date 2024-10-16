@@ -1,6 +1,7 @@
 import {
   ApiRefreshTokenDto,
   AppLoginParams,
+  AppTryLoginParams,
   AuthApi,
   BridgeUtils,
   ExternalEndpoint,
@@ -164,5 +165,29 @@ export class ServiceApp<
     this.storage.setData(coreTokenKey, core.refreshToken);
 
     this.exchangeTokenAll(core, coreName);
+  }
+
+  /**
+   * Try login
+   * @param params Login parameters
+   */
+  override async tryLogin(params?: AppTryLoginParams) {
+    // Check core system token
+    const coreToken = this.storage.getData<string>(coreTokenKey);
+    if (!coreToken) return false;
+
+    params ??= {};
+    const onSuccess = params.onSuccess;
+    params.onSuccess = () => {
+      // Call the core system API refresh token
+      this.apiRefreshTokenData(this.coreApi, coreToken).then((data) => {
+        if (data == null) return;
+
+        this.exchangeTokenAll(data, coreName);
+
+        onSuccess?.();
+      });
+    };
+    return await super.tryLogin(params);
   }
 }

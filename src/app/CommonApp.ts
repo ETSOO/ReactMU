@@ -1,4 +1,4 @@
-import { AppLoginParams, IAppSettings, IUser } from "@etsoo/appscript";
+import { AppTryLoginParams, IAppSettings, IUser } from "@etsoo/appscript";
 import { CoreConstants, IPageData } from "@etsoo/react";
 import { ReactApp } from "./ReactApp";
 
@@ -33,10 +33,21 @@ export abstract class CommonApp<
    * @param showLoading Show loading bar or not
    * @returns Result
    */
-  override async tryLogin(params?: AppLoginParams) {
+  override async tryLogin(params?: AppTryLoginParams) {
     // Check status
-    if (this.isTryingLogin) return;
-    this.isTryingLogin = true;
+    const result = await super.tryLogin(params);
+    if (!result) {
+      return false;
+    }
+
+    // Destruct
+    const {
+      onFailure = () => {
+        this.toLoginPage(rest);
+      },
+      onSuccess,
+      ...rest
+    } = params ?? {};
 
     // Refresh token
     await this.refreshToken(
@@ -44,11 +55,14 @@ export abstract class CommonApp<
         showLoading: params?.showLoading
       },
       (result) => {
-        if (result) {
+        if (result === true) {
+          onSuccess?.();
         } else {
-          this.toLoginPage(params);
+          onFailure();
         }
       }
     );
+
+    return true;
   }
 }
