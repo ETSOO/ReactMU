@@ -57,7 +57,7 @@ export abstract class CommonApp<
       (result) => {
         if (result === true) {
           onSuccess?.();
-        } else {
+        } else if (result === false) {
           onFailure();
         }
       }

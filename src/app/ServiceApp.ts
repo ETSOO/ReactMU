@@ -172,16 +172,25 @@ export class ServiceApp<
    * @param params Login parameters
    */
   override async tryLogin(params?: AppTryLoginParams) {
-    // Check core system token
-    const coreToken = this.storage.getData<string>(coreTokenKey);
-    if (!coreToken) return false;
-
+    // Current callback
     params ??= {};
     const onSuccess = params.onSuccess;
+    const onFailure = params.onFailure;
+
+    // Check core system token
+    const coreToken = this.storage.getData<string>(coreTokenKey);
+    if (!coreToken) {
+      onFailure?.();
+      return false;
+    }
+
     params.onSuccess = () => {
       // Call the core system API refresh token
       this.apiRefreshTokenData(this.coreApi, coreToken).then((data) => {
         if (data == null) return;
+
+        // Cache the core system refresh token
+        this.storage.setData(coreTokenKey, data.refreshToken);
 
         this.exchangeTokenAll(data, coreName);
 
