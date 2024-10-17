@@ -1,4 +1,5 @@
 import {
+  AppTryLoginParams,
   BridgeUtils,
   CoreApp,
   FormatResultCustomCallback,
@@ -416,6 +417,57 @@ export class ReactApp<
         inputs: progress
       }
     );
+  }
+
+  /**
+   * Try login
+   * @param showLoading Show loading bar or not
+   * @returns Result
+   */
+  override async tryLogin(params?: AppTryLoginParams) {
+    // Check status
+    const result = await super.tryLogin(params);
+    if (!result) {
+      return false;
+    }
+
+    // Destruct
+    const {
+      onFailure = () => {
+        this.toLoginPage(rest);
+      },
+      onSuccess,
+      ...rest
+    } = params ?? {};
+
+    // Refresh token
+    await this.refreshToken(
+      {
+        showLoading: params?.showLoading
+      },
+      (result) => {
+        if (result === true) {
+          onSuccess?.();
+        } else if (result === false) {
+          onFailure();
+        } else if (result != null && this.tryLoginIgnoreResult(result)) {
+          return false;
+        }
+      }
+    );
+
+    return true;
+  }
+
+  /**
+   * Check if the action result should be ignored during try login
+   * @param result Action result
+   * @returns Result
+   */
+  protected tryLoginIgnoreResult(result: IActionResult) {
+    // Ignore no token warning
+    if (result.type === "noData" && result.field === "token") return true;
+    else return false;
   }
 
   /**

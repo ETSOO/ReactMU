@@ -218,9 +218,7 @@ export function OptionGroup<
             if (changedValues.includes(typeValue)) return;
             changedValues.push(typeValue);
           } else {
-            const index = changedValues.findIndex((v) => v === typeValue);
-            if (index === -1) return;
-            changedValues.splice(index, 1);
+            changedValues.remove(typeValue);
           }
 
           if (onValueChange) onValueChange(changedValues);

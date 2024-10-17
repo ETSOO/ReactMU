@@ -1,4 +1,4 @@
-import { AppTryLoginParams, IAppSettings, IUser } from "@etsoo/appscript";
+import { IAppSettings, IUser } from "@etsoo/appscript";
 import { CoreConstants, IPageData } from "@etsoo/react";
 import { ReactApp } from "./ReactApp";
 
@@ -26,43 +26,5 @@ export abstract class CommonApp<
     const fields = super.initCallEncryptedUpdateFields();
     fields.push(CoreConstants.FieldUserIdSaved);
     return fields;
-  }
-
-  /**
-   * Try login
-   * @param showLoading Show loading bar or not
-   * @returns Result
-   */
-  override async tryLogin(params?: AppTryLoginParams) {
-    // Check status
-    const result = await super.tryLogin(params);
-    if (!result) {
-      return false;
-    }
-
-    // Destruct
-    const {
-      onFailure = () => {
-        this.toLoginPage(rest);
-      },
-      onSuccess,
-      ...rest
-    } = params ?? {};
-
-    // Refresh token
-    await this.refreshToken(
-      {
-        showLoading: params?.showLoading
-      },
-      (result) => {
-        if (result === true) {
-          onSuccess?.();
-        } else if (result === false) {
-          onFailure();
-        }
-      }
-    );
-
-    return true;
   }
 }
