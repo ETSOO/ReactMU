@@ -162,9 +162,17 @@ export class ServiceApp<
     };
 
     // Cache the core system refresh token
-    this.storage.setData(coreTokenKey, core.refreshToken);
+    this.saveCoreToken(core.refreshToken);
 
     this.exchangeTokenAll(core, coreName);
+  }
+
+  /**
+   * Save core system refresh token
+   * @param token New refresh token
+   */
+  protected saveCoreToken(token: string) {
+    this.storage.setData(coreTokenKey, this.encrypt(token));
   }
 
   /**
@@ -190,7 +198,7 @@ export class ServiceApp<
         if (data == null) return;
 
         // Cache the core system refresh token
-        this.storage.setData(coreTokenKey, data.refreshToken);
+        this.saveCoreToken(data.refreshToken);
 
         this.exchangeTokenAll(data, coreName);
 
