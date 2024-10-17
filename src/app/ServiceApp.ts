@@ -180,15 +180,20 @@ export class ServiceApp<
    * @param params Login parameters
    */
   override async tryLogin(params?: AppTryLoginParams) {
-    // Current callback
+    // Destruct
     params ??= {};
-    const onSuccess = params.onSuccess;
-    const onFailure = params.onFailure;
+    let { onFailure, onSuccess, ...rest } = params;
+
+    if (onFailure == null) {
+      onFailure = params.onFailure = () => {
+        this.toLoginPage(rest);
+      };
+    }
 
     // Check core system token
     const coreToken = this.storage.getData<string>(coreTokenKey);
     if (!coreToken) {
-      onFailure?.();
+      onFailure();
       return false;
     }
 
@@ -205,6 +210,7 @@ export class ServiceApp<
         onSuccess?.();
       });
     };
+
     return await super.tryLogin(params);
   }
 }
