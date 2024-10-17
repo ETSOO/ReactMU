@@ -451,7 +451,8 @@ export class ReactApp<
         } else if (result === false) {
           onFailure();
         } else if (result != null && this.tryLoginIgnoreResult(result)) {
-          return false;
+          // Ignore the result warning
+          return true;
         }
       }
     );
