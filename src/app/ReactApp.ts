@@ -421,12 +421,12 @@ export class ReactApp<
 
   /**
    * Try login
-   * @param showLoading Show loading bar or not
+   * @param data Try login parameters
    * @returns Result
    */
-  override async tryLogin(params?: AppTryLoginParams) {
+  override async tryLogin(data?: AppTryLoginParams) {
     // Check status
-    const result = await super.tryLogin(params);
+    const result = await super.tryLogin(data);
     if (!result) {
       return false;
     }
@@ -438,12 +438,12 @@ export class ReactApp<
       },
       onSuccess,
       ...rest
-    } = params ?? {};
+    } = data ?? {};
 
     // Refresh token
     await this.refreshToken(
       {
-        showLoading: params?.showLoading
+        showLoading: data?.showLoading
       },
       (result) => {
         if (result === true) {

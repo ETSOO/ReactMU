@@ -76,11 +76,11 @@ export class ServiceApp<
 
   /**
    * Go to the login page
-   * @params Login parameters
+   * @param data Login parameters
    */
-  override toLoginPage(params?: AppLoginParams) {
+  override toLoginPage(data?: AppLoginParams) {
     // Destruct
-    const { removeUrl, showLoading, ...rest } = params ?? {};
+    const { removeUrl, showLoading, params } = data ?? {};
 
     // Cache current URL
     this.cachedUrl = removeUrl ? undefined : globalThis.location.href;
@@ -95,7 +95,9 @@ export class ServiceApp<
         if (!url) return;
 
         // Add try login flag
-        url = url.addUrlParams(rest);
+        if (params != null) {
+          url = url.addUrlParams(params);
+        }
 
         // Is it embeded?
         if (this.embedded) {
