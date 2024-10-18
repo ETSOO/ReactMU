@@ -425,12 +425,6 @@ export class ReactApp<
    * @returns Result
    */
   override async tryLogin(data?: AppTryLoginParams) {
-    // Check status
-    const result = await super.tryLogin(data);
-    if (!result) {
-      return false;
-    }
-
     // Destruct
     const {
       onFailure = () => {
@@ -439,6 +433,13 @@ export class ReactApp<
       onSuccess,
       ...rest
     } = data ?? {};
+
+    // Check status
+    const result = await super.tryLogin(data);
+    if (!result) {
+      onFailure();
+      return false;
+    }
 
     // Refresh token
     await this.refreshToken(

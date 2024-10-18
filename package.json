@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.4.14",
+  "version": "1.4.15",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -50,7 +50,7 @@
     "@emotion/css": "^11.13.4",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@etsoo/appscript": "^1.5.55",
+    "@etsoo/appscript": "^1.5.56",
     "@etsoo/notificationbase": "^1.1.52",
     "@etsoo/react": "^1.7.89",
     "@etsoo/shared": "^1.2.51",
