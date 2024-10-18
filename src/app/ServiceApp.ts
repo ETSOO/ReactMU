@@ -199,9 +199,18 @@ export class ServiceApp<
       return false;
     }
 
+    const coreTokenDecrypted = this.decrypt(coreToken);
+    if (!coreTokenDecrypted) {
+      onFailure();
+      return false;
+    }
+
     params.onSuccess = () => {
       // Call the core system API refresh token
-      this.apiRefreshTokenData(this.coreApi, coreToken).then((data) => {
+      this.apiRefreshTokenData(this.coreApi, {
+        token: coreTokenDecrypted,
+        appId: this.settings.appId
+      }).then((data) => {
         if (data == null) return;
 
         // Cache the core system refresh token
