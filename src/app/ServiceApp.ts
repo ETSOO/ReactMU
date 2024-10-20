@@ -116,6 +116,18 @@ export class ServiceApp<
   }
 
   /**
+   * Signout, with userLogout and toLoginPage
+   * @param action Callback
+   */
+  override signout(action?: () => void | boolean) {
+    // Clear core token
+    this.storage.setData(coreTokenKey, undefined);
+
+    // Super call
+    return super.signout(action);
+  }
+
+  /**
    * User login extended
    * @param user New user
    * @param refreshToken Refresh token
