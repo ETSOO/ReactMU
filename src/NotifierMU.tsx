@@ -45,8 +45,8 @@ import { Labels } from "./app/Labels";
 
 // Custom icon dialog title bar
 const IconDialogTitle = styled(DialogTitle)`
-  ${({ theme }) => `
-        cursor: move;
+  ${({ theme, draggable }) => `
+        cursor: ${draggable ? "move" : "default"};
         display: flex;
         align-items: center;
         & .dialogTitle {
@@ -123,7 +123,7 @@ export class NotificationMU extends NotificationReact {
         fullScreen={fullScreen}
         {...options}
       >
-        <IconDialogTitle className="draggable-dialog-title">
+        <IconDialogTitle draggable={draggable} className="dialog-title">
           {icon}
           <span className="dialogTitle">{title}</span>
           {closable && (
@@ -204,7 +204,7 @@ export class NotificationMU extends NotificationReact {
         fullScreen={fullScreen}
         {...options}
       >
-        <IconDialogTitle className="draggable-dialog-title">
+        <IconDialogTitle draggable={draggable} className="dialog-title">
           <Help color="action" />
           <span className="dialogTitle">{title}</span>
           {closable && (
@@ -438,7 +438,7 @@ export class NotificationMU extends NotificationReact {
             return false;
           }}
         >
-          <IconDialogTitle className="draggable-dialog-title">
+          <IconDialogTitle draggable={draggable} className="dialog-title">
             <Info color="primary" />
             <span className="dialogTitle">{title}</span>
             {closable && (
