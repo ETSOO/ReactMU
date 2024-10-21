@@ -79,7 +79,8 @@ export class NotificationMU extends NotificationReact {
       okLabel = labels.alertOK,
       primaryButton = true,
       primaryButtonProps,
-      closable = false
+      closable = false,
+      draggable = fullScreen === true ? false : true
     } = this.inputProps ?? {};
 
     let title = this.title;
@@ -115,7 +116,7 @@ export class NotificationMU extends NotificationReact {
       <Dialog
         key={this.id}
         open={this.open}
-        PaperComponent={DraggablePaperComponent}
+        PaperComponent={draggable ? DraggablePaperComponent : undefined}
         className={className}
         fullWidth={fullWidth}
         maxWidth={maxWidth}
@@ -177,7 +178,8 @@ export class NotificationMU extends NotificationReact {
       maxWidth,
       primaryButton = true,
       primaryButtonProps,
-      closable = false
+      closable = false,
+      draggable = fullScreen === true ? false : true
     } = this.inputProps ?? {};
 
     // Setup callback
@@ -195,7 +197,7 @@ export class NotificationMU extends NotificationReact {
       <Dialog
         key={this.id}
         open={this.open}
-        PaperComponent={DraggablePaperComponent}
+        PaperComponent={draggable ? DraggablePaperComponent : undefined}
         className={className}
         fullWidth={fullWidth}
         maxWidth={maxWidth}
@@ -317,7 +319,8 @@ export class NotificationMU extends NotificationReact {
       primaryButton = true,
       primaryButtonProps,
       inputProps,
-      closable = false
+      closable = false,
+      draggable = fullScreen === true ? false : true
     } = this.inputProps ?? {};
 
     const inputRef = React.createRef<HTMLInputElement>();
@@ -417,7 +420,7 @@ export class NotificationMU extends NotificationReact {
       <Dialog
         key={this.id}
         open={this.open}
-        PaperComponent={DraggablePaperComponent}
+        PaperComponent={draggable ? DraggablePaperComponent : undefined}
         className={className}
         fullWidth={fullWidth}
         maxWidth={maxWidth}
