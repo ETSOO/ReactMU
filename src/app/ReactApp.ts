@@ -413,7 +413,7 @@ export class ReactApp<
       undefined,
       {
         okLabel: labels.cancel,
-        primaryButton: { fullWidth: true, autoFocus: false },
+        primaryButtonProps: { fullWidth: true, autoFocus: false },
         inputs: progress
       }
     );

@@ -77,7 +77,8 @@ export class NotificationMU extends NotificationReact {
       fullWidth = true,
       maxWidth,
       okLabel = labels.alertOK,
-      primaryButton,
+      primaryButton = true,
+      primaryButtonProps,
       closable = false
     } = this.inputProps ?? {};
 
@@ -143,18 +144,18 @@ export class NotificationMU extends NotificationReact {
           {inputs}
         </DialogContent>
         <DialogActions>
-          {buttons ? (
-            buttons(this, callback)
-          ) : (
-            <LoadingButton
-              {...setupProps}
-              onClick={callback}
-              autoFocus
-              {...primaryButton}
-            >
-              {okLabel}
-            </LoadingButton>
-          )}
+          {buttons
+            ? buttons(this, callback)
+            : primaryButton && (
+                <LoadingButton
+                  {...setupProps}
+                  onClick={callback}
+                  autoFocus
+                  {...primaryButtonProps}
+                >
+                  {okLabel}
+                </LoadingButton>
+              )}
         </DialogActions>
       </Dialog>
     );
@@ -174,7 +175,8 @@ export class NotificationMU extends NotificationReact {
       fullScreen,
       fullWidth = true,
       maxWidth,
-      primaryButton,
+      primaryButton = true,
+      primaryButtonProps,
       closable = false
     } = this.inputProps ?? {};
 
@@ -234,14 +236,16 @@ export class NotificationMU extends NotificationReact {
                   {cancelLabel}
                 </LoadingButton>
               )}
-              <LoadingButton
-                color="primary"
-                onClick={async (event) => await callback(event, true)}
-                autoFocus
-                {...primaryButton}
-              >
-                {okLabel}
-              </LoadingButton>
+              {primaryButton && (
+                <LoadingButton
+                  color="primary"
+                  onClick={async (event) => await callback(event, true)}
+                  autoFocus
+                  {...primaryButtonProps}
+                >
+                  {okLabel}
+                </LoadingButton>
+              )}
             </React.Fragment>
           )}
         </DialogActions>
@@ -310,7 +314,8 @@ export class NotificationMU extends NotificationReact {
       fullScreen,
       fullWidth = true,
       maxWidth,
-      primaryButton,
+      primaryButton = true,
+      primaryButtonProps,
       inputProps,
       closable = false
     } = this.inputProps ?? {};
@@ -473,15 +478,17 @@ export class NotificationMU extends NotificationReact {
                     {cancelLabel}
                   </Button>
                 )}
-                <LoadingButton
-                  color="primary"
-                  autoFocus
-                  onClick={handleSubmit}
-                  name="okButton"
-                  {...primaryButton}
-                >
-                  {okLabel}
-                </LoadingButton>
+                {primaryButton && (
+                  <LoadingButton
+                    color="primary"
+                    autoFocus
+                    onClick={handleSubmit}
+                    name="okButton"
+                    {...primaryButtonProps}
+                  >
+                    {okLabel}
+                  </LoadingButton>
+                )}
               </React.Fragment>
             )}
           </DialogActions>
