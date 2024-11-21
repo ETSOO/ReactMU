@@ -1,4 +1,4 @@
-import { IPageData } from '@etsoo/react';
+import { IPageData } from "@etsoo/react";
 
 /**
  * Service page data interface

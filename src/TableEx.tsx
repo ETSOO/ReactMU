@@ -149,16 +149,11 @@ export function TableEx<
     updateRows(rows);
   };
 
-  var orderByAsc = defaultOrderBy
-    ? columns.find((column) => column.field === defaultOrderBy)?.sortAsc
-    : undefined;
-
   // States
   const stateRefs = React.useRef<GridLoaderStates<T>>({
     queryPaging: {
       currentPage: 0,
       orderBy: defaultOrderBy,
-      orderByAsc,
       batchSize: rowsPerPageLocal
     },
     autoLoad,
@@ -311,7 +306,7 @@ export function TableEx<
 
   // New sort
   const handleSort = (field: string, asc?: boolean) => {
-    reset({ queryPaging: { orderBy: field, orderByAsc: asc } });
+    reset({ queryPaging: { orderBy: { [field]: asc ?? true } } });
   };
 
   // Set items for rerenderer
@@ -330,7 +325,7 @@ export function TableEx<
     selectedItems
   } = state;
 
-  const currentPage = queryPaging.currentPage;
+  const currentPage = queryPaging.currentPage ?? 0;
   const batchSize = queryPaging.batchSize;
 
   // Current page selected items
@@ -405,7 +400,9 @@ export function TableEx<
                 // Sortable
                 let sortLabel: React.ReactNode;
                 if (sortable && field != null) {
-                  const active = queryPaging.orderBy === field;
+                  const active =
+                    queryPaging.orderBy != null &&
+                    queryPaging.orderBy[field] != null;
 
                   sortLabel = (
                     <TableSortLabel

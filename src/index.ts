@@ -94,6 +94,7 @@ export * from "./PList";
 export * from "./ProgressCount";
 export * from "./PullToRefreshUI";
 export * from "./QuickList";
+export * from "./RegionsRQ";
 export * from "./ResponsibleContainer";
 export * from "./ResponsiveStyleValue";
 export * from "./ScrollerListEx";

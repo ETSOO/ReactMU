@@ -1,9 +1,9 @@
 import {
-  AddressApi,
   AddressCity,
   AddressDistrict,
   AddressRegionDb,
-  AddressState
+  AddressState,
+  IApiPayload
 } from "@etsoo/appscript";
 import { FormLabel, Grid2, GridSize } from "@mui/material";
 import React from "react";
@@ -11,6 +11,7 @@ import { globalApp } from "./app/ReactApp";
 import { ComboBox } from "./ComboBox";
 import { Tiplist } from "./Tiplist";
 import { ResponsiveStyleValue } from "./ResponsiveStyleValue";
+import { RegionsRQ } from "./RegionsRQ";
 
 /**
  * Address field
@@ -43,7 +44,33 @@ export type AddressSelectorProps = {
   /**
    * Address API
    */
-  api: AddressApi;
+  api: {
+    regions(
+      rq: RegionsRQ,
+      payload?: IApiPayload<AddressRegionDb[]>
+    ): Promise<AddressRegionDb[] | undefined>;
+
+    states(
+      regionId: string,
+      favoredIds?: string[],
+      payload?: IApiPayload<AddressState[]>,
+      culture?: string
+    ): Promise<AddressState[] | undefined>;
+
+    cities(
+      stateId: string,
+      favoredIds?: number[],
+      payload?: IApiPayload<AddressCity[]>,
+      culture?: string
+    ): Promise<AddressCity[] | undefined>;
+
+    districts(
+      cityId: number,
+      favoredIds?: number[],
+      payload?: IApiPayload<AddressDistrict[]>,
+      culture?: string
+    ): Promise<AddressDistrict[] | undefined>;
+  };
 
   /**
    * Break points
@@ -305,7 +332,7 @@ export function AddressSelector(props: AddressSelectorProps) {
             fullWidth
             idValue={regionState}
             loadData={(keyword, id, items) =>
-              api.getRegions({
+              api.regions({
                 keyword,
                 id,
                 items,

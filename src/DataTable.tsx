@@ -30,16 +30,6 @@ export type DataTableProps<R extends GridValidRowModel = any> = Omit<
    * @returns Result
    */
   onCellSelection?: (params: DataTableSelectedCellParams) => void | false;
-
-  /**
-   * Toolbar creator
-   * @returns Toolbar
-   */
-  toolbarCreator?: (
-    selectedCellParams: DataTableSelectedCellParams | null,
-    setCellModesModel: React.Dispatch<React.SetStateAction<GridCellModesModel>>,
-    cellModesModel: GridCellModesModel
-  ) => React.ReactElement;
 };
 
 /**
@@ -54,18 +44,15 @@ export function DataTable<R extends GridValidRowModel = any>(
   const {
     localeText = {},
     onCellSelection,
-    toolbarCreator,
     onProcessRowUpdateError = (error) =>
       console.log("onProcessRowUpdateError", error),
+    slotProps,
     ...rest
   } = props;
 
   // Labels
   const { noRows } = globalApp?.getLabels("noRows") ?? {};
   if (noRows && !localeText.noRowsLabel) localeText.noRowsLabel = noRows;
-
-  const [selectedCellParams, setSelectedCellParams] =
-    React.useState<DataTableSelectedCellParams | null>(null);
 
   const [cellModesModel, setCellModesModel] =
     React.useState<GridCellModesModel>({});
@@ -92,8 +79,6 @@ export function DataTable<R extends GridValidRowModel = any>(
       if (onCellSelection) {
         if (onCellSelection(params) === false) return;
       }
-
-      setSelectedCellParams(params);
     },
     []
   );
@@ -106,22 +91,8 @@ export function DataTable<R extends GridValidRowModel = any>(
       cellModesModel={cellModesModel}
       onCellModesModelChange={(model) => setCellModesModel(model)}
       onProcessRowUpdateError={onProcessRowUpdateError}
-      slots={{
-        toolbar: toolbarCreator
-          ? ({ selectedCellParams, setCellModesModel, cellModesModel }) =>
-              toolbarCreator(
-                selectedCellParams,
-                setCellModesModel,
-                cellModesModel
-              )
-          : undefined
-      }}
       slotProps={{
-        toolbar: {
-          selectedCellParams,
-          setCellModesModel,
-          cellModesModel
-        },
+        ...slotProps,
         cell: {
           onFocus: handleCellFocus
         }

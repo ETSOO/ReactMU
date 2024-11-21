@@ -1,32 +1,32 @@
-import { FabPropsColorOverrides, PropTypes } from '@mui/material';
-import { OverridableStringUnion } from '@mui/types';
+import { FabPropsColorOverrides, PropTypes } from "@mui/material";
+import { OverridableStringUnion } from "@mui/types";
 
 /**
  * Custom fab size
  */
-export type CustomFabSize = 'small' | 'medium' | 'large';
+export type CustomFabSize = "small" | "medium" | "large";
 
 /**
  * Custom fab props
  */
 export interface CustomFabProps {
-    /**
-     * Color
-     */
-    color?: OverridableStringUnion<PropTypes.Color, FabPropsColorOverrides>;
+  /**
+   * Color
+   */
+  color?: OverridableStringUnion<PropTypes.Color, FabPropsColorOverrides>;
 
-    /**
-     * Fab size
-     */
-    size?: CustomFabSize;
+  /**
+   * Fab size
+   */
+  size?: CustomFabSize;
 
-    /**
-     * Scroll target
-     */
-    target?: any;
+  /**
+   * Scroll target
+   */
+  target?: any;
 
-    /**
-     * Fab title
-     */
-    title?: string;
+  /**
+   * Fab title
+   */
+  title?: string;
 }

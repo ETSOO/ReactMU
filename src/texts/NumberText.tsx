@@ -1,25 +1,25 @@
-import { NumberUtils } from '@etsoo/shared';
-import { Typography, TypographyProps } from '@mui/material';
-import React from 'react';
+import { NumberUtils } from "@etsoo/shared";
+import { Typography, TypographyProps } from "@mui/material";
+import React from "react";
 
 /**
  * Number text props
  */
 export interface NumberTextProps extends TypographyProps {
-    /**
-     * Locale
-     */
-    locale?: string | string[];
+  /**
+   * Locale
+   */
+  locale?: string | string[];
 
-    /**
-     * Options
-     */
-    options?: Intl.NumberFormatOptions;
+  /**
+   * Options
+   */
+  options?: Intl.NumberFormatOptions;
 
-    /**
-     * Value
-     */
-    value?: number | bigint | null;
+  /**
+   * Value
+   */
+  value?: number | bigint | null;
 }
 
 /**
@@ -28,13 +28,13 @@ export interface NumberTextProps extends TypographyProps {
  * @returns Component
  */
 export function NumberText(props: NumberTextProps) {
-    // Destruct
-    const { locale, options = {}, value, ...rest } = props;
+  // Destruct
+  const { locale, options = {}, value, ...rest } = props;
 
-    // Layout
-    return (
-        <Typography component="span" fontSize="inherit" {...rest}>
-            {value == null ? '' : NumberUtils.format(value, locale, options)}
-        </Typography>
-    );
+  // Layout
+  return (
+    <Typography component="span" fontSize="inherit" {...rest}>
+      {value == null ? "" : NumberUtils.format(value, locale, options)}
+    </Typography>
+  );
 }

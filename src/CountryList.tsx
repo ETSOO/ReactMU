@@ -1,32 +1,33 @@
-import { AddressRegionDb, RegionsRQ } from '@etsoo/appscript';
-import { DataTypes } from '@etsoo/shared';
-import React from 'react';
-import { Tiplist, TiplistProps } from './Tiplist';
+import { AddressRegionDb } from "@etsoo/appscript";
+import { DataTypes } from "@etsoo/shared";
+import React from "react";
+import { Tiplist, TiplistProps } from "./Tiplist";
+import { RegionsRQ } from "./RegionsRQ";
 
 /**
  * Country list props
  */
 export type CountryListProps = Omit<
-    DataTypes.Optional<TiplistProps<AddressRegionDb, 'id'>, 'name'>,
-    'loadData'
+  DataTypes.Optional<TiplistProps<AddressRegionDb, "id">, "name">,
+  "loadData"
 > & {
-    /**
-     * Load data
-     * @param rq Request data
-     * @returns Result
-     */
-    loadData: (rq: RegionsRQ) => Promise<AddressRegionDb[] | undefined>;
+  /**
+   * Load data
+   * @param rq Request data
+   * @returns Result
+   */
+  loadData: (rq: RegionsRQ) => Promise<AddressRegionDb[] | undefined>;
 
-    /**
-     * Load favored country ids
-     * @returns Result
-     */
-    loadFavoredIds?: () => Promise<string[]>;
+  /**
+   * Load favored country ids
+   * @returns Result
+   */
+  loadFavoredIds?: () => Promise<string[]>;
 
-    /**
-     * Max items to display
-     */
-    items?: number;
+  /**
+   * Max items to display
+   */
+  items?: number;
 };
 
 /**
@@ -35,34 +36,34 @@ export type CountryListProps = Omit<
  * @returns Component
  */
 export function CountryList(props: CountryListProps) {
-    // Destruct
-    const {
-        items = 16,
-        loadData,
-        loadFavoredIds,
-        name = 'countryId',
-        ...rest
-    } = props;
+  // Destruct
+  const {
+    items = 16,
+    loadData,
+    loadFavoredIds,
+    name = "countryId",
+    ...rest
+  } = props;
 
-    // Ref
-    const favoredIds = React.useRef<string[]>([]);
+  // Ref
+  const favoredIds = React.useRef<string[]>([]);
 
-    // Ready
-    React.useEffect(() => {
-        if (loadFavoredIds && favoredIds.current.length === 0)
-            loadFavoredIds().then((ids) => {
-                favoredIds.current = ids;
-            });
-    }, [loadFavoredIds]);
+  // Ready
+  React.useEffect(() => {
+    if (loadFavoredIds && favoredIds.current.length === 0)
+      loadFavoredIds().then((ids) => {
+        favoredIds.current = ids;
+      });
+  }, [loadFavoredIds]);
 
-    // Layout
-    return (
-        <Tiplist<AddressRegionDb, 'id'>
-            name={name}
-            loadData={(keyword, id) =>
-                loadData({ id, keyword, favoredIds: favoredIds.current, items })
-            }
-            {...rest}
-        />
-    );
+  // Layout
+  return (
+    <Tiplist<AddressRegionDb, "id">
+      name={name}
+      loadData={(keyword, id) =>
+        loadData({ id, keyword, favoredIds: favoredIds.current, items })
+      }
+      {...rest}
+    />
+  );
 }

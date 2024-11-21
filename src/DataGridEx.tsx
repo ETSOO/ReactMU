@@ -258,7 +258,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
               states
             });
           } else if (sortable && field != null) {
-            const active = orderBy === field;
+            const active = orderBy != null && orderBy[field] != null;
 
             sortLabel = (
               <TableSortLabel
@@ -438,7 +438,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
 
   // New sort
   const handleSort = (field: string, asc?: boolean) => {
-    reset({ queryPaging: { orderBy: field, orderByAsc: asc } });
+    reset({ queryPaging: { orderBy: { [field]: asc ?? true } } });
   };
 
   // Reset
@@ -626,10 +626,6 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
 
   // Table
   const table = React.useMemo(() => {
-    const defaultOrderByAsc = defaultOrderBy
-      ? columns.find((column) => column.field === defaultOrderBy)?.sortAsc
-      : undefined;
-
     return (
       <ScrollerGrid<T>
         className={Utils.mergeClasses(
@@ -641,7 +637,6 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
         columnCount={columns.length}
         columnWidth={columnWidth}
         defaultOrderBy={defaultOrderBy}
-        defaultOrderByAsc={defaultOrderByAsc}
         height={
           height -
           headerHeight -

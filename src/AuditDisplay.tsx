@@ -1,10 +1,10 @@
-import { AuditLineDto } from "@etsoo/appscript";
 import { Utils } from "@etsoo/shared";
 import { Button, Divider, Theme, Typography, useTheme } from "@mui/material";
 import React, { CSSProperties } from "react";
 import { globalApp } from "./app/ReactApp";
 import { ListMoreDisplay, ListMoreDisplayProps } from "./ListMoreDisplay";
 import { ShowDataComparison } from "./ShowDataComparison";
+import { AuditLineDto } from "@etsoo/appscript";
 
 /**
  * Audit display props
