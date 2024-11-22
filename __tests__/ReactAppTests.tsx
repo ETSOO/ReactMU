@@ -1,9 +1,8 @@
 import {
   AddressUtils,
   ApiAuthorizationScheme,
-  ExternalSettings,
-  en,
-  zhHans
+  Culture,
+  ExternalSettings
 } from "@etsoo/appscript";
 import { ReactApp } from "../src";
 import { DataTypes, DomUtils, IActionResult, Utils } from "@etsoo/shared";
@@ -21,7 +20,10 @@ const { detectedCountry } = DomUtils;
 const { detectedCulture } = DomUtils;
 
 // Supported cultures
-const supportedCultures: DataTypes.CultureDefinition[] = [zhHans({}), en({})];
+const supportedCultures: DataTypes.CultureDefinition[] = [
+  Culture.zhHans({}),
+  Culture.en({})
+];
 
 // Supported regions
 const supportedRegions = ["CN"];
