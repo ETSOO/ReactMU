@@ -2,17 +2,17 @@ import { act, render } from "@testing-library/react";
 import { MUGlobal, MobileListItemRenderer, ResponsivePage } from "../src";
 import React from "react";
 
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn()
+globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn()
 }));
 
 type Data = { id: number; name: string };
 
 // Timer mock
 // https://jestjs.io/docs/en/timer-mocks
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 // TypeScript const assertions
 const fieldTemplate = {
@@ -29,6 +29,7 @@ it("Render ResponsePage", async () => {
         { field: "id", header: "ID" },
         { field: "name", header: "Name" }
       ]}
+      height={200}
       itemSize={[118, MUGlobal.pagePaddings]}
       fieldTemplate={fieldTemplate}
       loadData={({ id }) =>
@@ -48,7 +49,7 @@ it("Render ResponsePage", async () => {
 
   act(() => {
     // Fast forward
-    jest.runOnlyPendingTimers();
+    vi.runOnlyPendingTimers();
   });
 
   // Assert

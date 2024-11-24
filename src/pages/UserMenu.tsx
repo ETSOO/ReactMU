@@ -1,7 +1,7 @@
 import { EventWatcher } from "@etsoo/react";
 import { IconButton, Menu } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { UserAvatar } from "../UserAvatar";
 
 /**

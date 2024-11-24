@@ -141,9 +141,9 @@ it("Render FieldSelect", async () => {
 
   act(() => {
     // Act, click to open the dropdown list
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     fireEvent.mouseDown(button);
-    jest.advanceTimersByTime(100);
+    vi.advanceTimersByTime(100);
   });
 
   const input = document.querySelector<HTMLInputElement>("input");

@@ -111,15 +111,13 @@ export function ComboBoxMultiple<
     disableCloseOnSelect = true,
     renderOption = (props, option, { selected }) => (
       <li {...props}>
-        <>
-          <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option[labelField]}
-        </>
+        <Checkbox
+          icon={icon}
+          checkedIcon={checkedIcon}
+          style={{ marginRight: 8 }}
+          checked={selected}
+        />
+        {`${option[labelField]}`}
       </li>
     ),
     getOptionLabel = (option: T) => `${option[labelField]}`,

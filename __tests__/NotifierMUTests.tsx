@@ -29,11 +29,11 @@ const notifier = NotifierMU.instance;
 
 // Timer mock
 // https://jestjs.io/docs/en/timer-mocks
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 test("Alert tests", async () => {
   // Click
-  const handleClick = jest.fn();
+  const handleClick = vi.fn();
 
   act(() => {
     // Add the notification
@@ -53,12 +53,12 @@ test("Alert tests", async () => {
   expect(handleClick).toHaveBeenCalled();
 
   // Fast forward
-  jest.runOnlyPendingTimers();
+  vi.runOnlyPendingTimers();
 });
 
 test("Confirm tests", async () => {
   // Click
-  const handleClick = jest.fn();
+  const handleClick = vi.fn();
 
   act(() => {
     // Add the notification
@@ -78,12 +78,12 @@ test("Confirm tests", async () => {
   expect(handleClick).toHaveBeenCalled();
 
   // Fast forward
-  jest.runOnlyPendingTimers();
+  vi.runOnlyPendingTimers();
 });
 
 test("Confirm tests without cancel button", async () => {
   // Click
-  const handleClick = jest.fn();
+  const handleClick = vi.fn();
 
   act(() => {
     // Add the notification
@@ -105,12 +105,12 @@ test("Confirm tests without cancel button", async () => {
   expect(handleClick).toHaveBeenCalled();
 
   // Fast forward
-  jest.runOnlyPendingTimers();
+  vi.runOnlyPendingTimers();
 });
 
 test("Prompt tests", async () => {
   // Click
-  const handleClick = jest.fn((result: boolean) => {
+  const handleClick = vi.fn((result: boolean) => {
     expect(result).toBeTruthy();
   });
 
@@ -134,12 +134,12 @@ test("Prompt tests", async () => {
 
   expect(handleClick).toHaveBeenCalled();
 
-  jest.runOnlyPendingTimers();
+  vi.runOnlyPendingTimers();
 });
 
 test("Prompt tests with form submit", async () => {
   // Click
-  const handleClick = jest.fn((result: boolean) => {
+  const handleClick = vi.fn((result: boolean) => {
     expect(result).toBeTruthy();
   });
 
@@ -161,12 +161,12 @@ test("Prompt tests with form submit", async () => {
 
   expect(handleClick).toHaveBeenCalled();
 
-  jest.runOnlyPendingTimers();
+  vi.runOnlyPendingTimers();
 });
 
-test("Message tests", (done) => {
+test("Message tests", () => {
   // Callback
-  const callback = jest.fn(() => done());
+  const callback = vi.fn();
 
   let n: INotification<React.ReactNode, any> | undefined;
   act(() => {
@@ -190,7 +190,7 @@ test("Message tests", (done) => {
     n?.dismiss();
 
     // Fast forward
-    jest.runOnlyPendingTimers();
+    vi.runOnlyPendingTimers();
   });
 
   expect(root.innerHTML).not.toContain("Error Message");
@@ -209,7 +209,7 @@ test("Loading tests", () => {
     notifier.hideLoading();
 
     // Fast forward
-    jest.runOnlyPendingTimers();
+    vi.runOnlyPendingTimers();
   });
 
   expect(root.innerHTML).not.toContain("Loading");

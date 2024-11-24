@@ -35,7 +35,7 @@ import {
   UserCalls,
   UserState
 } from "@etsoo/react";
-import { NavigateFunction, NavigateOptions } from "react-router-dom";
+import { NavigateFunction, NavigateOptions } from "react-router";
 
 /**
  * React Application Type

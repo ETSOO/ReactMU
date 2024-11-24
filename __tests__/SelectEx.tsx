@@ -13,7 +13,7 @@ it("Render SelectEx", async () => {
 
   Utils.addBlankItem(options, "id", "name");
 
-  const itemChangeCallback = jest.fn((option, userAction) => {
+  const itemChangeCallback = vi.fn((option, userAction) => {
     if (userAction) expect(option).toBeUndefined();
     else expect(option.id).toBe(1);
   });
@@ -37,11 +37,11 @@ it("Render SelectEx", async () => {
 
   // https://davidwcai.medium.com/react-testing-library-and-the-not-wrapped-in-act-errors-491a5629193b
   act(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     fireEvent.mouseDown(button); // Not click
 
-    jest.advanceTimersByTime(100);
+    vi.advanceTimersByTime(100).useRealTimers();
   });
 
   // Get list item
@@ -67,7 +67,7 @@ it("Render multiple SelectEx", async () => {
     { id: "3", label: "Name 3" }
   ];
 
-  const itemChangeCallback = jest.fn((option, userAction) => {
+  const itemChangeCallback = vi.fn((option, userAction) => {
     if (userAction) expect(option.id).toBe("3");
     else expect(option.id).toBe("1");
   });

@@ -3,7 +3,7 @@ import React, { act } from "react";
 import { SwitchAnt } from "../src/SwitchAnt";
 
 it("SwitchAnt Tests", () => {
-  const onChange = jest.fn((event: React.ChangeEvent<HTMLInputElement>) =>
+  const onChange = vi.fn((event: React.ChangeEvent<HTMLInputElement>) =>
     expect(event.target.checked).toBeTruthy()
   );
 

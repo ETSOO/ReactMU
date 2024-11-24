@@ -1,6 +1,6 @@
 import { NumberUtils } from "@etsoo/shared";
 import { Breakpoint, ListItemButtonProps, Theme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 /**
  * Mouse event handler with data
