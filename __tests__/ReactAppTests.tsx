@@ -107,3 +107,20 @@ test("Test for properties", () => {
 
   expect(root.innerHTML).toContain(result.title);
 });
+
+test("Test for alertResult", () => {
+  const result: IActionResult = {
+    ok: false,
+    type: "TokenExpired",
+    title: "您的令牌已过期",
+    data: {}
+  };
+
+  act(() => {
+    app.alertResult(result);
+  });
+
+  expect(root.innerHTML).toContain(
+    '<span style="font-size: 9px;">(TokenExpired)</span>'
+  );
+});
