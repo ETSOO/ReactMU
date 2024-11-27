@@ -48,7 +48,7 @@ export namespace Labels {
     reset: "Reset",
     rotateLeft: "Rotate left 90°",
     rotateRight: "Rotate right 90°",
-    upload: "Upload",
+    selectFile: "Select file",
     zoom: "Zoom"
   };
 

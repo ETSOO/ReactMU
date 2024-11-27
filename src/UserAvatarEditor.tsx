@@ -11,7 +11,7 @@ import type AvatarEditor from "react-avatar-editor";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
-import ComputerIcon from "@mui/icons-material/Computer";
+import ImageIcon from "@mui/icons-material/Image";
 import DoneIcon from "@mui/icons-material/Done";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
@@ -68,6 +68,11 @@ export interface UserAvatarEditorProps {
   onDone: UserAvatarEditorOnDoneHandler;
 
   /**
+   * Select file label
+   */
+  selectFileLabel?: string;
+
+  /**
    * Return scaled result?
    */
   scaledResult?: boolean;
@@ -105,6 +110,9 @@ const defaultState: EditorState = {
  * @returns Component
  */
 export function UserAvatarEditor(props: UserAvatarEditorProps) {
+  // Labels
+  const labels = Labels.UserAvatarEditor;
+
   // Destruct
   const {
     border = 30,
@@ -114,7 +122,8 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     scaledResult = false,
     width = defaultSize,
     height = defaultSize,
-    range = [0.1, 2, 0.1]
+    range = [0.1, 2, 0.1],
+    selectFileLabel = labels.selectFile + "..."
   } = props;
 
   // Container width
@@ -123,9 +132,6 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   // Calculated max width
   const maxWidthCalculated =
     maxWidth == null || maxWidth < defaultSize ? 2 * width : maxWidth;
-
-  // Labels
-  const labels = Labels.UserAvatarEditor;
 
   // Ref
   const ref = React.createRef<AvatarEditor>();
@@ -280,12 +286,12 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
       <FileUploadButton
         variant="outlined"
         size="medium"
-        startIcon={<ComputerIcon />}
+        startIcon={<ImageIcon />}
         fullWidth
         onUploadFiles={handleFileUpload}
         inputProps={{ multiple: false, accept: "image/png, image/jpeg" }}
       >
-        {labels.upload}
+        {selectFileLabel}
       </FileUploadButton>
       <Stack direction="row" spacing={0.5}>
         <React.Suspense
