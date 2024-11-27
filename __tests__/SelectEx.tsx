@@ -1,6 +1,6 @@
 import React, { act } from "react";
 import { SelectEx } from "../src";
-import { findByText, fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { ListType1, Utils } from "@etsoo/shared";
 
 it("Render SelectEx", async () => {
@@ -19,16 +19,18 @@ it("Render SelectEx", async () => {
   });
 
   // Render component
-  const { findByText } = render(
-    <SelectEx<T>
-      options={options}
-      name="test"
-      onItemChange={itemChangeCallback}
-      value={1}
-      search
-      labelField="name"
-    />
-  );
+  act(() => {
+    render(
+      <SelectEx<T>
+        options={options}
+        name="test"
+        onItemChange={itemChangeCallback}
+        value={1}
+        search
+        labelField="name"
+      />
+    );
+  });
 
   expect(itemChangeCallback).toHaveBeenCalled();
 
@@ -45,10 +47,10 @@ it("Render SelectEx", async () => {
   });
 
   // Get list item
-  const itemName2 = await findByText("Name 2");
+  const itemName2 = await screen.findByText("Name 2");
   expect(itemName2.nodeName).toBe("SPAN");
 
-  const itemBlank = await findByText("---");
+  const itemBlank = await screen.findByText("---");
   expect(itemBlank.nodeName).toBe("SPAN");
 
   act(() => {
@@ -90,12 +92,12 @@ it("Render multiple SelectEx", async () => {
   fireEvent.mouseDown(button); // Not click
 
   // Get list item
-  const itemName1 = await findByText(baseElement, "Name 1");
+  const itemName1 = await screen.findByText("Name 1");
   const checkbox1 = itemName1.closest("li")?.querySelector("input");
 
   expect(checkbox1?.checked).toBeTruthy();
 
-  const itemName3 = await findByText(baseElement, "Name 3");
+  const itemName3 = await screen.findByText("Name 3");
   expect(itemName3.nodeName).toBe("SPAN");
 
   // Checkbox

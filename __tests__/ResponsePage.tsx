@@ -21,33 +21,38 @@ const fieldTemplate = {
 } as const;
 
 it("Render ResponsePage", async () => {
-  // Act
-  render(
-    <ResponsivePage<Data, typeof fieldTemplate>
-      fields={[]}
-      columns={[
-        { field: "id", header: "ID" },
-        { field: "name", header: "Name" }
-      ]}
-      height={200}
-      itemSize={[118, MUGlobal.pagePaddings]}
-      fieldTemplate={fieldTemplate}
-      loadData={({ id }) =>
-        Promise.resolve([
-          { id: 1, name: "Name 1" },
-          { id: 2, name: "Name 2" },
-          { id: id ?? 0, name: "auto" }
-        ])
-      }
-      innerItemRenderer={(props) =>
-        MobileListItemRenderer(props, (data) => {
-          return [data.name, undefined, [], <React.Fragment></React.Fragment>];
-        })
-      }
-    />
-  );
-
   act(() => {
+    // Act
+    render(
+      <ResponsivePage<Data, typeof fieldTemplate>
+        fields={[]}
+        columns={[
+          { field: "id", header: "ID" },
+          { field: "name", header: "Name" }
+        ]}
+        height={200}
+        itemSize={[118, MUGlobal.pagePaddings]}
+        fieldTemplate={fieldTemplate}
+        loadData={({ id }) =>
+          Promise.resolve([
+            { id: 1, name: "Name 1" },
+            { id: 2, name: "Name 2" },
+            { id: id ?? 0, name: "auto" }
+          ])
+        }
+        innerItemRenderer={(props) =>
+          MobileListItemRenderer(props, (data) => {
+            return [
+              data.name,
+              undefined,
+              [],
+              <React.Fragment></React.Fragment>
+            ];
+          })
+        }
+      />
+    );
+
     // Fast forward
     vi.runOnlyPendingTimers();
   });

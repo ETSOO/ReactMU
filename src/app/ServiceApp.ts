@@ -15,6 +15,7 @@ import { ReactApp } from "./ReactApp";
 
 const coreName = "core";
 const coreTokenKey = "core-refresh-token";
+const tryLoginKey = "tryLogin";
 
 /**
  * Core Service App
@@ -65,12 +66,18 @@ export class ServiceApp<
 
   /**
    * Load core system UI
+   * @param tryLogin Try login or not
    */
-  loadCore() {
+  loadCore(tryLogin: boolean = false) {
     if (BridgeUtils.host == null) {
-      globalThis.location.href = this.coreEndpoint.webUrl;
+      let url = this.coreEndpoint.webUrl;
+      if (!tryLogin) url = url.addUrlParam(tryLoginKey, tryLogin);
+      globalThis.location.href = url;
     } else {
-      BridgeUtils.host.loadApp(coreName);
+      const startUrl = tryLogin
+        ? undefined
+        : "".addUrlParam(tryLoginKey, tryLogin);
+      BridgeUtils.host.loadApp(coreName, startUrl);
     }
   }
 
