@@ -36,9 +36,11 @@ export interface UserAvatarEditorToBlob {
  * User avatar editor on done handler
  */
 export interface UserAvatarEditorOnDoneHandler {
-  (canvas: HTMLCanvasElement, toBlob: UserAvatarEditorToBlob, type: string):
-    | void
-    | false;
+  (
+    canvas: HTMLCanvasElement,
+    toBlob: UserAvatarEditorToBlob,
+    type: string
+  ): Promise<void | false | undefined>;
 }
 
 /**
@@ -269,19 +271,21 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
       // Large photo, resize it
       // https://github.com/nodeca/pica
-      picaInstance
-        .resize(data, to, {
-          unsharpAmount: 160,
-          unsharpRadius: 0.6,
-          unsharpThreshold: 1
-        })
-        .then((result) => {
-          if (onDone(result, toBlob, type.current) === false) {
-            resetUI();
-          }
-        });
-    } else if (onDone(data, toBlob, type.current) === false) {
-      resetUI();
+      const canvas = await picaInstance.resize(data, to, {
+        unsharpAmount: 160,
+        unsharpRadius: 0.6,
+        unsharpThreshold: 1
+      });
+
+      const result = await onDone(canvas, toBlob, type.current);
+      if (result === false) {
+        resetUI();
+      }
+    } else {
+      const result = await onDone(data, toBlob, type.current);
+      if (result === false) {
+        resetUI();
+      }
     }
   };
 
