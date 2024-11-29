@@ -40,7 +40,7 @@ export interface UserAvatarEditorOnDoneHandler {
     canvas: HTMLCanvasElement,
     toBlob: UserAvatarEditorToBlob,
     type: string
-  ): Promise<void | false | undefined>;
+  ): Promise<void | true | undefined>;
 }
 
 /**
@@ -230,6 +230,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   };
 
   const resetUI = () => {
+    setReady(false);
     setPreviewImage(undefined);
     handleReset();
   };
@@ -283,12 +284,12 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
       });
 
       const result = await onDone(canvas, toBlob, type.current);
-      if (result === false) {
+      if (result) {
         resetUI();
       }
     } else {
       const result = await onDone(data, toBlob, type.current);
-      if (result === false) {
+      if (result) {
         resetUI();
       }
     }
