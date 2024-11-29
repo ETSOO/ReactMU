@@ -36,11 +36,9 @@ export interface UserAvatarEditorToBlob {
  * User avatar editor on done handler
  */
 export interface UserAvatarEditorOnDoneHandler {
-  (
-    canvas: HTMLCanvasElement,
-    toBlob: UserAvatarEditorToBlob,
-    type: string
-  ): void;
+  (canvas: HTMLCanvasElement, toBlob: UserAvatarEditorToBlob, type: string):
+    | void
+    | false;
 }
 
 /**
@@ -224,6 +222,11 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     setEditorState({ ...defaultState });
   };
 
+  const resetUI = () => {
+    setPreviewImage(undefined);
+    handleReset();
+  };
+
   // Handle rotate
   const handleRotate = (r: number) => {
     let rotate = editorState.rotate + r;
@@ -272,9 +275,13 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
           unsharpRadius: 0.6,
           unsharpThreshold: 1
         })
-        .then((result) => onDone(result, toBlob, type.current));
-    } else {
-      onDone(data, toBlob, type.current);
+        .then((result) => {
+          if (onDone(result, toBlob, type.current) === false) {
+            resetUI();
+          }
+        });
+    } else if (onDone(data, toBlob, type.current) === false) {
+      resetUI();
     }
   };
 
