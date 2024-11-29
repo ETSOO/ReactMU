@@ -198,8 +198,8 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
   // Handle image load
   const handleLoad = (imageInfo: ImageState) => {
-    // Ignore small images
-    if (imageInfo.height < 10 || imageInfo.width < 10) return;
+    // Ignore too small images
+    if (imageInfo.resource.width < 10 || imageInfo.resource.height < 10) return;
 
     if (noHeight) {
       setHeight((imageInfo.height * width) / imageInfo.width);
