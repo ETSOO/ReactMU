@@ -145,6 +145,8 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   // Preview image state
   const [previewImage, setPreviewImage] = React.useState(image);
 
+  React.useEffect(() => setPreviewImage(image), [image]);
+
   // Is ready state
   const [ready, setReady] = React.useState(false);
 
@@ -196,6 +198,9 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
   // Handle image load
   const handleLoad = (imageInfo: ImageState) => {
+    // Ignore small images
+    if (imageInfo.height < 10 || imageInfo.width < 10) return;
+
     if (noHeight) {
       setHeight((imageInfo.height * width) / imageInfo.width);
     }
@@ -316,7 +321,10 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
             width={width}
             height={localHeight}
             onLoadSuccess={handleLoad}
-            image={previewImage ?? ""}
+            image={
+              previewImage ??
+              "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+            }
             scale={editorState.scale}
             rotate={editorState.rotate}
           />
