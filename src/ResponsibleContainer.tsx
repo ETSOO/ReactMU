@@ -429,7 +429,13 @@ export function ResponsibleContainer<
   })();
 
   const searchBar = React.useMemo(() => {
-    if (!hasFields || showDataGrid == null) return;
+    if (
+      !hasFields ||
+      showDataGrid == null ||
+      rect?.width == null ||
+      rect.width < 20
+    )
+      return;
 
     const f = typeof fields == "function" ? fields(searchData ?? {}) : fields;
 
@@ -440,7 +446,7 @@ export function ResponsibleContainer<
         className={`searchBar${showDataGrid ? "Grid" : "List"}`}
       />
     );
-  }, [showDataGrid, hasFields, searchBarHeight]);
+  }, [showDataGrid, hasFields, searchBarHeight, rect?.width]);
 
   // Pull container
   const pullContainer =
