@@ -1,4 +1,4 @@
-import { Button, Drawer, IconButton, Stack, useTheme } from "@mui/material";
+import { Button, Drawer, IconButton, Stack } from "@mui/material";
 import React from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { DomUtils } from "@etsoo/shared";
@@ -13,6 +13,11 @@ export interface SearchBarProps {
    * Style class name
    */
   className?: string;
+
+  /**
+   * Item gap
+   */
+  itemGap?: number;
 
   /**
    * Item width
@@ -83,14 +88,10 @@ const setChildState = (child: Element, enabled: boolean) => {
  */
 export function SearchBar(props: SearchBarProps) {
   // Destruct
-  const { className, fields, onSubmit, itemWidth = 160 } = props;
+  const { className, fields, onSubmit, itemGap = 6, itemWidth = 160 } = props;
 
   // Labels
   const labels = Labels.CommonPage;
-
-  // Spacing
-  const theme = useTheme();
-  const gap = parseFloat(theme.spacing(1));
 
   // Menu index
   const [index, updateIndex] = React.useState<number>();
@@ -110,7 +111,7 @@ export function SearchBar(props: SearchBarProps) {
   const { dimensions } = useDimensions(
     1,
     (target, rect) => {
-      // Same logic from resetButtonRef
+      // Same logic from resetButtonRefe);
       if (
         rect.width === state.lastMaxWidth ||
         (!state.hasMore && rect.width > state.lastMaxWidth)
@@ -170,7 +171,7 @@ export function SearchBar(props: SearchBarProps) {
 
       // Total
       const totalButtonWidth =
-        resetButtonRect.width + buttonMoreRect.width + 3 * gap;
+        resetButtonRect.width + buttonMoreRect.width + 3 * itemGap;
 
       // Cache
       container.setAttribute(cachedWidthName, totalButtonWidth.toString());
@@ -196,7 +197,7 @@ export function SearchBar(props: SearchBarProps) {
         childWidth = Number.parseFloat(cachedWidth);
       } else {
         const childD = child.getBoundingClientRect();
-        childWidth = childD.width + gap;
+        childWidth = childD.width + itemGap;
         child.setAttribute(cachedWidthName, childWidth.toString());
       }
 
@@ -312,7 +313,7 @@ export function SearchBar(props: SearchBarProps) {
           justifyContent="center"
           alignItems="center"
           direction="row"
-          spacing={1}
+          spacing={`${itemGap}px`}
           width="100%"
           overflow="hidden"
           paddingTop="6px"
@@ -336,7 +337,6 @@ export function SearchBar(props: SearchBarProps) {
           {fields.map((item, index) => (
             <React.Fragment key={index}>{item}</React.Fragment>
           ))}
-
           <IconButton
             title={labels.more}
             size="medium"

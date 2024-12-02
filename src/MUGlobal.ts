@@ -187,7 +187,9 @@ export class MUGlobal {
         const mediaRaw = theme.breakpoints.up(key as Breakpoint);
         const mediaQuery = mediaRaw.substring(mediaRaw.indexOf("("));
         if (window.matchMedia(mediaQuery).matches) {
-          return parseInt(theme.spacing(value), 10);
+          let space = parseInt(theme.spacing(value), 10);
+          if (isNaN(space)) space = 8 * value;
+          return space;
         }
       }
     }
