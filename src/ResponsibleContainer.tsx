@@ -56,7 +56,7 @@ export type ResponsibleContainerProps<
    * @param height Current calcuated height
    * @param rect Current rect data
    */
-  adjustHeight?: (height: number, rect: DOMRect) => number;
+  adjustHeight?: number | ((height: number, rect: DOMRect) => number);
 
   /**
    *
@@ -75,7 +75,7 @@ export type ResponsibleContainerProps<
    * Container box SX (dataGrid determines the case)
    */
   containerBoxSx?: (
-    paddings: Record<string, string | number>,
+    paddings: number | Record<string, string | number>,
     hasFields: boolean,
     dataGrid?: boolean
   ) => SxProps<Theme>;
@@ -139,7 +139,7 @@ export type ResponsibleContainerProps<
   /**
    * Paddings
    */
-  paddings?: Record<string, string | number>;
+  paddings?: number | Record<string, string | number>;
 
   /**
    * Pull to refresh data
@@ -170,11 +170,12 @@ interface LocalRefs<T> {
 }
 
 function defaultContainerBoxSx(
-  paddings: object,
+  paddings: object | number,
   hasField: boolean,
   _dataGrid?: boolean
 ): SxProps<Theme> {
-  const half = MUGlobal.half(paddings);
+  const half =
+    typeof paddings == "number" ? paddings / 2 : MUGlobal.half(paddings);
   return {
     "& .SearchBox": {
       marginBottom: hasField ? half : 0
@@ -357,7 +358,11 @@ export function ResponsibleContainer<
       const boxMargin = parseFloat(style.marginBottom);
       if (!isNaN(boxMargin)) heightLocal -= 3 * boxMargin; // 1 - Box, 2 - Page bottom
 
-      if (adjustHeight != null) heightLocal -= adjustHeight(heightLocal, rect);
+      if (adjustHeight != null)
+        heightLocal -=
+          typeof adjustHeight === "number"
+            ? adjustHeight
+            : adjustHeight(heightLocal, rect);
     }
 
     if (adjustFabHeight)

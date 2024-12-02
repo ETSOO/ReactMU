@@ -15,7 +15,7 @@ export type DataGridPageProps<
      * @param height Current calcuated height
      * @param rect Current rect data
      */
-    adjustHeight?: (height: number, rect: DOMRect) => number;
+    adjustHeight?: number | ((height: number, rect: DOMRect) => number);
 
     /**
      * Grid height

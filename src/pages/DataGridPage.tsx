@@ -135,7 +135,11 @@ export function DataGridPage<
       const paddingBottom = parseFloat(style.paddingBottom);
       if (!isNaN(paddingBottom)) gridHeight -= paddingBottom;
 
-      if (adjustHeight != null) gridHeight -= adjustHeight(gridHeight, rect);
+      if (adjustHeight != null)
+        gridHeight -=
+          typeof adjustHeight === "number"
+            ? adjustHeight
+            : adjustHeight(gridHeight, rect);
 
       if (gridHeight !== states.height) setStates({ height: gridHeight });
     }

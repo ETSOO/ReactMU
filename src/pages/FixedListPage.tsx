@@ -32,7 +32,7 @@ export function FixedListPage<
      * @param height Current calcuated height
      * @param rect Current rect data
      */
-    adjustHeight?: (height: number, rect: DOMRect) => number;
+    adjustHeight?: number | ((height: number, rect: DOMRect) => number);
   }
 ) {
   // Destruct
@@ -139,7 +139,11 @@ export function FixedListPage<
         document.documentElement.clientHeight -
         Math.round(rect.top + rect.height + 1);
 
-      if (adjustHeight != null) height -= adjustHeight(height, rect);
+      if (adjustHeight != null)
+        height -=
+          typeof adjustHeight === "number"
+            ? adjustHeight
+            : adjustHeight(height, rect);
 
       return (
         <Box

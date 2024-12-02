@@ -70,7 +70,7 @@ export interface CommonPageProps extends Omit<ContainerProps, "id"> {
   /**
    * Paddings
    */
-  paddings?: Record<string, string | number>;
+  paddings?: number | Record<string, string | number>;
 
   /**
    * Scroll container

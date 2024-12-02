@@ -105,7 +105,10 @@ export function ResponsivePage<
         paddings={paddings}
         containerBoxSx={(paddings, hasField, _dataGrid) => {
           // Half
-          const half = MUGlobal.half(paddings);
+          const half =
+            typeof paddings == "number"
+              ? paddings / 2
+              : MUGlobal.half(paddings);
 
           // .SearchBox keep the same to avoid flick when switching between DataGrid and List
           return {
