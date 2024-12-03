@@ -57,6 +57,8 @@ export namespace MUUtils {
       if (lastItem) {
         const keysets = orderBy.map((o) => Reflect.get(lastItem, o.field));
         data.queryPaging.keysets = keysets;
+      } else {
+        data.queryPaging.keysets = undefined;
       }
     }
 
