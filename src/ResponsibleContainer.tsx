@@ -123,7 +123,8 @@ export type ResponsibleContainerProps<
    * Load data callback
    */
   loadData: (
-    data: GridJsonData & DataTypes.BasicTemplateType<F>
+    data: GridJsonData & DataTypes.BasicTemplateType<F>,
+    lastItem?: T
   ) => PromiseLike<T[] | null | undefined>;
 
   /**
@@ -238,9 +239,12 @@ export function ResponsibleContainer<
   const hasFields = fields != null && fields.length > 0;
 
   // Load data
-  const localLoadData = (props: GridLoadDataProps) => {
+  const localLoadData = (props: GridLoadDataProps, lastItem?: T) => {
     state.mounted = true;
-    return loadData(GridUtils.createLoader<F>(props, fieldTemplate, cacheKey));
+    return loadData(
+      GridUtils.createLoader<F>(props, fieldTemplate, cacheKey),
+      lastItem
+    );
   };
 
   // Search data

@@ -258,7 +258,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
               states
             });
           } else if (sortable && field != null) {
-            const active = orderBy != null && orderBy[field] != null;
+            const active = orderBy?.has(field);
 
             sortLabel = (
               <TableSortLabel
@@ -438,7 +438,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
 
   // New sort
   const handleSort = (field: string, asc?: boolean) => {
-    reset({ queryPaging: { orderBy: { [field]: asc ?? true } } });
+    reset({ queryPaging: { orderBy: new Map([[field, !(asc ?? true)]]) } });
   };
 
   // Reset

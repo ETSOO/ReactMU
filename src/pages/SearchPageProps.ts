@@ -35,7 +35,8 @@ export type SearchPageProps<
    * Load data callback
    */
   loadData: (
-    data: GridJsonData & DataTypes.BasicTemplateType<F>
+    data: GridJsonData & DataTypes.BasicTemplateType<F>,
+    lastItem?: T
   ) => PromiseLike<T[] | null | undefined>;
 
   /**
