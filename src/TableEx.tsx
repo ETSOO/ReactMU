@@ -306,7 +306,7 @@ export function TableEx<
 
   // New sort
   const handleSort = (field: string, asc?: boolean) => {
-    reset({ queryPaging: { orderBy: new Map([[field, !(asc ?? true)]]) } });
+    reset({ queryPaging: { orderBy: [{ field, desc: !(asc ?? true) }] } });
   };
 
   // Set items for rerenderer
@@ -400,7 +400,9 @@ export function TableEx<
                 // Sortable
                 let sortLabel: React.ReactNode;
                 if (sortable && field != null) {
-                  const active = queryPaging.orderBy?.has(field);
+                  const active = queryPaging.orderBy?.some(
+                    (o) => o.field.toLowerCase() === field.toLowerCase()
+                  );
 
                   sortLabel = (
                     <TableSortLabel

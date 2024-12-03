@@ -5,7 +5,6 @@ import {
 } from "@etsoo/react";
 import { DataTypes } from "@etsoo/shared";
 import { GridDataCacheType } from "./GridDataCacheType";
-import { QueryPagingData } from "@etsoo/appscript";
 
 /**
  * Grid utilities
@@ -98,33 +97,5 @@ export namespace GridUtils {
     if (searchData == null) return;
     state.data ??= {};
     Object.assign(state.data, searchData);
-  }
-
-  /**
-   * Setup paging keysets
-   * @param data Paging data
-   * @param lastItem Last item of the query
-   * @param idField Id field
-   */
-  export function setupPagingKeysets<T>(
-    data: QueryPagingData,
-    lastItem: T | undefined,
-    idField: keyof T & string
-  ) {
-    // If the id field is not set for ordering, add it with descending
-    if (data.orderBy == null) {
-      data.orderBy = new Map<string, boolean>([[idField, true]]);
-    } else if (!data.orderBy.has(idField)) {
-      data.orderBy.set(idField, true);
-    }
-
-    // Set the paging keysets
-    if (lastItem) {
-      const keysets: unknown[] = [];
-      data.orderBy.forEach((_value, key) =>
-        keysets.push(Reflect.get(lastItem, key))
-      );
-      data.keysets = keysets;
-    }
   }
 }
