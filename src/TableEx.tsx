@@ -174,6 +174,7 @@ export function TableEx<
       hasNextPage: true,
       isNextPageLoading: false,
       lastLoadedItems: undefined,
+      lastItem: undefined,
       ...rest
     };
     Object.assign(state, resetState);

@@ -59,5 +59,7 @@ export namespace MUUtils {
         data.queryPaging.keysets = keysets;
       }
     }
+
+    return data;
   }
 }

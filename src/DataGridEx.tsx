@@ -440,7 +440,9 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
 
   // New sort
   const handleSort = (field: string, asc?: boolean) => {
-    reset({ queryPaging: { orderBy: [{ field, desc: !(asc ?? true) }] } });
+    reset({
+      queryPaging: { orderBy: [{ field, desc: !(asc ?? true) }] }
+    });
   };
 
   // Reset
