@@ -66,6 +66,11 @@ export type TiplistProProps<T extends ListType2 = ListType2> = Omit<
    * @param value New value
    */
   onValueChange?: (value: T | null) => void;
+
+  /**
+   * Minimum characters to trigger the change event
+   */
+  minChars?: number;
 };
 
 // Multiple states
@@ -114,6 +119,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     getOptionLabel,
     onChange,
     onValueChange,
+    minChars,
     ...rest
   } = props;
 
@@ -345,6 +351,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         loading={states.loading}
         renderInput={(params) => (
           <InputField
+            minChars={minChars}
             {...inputProps}
             {...params}
             onChange={changeHandle}

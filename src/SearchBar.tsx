@@ -1,7 +1,7 @@
 import { Button, Drawer, IconButton, Stack } from "@mui/material";
 import React from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { DomUtils } from "@etsoo/shared";
+import { DomUtils, NumberUtils } from "@etsoo/shared";
 import { ReactUtils, useDelayedExecutor, useDimensions } from "@etsoo/react";
 import { Labels } from "./app/Labels";
 
@@ -258,6 +258,19 @@ export function SearchBar(props: SearchBarProps) {
   // More form change
   const moreFormChange = (event: React.FormEvent<HTMLFormElement>) => {
     if (event.nativeEvent.cancelable && !event.nativeEvent.composed) return;
+
+    if (
+      event.target instanceof HTMLInputElement ||
+      event.target instanceof HTMLTextAreaElement
+    ) {
+      const minChars = NumberUtils.parse(event.target.dataset.minChars);
+      if (minChars != null && minChars > 0) {
+        const len = event.target.value.length;
+        if (len > 0 && len < minChars) {
+          return;
+        }
+      }
+    }
 
     if (state.moreForm == null) state.moreForm = event.currentTarget;
 

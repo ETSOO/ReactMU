@@ -29,6 +29,11 @@ export type TiplistProps<T extends object, D extends DataTypes.Keys<T>> = Omit<
   maxItems?: number;
 
   /**
+   * Minimum characters to trigger the change event
+   */
+  minChars?: number;
+
+  /**
    * Width
    */
   width?: number;
@@ -89,6 +94,7 @@ export function Tiplist<
     getOptionLabel,
     getOptionDisabled,
     sx = {},
+    minChars,
     ...rest
   } = props;
 
@@ -336,6 +342,7 @@ export function Tiplist<
               label={label}
               name={name + "Input"}
               margin={inputMargin}
+              minChars={minChars}
               variant={inputVariant}
               required={inputRequired}
               autoComplete={inputAutoComplete}
@@ -349,6 +356,7 @@ export function Tiplist<
               label={label}
               name={name + "Input"}
               margin={inputMargin}
+              minChars={minChars}
               variant={inputVariant}
               required={inputRequired}
               autoComplete={inputAutoComplete}

@@ -16,6 +16,11 @@ export type SearchFieldProps = TextFieldProps & {
    * Is the field read only?
    */
   readOnly?: boolean;
+
+  /**
+   * Minimum characters to trigger the change event
+   */
+  minChars?: number;
 };
 
 /**
@@ -33,6 +38,7 @@ export function SearchField(props: SearchFieldProps) {
     readOnly,
     size = MUGlobal.searchFieldSize,
     variant = MUGlobal.searchFieldVariant,
+    minChars = 0,
     ...rest
   } = props;
 
@@ -52,6 +58,10 @@ export function SearchField(props: SearchFieldProps) {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     if (onChange == null) return;
+
+    // Min characters check
+    const len = event.target.value.length;
+    if (len > 0 && len < minChars) return;
 
     if (changeDelay == null || changeDelay < 1) {
       onChange(event);

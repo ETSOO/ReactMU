@@ -23,6 +23,11 @@ export type InputFieldProps = TextFieldProps & {
    * Is the field read only?
    */
   readOnly?: boolean;
+
+  /**
+   * Minimum characters to trigger the change event
+   */
+  minChars?: number;
 };
 
 /**
@@ -42,6 +47,7 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
       readOnly,
       size = MUGlobal.inputFieldSize,
       variant = MUGlobal.inputFieldVariant,
+      minChars = 0,
       ...rest
     } = props;
 
@@ -65,6 +71,10 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
     const onChangeEx = (
       event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
+      // Min characters check
+      const len = event.target.value.length;
+      if (len > 0 && len < minChars) return;
+
       if (onChange && (delayed == null || onChangeDelay != null))
         onChange(event);
       delayed?.call(undefined, event);

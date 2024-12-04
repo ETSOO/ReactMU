@@ -83,8 +83,11 @@ export function TablePage<
     reset();
   };
 
-  const localLoadData = (props: GridLoadDataProps) => {
-    return loadData(GridUtils.createLoader<F>(props, fieldTemplate, cacheKey));
+  const localLoadData = (props: GridLoadDataProps, lastItem?: T) => {
+    return loadData(
+      GridUtils.createLoader<F>(props, fieldTemplate, cacheKey),
+      lastItem
+    );
   };
 
   // Search data

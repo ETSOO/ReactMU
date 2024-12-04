@@ -160,6 +160,7 @@ export function ComboBox<
   }, [localValue]);
 
   // Add readOnly
+  // Before AutocompleteRenderInputParams changed, impossible to remove "InputLabelProps" and "InputProps"
   const addReadOnly = (params: AutocompleteRenderInputParams) => {
     if (readOnly != null) {
       Object.assign(params, { readOnly });
