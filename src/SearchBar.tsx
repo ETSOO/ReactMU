@@ -81,6 +81,25 @@ const setChildState = (child: Element, enabled: boolean) => {
   }
 };
 
+function checkFormEvent(event: React.FormEvent<HTMLFormElement>) {
+  if (event.nativeEvent.cancelable && !event.nativeEvent.composed) return true;
+
+  if (
+    event.target instanceof HTMLInputElement ||
+    event.target instanceof HTMLTextAreaElement
+  ) {
+    const minChars = NumberUtils.parse(event.target.dataset.minChars);
+    if (minChars != null && minChars > 0) {
+      const len = event.target.value.length;
+      if (len > 0 && len < minChars) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 /**
  * Search bar
  * @param props Props
@@ -243,7 +262,7 @@ export function SearchBar(props: SearchBarProps) {
 
   // Handle main form
   const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
-    if (event.nativeEvent.cancelable && !event.nativeEvent.composed) return;
+    if (checkFormEvent(event)) return;
 
     if (state.form == null) state.form = event.currentTarget;
 
@@ -257,20 +276,7 @@ export function SearchBar(props: SearchBarProps) {
 
   // More form change
   const moreFormChange = (event: React.FormEvent<HTMLFormElement>) => {
-    if (event.nativeEvent.cancelable && !event.nativeEvent.composed) return;
-
-    if (
-      event.target instanceof HTMLInputElement ||
-      event.target instanceof HTMLTextAreaElement
-    ) {
-      const minChars = NumberUtils.parse(event.target.dataset.minChars);
-      if (minChars != null && minChars > 0) {
-        const len = event.target.value.length;
-        if (len > 0 && len < minChars) {
-          return;
-        }
-      }
-    }
+    if (checkFormEvent(event)) return;
 
     if (state.moreForm == null) state.moreForm = event.currentTarget;
 
