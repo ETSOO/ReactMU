@@ -63,6 +63,7 @@ export * from "./FieldSetEx";
 export * from "./FileUploadButton";
 export * from "./FlexBox";
 export * from "./GridDataFormat";
+export * from "./GridUtils";
 export * from "./HiSelector";
 export * from "./HiSelectorTL";
 export * from "./IconButtonLink";
