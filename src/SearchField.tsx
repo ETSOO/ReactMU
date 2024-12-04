@@ -34,6 +34,7 @@ export function SearchField(props: SearchFieldProps) {
     changeDelay,
     InputLabelProps = {},
     InputProps = {},
+    inputProps = {},
     onChange,
     readOnly,
     size = MUGlobal.searchFieldSize,
@@ -47,6 +48,9 @@ export function SearchField(props: SearchFieldProps) {
 
   // Read only
   if (readOnly != null) InputProps.readOnly = readOnly;
+
+  // Min characters
+  inputProps["data-min-chars"] = minChars;
 
   const isMounted = React.useRef(true);
   const delayed =
@@ -83,6 +87,7 @@ export function SearchField(props: SearchFieldProps) {
     <TextField
       InputLabelProps={InputLabelProps}
       InputProps={InputProps}
+      inputProps={inputProps}
       onChange={onChangeEx}
       size={size}
       variant={variant}

@@ -42,6 +42,7 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
       changeDelay,
       InputLabelProps = {},
       InputProps = {},
+      inputProps = {},
       onChange,
       onChangeDelay,
       readOnly,
@@ -56,6 +57,9 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
 
     // Read only
     if (readOnly != null) InputProps.readOnly = readOnly;
+
+    // Min characters
+    inputProps["data-min-chars"] = minChars;
 
     const isMounted = React.useRef(true);
     const createDelayed = () => {
@@ -93,6 +97,7 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
         ref={ref}
         InputLabelProps={InputLabelProps}
         InputProps={InputProps}
+        inputProps={inputProps}
         onChange={onChangeEx}
         size={size}
         variant={variant}
