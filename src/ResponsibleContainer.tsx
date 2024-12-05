@@ -1,5 +1,5 @@
 import { DataTypes } from "@etsoo/shared";
-import { Box, Stack, SxProps, Theme } from "@mui/material";
+import { Box, Stack, SxProps, Theme, useMediaQuery } from "@mui/material";
 import React from "react";
 import {
   GridOnScrollProps,
@@ -18,11 +18,7 @@ import {
   useCombinedRefs,
   useDimensions
 } from "@etsoo/react";
-import {
-  DataGridEx,
-  DataGridExCalColumns,
-  DataGridExProps
-} from "./DataGridEx";
+import { DataGridEx, DataGridExProps } from "./DataGridEx";
 import { MUGlobal } from "./MUGlobal";
 import { PullToRefreshUI } from "./PullToRefreshUI";
 import {
@@ -79,11 +75,6 @@ export type ResponsibleContainerProps<
     hasFields: boolean,
     dataGrid?: boolean
   ) => SxProps<Theme>;
-
-  /**
-   * Min width to show Datagrid
-   */
-  dataGridMinWidth?: number;
 
   /**
    * Search fields
@@ -161,6 +152,11 @@ export type ResponsibleContainerProps<
    * SearchBar height
    */
   searchBarHeight?: number;
+
+  /**
+   * SearchBar bottom padding
+   */
+  searchBarBottom?: number;
 };
 
 interface LocalRefs<T> {
@@ -201,7 +197,6 @@ export function ResponsibleContainer<
     cacheMinutes = 15,
     columns,
     containerBoxSx = defaultContainerBoxSx,
-    dataGridMinWidth = Math.max(576, DataGridExCalColumns(columns).total),
     elementReady,
     fields,
     fieldTemplate,
@@ -213,6 +208,7 @@ export function ResponsibleContainer<
     quickAction,
     sizeReadyMiliseconds = 0,
     searchBarHeight = 45.6,
+    searchBarBottom = 8,
     ...rest
   } = props;
 
@@ -227,6 +223,9 @@ export function ResponsibleContainer<
     if (ref == null) return;
     state.ref = ref;
   });
+
+  // Screen size detection
+  const showDataGrid = useMediaQuery("(min-width:600px)");
 
   // Update mounted state
   React.useEffect(() => {
@@ -339,15 +338,9 @@ export function ResponsibleContainer<
   const rect = dimensions[0][2];
 
   // Create list
-  const [list, showDataGrid] = (() => {
+  const list = (() => {
     // No layout
     if (rect == null) return [null, undefined];
-
-    // Width
-    const width = rect.width;
-
-    // Show DataGrid or List dependng on width
-    const showDataGrid = width >= dataGridMinWidth;
 
     // Height
     let heightLocal: number;
@@ -360,7 +353,7 @@ export function ResponsibleContainer<
 
       const style = window.getComputedStyle(dimensions[0][1]!);
       const boxMargin = parseFloat(style.marginBottom);
-      if (!isNaN(boxMargin)) heightLocal -= 3 * boxMargin; // 1 - Box, 2 - Page bottom
+      if (!isNaN(boxMargin)) heightLocal -= boxMargin;
 
       if (adjustHeight != null)
         heightLocal -=
@@ -376,7 +369,7 @@ export function ResponsibleContainer<
       // Delete
       delete rest.itemRenderer;
 
-      return [
+      return (
         <Box className="DataGridBox">
           <DataGridEx<T>
             autoLoad={!hasFields}
@@ -394,9 +387,8 @@ export function ResponsibleContainer<
             onInitLoad={onInitLoad}
             {...rest}
           />
-        </Box>,
-        true
-      ];
+        </Box>
+      );
     }
 
     // Delete
@@ -409,7 +401,7 @@ export function ResponsibleContainer<
     delete rest.hoverColor;
     delete rest.selectable;
 
-    return [
+    return (
       <Box className="ListBox" sx={{ height: heightLocal }}>
         <ScrollerListEx<T>
           autoLoad={!hasFields}
@@ -427,9 +419,8 @@ export function ResponsibleContainer<
           onScroll={onListScroll}
           {...rest}
         />
-      </Box>,
-      false
-    ];
+      </Box>
+    );
   })();
 
   const searchBar = React.useMemo(() => {
@@ -473,7 +464,12 @@ export function ResponsibleContainer<
         <Box
           ref={dimensions[0][0]}
           className="SearchBox"
-          sx={{ height: hasFields ? searchBarHeight : 0 }}
+          sx={{
+            height: hasFields ? searchBarHeight : 0
+          }}
+          marginBottom={
+            hasFields ? `${searchBarBottom}px!important` : undefined
+          }
         >
           {searchBar}
         </Box>
