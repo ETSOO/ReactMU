@@ -1,14 +1,10 @@
-import type { DataTypes } from "@etsoo/shared";
 import type { DataGridExProps } from "../DataGridEx";
 import type { SearchPageProps } from "./SearchPageProps";
 
 /**
  * DataGrid page props
  */
-export type DataGridPageProps<
-  T extends object,
-  F extends DataTypes.BasicTemplate
-> = SearchPageProps<T, F> &
+export type DataGridPageProps<T extends object> = SearchPageProps<T> &
   Omit<DataGridExProps<T>, "loadData"> & {
     /**
      * Height will be deducted

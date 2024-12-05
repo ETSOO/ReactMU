@@ -15,15 +15,17 @@ export namespace GridUtils {
    * @param props Props
    * @param template Field template
    * @param cacheKey Cache key
+   * @param keepSource Keep source or not
    * @returns Request data
    */
-  export function createLoader<F extends DataTypes.BasicTemplate>(
+  export function createLoader(
     props: GridLoadDataProps,
-    template?: F,
-    cacheKey?: string
+    template?: object,
+    cacheKey?: string,
+    keepSource?: boolean
   ) {
     const { data, ...rest } = props;
-    const formData = GridDataGetData(data, template);
+    const formData = GridDataGetData(data, template, keepSource);
 
     if (cacheKey)
       sessionStorage.setItem(`${cacheKey}-searchbar`, JSON.stringify(formData));
@@ -55,13 +57,11 @@ export namespace GridUtils {
    * @param cacheKey Cache key
    * @returns Result
    */
-  export function getSearchData<F extends DataTypes.BasicTemplate>(
-    cacheKey?: string
-  ) {
+  export function getSearchData(cacheKey?: string) {
     if (cacheKey) {
       const data = sessionStorage.getItem(`${cacheKey}-searchbar`);
       if (data) {
-        return JSON.parse(data) as DataTypes.BasicTemplateType<F>;
+        return JSON.parse(data);
       }
     }
   }

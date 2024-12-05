@@ -23,9 +23,8 @@ import type { SearchPageProps } from "./SearchPageProps";
  */
 export type TablePageProps<
   T extends object,
-  F extends DataTypes.BasicTemplate,
   D extends DataTypes.Keys<T>
-> = SearchPageProps<T, F> & Omit<TableExProps<T, D>, "loadData">;
+> = SearchPageProps<T> & Omit<TableExProps<T, D>, "loadData">;
 
 /**
  * Table page
@@ -34,9 +33,8 @@ export type TablePageProps<
  */
 export function TablePage<
   T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate,
   D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: TablePageProps<T, F, D>) {
+>(props: TablePageProps<T, D>) {
   // Destruct
   const {
     columns,
@@ -85,13 +83,13 @@ export function TablePage<
 
   const localLoadData = (props: GridLoadDataProps, lastItem?: T) => {
     return loadData(
-      GridUtils.createLoader<F>(props, fieldTemplate, cacheKey),
+      GridUtils.createLoader(props, fieldTemplate, cacheKey, false),
       lastItem
     );
   };
 
   // Search data
-  const searchData = GridUtils.getSearchData<F>(cacheKey);
+  const searchData = GridUtils.getSearchData(cacheKey);
 
   // Total width
   const totalWidth = React.useMemo(

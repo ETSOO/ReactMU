@@ -1,4 +1,3 @@
-import { DataTypes } from "@etsoo/shared";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
 import { ResponsibleContainer } from "../ResponsibleContainer";
@@ -16,10 +15,7 @@ import type { OperationMessageHandlerAll } from "../messages/OperationMessageHan
 /**
  * Response page props
  */
-export type ResponsePageProps<
-  T extends object,
-  F extends DataTypes.BasicTemplate
-> = DataGridPageProps<T, F> & {
+export type ResponsePageProps<T extends object> = DataGridPageProps<T> & {
   /**
    *
    * @param height Current height
@@ -76,10 +72,7 @@ export type ResponsePageProps<
  * @param props Props
  * @returns Component
  */
-export function ResponsivePage<
-  T extends object,
-  F extends DataTypes.BasicTemplate = {}
->(props: ResponsePageProps<T, F>) {
+export function ResponsivePage<T extends object>(props: ResponsePageProps<T>) {
   // Destruct
   const { pageProps = {}, operationMessageHandler, ...rest } = props;
 
@@ -101,7 +94,7 @@ export function ResponsivePage<
       {operationMessageHandler && (
         <OperationMessageContainer handler={operationMessageHandler} />
       )}
-      <ResponsibleContainer<T, F>
+      <ResponsibleContainer<T>
         paddings={paddings}
         containerBoxSx={(paddings, hasField, _dataGrid) => {
           // Half

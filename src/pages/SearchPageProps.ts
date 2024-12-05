@@ -1,14 +1,13 @@
-import type { GridJsonData, GridLoader } from "@etsoo/react";
-import type { DataTypes } from "@etsoo/shared";
+import type { GridJsonData, GridLoader, GridTemplateType } from "@etsoo/react";
 import type { CommonPageProps } from "./CommonPage";
 
 /**
  * Search page props
  */
-export type SearchPageProps<
-  T extends object,
-  F extends DataTypes.BasicTemplate
-> = Omit<GridLoader<T>, "loadData"> & {
+export type SearchPageProps<T extends object> = Omit<
+  GridLoader<T>,
+  "loadData"
+> & {
   /**
    * Cache key
    */
@@ -24,18 +23,20 @@ export type SearchPageProps<
    */
   fields:
     | React.ReactElement[]
-    | ((data: DataTypes.BasicTemplateType<F>) => React.ReactElement[]);
+    | ((
+        data: GridTemplateType<SearchPageProps<T>["fieldTemplate"]>
+      ) => React.ReactElement[]);
 
   /**
    * Search field template
    */
-  fieldTemplate?: F;
+  readonly fieldTemplate: object;
 
   /**
    * Load data callback
    */
   loadData: (
-    data: GridJsonData & DataTypes.BasicTemplateType<F>,
+    data: GridJsonData & GridTemplateType<SearchPageProps<T>["fieldTemplate"]>,
     lastItem?: T
   ) => PromiseLike<T[] | null | undefined>;
 

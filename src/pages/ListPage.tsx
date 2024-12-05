@@ -6,7 +6,6 @@ import {
   ScrollerListRef,
   useCombinedRefs
 } from "@etsoo/react";
-import { DataTypes } from "@etsoo/shared";
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
@@ -19,20 +18,15 @@ import type { SearchPageProps } from "./SearchPageProps";
 /**
  * List page props
  */
-export type ListPageProps<
-  T extends object,
-  F extends DataTypes.BasicTemplate
-> = SearchPageProps<T, F> & Omit<ScrollerListExProps<T>, "loadData">;
+export type ListPageProps<T extends object> = SearchPageProps<T> &
+  Omit<ScrollerListExProps<T>, "loadData">;
 
 /**
  * List page
  * @param props Props
  * @returns Component
  */
-export function ListPage<
-  T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
->(props: ListPageProps<T, F>) {
+export function ListPage<T extends object>(props: ListPageProps<T>) {
   // Destruct
   const {
     fields,
@@ -78,13 +72,13 @@ export function ListPage<
 
   const localLoadData = (props: GridLoadDataProps, lastItem?: T) => {
     return loadData(
-      GridUtils.createLoader<F>(props, fieldTemplate, cacheKey),
+      GridUtils.createLoader(props, fieldTemplate, cacheKey, false),
       lastItem
     );
   };
 
   // Search data
-  const searchData = GridUtils.getSearchData<F>(cacheKey);
+  const searchData = GridUtils.getSearchData(cacheKey);
 
   const onInitLoad = (
     ref: ScrollerListRef

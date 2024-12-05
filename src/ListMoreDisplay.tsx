@@ -21,10 +21,8 @@ import { globalApp } from "./app/ReactApp";
 /**
  * ListMoreDisplay props
  */
-export interface ListMoreDisplayProps<
-  T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
-> extends Omit<CardProps, "children">,
+export interface ListMoreDisplayProps<T extends object>
+  extends Omit<CardProps, "children">,
     GridLoader<T> {
   /**
    * Batch size to load
@@ -39,7 +37,7 @@ export interface ListMoreDisplayProps<
   /**
    * Search field template
    */
-  fieldTemplate?: F;
+  readonly fieldTemplate: object;
 
   /**
    * Header renderer
@@ -67,10 +65,9 @@ type states<T> = {
  * @param props Props
  * @returns Component
  */
-export function ListMoreDisplay<
-  T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
->(props: ListMoreDisplayProps<T, F>) {
+export function ListMoreDisplay<T extends object>(
+  props: ListMoreDisplayProps<T>
+) {
   // Destruct
   const {
     batchSize = 6,

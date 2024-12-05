@@ -1,4 +1,3 @@
-import { DataTypes } from "@etsoo/shared";
 import { Box, Stack, SxProps, Theme, useMediaQuery } from "@mui/material";
 import React from "react";
 import {
@@ -13,6 +12,7 @@ import {
   GridLoadDataProps,
   GridLoaderStates,
   GridMethodRef,
+  GridTemplateType,
   ReactUtils,
   ScrollerListRef,
   useCombinedRefs,
@@ -33,10 +33,7 @@ import { GridUtils } from "./GridUtils";
 /**
  * ResponsibleContainer props
  */
-export type ResponsibleContainerProps<
-  T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
-> = Omit<
+export type ResponsibleContainerProps<T extends object> = Omit<
   DataGridExProps<T>,
   | "height"
   | "itemKey"
@@ -81,12 +78,14 @@ export type ResponsibleContainerProps<
    */
   fields?:
     | React.ReactElement[]
-    | ((data: DataTypes.BasicTemplateType<F>) => React.ReactElement[]);
+    | ((
+        data: GridTemplateType<ResponsibleContainerProps<T>["fieldTemplate"]>
+      ) => React.ReactElement[]);
 
   /**
    * Search field template
    */
-  fieldTemplate?: F;
+  fieldTemplate: object;
 
   /**
    * Grid height
@@ -114,7 +113,8 @@ export type ResponsibleContainerProps<
    * Load data callback
    */
   loadData: (
-    data: GridJsonData & DataTypes.BasicTemplateType<F>,
+    data: GridJsonData &
+      GridTemplateType<ResponsibleContainerProps<T>["fieldTemplate"]>,
     lastItem?: T
   ) => PromiseLike<T[] | null | undefined>;
 
@@ -185,10 +185,9 @@ function defaultContainerBoxSx(
  * @param props Props
  * @returns Layout
  */
-export function ResponsibleContainer<
-  T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
->(props: ResponsibleContainerProps<T, F>) {
+export function ResponsibleContainer<T extends object>(
+  props: ResponsibleContainerProps<T>
+) {
   // Destruct
   const {
     adjustHeight,
@@ -241,13 +240,13 @@ export function ResponsibleContainer<
   const localLoadData = (props: GridLoadDataProps, lastItem?: T) => {
     state.mounted = true;
     return loadData(
-      GridUtils.createLoader<F>(props, fieldTemplate, cacheKey),
+      GridUtils.createLoader(props, fieldTemplate, cacheKey, false),
       lastItem
     );
   };
 
   // Search data
-  const searchData = GridUtils.getSearchData<F>(cacheKey);
+  const searchData = GridUtils.getSearchData(cacheKey);
 
   // On submit callback
   const onSubmit = (data: FormData, _reset: boolean) => {

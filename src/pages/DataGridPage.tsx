@@ -7,7 +7,6 @@ import {
   useCombinedRefs,
   useDimensions
 } from "@etsoo/react";
-import { DataTypes } from "@etsoo/shared";
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import { DataGridEx } from "../DataGridEx";
@@ -29,10 +28,7 @@ interface LocalStates<T> {
  * @param props Props
  * @returns Component
  */
-export function DataGridPage<
-  T extends object,
-  F extends DataTypes.BasicTemplate = DataTypes.BasicTemplate
->(props: DataGridPageProps<T, F>) {
+export function DataGridPage<T extends object>(props: DataGridPageProps<T>) {
   // Destruct
   const {
     adjustHeight,
@@ -78,13 +74,13 @@ export function DataGridPage<
 
   const localLoadData = (props: GridLoadDataProps, lastItem?: T) => {
     return loadData(
-      GridUtils.createLoader<F>(props, fieldTemplate, cacheKey),
+      GridUtils.createLoader(props, fieldTemplate, cacheKey, false),
       lastItem
     );
   };
 
   // Search data
-  const searchData = GridUtils.getSearchData<F>(cacheKey);
+  const searchData = GridUtils.getSearchData(cacheKey);
 
   const onInitLoad = (
     ref: VariableSizeGrid<T>
