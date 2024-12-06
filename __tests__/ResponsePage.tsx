@@ -8,7 +8,7 @@ globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn()
 }));
 
-type Data = { id: number; name: string };
+type Data = { id: number; name: string; value?: string };
 
 // Timer mock
 // https://jestjs.io/docs/en/timer-mocks
@@ -28,7 +28,12 @@ it("Render ResponsePage", async () => {
         fields={[]}
         columns={[
           { field: "id", header: "ID" },
-          { field: "name", header: "Name" }
+          { field: "name", header: "Name" },
+          {
+            field: "value",
+            header: "Value",
+            valueFormatter: ({ data }) => data?.value ?? data?.name
+          }
         ]}
         height={200}
         itemSize={[118, MUGlobal.pagePaddings]}
