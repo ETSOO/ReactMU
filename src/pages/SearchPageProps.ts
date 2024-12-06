@@ -4,9 +4,9 @@ import type { CommonPageProps } from "./CommonPage";
 /**
  * Search page props
  */
-export type SearchPageProps<T extends object, F> = Omit<
-  GridLoader<T>,
-  "loadData"
+export type SearchPageProps<T extends object, F> = GridLoader<
+  T,
+  GridJsonData & GridTemplateType<F>
 > & {
   /**
    * Cache key
@@ -29,14 +29,6 @@ export type SearchPageProps<T extends object, F> = Omit<
    * Search field template
    */
   readonly fieldTemplate: F;
-
-  /**
-   * Load data callback
-   */
-  loadData: (
-    data: GridJsonData & GridTemplateType<F>,
-    lastItem?: T
-  ) => PromiseLike<T[] | null | undefined>;
 
   /**
    * Page props

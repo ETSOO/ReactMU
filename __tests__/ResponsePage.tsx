@@ -1,5 +1,10 @@
 import { act, render } from "@testing-library/react";
-import { MUGlobal, MobileListItemRenderer, ResponsivePage } from "../src";
+import {
+  MUGlobal,
+  MobileListItemRenderer,
+  ResponsivePage,
+  SearchField
+} from "../src";
 import React from "react";
 
 globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
@@ -8,7 +13,13 @@ globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn()
 }));
 
-type Data = { id: number; name: string; value?: string };
+type Data = {
+  id: number;
+  name: string;
+  deviceName?: string;
+  data?: string;
+  creation?: Date;
+};
 
 // Timer mock
 // https://jestjs.io/docs/en/timer-mocks
@@ -25,16 +36,7 @@ it("Render ResponsePage", async () => {
     // Act
     render(
       <ResponsivePage<Data, typeof fieldTemplate>
-        fields={[]}
-        columns={[
-          { field: "id", header: "ID" },
-          { field: "name", header: "Name" },
-          {
-            field: "value",
-            header: "Value",
-            valueFormatter: ({ data }) => data?.value ?? data?.name
-          }
-        ]}
+        fields={[<SearchField label="Keyword" name="keyword" minChars={2} />]}
         height={200}
         itemSize={[118, MUGlobal.pagePaddings]}
         fieldTemplate={fieldTemplate}
@@ -45,6 +47,15 @@ it("Render ResponsePage", async () => {
             { id: id ?? 0, name: "auto" }
           ])
         }
+        columns={[
+          { field: "id", header: "ID" },
+          { field: "name", header: "Name" },
+          {
+            field: "deviceName",
+            header: "Value",
+            valueFormatter: ({ data }) => data?.deviceName ?? data?.name
+          }
+        ]}
         innerItemRenderer={(props) =>
           MobileListItemRenderer(props, (data) => {
             return [
