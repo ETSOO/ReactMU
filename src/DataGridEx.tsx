@@ -5,6 +5,8 @@ import {
   GridCellRendererProps,
   GridColumn,
   GridHeaderCellRendererProps,
+  GridJsonData,
+  GridLoadDataProps,
   GridLoaderPartialStates,
   GridLoaderStates,
   ScrollerGrid,
@@ -40,8 +42,11 @@ export type DataGridExFooterItemRendererProps<T extends object> = {
 /**
  * Extended DataGrid with VariableSizeGrid props
  */
-export type DataGridExProps<T extends object> = Omit<
-  ScrollerGridProps<T>,
+export type DataGridExProps<
+  T extends object,
+  P extends GridJsonData = GridLoadDataProps
+> = Omit<
+  ScrollerGridProps<T, P>,
   "itemRenderer" | "columnCount" | "columnWidth" | "width"
 > & {
   /**

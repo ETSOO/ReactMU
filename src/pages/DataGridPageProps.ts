@@ -1,12 +1,13 @@
+import { GridJsonData, GridTemplateType } from "@etsoo/react";
 import type { DataGridExProps } from "../DataGridEx";
 import type { SearchPageProps } from "./SearchPageProps";
 
 /**
  * DataGrid page props
  */
-export type DataGridPageProps<T extends object, F> = Omit<
-  DataGridExProps<T>,
-  "loadData" | "height"
+export type DataGridPageProps<T extends object, F> = DataGridExProps<
+  T,
+  GridJsonData & GridTemplateType<F>
 > &
   SearchPageProps<T, F> & {
     /**
