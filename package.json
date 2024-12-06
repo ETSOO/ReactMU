@@ -37,7 +37,7 @@
     "@emotion/styled": "^11.13.5",
     "@etsoo/appscript": "^1.5.78",
     "@etsoo/notificationbase": "^1.1.54",
-    "@etsoo/react": "^1.8.10",
+    "@etsoo/react": "^1.8.11",
     "@etsoo/shared": "^1.2.55",
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.10",

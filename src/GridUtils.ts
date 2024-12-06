@@ -18,9 +18,9 @@ export namespace GridUtils {
    * @param keepSource Keep source or not
    * @returns Request data
    */
-  export function createLoader(
+  export function createLoader<const F>(
     props: GridLoadDataProps,
-    template?: object,
+    template?: F,
     cacheKey?: string,
     keepSource?: boolean
   ) {

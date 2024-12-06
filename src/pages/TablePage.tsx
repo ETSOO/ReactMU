@@ -23,8 +23,9 @@ import type { SearchPageProps } from "./SearchPageProps";
  */
 export type TablePageProps<
   T extends object,
+  F,
   D extends DataTypes.Keys<T>
-> = SearchPageProps<T> & Omit<TableExProps<T, D>, "loadData">;
+> = SearchPageProps<T, F> & Omit<TableExProps<T, D>, "loadData">;
 
 /**
  * Table page
@@ -33,8 +34,9 @@ export type TablePageProps<
  */
 export function TablePage<
   T extends object,
+  F,
   D extends DataTypes.Keys<T> = IdDefaultType<T>
->(props: TablePageProps<T, D>) {
+>(props: TablePageProps<T, F, D>) {
   // Destruct
   const {
     columns,

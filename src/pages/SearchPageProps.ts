@@ -4,7 +4,7 @@ import type { CommonPageProps } from "./CommonPage";
 /**
  * Search page props
  */
-export type SearchPageProps<T extends object> = Omit<
+export type SearchPageProps<T extends object, F> = Omit<
   GridLoader<T>,
   "loadData"
 > & {
@@ -23,20 +23,18 @@ export type SearchPageProps<T extends object> = Omit<
    */
   fields:
     | React.ReactElement[]
-    | ((
-        data: GridTemplateType<SearchPageProps<T>["fieldTemplate"]>
-      ) => React.ReactElement[]);
+    | ((data: GridTemplateType<F>) => React.ReactElement[]);
 
   /**
    * Search field template
    */
-  readonly fieldTemplate: object;
+  readonly fieldTemplate: F;
 
   /**
    * Load data callback
    */
   loadData: (
-    data: GridJsonData & GridTemplateType<SearchPageProps<T>["fieldTemplate"]>,
+    data: GridJsonData & GridTemplateType<F>,
     lastItem?: T
   ) => PromiseLike<T[] | null | undefined>;
 

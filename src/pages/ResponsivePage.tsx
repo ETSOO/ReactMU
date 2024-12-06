@@ -15,7 +15,7 @@ import type { OperationMessageHandlerAll } from "../messages/OperationMessageHan
 /**
  * Response page props
  */
-export type ResponsePageProps<T extends object> = DataGridPageProps<T> & {
+export type ResponsePageProps<T extends object, F> = DataGridPageProps<T, F> & {
   /**
    *
    * @param height Current height
@@ -72,7 +72,9 @@ export type ResponsePageProps<T extends object> = DataGridPageProps<T> & {
  * @param props Props
  * @returns Component
  */
-export function ResponsivePage<T extends object>(props: ResponsePageProps<T>) {
+export function ResponsivePage<T extends object, F>(
+  props: ResponsePageProps<T, F>
+) {
   // Destruct
   const { pageProps = {}, operationMessageHandler, ...rest } = props;
 
@@ -94,7 +96,7 @@ export function ResponsivePage<T extends object>(props: ResponsePageProps<T>) {
       {operationMessageHandler && (
         <OperationMessageContainer handler={operationMessageHandler} />
       )}
-      <ResponsibleContainer<T>
+      <ResponsibleContainer<T, F>
         paddings={paddings}
         containerBoxSx={(paddings, hasField, _dataGrid) => {
           // Half

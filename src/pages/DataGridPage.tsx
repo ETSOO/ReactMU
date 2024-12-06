@@ -28,7 +28,9 @@ interface LocalStates<T> {
  * @param props Props
  * @returns Component
  */
-export function DataGridPage<T extends object>(props: DataGridPageProps<T>) {
+export function DataGridPage<T extends object, F>(
+  props: DataGridPageProps<T, F>
+) {
   // Destruct
   const {
     adjustHeight,

@@ -21,8 +21,8 @@ import type { ListPageProps } from "./ListPage";
  * @param props Props
  * @returns Component
  */
-export function FixedListPage<T extends object>(
-  props: ListPageProps<T> & {
+export function FixedListPage<T extends object, F>(
+  props: ListPageProps<T, F> & {
     /**
      * Height will be deducted
      * @param height Current calcuated height

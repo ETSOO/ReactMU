@@ -18,7 +18,7 @@ import type { SearchPageProps } from "./SearchPageProps";
 /**
  * List page props
  */
-export type ListPageProps<T extends object> = SearchPageProps<T> &
+export type ListPageProps<T extends object, F> = SearchPageProps<T, F> &
   Omit<ScrollerListExProps<T>, "loadData">;
 
 /**
@@ -26,7 +26,7 @@ export type ListPageProps<T extends object> = SearchPageProps<T> &
  * @param props Props
  * @returns Component
  */
-export function ListPage<T extends object>(props: ListPageProps<T>) {
+export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
   // Destruct
   const {
     fields,

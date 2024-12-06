@@ -33,7 +33,7 @@ import { GridUtils } from "./GridUtils";
 /**
  * ResponsibleContainer props
  */
-export type ResponsibleContainerProps<T extends object> = Omit<
+export type ResponsibleContainerProps<T extends object, F> = Omit<
   DataGridExProps<T>,
   | "height"
   | "itemKey"
@@ -78,14 +78,12 @@ export type ResponsibleContainerProps<T extends object> = Omit<
    */
   fields?:
     | React.ReactElement[]
-    | ((
-        data: GridTemplateType<ResponsibleContainerProps<T>["fieldTemplate"]>
-      ) => React.ReactElement[]);
+    | ((data: GridTemplateType<F>) => React.ReactElement[]);
 
   /**
    * Search field template
    */
-  fieldTemplate: object;
+  readonly fieldTemplate: F;
 
   /**
    * Grid height
@@ -113,8 +111,7 @@ export type ResponsibleContainerProps<T extends object> = Omit<
    * Load data callback
    */
   loadData: (
-    data: GridJsonData &
-      GridTemplateType<ResponsibleContainerProps<T>["fieldTemplate"]>,
+    data: GridJsonData & GridTemplateType<F>,
     lastItem?: T
   ) => PromiseLike<T[] | null | undefined>;
 
@@ -185,8 +182,8 @@ function defaultContainerBoxSx(
  * @param props Props
  * @returns Layout
  */
-export function ResponsibleContainer<T extends object>(
-  props: ResponsibleContainerProps<T>
+export function ResponsibleContainer<T extends object, F>(
+  props: ResponsibleContainerProps<T, F>
 ) {
   // Destruct
   const {

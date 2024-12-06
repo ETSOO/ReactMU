@@ -4,7 +4,7 @@ import type { SearchPageProps } from "./SearchPageProps";
 /**
  * DataGrid page props
  */
-export type DataGridPageProps<T extends object> = SearchPageProps<T> &
+export type DataGridPageProps<T extends object, F> = SearchPageProps<T, F> &
   Omit<DataGridExProps<T>, "loadData"> & {
     /**
      * Height will be deducted
