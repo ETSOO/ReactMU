@@ -117,6 +117,7 @@ export function ComboBox<
     openText = labels?.open,
     addLabel = labels?.add,
     onAdd,
+    getOptionKey = (option: T) => `${option[idField]}`,
     ...rest
   } = props;
 
@@ -292,6 +293,7 @@ export function ComboBox<
           noOptionsText={noOptionsText}
           loadingText={loadingText}
           openText={openText}
+          getOptionKey={getOptionKey}
           {...rest}
         />
         {onAdd && (
