@@ -5,13 +5,15 @@ import {
   AuthApi,
   BridgeUtils,
   ExternalEndpoint,
-  IApi
+  IApi,
+  IApiPayload
 } from "@etsoo/appscript";
 import { IServiceApp } from "./IServiceApp";
 import { IServiceAppSettings } from "./IServiceAppSettings";
 import { IServicePageData } from "./IServicePage";
 import { IServiceUser, ServiceUserToken } from "./IServiceUser";
 import { ReactApp } from "./ReactApp";
+import { IActionResult } from "@etsoo/shared";
 
 const coreName = "core";
 const coreTokenKey = "core-refresh-token";
@@ -45,6 +47,8 @@ export class ServiceApp<
    * Core system origin
    */
   readonly coreOrigin: string;
+
+  private coreAccessToken: string | undefined;
 
   /**
    * Constructor
@@ -182,18 +186,61 @@ export class ServiceApp<
       expiresIn: user.seconds
     };
 
-    // Cache the core system refresh token
-    this.saveCoreToken(core.refreshToken);
-
-    this.exchangeTokenAll(core, coreName);
+    // Cache the core system data
+    this.saveCoreToken(core);
   }
 
   /**
-   * Save core system refresh token
-   * @param token New refresh token
+   * Save core system data
+   * @param data Data
    */
-  protected saveCoreToken(token: string) {
-    this.storage.setData(coreTokenKey, this.encrypt(token));
+  protected saveCoreToken(data: ApiRefreshTokenDto) {
+    // Hold the core system access token
+    this.coreAccessToken = data.accessToken;
+
+    // Cache the core system refresh token
+    this.storage.setData(coreTokenKey, this.encrypt(data.refreshToken));
+
+    // Exchange tokens
+    this.exchangeTokenAll(data, coreName);
+  }
+
+  /**
+   * Switch organization
+   * @param organizationId Organization ID
+   * @param fromOrganizationId From organization ID
+   * @param payload Payload
+   */
+  async switchOrg(
+    organizationId: number,
+    fromOrganizationId?: number,
+    payload?: IApiPayload<IActionResult<U & ServiceUserToken>>
+  ) {
+    if (!this.coreAccessToken) {
+      throw new Error("Core access token is required to switch organization.");
+    }
+
+    const [result, refreshToken] = await new AuthApi(
+      this,
+      this.coreApi
+    ).switchOrg(
+      { organizationId, fromOrganizationId, token: this.coreAccessToken },
+      payload
+    );
+
+    if (result == null || result.data == null) return;
+
+    let core: ApiRefreshTokenDto | undefined;
+    if ("core" in result.data && typeof result.data.core === "string") {
+      core = JSON.parse(result.data.core);
+      delete result.data.core;
+    }
+
+    // Override the user data's refresh token
+    const user = refreshToken ? { ...result.data, refreshToken } : result.data;
+
+    // User login
+    this.userLoginEx(user, core, true);
   }
 
   /**
@@ -233,9 +280,7 @@ export class ServiceApp<
         if (data == null) return;
 
         // Cache the core system refresh token
-        this.saveCoreToken(data.refreshToken);
-
-        this.exchangeTokenAll(data, coreName);
+        this.saveCoreToken(data);
 
         onSuccess?.();
       });
