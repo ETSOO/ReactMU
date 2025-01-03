@@ -228,7 +228,15 @@ export class ServiceApp<
       payload
     );
 
-    if (result == null || result.data == null) return;
+    if (result == null) return;
+
+    if (!result.ok) {
+      return result;
+    }
+
+    if (result.data == null) {
+      throw new Error("Invalid switch organization result.");
+    }
 
     let core: ApiRefreshTokenDto | undefined;
     if ("core" in result.data && typeof result.data.core === "string") {
@@ -241,6 +249,8 @@ export class ServiceApp<
 
     // User login
     this.userLoginEx(user, core, true);
+
+    return result;
   }
 
   /**
