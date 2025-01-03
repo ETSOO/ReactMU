@@ -220,10 +220,7 @@ export class ServiceApp<
       throw new Error("Core access token is required to switch organization.");
     }
 
-    const [result, refreshToken] = await new AuthApi(
-      this,
-      this.coreApi
-    ).switchOrg(
+    const [result, refreshToken] = await new AuthApi(this).switchOrg(
       { organizationId, fromOrganizationId, token: this.coreAccessToken },
       payload
     );
