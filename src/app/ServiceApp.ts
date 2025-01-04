@@ -176,7 +176,6 @@ export class ServiceApp<
   ) {
     // User login
     const { refreshToken } = user;
-    this.userLogin(user, refreshToken, dispatch);
 
     // Core system login
     core ??= {
@@ -188,6 +187,9 @@ export class ServiceApp<
 
     // Cache the core system data
     this.saveCoreToken(core);
+
+    // User login and trigger the dispatch at last
+    this.userLogin(user, refreshToken, dispatch);
   }
 
   /**
