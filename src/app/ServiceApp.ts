@@ -139,12 +139,17 @@ export class ServiceApp<
   }
 
   /**
-   * User login extended
-   * @param user New user
-   * @param refreshToken Refresh token
+   *
+   * @param user Current user
+   * @param core Core system API token data
+   * @param keep Keep in local storage or not
    * @param dispatch User state dispatch
    */
-  override userLogin(user: U, refreshToken: string, dispatch?: boolean): void {
+  userLoginEx(
+    user: U & ServiceUserToken,
+    core?: ApiRefreshTokenDto,
+    dispatch?: boolean
+  ) {
     if (user.clientDeviceId && user.passphrase) {
       // Save the passphrase
       // Interpolated string expressions are different between TypeScript and C# for the null value
@@ -158,26 +163,11 @@ export class ServiceApp<
       }
     }
 
-    // Super call, set token
-    super.userLogin(user, refreshToken, dispatch);
-  }
-
-  /**
-   *
-   * @param user Current user
-   * @param core Core system API token data
-   * @param keep Keep in local storage or not
-   * @param dispatch User state dispatch
-   */
-  userLoginEx(
-    user: U & ServiceUserToken,
-    core?: ApiRefreshTokenDto,
-    dispatch?: boolean
-  ) {
     // User login
     const { refreshToken } = user;
 
     // Core system login
+    // It's the extreme case, the core system token should not be the same with the current app user token
     core ??= {
       refreshToken,
       accessToken: user.token,
