@@ -12,10 +12,16 @@ export abstract class CommonApp<
   S extends IAppSettings = IAppSettings
 > extends ReactApp<S, U, P> {
   /**
-   * Override persistedFields
+   * Constructor
+   * @param settings Settings
+   * @param name Application name
+   * @param debug Debug mode
    */
-  protected override get persistedFields() {
-    return [...super.persistedFields, CoreConstants.FieldUserIdSaved];
+  constructor(settings: S, name: string, debug: boolean = false) {
+    super(settings, name, debug);
+
+    // Add persisted fields
+    this.persistedFields.push(CoreConstants.FieldUserIdSaved);
   }
 
   /**

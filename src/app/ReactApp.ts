@@ -453,8 +453,13 @@ export class ReactApp<
           onFailure("ReactAppRefreshTokenFailed");
         } else if (result != null && !this.tryLoginIgnoreResult(result)) {
           onFailure("ReactAppRefreshTokenFailed: " + JSON.stringify(result));
+        } else {
+          // Ignore other results
+          onFailure(
+            "ReactAppRefreshTokenIgnoredFailure: " + JSON.stringify(result)
+          );
+          return true;
         }
-        // Ignore other results
       }
     );
 
