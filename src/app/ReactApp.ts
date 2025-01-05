@@ -437,7 +437,7 @@ export class ReactApp<
     // Check status
     const result = await super.tryLogin(data);
     if (!result) {
-      onFailure();
+      onFailure("ReactAppSuperTryLoginFailed");
       return false;
     }
 
@@ -450,11 +450,11 @@ export class ReactApp<
         if (result === true) {
           onSuccess?.();
         } else if (result === false) {
-          onFailure();
-        } else if (result != null && this.tryLoginIgnoreResult(result)) {
-          // Ignore the result warning
-          return true;
+          onFailure("ReactAppRefreshTokenFailed");
+        } else if (result != null && !this.tryLoginIgnoreResult(result)) {
+          onFailure("ReactAppRefreshTokenFailed: " + JSON.stringify(result));
         }
+        // Ignore other results
       }
     );
 

@@ -66,6 +66,8 @@ export class ServiceApp<
     this.coreEndpoint = coreEndpoint;
     this.coreOrigin = new URL(coreEndpoint.webUrl).origin;
     this.coreApi = this.createApi(coreName, coreEndpoint);
+
+    this.keepLogin = true;
   }
 
   /**
@@ -252,7 +254,8 @@ export class ServiceApp<
     let { onFailure, onSuccess, ...rest } = params;
 
     if (onFailure == null) {
-      onFailure = params.onFailure = () => {
+      onFailure = params.onFailure = (type) => {
+        console.log(`Try login failed: ${type}.`);
         this.toLoginPage(rest);
       };
     }
@@ -260,13 +263,13 @@ export class ServiceApp<
     // Check core system token
     const coreToken = this.storage.getData<string>(coreTokenKey);
     if (!coreToken) {
-      onFailure();
+      onFailure("ServiceAppCoreTokenNoData");
       return false;
     }
 
     const coreTokenDecrypted = this.decrypt(coreToken);
     if (!coreTokenDecrypted) {
-      onFailure();
+      onFailure("ServiceAppCoreTokenNoDecryptedData");
       return false;
     }
 
