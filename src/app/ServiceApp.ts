@@ -244,6 +244,44 @@ export class ServiceApp<
     return result;
   }
 
+  protected override async refreshTokenSucceed(
+    user: U,
+    token: string,
+    callback?: (result?: boolean | IActionResult) => boolean | void
+  ): Promise<void> {
+    // Check core system token
+    const coreToken = this.storage.getData<string>(coreTokenKey);
+    if (!coreToken) {
+      callback?.({ ok: false, type: "noData", title: "Core token is blank" });
+      return;
+    }
+
+    const coreTokenDecrypted = this.decrypt(coreToken);
+    if (!coreTokenDecrypted) {
+      callback?.({
+        ok: false,
+        type: "noData",
+        title: "Core token decrypted is blank"
+      });
+      return;
+    }
+
+    // Call the core system API refresh token
+    const data = await this.apiRefreshTokenData(this.coreApi, {
+      token: coreTokenDecrypted,
+      appId: this.settings.appId
+    });
+
+    if (data == null) return;
+
+    // Cache the core system refresh token
+    // Follow similar logic in userLoginEx
+    this.saveCoreToken(data);
+
+    // Call the super
+    await super.refreshTokenSucceed(user, token, callback);
+  }
+
   /**
    * Try login
    * @param params Login parameters
@@ -251,7 +289,7 @@ export class ServiceApp<
   override async tryLogin(params?: AppTryLoginParams) {
     // Destruct
     params ??= {};
-    let { onFailure, onSuccess, ...rest } = params;
+    let { onFailure, ...rest } = params;
 
     if (onFailure == null) {
       onFailure = params.onFailure = (type) => {
@@ -259,34 +297,6 @@ export class ServiceApp<
         this.toLoginPage(rest);
       };
     }
-
-    // Check core system token
-    const coreToken = this.storage.getData<string>(coreTokenKey);
-    if (!coreToken) {
-      onFailure("ServiceAppCoreTokenNoData");
-      return false;
-    }
-
-    const coreTokenDecrypted = this.decrypt(coreToken);
-    if (!coreTokenDecrypted) {
-      onFailure("ServiceAppCoreTokenNoDecryptedData");
-      return false;
-    }
-
-    params.onSuccess = () => {
-      // Call the core system API refresh token
-      this.apiRefreshTokenData(this.coreApi, {
-        token: coreTokenDecrypted,
-        appId: this.settings.appId
-      }).then((data) => {
-        if (data == null) return;
-
-        // Cache the core system refresh token
-        this.saveCoreToken(data);
-
-        onSuccess?.();
-      });
-    };
 
     return await super.tryLogin(params);
   }

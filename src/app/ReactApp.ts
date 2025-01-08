@@ -427,7 +427,8 @@ export class ReactApp<
   override async tryLogin(data?: AppTryLoginParams) {
     // Destruct
     const {
-      onFailure = () => {
+      onFailure = (type: string) => {
+        console.log(`Try login failed: ${type}.`);
         this.toLoginPage(rest);
       },
       onSuccess,
