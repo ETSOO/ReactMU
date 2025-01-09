@@ -43,6 +43,22 @@ import { NavigateFunction, NavigateOptions } from "react-router";
 export type ReactAppType = IApp & IReactAppBase;
 
 /**
+ * React application data
+ */
+export type ReactAppData<A extends ReactAppType> = {
+  /**
+   * Current application
+   */
+  app: A;
+};
+
+/**
+ * React application context
+ */
+export const ReactAppContext =
+  React.createContext<ReactAppData<ReactAppType> | null>(null);
+
+/**
  * Global application
  */
 export let globalApp: ReactAppType | null;
