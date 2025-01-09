@@ -123,7 +123,12 @@ export class NotificationMU extends NotificationReact {
         fullScreen={fullScreen}
         {...options}
       >
-        <IconDialogTitle draggable={draggable} className="dialog-title">
+        <IconDialogTitle
+          draggable={draggable}
+          className={
+            draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
+          }
+        >
           {icon}
           <span className="dialogTitle">{title}</span>
           {closable && (
@@ -204,7 +209,12 @@ export class NotificationMU extends NotificationReact {
         fullScreen={fullScreen}
         {...options}
       >
-        <IconDialogTitle draggable={draggable} className="dialog-title">
+        <IconDialogTitle
+          draggable={draggable}
+          className={
+            draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
+          }
+        >
           <Help color="action" />
           <span className="dialogTitle">{title}</span>
           {closable && (
@@ -438,7 +448,12 @@ export class NotificationMU extends NotificationReact {
             return false;
           }}
         >
-          <IconDialogTitle draggable={draggable} className="dialog-title">
+          <IconDialogTitle
+            draggable={draggable}
+            className={
+              draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
+            }
+          >
             <Info color="primary" />
             <span className="dialogTitle">{title}</span>
             {closable && (

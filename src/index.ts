@@ -43,6 +43,7 @@ export * from "./AutocompleteExtendedProps";
 export * from "./BackButton";
 export * from "./BridgeCloseButton";
 export * from "./ButtonLink";
+export * from "./ButtonPopover";
 export * from "./ComboBox";
 export * from "./ComboBoxMultiple";
 export * from "./ComboBoxPro";
