@@ -8,7 +8,7 @@ import Draggable from "react-draggable";
  * @returns Component
  */
 export function DraggablePaperComponent(props: PaperProps) {
-  const nodeRef = React.useRef(null);
+  const nodeRef = React.useRef<HTMLDivElement>(null);
   return (
     <Draggable
       handle=".draggable-dialog-title"

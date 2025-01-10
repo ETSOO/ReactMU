@@ -20,6 +20,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  DialogTitleProps,
   Fade,
   IconButton,
   Popover,
@@ -43,8 +44,15 @@ import { DraggablePaperComponent } from "./DraggablePaperComponent";
 import { LoadingButton, LoadingButtonProps } from "./LoadingButton";
 import { Labels } from "./app/Labels";
 
+type StyledDialogTitleProps = DialogTitleProps & {
+  draggable?: boolean;
+};
+
 // Custom icon dialog title bar
-const IconDialogTitle = styled(DialogTitle)`
+const IconDialogTitle = styled(DialogTitle, {
+  // Prevent the passing of the draggable prop to the underlying DOM element
+  shouldForwardProp: (prop) => prop !== "draggable"
+})<StyledDialogTitleProps>`
   ${({ theme, draggable }) => `
         cursor: ${draggable ? "move" : "default"};
         display: flex;
