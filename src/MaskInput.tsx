@@ -1,27 +1,32 @@
 import { TextField, TextFieldProps } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "./MUGlobal";
-import { type InputMask, type FactoryOpts } from "imask";
-import { useIMask } from "react-imask";
+
+type ReactIMask = typeof import("react-imask", { with: { "resolution-mode": "import" }}).useIMask;
+type ReactIMaskProps = Parameters<ReactIMask>;
+type RIOpts = ReactIMaskProps[0];
+type RIReturns = ReturnType<ReactIMask>;
+type RIMaskRef = RIReturns["maskRef"]["current"];
+type RIMValue = RIReturns["value"];
 
 /**
  * Mask input props
  */
-export type MaskInputProps<T extends FactoryOpts> = TextFieldProps & {
+export type MaskInputProps = TextFieldProps & {
   /**
    * Mask props
    */
-  mask: T;
+  mask: RIOpts;
 
   /**
    * Accept hanlder
    */
-  onAccept?: (value: unknown, maskRef: InputMask<T>, e?: InputEvent) => void;
+  onAccept?: (value: RIMValue, maskRef: RIMaskRef, e?: InputEvent) => void;
 
   /**
    * Complete handler
    */
-  onComplete?: (value: unknown, maskRef: InputMask<T>, e?: InputEvent) => void;
+  onComplete?: (value: RIMValue, maskRef: RIMaskRef, e?: InputEvent) => void;
 
   /**
    * Is the field read only?
@@ -40,8 +45,8 @@ export type MaskInputProps<T extends FactoryOpts> = TextFieldProps & {
  * @param props Props
  * @returns Component
  */
-export function MaskInput<T extends FactoryOpts = FactoryOpts>(
-  props: MaskInputProps<T>
+export function MaskInput(
+  props: MaskInputProps
 ) {
   // Destruct
   const {
@@ -59,11 +64,19 @@ export function MaskInput<T extends FactoryOpts = FactoryOpts>(
     ...rest
   } = props;
 
+  // State
+  const [useIMask, setUseIMask] = React.useState<ReactIMask | null>(null);
+  React.useEffect(() => {
+    import("react-imask").then((module) => setUseIMask(module.useIMask));
+  }, []);
+
+  if(useIMask == null) return;
+
   const { ref, maskRef } = useIMask(mask, {
-    onAccept: (value, maskRef, event) => {
+    onAccept: (value: RIMValue, maskRef: RIMaskRef, event?: InputEvent) => {
       if (onAccept) onAccept(value, maskRef, event);
     },
-    onComplete: (value, maskRef, event) => {
+    onComplete: (value: RIMValue, maskRef: RIMaskRef, event?: InputEvent) => {
       if (onComplete) onComplete(value, maskRef, event);
     }
   });

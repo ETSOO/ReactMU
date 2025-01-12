@@ -1,7 +1,7 @@
 import { LinearProgress } from "@mui/material";
 import React from "react";
-import type { ChartData, LineControllerChartOptions } from "chart.js";
-import type { Line } from "react-chartjs-2";
+import type { ChartData, LineControllerChartOptions } from "chart.js" with { "resolution-mode": "import" };
+import type { Line } from "react-chartjs-2" with { "resolution-mode": "import" };
 
 /**
  * Line chart
@@ -70,7 +70,7 @@ export function LineChart(props: LineChartProps) {
           Tooltip,
           Legend,
 
-          ChartDataLabels
+          ChartDataLabels as any // CommonJS says 'id' is missing
         );
 
         setLineType(Line);

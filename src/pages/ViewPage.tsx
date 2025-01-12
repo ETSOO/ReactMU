@@ -298,7 +298,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
     return () => {
       MessageUtils.offRefresh(refreshHandler);
     };
-  }, []);
+  }, [refresh]);
 
   return (
     <CommonPage
