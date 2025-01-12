@@ -6,9 +6,9 @@ import {
   GridLoader,
   GridLoaderPartialStates,
   GridLoaderStates,
+  GridMethodRef,
   GridSizeGet
 } from "@etsoo/react";
-import { GridMethodRef } from "@etsoo/react/lib/components/GridMethodRef";
 import { DataTypes, IdDefaultType } from "@etsoo/shared";
 import {
   Checkbox,

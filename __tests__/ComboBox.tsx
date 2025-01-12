@@ -1,12 +1,6 @@
 import React from "react";
 import { ComboBox } from "../src";
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor
-} from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 
 it("Render ComboBox", async () => {
   // Arrange
