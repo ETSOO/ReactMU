@@ -42,6 +42,7 @@ export function FixedListPage<T extends object, F>(
     pageProps = {},
     cacheKey,
     cacheMinutes = 15,
+    searchBarTop,
     ...rest
   } = props;
 
@@ -178,7 +179,7 @@ export function FixedListPage<T extends object, F>(
     <CommonPage {...pageRest} paddings={{}} scrollContainer={scrollContainer}>
       <Stack>
         <Box ref={dimensions[0][0]} sx={{ padding: paddings }}>
-          <SearchBar fields={f} onSubmit={onSubmit} />
+          <SearchBar fields={f} onSubmit={onSubmit} top={searchBarTop} />
         </Box>
         {list}
       </Stack>

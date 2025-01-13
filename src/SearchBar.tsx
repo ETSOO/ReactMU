@@ -1,4 +1,4 @@
-import { Button, Drawer, IconButton, Stack } from "@mui/material";
+import { Button, Drawer, IconButton, Stack, Toolbar } from "@mui/material";
 import React from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { DomUtils, NumberUtils } from "@etsoo/shared";
@@ -33,6 +33,11 @@ export interface SearchBarProps {
    * On submit callback
    */
   onSubmit: (data: FormData, reset: boolean) => void | PromiseLike<void>;
+
+  /**
+   * Top position, true means Toolbar's height
+   */
+  top?: number | true;
 }
 
 // Cached width attribute name
@@ -107,7 +112,14 @@ function checkFormEvent(event: React.FormEvent<HTMLFormElement>) {
  */
 export function SearchBar(props: SearchBarProps) {
   // Destruct
-  const { className, fields, onSubmit, itemGap = 6, itemWidth = 160 } = props;
+  const {
+    className,
+    fields,
+    onSubmit,
+    itemGap = 6,
+    itemWidth = 160,
+    top
+  } = props;
 
   // Labels
   const labels = Labels.CommonPage;
@@ -377,13 +389,17 @@ export function SearchBar(props: SearchBarProps) {
       {hasMoreItems && (
         <Drawer
           anchor="right"
-          sx={{ minWidth: "180px" }}
+          sx={{
+            minWidth: "180px",
+            paddingTop: typeof top === "number" ? `${top}px` : undefined
+          }}
           ModalProps={{
             keepMounted: true
           }}
           open={open}
           onClose={() => updateOpen(false)}
         >
+          {top === true && <Toolbar />}
           <form
             onChange={moreFormChange}
             ref={(form) => {

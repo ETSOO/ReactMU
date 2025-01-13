@@ -1,8 +1,10 @@
 import React from "react";
 import type { Options } from "pulltorefreshjs";
 import type PullToRefresh from "pulltorefreshjs";
+import { ExtendUtils } from "@etsoo/shared";
 
 type p = typeof PullToRefresh;
+let pr: p | null;
 
 /**
  * PullToRefresh UI
@@ -13,14 +15,23 @@ type p = typeof PullToRefresh;
 export function PullToRefreshUI(props: Options) {
   // Ready
   React.useEffect(() => {
-    let pr: p | null;
-    import("pulltorefreshjs").then((PullToRefresh) => {
-      pr = PullToRefresh.default;
-      pr.init(props);
-    });
+    if (pr) {
+      // Loaded, delay a little bit
+      pr.destroyAll();
+      ExtendUtils.waitFor(() => {
+        pr?.init(props);
+      }, 100);
+    } else {
+      import("pulltorefreshjs").then((PullToRefresh) => {
+        pr = PullToRefresh.default;
+        pr.init(props);
+      });
+    }
 
     return () => {
-      if (pr) pr.destroyAll();
+      if (pr) {
+        pr.destroyAll();
+      }
     };
   }, [props]);
 

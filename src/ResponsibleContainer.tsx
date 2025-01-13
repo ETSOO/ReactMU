@@ -154,6 +154,11 @@ export type ResponsibleContainerProps<T extends object, F> = Omit<
    * SearchBar bottom padding
    */
   searchBarBottom?: number;
+
+  /**
+   * SearchBar top
+   */
+  searchBarTop?: number | true;
 };
 
 interface LocalRefs<T> {
@@ -205,6 +210,7 @@ export function ResponsibleContainer<T extends object, F>(
     sizeReadyMiliseconds = 0,
     searchBarHeight = 45.6,
     searchBarBottom = 8,
+    searchBarTop,
     ...rest
   } = props;
 
@@ -336,7 +342,7 @@ export function ResponsibleContainer<T extends object, F>(
   // Create list
   const list = (() => {
     // No layout
-    if (rect == null) return [null, undefined];
+    if (rect == null) return undefined;
 
     // Height
     let heightLocal: number;
@@ -435,6 +441,7 @@ export function ResponsibleContainer<T extends object, F>(
         fields={f}
         onSubmit={onSubmit}
         className={`searchBar${showDataGrid ? "Grid" : "List"}`}
+        top={searchBarTop}
       />
     );
   }, [showDataGrid, hasFields, searchBarHeight, rect?.width]);
@@ -471,7 +478,7 @@ export function ResponsibleContainer<T extends object, F>(
         </Box>
         {list}
       </Stack>
-      {pullToRefresh && pullContainer && (
+      {pullToRefresh && pullContainer && list != null && (
         <PullToRefreshUI
           mainElement={pullContainer}
           triggerElement={pullContainer}

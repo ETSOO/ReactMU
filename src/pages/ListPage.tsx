@@ -36,6 +36,7 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
     pageProps = {},
     cacheKey,
     cacheMinutes = 15,
+    searchBarTop,
     ...rest
   } = props;
 
@@ -126,7 +127,7 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
             paddingBottom: pageProps.paddings
           }}
         >
-          <SearchBar fields={f} onSubmit={onSubmit} />
+          <SearchBar fields={f} onSubmit={onSubmit} top={searchBarTop} />
         </Box>
         <ScrollerListEx<T>
           autoLoad={false}

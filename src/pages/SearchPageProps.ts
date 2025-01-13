@@ -45,4 +45,9 @@ export type SearchPageProps<T extends object, F> = GridLoader<
    * SearchBar height
    */
   searchBarHeight?: number;
+
+  /**
+   * SearchBar top
+   */
+  searchBarTop?: number | true;
 };

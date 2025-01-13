@@ -43,6 +43,7 @@ export function DataGridPage<T extends object, F>(
     pageProps = {},
     cacheKey,
     cacheMinutes = 15,
+    searchBarTop,
     ...rest
   } = props;
 
@@ -185,7 +186,7 @@ export function DataGridPage<T extends object, F>(
             paddingBottom: pageProps.paddings
           }}
         >
-          <SearchBar fields={f} onSubmit={onSubmit} />
+          <SearchBar fields={f} onSubmit={onSubmit} top={searchBarTop} />
         </Box>
         {list}
       </Stack>
