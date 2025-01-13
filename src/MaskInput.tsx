@@ -3,8 +3,7 @@ import React from "react";
 import { MUGlobal } from "./MUGlobal";
 
 type ReactIMask = typeof import("react-imask", { with: { "resolution-mode": "import" }}).useIMask;
-type ReactIMaskProps = Parameters<ReactIMask>;
-type RIOpts = ReactIMaskProps[0];
+type RIOpts = Parameters<ReactIMask>[0];
 type RIReturns = ReturnType<ReactIMask>;
 type RIMaskRef = RIReturns["maskRef"]["current"];
 type RIMValue = RIReturns["value"];
@@ -52,8 +51,6 @@ export function MaskInput(
   const {
     defaultValue,
     mask,
-    InputLabelProps = {},
-    InputProps = {},
     onAccept,
     onComplete,
     readOnly,
@@ -70,9 +67,7 @@ export function MaskInput(
     import("react-imask").then((module) => setUseIMask(module.useIMask));
   }, []);
 
-  if(useIMask == null) return;
-
-  const { ref, maskRef } = useIMask(mask, {
+  const { ref, maskRef } = useIMask == null ? {} : useIMask(mask, {
     onAccept: (value: RIMValue, maskRef: RIMaskRef, event?: InputEvent) => {
       if (onAccept) onAccept(value, maskRef, event);
     },
@@ -80,30 +75,25 @@ export function MaskInput(
       if (onComplete) onComplete(value, maskRef, event);
     }
   });
+
   const localValue = defaultValue ?? value;
 
-  // Shrink
-  InputLabelProps.shrink ??= search
-    ? MUGlobal.searchFieldShrink
-    : MUGlobal.inputFieldShrink;
-
-  // Read only
-  if (readOnly != null) InputProps.readOnly = readOnly;
-  InputProps.inputRef = ref;
-
   React.useEffect(() => {
-    if (maskRef.current == null || localValue == null) return;
+    if (maskRef?.current == null || localValue == null) return;
     maskRef.current.value = String(localValue);
     maskRef.current.updateValue();
-  }, [maskRef.current, localValue]);
+  }, [maskRef?.current, localValue]);
 
   // Layout
-  return (
+  return ref == null ? undefined: (
     <TextField
-      InputLabelProps={InputLabelProps}
-      InputProps={InputProps}
+      slotProps={{
+         htmlInput: { readOnly },
+         inputLabel: { shrink: search ? MUGlobal.searchFieldShrink : MUGlobal.inputFieldShrink }
+      }}
       size={size}
       variant={variant}
+      inputRef={ref}
       {...rest}
     />
   );
