@@ -127,30 +127,34 @@ export function CommonPage(props: CommonPageProps) {
   // Labels
   const labels = Labels.CommonPage;
 
-  // Update
-  const updateRef = React.useRef(false);
-  const update = onUpdateAll
-    ? onUpdateAll
-    : onUpdate
-    ? async (authorized?: boolean) => {
-        if (authorized == null || authorized) {
-          await onUpdate();
-          updateRef.current = true;
-        }
-      }
-    : onRefresh
-    ? async (authorized?: boolean) => {
-        if (authorized) {
-          await onRefresh();
-          updateRef.current = true;
-        }
-      }
-    : undefined;
-
   const theme = useTheme();
   const distance = React.useMemo(
     () => MUGlobal.updateWithTheme(fabPadding, theme.spacing),
     [fabPadding, theme.spacing]
+  );
+
+  // Update
+  const updateRef = React.useRef(false);
+  const update = React.useMemo(
+    () =>
+      onUpdateAll
+        ? onUpdateAll
+        : onUpdate
+        ? async (authorized?: boolean) => {
+            if (authorized == null || authorized) {
+              await onUpdate();
+              updateRef.current = true;
+            }
+          }
+        : onRefresh
+        ? async (authorized?: boolean) => {
+            if (authorized) {
+              await onRefresh();
+              updateRef.current = true;
+            }
+          }
+        : undefined,
+    [onUpdateAll, onUpdate, onRefresh]
   );
 
   React.useEffect(() => {
