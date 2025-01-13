@@ -8,6 +8,10 @@ type RIReturns = ReturnType<ReactIMask>;
 type RIMaskRef = RIReturns["maskRef"]["current"];
 type RIMValue = RIReturns["value"];
 
+// Currently CommonJS modules are not supported by "react-imask" package
+let useIMask: ReactIMask;
+import("react-imask").then((module) => useIMask = module.useIMask);
+
 /**
  * Mask input props
  */
@@ -56,18 +60,13 @@ export function MaskInput(
     readOnly,
     search = false,
     size = search ? MUGlobal.searchFieldSize : MUGlobal.inputFieldSize,
+    slotProps,
     value,
     variant = search ? MUGlobal.searchFieldVariant : MUGlobal.inputFieldVariant,
     ...rest
   } = props;
 
-  // State
-  const [useIMask, setUseIMask] = React.useState<ReactIMask | null>(null);
-  React.useEffect(() => {
-    import("react-imask").then((module) => setUseIMask(module.useIMask));
-  }, []);
-
-  const { ref, maskRef } = useIMask == null ? {} : useIMask(mask, {
+  const { ref, maskRef } = useIMask(mask, {
     onAccept: (value: RIMValue, maskRef: RIMaskRef, event?: InputEvent) => {
       if (onAccept) onAccept(value, maskRef, event);
     },
@@ -79,17 +78,17 @@ export function MaskInput(
   const localValue = defaultValue ?? value;
 
   React.useEffect(() => {
-    if (maskRef?.current == null || localValue == null) return;
+    if (maskRef.current == null || localValue == null) return;
     maskRef.current.value = String(localValue);
     maskRef.current.updateValue();
-  }, [maskRef?.current, localValue]);
+  }, [maskRef.current, localValue]);
 
   // Layout
-  return ref == null ? undefined: (
+  return (
     <TextField
       slotProps={{
-         htmlInput: { readOnly },
-         inputLabel: { shrink: search ? MUGlobal.searchFieldShrink : MUGlobal.inputFieldShrink }
+         htmlInput: { readOnly, ...slotProps?.htmlInput },
+         inputLabel: { shrink: search ? MUGlobal.searchFieldShrink : MUGlobal.inputFieldShrink, ...slotProps?.inputLabel }
       }}
       size={size}
       variant={variant}
