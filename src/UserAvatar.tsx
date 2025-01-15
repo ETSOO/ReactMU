@@ -1,7 +1,6 @@
-import React from "react";
 import { Avatar } from "@mui/material";
 import { BusinessUtils } from "@etsoo/appscript";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * User avatar props
@@ -29,6 +28,9 @@ export interface UserAvatarProps {
  * @returns Component
  */
 export function UserAvatar(props: UserAvatarProps) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     src,
@@ -37,7 +39,7 @@ export function UserAvatar(props: UserAvatarProps) {
       return BusinessUtils.formatAvatarTitle(
         title,
         3,
-        globalApp?.get<string>("me") ?? "ME"
+        app?.get<string>("me") ?? "ME"
       );
     }
   } = props;

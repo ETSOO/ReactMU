@@ -1,8 +1,8 @@
 import { Autocomplete, AutocompleteProps } from "@mui/material";
 import React from "react";
-import { globalApp } from "./app/ReactApp";
 import { InputField, InputFieldProps } from "./InputField";
 import { DataTypes, ListType2 } from "@etsoo/shared";
+import { useAppContext } from "./app/ReactApp";
 
 export type ComboBoxProProps<D extends ListType2 = ListType2> = Omit<
   AutocompleteProps<D, false, false, true>,
@@ -43,12 +43,15 @@ export type ComboBoxProProps<D extends ListType2 = ListType2> = Omit<
 export function ComboBoxPro<D extends ListType2 = ListType2>(
   props: ComboBoxProProps<D>
 ) {
+  // Global app
+  const app = useAppContext();
+
   // Labels
   const {
     noOptions,
     loading: loadingLabel,
     open: openDefault
-  } = globalApp?.getLabels("noOptions", "loading", "open") ?? {};
+  } = app?.getLabels("noOptions", "loading", "open") ?? {};
 
   // Destruct
   const {

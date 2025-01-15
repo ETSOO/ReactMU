@@ -6,7 +6,7 @@ import {
 } from "@mui/x-data-grid";
 import { DataGridProps } from "@mui/x-data-grid/models/props/DataGridProps";
 import React from "react";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Data table selected cell params
@@ -40,6 +40,9 @@ export type DataTableProps<R extends GridValidRowModel = any> = Omit<
 export function DataTable<R extends GridValidRowModel = any>(
   props: DataTableProps<R>
 ) {
+  // Global app
+  const app = useAppContext();
+
   // Destructor
   const {
     localeText = {},
@@ -51,7 +54,7 @@ export function DataTable<R extends GridValidRowModel = any>(
   } = props;
 
   // Labels
-  const { noRows } = globalApp?.getLabels("noRows") ?? {};
+  const noRows = app?.get("noRows");
   if (noRows && !localeText.noRowsLabel) localeText.noRowsLabel = noRows;
 
   const [cellModesModel, setCellModesModel] =

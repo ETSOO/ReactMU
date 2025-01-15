@@ -10,7 +10,6 @@ import {
 } from "@etsoo/appscript";
 import { IServiceApp } from "./IServiceApp";
 import { IServiceAppSettings } from "./IServiceAppSettings";
-import { IServicePageData } from "./IServicePage";
 import { IServiceUser, ServiceUserToken } from "./IServiceUser";
 import { ReactApp } from "./ReactApp";
 import { IActionResult } from "@etsoo/shared";
@@ -27,10 +26,9 @@ const tryLoginKey = "tryLogin";
  */
 export class ServiceApp<
     U extends IServiceUser = IServiceUser,
-    P extends IServicePageData = IServicePageData,
     S extends IServiceAppSettings = IServiceAppSettings
   >
-  extends ReactApp<S, U, P>
+  extends ReactApp<S, U>
   implements IServiceApp
 {
   /**

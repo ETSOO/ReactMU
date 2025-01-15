@@ -9,7 +9,7 @@ import { MUGlobal } from "./MUGlobal";
 import { Clear, Visibility } from "@mui/icons-material";
 import { Keyboard } from "@etsoo/shared";
 import { ReactUtils, useCombinedRefs, useDelayedExecutor } from "@etsoo/react";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Extended text field props
@@ -73,9 +73,11 @@ export const TextFieldEx = React.forwardRef<
   TextFieldExMethods,
   TextFieldExProps
 >((props, ref) => {
+  // Global app
+  const app = useAppContext();
+
   // Labels
-  const { showIt, clearInput } =
-    globalApp?.getLabels("showIt", "clearInput") ?? {};
+  const { showIt, clearInput } = app?.getLabels("showIt", "clearInput") ?? {};
 
   // Destructure
   const {

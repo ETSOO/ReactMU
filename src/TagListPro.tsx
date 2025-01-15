@@ -3,8 +3,8 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
-import { globalApp } from "./app/ReactApp";
 import { DataTypes, ListType2 } from "@etsoo/shared";
+import { useAppContext } from "./app/ReactApp";
 
 export type TagListProProps<D extends ListType2 = ListType2> = Omit<
   AutocompleteProps<D, true, false, false>,
@@ -37,13 +37,16 @@ export type TagListProProps<D extends ListType2 = ListType2> = Omit<
 export function TagListPro<D extends ListType2 = ListType2>(
   props: TagListProProps<D>
 ) {
+  // Global app
+  const app = useAppContext();
+
   // Labels
   const {
     noOptions,
     loading: loadingLabel,
     more = "More",
     open: openDefault
-  } = globalApp?.getLabels("noOptions", "loading", "more", "open") ?? {};
+  } = app?.getLabels("noOptions", "loading", "more", "open") ?? {};
 
   const moreLabel = more + "...";
 

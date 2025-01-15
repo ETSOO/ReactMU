@@ -8,7 +8,7 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { globalApp } from "./app/ReactApp";
+import { useRequiredAppContext } from "./app/ReactApp";
 
 /**
  * Check obj is instance of AuditLineChangesDto
@@ -45,11 +45,8 @@ export const ShowDataComparison = (
   getLabel?: (field: string) => string,
   equalCheck: boolean = true
 ) => {
-  // Validate app
-  const app = globalApp;
-  if (app == null) {
-    throw new Error("No globalApp");
-  }
+  // Global app
+  const app = useRequiredAppContext();
 
   // Labels
   const { dataComparison, field, newValue, oldValue } = app.getLabels(

@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import Switch, { SwitchProps } from "@mui/material/Switch";
 import React from "react";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Ant style switch props
@@ -29,8 +29,11 @@ export interface SwitchAntProps extends SwitchProps {
  * @returns Component
  */
 export function SwitchAnt(props: SwitchAntProps) {
+  // Global app
+  const app = useAppContext();
+
   // Labels
-  const { yes = "Yes", no = "No" } = globalApp?.getLabels("yes", "no") ?? {};
+  const { yes = "Yes", no = "No" } = app?.getLabels("yes", "no") ?? {};
 
   // Destruct
   const {

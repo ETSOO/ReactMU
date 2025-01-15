@@ -13,8 +13,8 @@ import StartIcon from "@mui/icons-material/Start";
 import { InputDialogProps } from "@etsoo/react";
 import React from "react";
 import { HBox } from "./FlexBox";
-import { globalApp } from "./app/ReactApp";
 import { MUGlobal } from "./MUGlobal";
+import { useRequiredAppContext } from "./app/ReactApp";
 
 /**
  * Data step
@@ -60,11 +60,8 @@ export type DataStepsProps<T extends object> = Omit<
  * @returns Component
  */
 export function DataSteps<T extends object>(props: DataStepsProps<T>) {
-  // App
-  const app = globalApp;
-  if (app == null) {
-    throw new Error("No globalApp");
-  }
+  // Global app
+  const app = useRequiredAppContext();
 
   // Labels
   const labels = app.getLabels("close", "nextStep", "previousStep", "submit");

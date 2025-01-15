@@ -2,6 +2,7 @@ import { act, render } from "@testing-library/react";
 import {
   MUGlobal,
   MobileListItemRenderer,
+  ReactAppContext,
   ResponsivePage,
   SearchField
 } from "../src";
@@ -35,38 +36,40 @@ it("Render ResponsePage", async () => {
   act(() => {
     // Act
     render(
-      <ResponsivePage<Data, typeof fieldTemplate>
-        fields={[<SearchField label="Keyword" name="keyword" minChars={2} />]}
-        height={200}
-        itemSize={[118, MUGlobal.pagePaddings]}
-        fieldTemplate={fieldTemplate}
-        loadData={({ id }) =>
-          Promise.resolve([
-            { id: 1, name: "Name 1" },
-            { id: 2, name: "Name 2" },
-            { id: id ?? 0, name: "auto" }
-          ])
-        }
-        columns={[
-          { field: "id", header: "ID" },
-          { field: "name", header: "Name" },
-          {
-            field: "deviceName",
-            header: "Value",
-            valueFormatter: ({ data }) => data?.deviceName ?? data?.name
+      <ReactAppContext.Provider value={null}>
+        <ResponsivePage<Data, typeof fieldTemplate>
+          fields={[<SearchField label="Keyword" name="keyword" minChars={2} />]}
+          height={200}
+          itemSize={[118, MUGlobal.pagePaddings]}
+          fieldTemplate={fieldTemplate}
+          loadData={({ id }) =>
+            Promise.resolve([
+              { id: 1, name: "Name 1" },
+              { id: 2, name: "Name 2" },
+              { id: id ?? 0, name: "auto" }
+            ])
           }
-        ]}
-        innerItemRenderer={(props) =>
-          MobileListItemRenderer(props, (data) => {
-            return [
-              data.name,
-              undefined,
-              [],
-              <React.Fragment></React.Fragment>
-            ];
-          })
-        }
-      />
+          columns={[
+            { field: "id", header: "ID" },
+            { field: "name", header: "Name" },
+            {
+              field: "deviceName",
+              header: "Value",
+              valueFormatter: ({ data }) => data?.deviceName ?? data?.name
+            }
+          ]}
+          innerItemRenderer={(props) =>
+            MobileListItemRenderer(props, (data) => {
+              return [
+                data.name,
+                undefined,
+                [],
+                <React.Fragment></React.Fragment>
+              ];
+            })
+          }
+        />
+      </ReactAppContext.Provider>
     );
 
     // Fast forward

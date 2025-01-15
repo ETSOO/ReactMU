@@ -7,10 +7,10 @@ import { Container, ContainerProps, Fab, Theme, useTheme } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { BackButton } from "../BackButton";
 import { Labels } from "../app/Labels";
-import { ReactAppStateDetector } from "../app/ReactApp";
 import type { CustomFabSize } from "../CustomFabProps";
 import type { IStateUpdate, ListItemReact } from "@etsoo/react";
 import type { UserKey } from "@etsoo/appscript";
+import { useAppContext } from "../app/ReactApp";
 
 /**
  * Common page props
@@ -93,6 +93,9 @@ export interface CommonPageProps extends Omit<ContainerProps, "id"> {
  * @param props Props
  */
 export function CommonPage(props: CommonPageProps) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     children,
@@ -166,9 +169,7 @@ export function CommonPage(props: CommonPageProps) {
   // Return the UI
   return (
     <React.Fragment>
-      {update && (
-        <ReactAppStateDetector targetFields={targetFields} update={update} />
-      )}
+      {update && app?.stateDetector({ targetFields, update })}
       <Container
         disableGutters={disableGutters}
         maxWidth={maxWidth}

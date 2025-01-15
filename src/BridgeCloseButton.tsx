@@ -2,7 +2,7 @@ import { BridgeUtils, IBridgeHost } from "@etsoo/appscript";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, BoxProps, IconButton, IconButtonProps } from "@mui/material";
 import React from "react";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Bridge close button props
@@ -26,11 +26,14 @@ export interface BridgeCloseButtonProps extends IconButtonProps {
  * @returns Component
  */
 export function BridgeCloseButton(props: BridgeCloseButtonProps) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     boxProps,
     onClick,
-    title = globalApp?.get("close") ?? "Close",
+    title = app?.get("close") ?? "Close",
     validate,
     ...rest
   } = props;

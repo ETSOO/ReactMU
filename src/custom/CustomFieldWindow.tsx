@@ -3,9 +3,9 @@ import { CustomFieldReactCollection } from "@etsoo/react";
 import { Utils } from "@etsoo/shared";
 import { Grid2, Grid2Props, Stack } from "@mui/material";
 import React from "react";
-import { globalApp } from "../app/ReactApp";
 import { MUGlobal } from "../MUGlobal";
 import { CustomFieldUtils } from "./CustomFieldUtils";
+import { useRequiredAppContext } from "../app/ReactApp";
 
 function calculateKeys(data: Record<string, unknown>) {
   let count = 0;
@@ -100,11 +100,8 @@ export type CustomFieldWindowProps<D extends CustomFieldData> = {
 export function CustomFieldWindow<D extends CustomFieldData = CustomFieldData>(
   props: CustomFieldWindowProps<D>
 ) {
-  // Validate app
-  const app = globalApp;
-  if (app == null) {
-    throw new Error("No globalApp");
-  }
+  // Global app
+  const app = useRequiredAppContext();
 
   const {
     children,

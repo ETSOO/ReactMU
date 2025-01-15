@@ -3,7 +3,7 @@ import {
   GridDataType,
   ScrollRestoration
 } from "@etsoo/react";
-import { DataTypes, DateUtils, Utils } from "@etsoo/shared";
+import { DataTypes, Utils } from "@etsoo/shared";
 import {
   Grid2,
   Grid2Props,
@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Labels } from "../app/Labels";
-import { globalApp } from "../app/ReactApp";
 import { GridDataFormat } from "../GridDataFormat";
 import { MUGlobal } from "../MUGlobal";
 import { PullToRefreshUI } from "../PullToRefreshUI";
@@ -22,6 +21,7 @@ import type { OperationMessageHandlerAll } from "../messages/OperationMessageHan
 import { MessageUtils } from "../messages/MessageUtils";
 import type { RefreshHandler } from "../messages/RefreshHandler";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
+import { ReactAppType, useRequiredAppContext } from "../app/ReactApp";
 
 /**
  * View page grid item properties
@@ -170,13 +170,13 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
     | { id: number; types: string[] };
 }
 
-function formatItemData(fieldData: unknown): string | undefined {
+function formatItemData(
+  app: ReactAppType,
+  fieldData: unknown
+): string | undefined {
   if (fieldData == null) return undefined;
   if (typeof fieldData === "string") return fieldData;
-  if (fieldData instanceof Date)
-    return globalApp
-      ? globalApp.formatDate(fieldData, "d")
-      : DateUtils.format(fieldData, "d");
+  if (fieldData instanceof Date) return app.formatDate(fieldData, "d");
   return `${fieldData}`;
 }
 
@@ -199,6 +199,7 @@ function getResp(singleRow: ViewPageRowType) {
 }
 
 function getItemField<T extends object>(
+  app: ReactAppType,
   field: ViewPageFieldTypeNarrow<T>,
   data: T
 ): [React.ReactNode, React.ReactNode, Grid2Props] {
@@ -210,7 +211,7 @@ function getItemField<T extends object>(
   if (Array.isArray(field)) {
     const [fieldData, fieldType, renderProps, singleRow = "small"] = field;
     itemData = GridDataFormat(data[fieldData], fieldType, renderProps);
-    itemLabel = globalApp?.get<string>(fieldData) ?? fieldData;
+    itemLabel = app.get<string>(fieldData) ?? fieldData;
     gridProps = { ...getResp(singleRow) };
   } else if (typeof field === "object") {
     // Destruct
@@ -230,7 +231,7 @@ function getItemField<T extends object>(
 
     // Field data
     if (typeof fieldData === "function") itemData = fieldData(data);
-    else if (dataType == null) itemData = formatItemData(data[fieldData]);
+    else if (dataType == null) itemData = formatItemData(app, data[fieldData]);
     else itemData = GridDataFormat(data[fieldData], dataType, renderProps);
 
     // Field label
@@ -238,11 +239,11 @@ function getItemField<T extends object>(
       typeof fieldLabel === "function"
         ? fieldLabel(data)
         : fieldLabel != null
-        ? globalApp?.get<string>(fieldLabel) ?? fieldLabel
+        ? app.get<string>(fieldLabel) ?? fieldLabel
         : fieldLabel;
   } else {
-    itemData = formatItemData(data[field]);
-    itemLabel = globalApp?.get<string>(field) ?? field;
+    itemData = formatItemData(app, data[field]);
+    itemLabel = app.get<string>(field) ?? field;
   }
 
   return [itemData, itemLabel, gridProps];
@@ -255,6 +256,9 @@ function getItemField<T extends object>(
 export function ViewPage<T extends DataTypes.StringRecord>(
   props: ViewPageProps<T>
 ) {
+  // Global app
+  const app = useRequiredAppContext();
+
   // Destruct
   const {
     actions,
@@ -348,6 +352,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
               }
 
               const [itemData, itemLabel, gridProps] = getItemField(
+                app,
                 field,
                 data
               );

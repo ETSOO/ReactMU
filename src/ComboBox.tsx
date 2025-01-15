@@ -18,7 +18,7 @@ import AddIcon from "@mui/icons-material/Add";
 import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * ComboBox props
@@ -79,8 +79,11 @@ export function ComboBox<
   D extends DataTypes.Keys<T> = IdDefaultType<T>,
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
 >(props: ComboBoxProps<T, D, L>) {
+  // Global app
+  const app = useAppContext();
+
   // Labels
-  const labels = globalApp?.getLabels("noOptions", "loading", "open", "add");
+  const labels = app?.getLabels("noOptions", "loading", "open", "add");
 
   // Destruct
   const {

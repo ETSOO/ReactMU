@@ -2,8 +2,8 @@ import { DataTypes } from "@etsoo/shared";
 import { InputAdornment, List, ListItem, Popover } from "@mui/material";
 import Typography, { TypographyProps } from "@mui/material/Typography";
 import React from "react";
-import { globalApp } from "./app/ReactApp";
 import { InputField, InputFieldProps } from "./InputField";
+import { useAppContext } from "./app/ReactApp";
 
 type ItemType = DataTypes.IdLabelItem<string | number>;
 
@@ -46,6 +46,9 @@ export type InputTipFieldProps<T extends ItemType = ItemType> =
 export function InputTipField<T extends ItemType = ItemType>(
   props: InputTipFieldProps<T>
 ) {
+  // Global app
+  const app = useAppContext();
+
   // State
   const [title, setTitle] = React.useState<string>();
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement>();
@@ -54,30 +57,19 @@ export function InputTipField<T extends ItemType = ItemType>(
   // Destruct
   const {
     labelProps = {
-      title: globalApp?.get("clickForDetails"),
+      title: app?.get("clickForDetails"),
       sx: { color: (theme) => theme.palette.error.main, cursor: "pointer" }
-    },
-    InputProps = {
-      endAdornment: title ? (
-        <InputAdornment position="end">
-          <Typography
-            onClick={(event) => {
-              setAnchorEl(event.currentTarget);
-            }}
-            {...labelProps}
-          >
-            {title}
-          </Typography>
-        </InputAdornment>
-      ) : undefined
     },
     changeDelay = 480,
     onChangeDelay,
     loadData,
     itemLabel = (item) => item.label,
     renderItem = (item) => <ListItem key={item.id}>{itemLabel(item)}</ListItem>,
+    slotProps = {},
     ...rest
   } = props;
+
+  const { input, ...slotRests } = slotProps;
 
   const load = (value: string) => {
     if (value.length < 2) {
@@ -110,7 +102,24 @@ export function InputTipField<T extends ItemType = ItemType>(
           load(event.target.value);
           if (onChangeDelay) onChangeDelay(event);
         }}
-        InputProps={InputProps}
+        slotProps={{
+          input: {
+            endAdornment: title ? (
+              <InputAdornment position="end">
+                <Typography
+                  onClick={(event) => {
+                    setAnchorEl(event.currentTarget);
+                  }}
+                  {...labelProps}
+                >
+                  {title}
+                </Typography>
+              </InputAdornment>
+            ) : undefined,
+            ...input
+          },
+          ...slotRests
+        }}
         {...rest}
       />
     </React.Fragment>

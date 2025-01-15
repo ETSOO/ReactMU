@@ -1,10 +1,10 @@
 import { Utils } from "@etsoo/shared";
 import { Button, Divider, Theme, Typography, useTheme } from "@mui/material";
 import React, { CSSProperties } from "react";
-import { globalApp } from "./app/ReactApp";
 import { ListMoreDisplay, ListMoreDisplayProps } from "./ListMoreDisplay";
 import { ShowDataComparison } from "./ShowDataComparison";
 import { AuditLineDto } from "@etsoo/appscript";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Audit display props
@@ -32,17 +32,6 @@ export interface AuditDisplayProps
   itemRenderer?: (data: AuditLineDto, index: number) => React.ReactNode;
 }
 
-// Get label
-const getLabel = (key: string) => {
-  return globalApp?.get(Utils.formatInitial(key)) ?? key;
-};
-
-// Format date
-const formatDate = (date: Date) => {
-  if (globalApp) return globalApp.formatDate(date, "ds");
-  return date.toUTCString();
-};
-
 /**
  * Audit display
  * @param props Props
@@ -51,6 +40,19 @@ const formatDate = (date: Date) => {
 export function AuditDisplay(props: AuditDisplayProps) {
   // Theme
   const theme = useTheme();
+
+  // Global app
+  const app = useAppContext();
+
+  // Get label
+  const getLabel = (key: string) => {
+    return app?.get(Utils.formatInitial(key)) ?? key;
+  };
+
+  // Format date
+  const formatDate = (date: Date) => {
+    return app?.formatDate(date, "ds") ?? date.toUTCString();
+  };
 
   // Title
   var title = getLabel("dataComparison");

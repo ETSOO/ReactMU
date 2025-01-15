@@ -1,6 +1,5 @@
 import { ListType1 } from "@etsoo/shared";
-import React from "react";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 import { OptionGroup, OptionGroupProps } from "./OptionGroup";
 
 /**
@@ -17,8 +16,11 @@ export type OptionBoolProps = Omit<
  * @returns Component
  */
 export function OptionBool(props: OptionBoolProps) {
+  // Global app
+  const app = useAppContext();
+
   // Options
-  const options = globalApp?.getBools() ?? [];
+  const options = app?.getBools() ?? [];
 
   // Layout
   return (

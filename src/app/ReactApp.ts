@@ -24,15 +24,12 @@ import {
   CultureState,
   INotificationReact,
   InputDialogProps,
-  IPageData,
   IStateProps,
   NotificationReactCallProps,
-  PageAction,
-  PageActionType,
-  PageState,
   UserAction,
   UserActionType,
   UserCalls,
+  useRequiredContext,
   UserState
 } from "@etsoo/react";
 import { NavigateFunction, NavigateOptions } from "react-router";
@@ -43,66 +40,24 @@ import { NavigateFunction, NavigateOptions } from "react-router";
 export type ReactAppType = IApp & IReactAppBase;
 
 /**
- * React application data
- */
-export type ReactAppData<A extends ReactAppType> = {
-  /**
-   * Current application
-   */
-  app: A;
-};
-
-/**
  * React application context
  */
-export const ReactAppContext =
-  React.createContext<ReactAppData<ReactAppType> | null>(null);
+export const ReactAppContext = React.createContext<ReactAppType | null>(null);
 
 /**
- * Global application
+ * Get React application context hook
+ * @returns React application
  */
-export let globalApp: ReactAppType | null;
+export function useAppContext() {
+  return React.useContext(ReactAppContext);
+}
 
 /**
- * React app state detector
- * Case 1: undefined, when refresh the whole page
- * Case 2: false, unauthorized
- * Case 3: true, authorized or considered as authorized (maynot, like token expiry)
- * Case 4: property or properties changed
- * @param props Props
- * @returns Component
+ * Get React application context hook
+ * @returns React application
  */
-export function ReactAppStateDetector(props: IStateProps) {
-  // Destruct
-  const { targetFields, update } = props;
-
-  // Context
-  const { state } =
-    globalApp == null
-      ? ({} as UserCalls<IUser>)
-      : React.useContext(globalApp.userState.context);
-
-  // Ready
-  React.useEffect(() => {
-    // Match fields
-    const changedFields = state.lastChangedFields;
-    let matchedFields: string[] | undefined;
-    if (targetFields == null || changedFields == null) {
-      matchedFields = changedFields;
-    } else {
-      matchedFields = [];
-      targetFields.forEach((targetField) => {
-        if (changedFields.includes(targetField))
-          matchedFields?.push(targetField);
-      });
-    }
-
-    // Callback
-    update(state.authorized, matchedFields);
-  }, [state]);
-
-  // return
-  return React.createElement(React.Fragment);
+export function useRequiredAppContext() {
+  return useRequiredContext(ReactAppContext);
 }
 
 /**
@@ -113,11 +68,6 @@ export interface IReactAppBase {
    * Override Notifier as React specific
    */
   readonly notifier: INotifier<React.ReactNode, NotificationReactCallProps>;
-
-  /**
-   * User state
-   */
-  readonly userState: UserState<any>;
 
   /**
    * Is screen size down 'sm'
@@ -143,25 +93,6 @@ export interface IReactAppBase {
   getMoneyFormatProps(currency?: string): object;
 
   /**
-   * Set page data
-   * @param data Page data
-   */
-  setPageData(data: IPageData): void;
-
-  /**
-   * Set page title and subtitle
-   * @param title Page title
-   * @param subtitle Page subtitle
-   */
-  setPageTitle(title: string, subtitle?: string): void;
-
-  /**
-   * Set page title and data
-   * @param title Page title
-   */
-  setPageTitle(title: string): void;
-
-  /**
    * Show input dialog
    * @param props Props
    */
@@ -171,39 +102,32 @@ export interface IReactAppBase {
     callback,
     ...rest
   }: InputDialogProps): INotificationReact;
+
+  /**
+   * State detector component
+   * @param props Props
+   */
+  stateDetector(props: IStateProps): React.ReactNode;
 }
 
 /**
  * Core application interface
  */
-export interface IReactApp<
-  S extends IAppSettings,
-  D extends IUser,
-  P extends IPageData
-> extends ICoreApp<D, S, React.ReactNode, NotificationReactCallProps>,
-    IReactAppBase {
+export interface IReactApp<S extends IAppSettings, D extends IUser>
+  extends ICoreApp<D, S, React.ReactNode, NotificationReactCallProps>,
+    Omit<IReactAppBase, "userState"> {
   /**
    * User state
    */
   readonly userState: UserState<D>;
-
-  /**
-   * Set page data
-   * @param data Page data
-   */
-  setPageData(data: P): void;
 }
 
 /**
  * React application
  */
-export class ReactApp<
-    S extends IAppSettings,
-    D extends IUser,
-    P extends IPageData
-  >
+export class ReactApp<S extends IAppSettings, D extends IUser>
   extends CoreApp<D, S, React.ReactNode, NotificationReactCallProps>
-  implements IReactApp<S, D, P>
+  implements IReactApp<S, D>
 {
   private static _notifierProvider: React.FunctionComponent<NotificationRenderProps>;
 
@@ -226,11 +150,6 @@ export class ReactApp<
   readonly cultureState: CultureState;
 
   /**
-   * Page state
-   */
-  readonly pageState: PageState<P>;
-
-  /**
    * User state
    */
   readonly userState = new UserState<D>();
@@ -249,11 +168,6 @@ export class ReactApp<
    * Navigate function
    */
   navigateFunction?: NavigateFunction;
-
-  /**
-   * Page state dispatch
-   */
-  pageStateDispatch?: React.Dispatch<PageAction<P>>;
 
   /**
    * User state dispatch
@@ -287,9 +201,6 @@ export class ReactApp<
     }
 
     this.cultureState = new CultureState(settings.currentCulture);
-    this.pageState = new PageState<P>();
-
-    globalApp = this;
   }
 
   /**
@@ -495,38 +406,6 @@ export class ReactApp<
   }
 
   /**
-   * Set page data
-   * @param data Page data
-   */
-  setPageData(data: P): void {
-    // Dispatch the change
-    if (this.pageStateDispatch != null) {
-      this.pageStateDispatch({
-        type: PageActionType.Data,
-        data
-      });
-    }
-  }
-
-  /**
-   * Set page title and subtitle
-   * @param title Page title
-   * @param subtitle Page subtitle
-   */
-  setPageTitle(title: string, subtitle?: string): void {
-    // Data
-    const data = { title, subtitle } as P;
-
-    // Dispatch the change
-    if (this.pageStateDispatch != null) {
-      this.pageStateDispatch({
-        type: PageActionType.Title,
-        data
-      });
-    }
-  }
-
-  /**
    * Navigate to Url or delta
    * @param url Url or delta
    * @param options Options
@@ -538,14 +417,6 @@ export class ReactApp<
     if (this.navigateFunction == null) super.navigate(to, options);
     else if (typeof to === "number") this.navigateFunction(to);
     else this.navigateFunction(to, options);
-  }
-
-  /**
-   * Set page title and data
-   * @param key Page title resource key
-   */
-  setPageKey(key: string): void {
-    this.setPageTitle(this.get<string>(key) ?? "");
   }
 
   /**
@@ -564,6 +435,36 @@ export class ReactApp<
       title,
       rest
     );
+  }
+
+  stateDetector(props: IStateProps) {
+    // Destruct
+    const { targetFields, update } = props;
+
+    // Context
+    const { state } = React.useContext(this.userState.context);
+
+    // Ready
+    React.useEffect(() => {
+      // Match fields
+      const changedFields = state.lastChangedFields;
+      let matchedFields: string[] | undefined;
+      if (targetFields == null || changedFields == null) {
+        matchedFields = changedFields;
+      } else {
+        matchedFields = [];
+        targetFields.forEach((targetField) => {
+          if (changedFields.includes(targetField))
+            matchedFields?.push(targetField);
+        });
+      }
+
+      // Callback
+      update(state.authorized, matchedFields);
+    }, [state]);
+
+    // return
+    return React.createElement(React.Fragment);
   }
 
   /**

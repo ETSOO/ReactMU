@@ -19,7 +19,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -78,8 +78,11 @@ export function ComboBoxMultiple<
   D extends DataTypes.Keys<T> = IdDefaultType<T>,
   L extends DataTypes.Keys<T, string> = LabelDefaultType<T>
 >(props: ComboBoxMultipleProps<T, D, L>) {
+  // Global app
+  const app = useAppContext();
+
   // Labels
-  const labels = globalApp?.getLabels("noOptions", "loading");
+  const labels = app?.getLabels("noOptions", "loading");
 
   // Destruct
   const {

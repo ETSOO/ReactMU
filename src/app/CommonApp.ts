@@ -1,5 +1,5 @@
 import { IAppSettings, IUser } from "@etsoo/appscript";
-import { CoreConstants, IPageData } from "@etsoo/react";
+import { CoreConstants } from "@etsoo/react";
 import { ReactApp } from "./ReactApp";
 
 /**
@@ -8,9 +8,8 @@ import { ReactApp } from "./ReactApp";
  */
 export abstract class CommonApp<
   U extends IUser = IUser,
-  P extends IPageData = IPageData,
   S extends IAppSettings = IAppSettings
-> extends ReactApp<S, U, P> {
+> extends ReactApp<S, U> {
   /**
    * Constructor
    * @param settings Settings

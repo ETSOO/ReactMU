@@ -3,7 +3,7 @@ import { DataTypes, ListType2 } from "@etsoo/shared";
 import { Autocomplete, AutocompleteProps } from "@mui/material";
 import React, { ChangeEventHandler } from "react";
 import { InputField, InputFieldProps } from "./InputField";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * TiplistPro props
@@ -89,13 +89,16 @@ interface States<T extends object> {
 export function TiplistPro<T extends ListType2 = ListType2>(
   props: TiplistProProps<T>
 ) {
+  // Global app
+  const app = useAppContext();
+
   // Labels
   const {
     noOptions,
     loading,
     more,
     open: openDefault
-  } = globalApp?.getLabels("noOptions", "loading", "more", "open") ?? {};
+  } = app?.getLabels("noOptions", "loading", "more", "open") ?? {};
 
   // Destruct
   const {

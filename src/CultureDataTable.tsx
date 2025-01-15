@@ -1,8 +1,8 @@
 import { DataTable, DataTableProps } from "./DataTable";
 import React from "react";
-import { globalApp } from "./app/ReactApp";
 import { ListType1 } from "@etsoo/shared";
 import { GridRenderCellParams } from "@mui/x-data-grid";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Culture table props
@@ -22,14 +22,17 @@ export type CultureDataTableProps = Omit<DataTableProps, "columns"> & {
  * @returns Component
  */
 export function CultureDataTable(props: CultureDataTableProps) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     cultures,
-    cultureLabel = globalApp?.get("culture"),
+    cultureLabel = app?.get("culture"),
     editable = true,
     titleLabel,
     hasDescription = false,
-    descriptionLabel = globalApp?.get("description"),
+    descriptionLabel = app?.get("description"),
     ...rest
   } = props;
 

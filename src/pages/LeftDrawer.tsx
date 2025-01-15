@@ -9,7 +9,7 @@ import {
 import React from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { DrawerHeader } from "./DrawerHeader";
-import { globalApp } from "../app/ReactApp";
+import { useAppContext } from "../app/ReactApp";
 
 /**
  * Left drawer props
@@ -52,11 +52,14 @@ export type LeftDrawerProps = React.PropsWithRef<{
 }>;
 
 export function LeftDrawer(props: React.PropsWithChildren<LeftDrawerProps>) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     mdUp,
     width,
-    appName = globalApp?.get("appName"),
+    appName = app?.get("appName"),
     logoUrl = "/logo192.png",
     onMinimize,
     open = mdUp,
@@ -99,7 +102,7 @@ export function LeftDrawer(props: React.PropsWithChildren<LeftDrawerProps>) {
       <DrawerHeader>
         <a
           href="https://www.etsoo.com"
-          title={globalApp?.get("etsoo") ?? "ETSOO"}
+          title={app?.get("etsoo") ?? "ETSOO"}
           target="_blank"
           rel="noreferrer"
         >

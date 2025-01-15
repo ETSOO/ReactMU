@@ -1,7 +1,6 @@
 import { ListType1, Utils } from "@etsoo/shared";
-import React from "react";
-import { globalApp } from "./app/ReactApp";
 import { SelectEx, SelectExProps } from "./SelectEx";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * SelectBool props
@@ -17,11 +16,14 @@ export type SelectBoolProps = Omit<
  * @returns Component
  */
 export function SelectBool(props: SelectBoolProps) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const { search = true, autoAddBlankItem = search, ...rest } = props;
 
   // Options
-  const options = globalApp?.getBools() ?? [];
+  const options = app?.getBools() ?? [];
 
   if (autoAddBlankItem) Utils.addBlankItem(options);
 

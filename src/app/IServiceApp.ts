@@ -1,14 +1,7 @@
 import { ApiRefreshTokenDto, IApi, IApiPayload } from "@etsoo/appscript";
-import { ReactAppData, ReactAppType } from "./ReactApp";
+import { ReactAppType } from "./ReactApp";
 import { IServiceUser, ServiceUserToken } from "./IServiceUser";
 import { IActionResult } from "@etsoo/shared";
-import React from "react";
-
-/**
- * Service application context
- */
-export const ServiceAppContext =
-  React.createContext<ReactAppData<IServiceApp> | null>(null);
 
 /**
  * Service application interface

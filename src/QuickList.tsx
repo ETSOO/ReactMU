@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
-import { globalApp } from "./app/ReactApp";
 import { VBox } from "./FlexBox";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Quick list props
@@ -77,6 +77,9 @@ export type QuickListProps<T extends ListType2 = ListType2> = StackProps & {
 export function QuickList<T extends ListType2 = ListType2>(
   props: QuickListProps<T>
 ) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     buttonProps = {},
@@ -86,7 +89,7 @@ export function QuickList<T extends ListType2 = ListType2>(
     itemRenderer = (item: T) => itemLabel(item),
     itemProps,
     loadData,
-    noMatchesLabel = globalApp?.get("noMatches"),
+    noMatchesLabel = app?.get("noMatches"),
     gap = 1,
     height = "480px",
     onItemClick,

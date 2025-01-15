@@ -1,4 +1,3 @@
-import { DataTypes } from "@etsoo/shared";
 import {
   Card,
   CardActions,
@@ -16,7 +15,7 @@ import {
   GridLoaderStates
 } from "@etsoo/react";
 import { LoadingButton } from "./LoadingButton";
-import { globalApp } from "./app/ReactApp";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * ListMoreDisplay props
@@ -68,6 +67,9 @@ type states<T> = {
 export function ListMoreDisplay<T extends object>(
   props: ListMoreDisplayProps<T>
 ) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     batchSize = 6,
@@ -78,7 +80,7 @@ export function ListMoreDisplay<T extends object>(
     headerTitle,
     loadBatchSize,
     loadData,
-    moreLabel = globalApp ? globalApp.get("more") + "..." : undefined,
+    moreLabel = app?.get("more1"),
     fieldTemplate,
     threshold,
     ...rest

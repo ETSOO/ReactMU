@@ -7,11 +7,11 @@ import {
 } from "@etsoo/appscript";
 import { FormLabel, Grid2, GridSize } from "@mui/material";
 import React from "react";
-import { globalApp } from "./app/ReactApp";
 import { ComboBox } from "./ComboBox";
 import { Tiplist } from "./Tiplist";
 import { ResponsiveStyleValue } from "./ResponsiveStyleValue";
 import { RegionsRQ } from "./RegionsRQ";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Address field
@@ -166,13 +166,16 @@ export type AddressSelectorProps = {
  * @param props Props
  */
 export function AddressSelector(props: AddressSelectorProps) {
+  // Global app
+  const app = useAppContext();
+
   // Labels
   const {
     city: cityDefault = "City",
     district: districtDefault = "District",
     region: regionDefault = "Region",
     state: stateDefault = "State"
-  } = globalApp?.getLabels("region", "state", "city", "district") ?? {};
+  } = app?.getLabels("region", "state", "city", "district") ?? {};
 
   // Destruct
   const {

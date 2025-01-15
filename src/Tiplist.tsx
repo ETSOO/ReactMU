@@ -3,9 +3,9 @@ import { DataTypes, IdDefaultType, ListType2 } from "@etsoo/shared";
 import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
 import React from "react";
 import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
-import { globalApp } from "./app/ReactApp";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Tiplist props
@@ -56,13 +56,16 @@ export function Tiplist<
   T extends object = ListType2,
   D extends DataTypes.Keys<T> = IdDefaultType<T>
 >(props: TiplistProps<T, D>) {
+  // Global app
+  const app = useAppContext();
+
   // Labels
   const {
     noOptions,
     loading,
-    more,
+    more1 = "More",
     open: openDefault
-  } = globalApp?.getLabels("noOptions", "loading", "more", "open") ?? {};
+  } = app?.getLabels("noOptions", "loading", "more1", "open") ?? {};
 
   // Destruct
   const {
@@ -378,7 +381,7 @@ export function Tiplist<
         }}
         getOptionLabel={(item) => {
           if (typeof item !== "object") return `${item}`;
-          if (item[idField] === "n/a") return (more ?? "More") + "...";
+          if (item[idField] === "n/a") return more1;
           return getOptionLabel
             ? getOptionLabel(item)
             : DataTypes.getObjectItemLabel(item);
