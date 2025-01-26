@@ -289,7 +289,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
   // Load data
   const refresh = React.useCallback(async () => {
     const result = await loadData();
-    if (result == null) return;
+    // When failed or no data returned, show the loading bar
     setData(result);
   }, [loadData]);
 

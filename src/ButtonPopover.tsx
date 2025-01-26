@@ -1,4 +1,4 @@
-import { Popover } from "@mui/material";
+import { Popover, PopoverOrigin } from "@mui/material";
 import React from "react";
 
 /**
@@ -24,6 +24,11 @@ export type ButtonPopoverProps<T> = {
    * @returns Data promise
    */
   loadData?: () => Promise<T | undefined>;
+
+  /**
+   * Position
+   */
+  position?: PopoverOrigin["horizontal"];
 };
 
 /**
@@ -33,7 +38,7 @@ export type ButtonPopoverProps<T> = {
  */
 export function ButtonPopover<T>(props: ButtonPopoverProps<T>) {
   // Destruct
-  const { button, children, loadData } = props;
+  const { button, children, loadData, position = "right" } = props;
 
   // States
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -61,6 +66,8 @@ export function ButtonPopover<T>(props: ButtonPopoverProps<T>) {
     setAnchorEl(null);
   };
 
+  const styles = position === "left" ? { left: 14 } : { right: 14 };
+
   // Layout
   return (
     <React.Fragment>
@@ -70,8 +77,8 @@ export function ButtonPopover<T>(props: ButtonPopoverProps<T>) {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        transformOrigin={{ horizontal: position, vertical: "top" }}
+        anchorOrigin={{ horizontal: position, vertical: "bottom" }}
         slotProps={{
           paper: {
             elevation: 0,
@@ -84,12 +91,12 @@ export function ButtonPopover<T>(props: ButtonPopoverProps<T>) {
                 display: "block",
                 position: "absolute",
                 top: 0,
-                right: 14,
                 width: 10,
                 height: 10,
                 bgcolor: "background.paper",
                 transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0
+                zIndex: 0,
+                ...styles
               }
             }
           }
