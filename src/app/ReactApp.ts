@@ -372,8 +372,7 @@ export class ReactApp<S extends IAppSettings, D extends IUser>
     // Refresh token
     await this.refreshToken(
       {
-        showLoading: data?.showLoading,
-        timeZone: this.getTimeZone()
+        showLoading: data?.showLoading
       },
       (result) => {
         if (result === true) {

@@ -267,8 +267,7 @@ export class ServiceApp<
     // Call the core system API refresh token
     const data = await this.apiRefreshTokenData(this.coreApi, {
       token: coreTokenDecrypted,
-      appId: this.settings.appId,
-      timeZone: this.getTimeZone()
+      appId: this.settings.appId
     });
 
     if (data == null) return;
