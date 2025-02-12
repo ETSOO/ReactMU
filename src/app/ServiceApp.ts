@@ -57,7 +57,7 @@ export class ServiceApp<
   constructor(settings: S, name: string, debug: boolean = false) {
     super(settings, name, debug);
 
-    const coreEndpoint = settings.endpoints?.core;
+    const coreEndpoint = this.settings.endpoints?.core;
     if (coreEndpoint == null) {
       throw new Error("Core API endpont is required.");
     }

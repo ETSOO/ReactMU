@@ -200,7 +200,7 @@ export class ReactApp<S extends IAppSettings, D extends IUser>
       });
     }
 
-    this.cultureState = new CultureState(settings.currentCulture);
+    this.cultureState = new CultureState(this.settings.currentCulture);
   }
 
   /**
