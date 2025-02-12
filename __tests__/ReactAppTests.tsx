@@ -1,9 +1,4 @@
-import {
-  AddressUtils,
-  ApiAuthorizationScheme,
-  Culture,
-  ExternalSettings
-} from "@etsoo/appscript";
+import { AddressUtils, Culture } from "@etsoo/appscript";
 import { ReactApp } from "../src";
 import { DataTypes, DomUtils, IActionResult, Utils } from "@etsoo/shared";
 import React, { act } from "react";
@@ -28,49 +23,49 @@ const supportedCultures: DataTypes.CultureDefinition[] = [
 // Supported regions
 const supportedRegions = ["CN"];
 
-const settings = ExternalSettings.format({
-  /**
-   * Endpoint of the API service
-   */
-  endpoint: "http://{hostname}/com.etsoo.SmartERPApi/api/",
+const app = new ReactApp(
+  {
+    appId: 0,
 
-  /**
-   * App root url
-   */
-  homepage: "/cms",
+    /**
+     * Endpoint of the API service
+     */
+    endpoint: "http://{hostname}/com.etsoo.SmartERPApi/api/",
 
-  /**
-   * Web url of the cloud
-   */
-  webUrl: "http://localhost",
+    /**
+     * App root url
+     */
+    homepage: "/cms",
 
-  // Authorization scheme
-  authScheme: ApiAuthorizationScheme.Bearer,
+    /**
+     * Web url of the cloud
+     */
+    webUrl: "http://localhost",
 
-  // Detected culture
-  detectedCulture,
+    // Detected culture
+    detectedCulture,
 
-  // Supported cultures
-  cultures: supportedCultures,
+    // Supported cultures
+    cultures: supportedCultures,
 
-  // Supported regions
-  regions: supportedRegions,
+    // Supported regions
+    regions: supportedRegions,
 
-  // Browser's time zone
-  timeZone: Utils.getTimeZone(),
+    // Browser's time zone
+    timeZone: Utils.getTimeZone(),
 
-  // Current country or region
-  currentRegion: AddressUtils.getRegion(
-    supportedRegions,
-    detectedCountry,
-    detectedCulture
-  ),
+    // Current country or region
+    currentRegion: AddressUtils.getRegion(
+      supportedRegions,
+      detectedCountry,
+      detectedCulture
+    ),
 
-  // Current culture
-  currentCulture: DomUtils.getCulture(supportedCultures, detectedCulture)![0]
-});
-
-const app = new ReactApp(settings, "test");
+    // Current culture
+    currentCulture: DomUtils.getCulture(supportedCultures, detectedCulture)![0]
+  },
+  "test"
+);
 
 // Root
 const root = document.body;
