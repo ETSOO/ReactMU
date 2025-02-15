@@ -14,7 +14,6 @@ import { IServiceUser, ServiceUserToken } from "./IServiceUser";
 import { ReactApp } from "./ReactApp";
 import { IActionResult } from "@etsoo/shared";
 
-const coreName = "core";
 const coreTokenKey = "core-refresh-token";
 const tryLoginKey = "tryLogin";
 
@@ -57,13 +56,14 @@ export class ServiceApp<
   constructor(settings: S, name: string, debug: boolean = false) {
     super(settings, name, debug);
 
-    const coreEndpoint = this.settings.endpoints?.core;
+    // Custom core API name can be done with override this.coreName
+    const coreEndpoint = this.settings.endpoints?.[this.coreName];
     if (coreEndpoint == null) {
       throw new Error("Core API endpont is required.");
     }
     this.coreEndpoint = coreEndpoint;
     this.coreOrigin = new URL(coreEndpoint.webUrl).origin;
-    this.coreApi = this.createApi(coreName, coreEndpoint);
+    this.coreApi = this.createApi(this.coreName, coreEndpoint);
 
     this.keepLogin = true;
   }
@@ -81,7 +81,7 @@ export class ServiceApp<
       const startUrl = tryLogin
         ? undefined
         : "".addUrlParam(tryLoginKey, tryLogin);
-      BridgeUtils.host.loadApp(coreName, startUrl);
+      BridgeUtils.host.loadApp(this.coreName, startUrl);
     }
   }
 
@@ -117,7 +117,7 @@ export class ServiceApp<
           if (BridgeUtils.host == null) {
             globalThis.location.href = url;
           } else {
-            BridgeUtils.host.loadApp(coreName, url);
+            BridgeUtils.host.loadApp(this.coreName, url);
           }
         }
       });
@@ -194,7 +194,7 @@ export class ServiceApp<
     this.storage.setData(coreTokenKey, this.encrypt(data.refreshToken));
 
     // Exchange tokens
-    this.exchangeTokenAll(data, coreName);
+    this.exchangeTokenAll(data);
   }
 
   /**
