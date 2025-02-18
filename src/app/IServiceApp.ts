@@ -24,6 +24,12 @@ export interface IServiceApp extends ReactAppType {
   loadCore(tryLogin?: boolean): void;
 
   /**
+   * Load URL with core origin
+   * @param url URL
+   */
+  loadUrlEx(url: string): void;
+
+  /**
    * Switch organization
    * @param organizationId Organization ID
    * @param fromOrganizationId From organization ID

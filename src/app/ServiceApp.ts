@@ -97,33 +97,27 @@ export class ServiceApp<
     this.cachedUrl = removeUrl ? undefined : globalThis.location.href;
 
     //  Get the redirect URL
-    new AuthApi(this)
-      .getLogInUrl({
-        region: this.region,
-        device: this.deviceId
-      })
-      .then((url) => {
-        if (!url) return;
+    new AuthApi(this).getLogInUrl().then((url) => {
+      if (!url) return;
 
-        // Add try login flag
-        if (params != null) {
-          url = url.addUrlParams(params);
-        }
+      // Add try login flag
+      if (params != null) {
+        url = url.addUrlParams(params);
+      }
 
-        // Is it embeded?
-        if (this.embedded) {
-          globalThis.parent.postMessage(["login", url], this.coreOrigin);
-        } else {
-          if (BridgeUtils.host == null) {
-            globalThis.location.href = url;
-          } else {
-            BridgeUtils.host.loadApp(this.coreName, url);
-          }
-        }
-      });
+      this.loadUrlEx(url);
+    });
 
     // Make sure apply new device id for new login
     this.clearDeviceId();
+  }
+
+  /**
+   * Load URL with core origin
+   * @param url URL
+   */
+  loadUrlEx(url: string) {
+    super.loadUrl(url, this.coreOrigin);
   }
 
   /**
