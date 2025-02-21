@@ -337,7 +337,7 @@ export function SearchBar(props: SearchBarProps) {
 
   // Layout
   return (
-    <Container fixed>
+    <Container fixed ref={dimensions[0][0]}>
       <form
         id="SearchBarForm"
         className={className}
@@ -347,7 +347,6 @@ export function SearchBar(props: SearchBarProps) {
         }}
       >
         <Stack
-          ref={dimensions[0][0]}
           className="SearchBarContainer"
           justifyContent="center"
           alignItems="center"
