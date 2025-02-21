@@ -228,6 +228,16 @@ export function SearchBar(props: SearchBarProps) {
         childWidth = Number.parseFloat(cachedWidth);
       } else {
         const childD = child.getBoundingClientRect();
+
+        console.log(
+          "SearchBar",
+          child.querySelector("input")?.name,
+          childD.width,
+          childD.height,
+          child.clientWidth,
+          child.computedStyleMap().get("width")
+        );
+
         childWidth = childD.width + itemGap;
         child.setAttribute(cachedWidthName, childWidth.toString());
       }
