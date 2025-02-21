@@ -1,4 +1,11 @@
-import { Button, Drawer, IconButton, Stack, Toolbar } from "@mui/material";
+import {
+  Button,
+  Container,
+  Drawer,
+  IconButton,
+  Stack,
+  Toolbar
+} from "@mui/material";
 import React from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { DomUtils, NumberUtils } from "@etsoo/shared";
@@ -330,7 +337,7 @@ export function SearchBar(props: SearchBarProps) {
 
   // Layout
   return (
-    <React.Fragment>
+    <Container fixed>
       <form
         id="SearchBarForm"
         className={className}
@@ -423,6 +430,6 @@ export function SearchBar(props: SearchBarProps) {
           </form>
         </Drawer>
       )}
-    </React.Fragment>
+    </Container>
   );
 }
