@@ -45,6 +45,11 @@ export interface SearchBarProps {
    * Top position, true means Toolbar's height
    */
   top?: number | true;
+
+  /**
+   * Width
+   */
+  width: number;
 }
 
 // Cached width attribute name
@@ -126,7 +131,8 @@ export function SearchBar(props: SearchBarProps) {
     onSubmit,
     itemGap = 6,
     itemWidth = 160,
-    top
+    top,
+    width
   } = props;
 
   // Labels
@@ -337,7 +343,7 @@ export function SearchBar(props: SearchBarProps) {
 
   // Layout
   return (
-    <Container fixed ref={dimensions[0][0]}>
+    <React.Fragment>
       <form
         id="SearchBarForm"
         className={className}
@@ -347,12 +353,13 @@ export function SearchBar(props: SearchBarProps) {
         }}
       >
         <Stack
+          ref={dimensions[0][0]}
           className="SearchBarContainer"
           justifyContent="center"
           alignItems="center"
           direction="row"
           spacing={`${itemGap}px`}
-          width="100%"
+          width={width}
           overflow="hidden"
           paddingTop="6px"
           sx={{
@@ -429,6 +436,6 @@ export function SearchBar(props: SearchBarProps) {
           </form>
         </Drawer>
       )}
-    </Container>
+    </React.Fragment>
   );
 }

@@ -179,7 +179,14 @@ export function FixedListPage<T extends object, F>(
     <CommonPage {...pageRest} paddings={{}} scrollContainer={scrollContainer}>
       <Stack>
         <Box ref={dimensions[0][0]} sx={{ padding: paddings }}>
-          <SearchBar fields={f} onSubmit={onSubmit} top={searchBarTop} />
+          {rect && rect.width > 100 && (
+            <SearchBar
+              fields={f}
+              onSubmit={onSubmit}
+              top={searchBarTop}
+              width={rect.width}
+            />
+          )}
         </Box>
         {list}
       </Stack>

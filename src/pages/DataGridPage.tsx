@@ -186,7 +186,14 @@ export function DataGridPage<T extends object, F>(
             paddingBottom: pageProps.paddings
           }}
         >
-          <SearchBar fields={f} onSubmit={onSubmit} top={searchBarTop} />
+          {rect && rect.width > 100 && (
+            <SearchBar
+              fields={f}
+              onSubmit={onSubmit}
+              top={searchBarTop}
+              width={rect.width}
+            />
+          )}
         </Box>
         {list}
       </Stack>

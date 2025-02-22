@@ -48,6 +48,7 @@ export function TablePage<
     pageProps = {},
     cacheKey,
     cacheMinutes = 15,
+    searchBarTop,
     ...rest
   } = props;
 
@@ -139,7 +140,14 @@ export function TablePage<
             paddingBottom: pageProps.paddings
           }}
         >
-          <SearchBar fields={f} onSubmit={onSubmit} />
+          {rect && rect.width > 100 && (
+            <SearchBar
+              fields={f}
+              onSubmit={onSubmit}
+              top={searchBarTop}
+              width={rect.width}
+            />
+          )}
         </Box>
         {list}
       </Stack>

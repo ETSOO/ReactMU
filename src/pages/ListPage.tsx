@@ -4,7 +4,8 @@ import {
   ListOnScrollProps,
   ScrollerListForwardRef,
   ScrollerListRef,
-  useCombinedRefs
+  useCombinedRefs,
+  useDimensions
 } from "@etsoo/react";
 import { Box, Stack } from "@mui/material";
 import React from "react";
@@ -36,6 +37,7 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
     pageProps = {},
     cacheKey,
     cacheMinutes = 15,
+    sizeReadyMiliseconds = 0,
     searchBarTop,
     ...rest
   } = props;
@@ -77,6 +79,10 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
       lastItem
     );
   };
+
+  // Watch container
+  const { dimensions } = useDimensions(1, undefined, sizeReadyMiliseconds);
+  const rect = dimensions[0][2];
 
   // Search data
   const searchData = GridUtils.getSearchData(cacheKey);
@@ -123,11 +129,19 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
     <CommonPage {...pageProps} scrollContainer={globalThis}>
       <Stack>
         <Box
+          ref={dimensions[0][0]}
           sx={{
             paddingBottom: pageProps.paddings
           }}
         >
-          <SearchBar fields={f} onSubmit={onSubmit} top={searchBarTop} />
+          {rect && rect.width > 100 && (
+            <SearchBar
+              fields={f}
+              onSubmit={onSubmit}
+              top={searchBarTop}
+              width={rect.width}
+            />
+          )}
         </Box>
         <ScrollerListEx<T>
           autoLoad={false}

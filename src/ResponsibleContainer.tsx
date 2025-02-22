@@ -441,6 +441,7 @@ export function ResponsibleContainer<T extends object, F>(
         fields={f}
         onSubmit={onSubmit}
         className={`searchBar${showDataGrid ? "Grid" : "List"}`}
+        width={rect.width}
         top={searchBarTop}
       />
     );
