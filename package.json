@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.4.87",
+  "version": "1.4.88",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -40,7 +40,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@etsoo/appscript": "^1.6.9",
+    "@etsoo/appscript": "^1.6.12",
     "@etsoo/notificationbase": "^1.1.58",
     "@etsoo/react": "^1.8.31",
     "@etsoo/shared": "^1.2.61",

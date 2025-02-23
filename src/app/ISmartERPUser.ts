@@ -1,4 +1,4 @@
-import { IUser } from "@etsoo/appscript";
+import { IUser, LoginInputAuthResult } from "@etsoo/appscript";
 import { IActionResult } from "@etsoo/shared";
 
 /**
@@ -21,4 +21,6 @@ export interface ISmartERPUser extends IUser {
 /**
  * SmartERP user login result
  */
-export type SmartERPLoginResult = IActionResult<ISmartERPUser>;
+export type SmartERPLoginResult = IActionResult<
+  ISmartERPUser | LoginInputAuthResult
+>;

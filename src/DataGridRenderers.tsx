@@ -41,6 +41,10 @@ export namespace DataGridRenderers {
     const value = formattedValue ?? data[field!];
     if (value == null) return undefined;
 
+    // For unknow and string type, keep the simple format
+    if (type === GridDataType.Unkwown) return value;
+    else if (type === GridDataType.String) return new String(value);
+
     // For date time
     // Conversion if necessary
     if (type === GridDataType.Date || type === GridDataType.DateTime) {
