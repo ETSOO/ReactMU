@@ -236,12 +236,17 @@ function getItemField<T extends object>(
 
     // Field label
     itemLabel =
-      typeof fieldLabel === "function"
+      fieldLabel === ""
+        ? undefined
+        : fieldLabel == null && typeof fieldData === "string"
+        ? app.get<string>(fieldData) ?? fieldData
+        : typeof fieldLabel === "function"
         ? fieldLabel(data)
         : fieldLabel != null
         ? app.get<string>(fieldLabel) ?? fieldLabel
-        : fieldLabel;
+        : undefined;
   } else {
+    // Single field format
     itemData = formatItemData(app, data[field]);
     itemLabel = app.get<string>(field) ?? field;
   }
