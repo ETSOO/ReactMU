@@ -77,7 +77,12 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
     ) => {
       // Min characters check
       const len = event.target.value.length;
-      if (len > 0 && len < minChars) return;
+      if (len > 0 && len < minChars) {
+        // Avoid to trigger the form change event
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+      }
 
       if (onChange && (delayed == null || onChangeDelay != null))
         onChange(event);

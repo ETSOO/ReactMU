@@ -61,11 +61,16 @@ export function SearchField(props: SearchFieldProps) {
   const onChangeEx = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    if (onChange == null) return;
-
     // Min characters check
     const len = event.target.value.length;
-    if (len > 0 && len < minChars) return;
+    if (len > 0 && len < minChars) {
+      // Avoid to trigger the form change event
+      event.stopPropagation();
+      event.preventDefault();
+      return;
+    }
+
+    if (onChange == null) return;
 
     if (changeDelay == null || changeDelay < 1) {
       onChange(event);

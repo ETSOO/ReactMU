@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.4.88",
+  "version": "1.4.89",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
