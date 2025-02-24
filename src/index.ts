@@ -117,6 +117,7 @@ export * from "./TiplistPro";
 export * from "./TagList";
 export * from "./TagListPro";
 export * from "./TwoFieldInput";
+export * from "./useCurrentBreakpoint";
 export * from "./TooltipClick";
 export * from "./UserAvatar";
 export * from "./UserAvatarEditor";

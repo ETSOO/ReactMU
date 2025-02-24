@@ -5,6 +5,7 @@ import {
 } from "@etsoo/react";
 import { DataTypes, Utils } from "@etsoo/shared";
 import {
+  Breakpoint,
   Grid2,
   Grid2Props,
   LinearProgress,
@@ -22,6 +23,50 @@ import { MessageUtils } from "../messages/MessageUtils";
 import type { RefreshHandler } from "../messages/RefreshHandler";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 import { ReactAppType, useRequiredAppContext } from "../app/ReactApp";
+import { useCurrentBreakpoint } from "../useCurrentBreakpoint";
+
+/**
+ * View page item size
+ */
+export type ViewPageItemSize = Record<Breakpoint, number | undefined>;
+
+const breakpoints: Breakpoint[] = ["xs", "sm", "md", "lg", "xl"];
+
+/**
+ * View page grid item size
+ */
+export namespace ViewPageSize {
+  export const medium: ViewPageItemSize = {
+    xs: 12,
+    sm: 12,
+    md: 6,
+    lg: 4,
+    xl: 3
+  };
+  export const line: ViewPageItemSize = {
+    xs: 12,
+    sm: 12,
+    md: 12,
+    lg: 12,
+    xl: 12
+  };
+  export const small: ViewPageItemSize = { xs: 6, sm: 6, md: 4, lg: 3, xl: 2 };
+  export const smallLine: ViewPageItemSize = {
+    xs: 12,
+    sm: 6,
+    md: 4,
+    lg: 3,
+    xl: 2
+  };
+  export function matchSize(size: ViewPageItemSize) {
+    return Object.fromEntries(
+      Object.entries(size).map(([key, value]) => [
+        key,
+        value == null ? undefined : value === 12 ? 12 : 12 - value
+      ])
+    );
+  }
+}
 
 /**
  * View page grid item properties
@@ -69,7 +114,12 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
 /**
  * View page row width type
  */
-export type ViewPageRowType = boolean | "default" | "small" | "medium" | object;
+export type ViewPageRowType =
+  | boolean
+  | "default"
+  | "small"
+  | "medium"
+  | ViewPageItemSize;
 
 /**
  * View page display field
@@ -111,7 +161,10 @@ type ViewPageFieldTypeNarrow<T extends object> =
  */
 export type ViewPageFieldType<T extends object> =
   | ViewPageFieldTypeNarrow<T>
-  | ((data: T, refresh: () => Promise<void>) => React.ReactNode);
+  | ((
+      data: T,
+      refresh: () => Promise<void>
+    ) => React.ReactNode | [React.ReactNode, ViewPageItemSize]);
 
 /**
  * View page props
@@ -168,6 +221,28 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
   operationMessageHandler?:
     | OperationMessageHandlerAll
     | { id: number; types: string[] };
+
+  /**
+   * Title bar
+   * @param data Data to render
+   * @returns
+   */
+  titleBar?: (data: T) => React.ReactNode;
+
+  /**
+   * Left container
+   */
+  leftContainer?: (data: T) => React.ReactNode;
+
+  /**
+   * Left container height in lines
+   */
+  leftContainerLines?: number;
+
+  /**
+   * Left container properties
+   */
+  leftContainerProps?: Omit<Grid2Props, "size"> & { size?: ViewPageItemSize };
 }
 
 function formatItemData(
@@ -185,34 +260,32 @@ function getResp(singleRow: ViewPageRowType) {
     typeof singleRow === "object"
       ? singleRow
       : singleRow === "medium"
-      ? { xs: 12, sm: 12, md: 6, lg: 4, xl: 3 }
+      ? ViewPageSize.medium
       : singleRow === true
-      ? { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }
-      : {
-          xs: singleRow === false ? 12 : 6,
-          sm: 6,
-          md: 4,
-          lg: 3,
-          xl: 2
-        };
-  return { size };
+      ? ViewPageSize.line
+      : singleRow === false
+      ? ViewPageSize.smallLine
+      : ViewPageSize.small;
+  return size;
 }
 
 function getItemField<T extends object>(
   app: ReactAppType,
   field: ViewPageFieldTypeNarrow<T>,
   data: T
-): [React.ReactNode, React.ReactNode, Grid2Props] {
+): [React.ReactNode, React.ReactNode, Grid2Props, ViewPageItemSize] {
   // Item data and label
   let itemData: React.ReactNode,
     itemLabel: React.ReactNode,
-    gridProps: Grid2Props = {};
+    gridProps: Grid2Props = {},
+    size: ViewPageItemSize;
 
   if (Array.isArray(field)) {
     const [fieldData, fieldType, renderProps, singleRow = "small"] = field;
     itemData = GridDataFormat(data[fieldData], fieldType, renderProps);
     itemLabel = app.get<string>(fieldData) ?? fieldData;
-    gridProps = { ...getResp(singleRow) };
+    size = getResp(singleRow);
+    gridProps = { size };
   } else if (typeof field === "object") {
     // Destruct
     const {
@@ -224,9 +297,12 @@ function getItemField<T extends object>(
       ...rest
     } = field;
 
+    // Size
+    size = getResp(singleRow);
+
     gridProps = {
       ...rest,
-      ...getResp(singleRow)
+      size
     };
 
     // Field data
@@ -249,9 +325,24 @@ function getItemField<T extends object>(
     // Single field format
     itemData = formatItemData(app, data[field]);
     itemLabel = app.get<string>(field) ?? field;
+    size = ViewPageSize.small;
+    gridProps = { size };
   }
 
-  return [itemData, itemLabel, gridProps];
+  return [itemData, itemLabel, gridProps, size];
+}
+
+function getItemSize(bp: Breakpoint, size: ViewPageItemSize) {
+  const v = size[bp];
+  if (v != null) return v;
+
+  const index = breakpoints.indexOf(bp);
+  for (let i = index; i >= 0; i--) {
+    const v = size[breakpoints[i]];
+    if (v != null) return v;
+  }
+
+  return 12;
 }
 
 /**
@@ -279,8 +370,15 @@ export function ViewPage<T extends DataTypes.StringRecord>(
     pullToRefresh = true,
     gridRef,
     operationMessageHandler,
+    titleBar,
+    leftContainer,
+    leftContainerLines = 3,
+    leftContainerProps = {},
     ...rest
   } = props;
+
+  // Current breakpoint
+  const bp = useCurrentBreakpoint();
 
   // Data
   const [data, setData] = React.useState<T>();
@@ -291,12 +389,86 @@ export function ViewPage<T extends DataTypes.StringRecord>(
   // Container
   const pullContainer = "#page-container";
 
+  // Left container
+  const { size = ViewPageSize.smallLine, ...leftContainerPropsRest } =
+    leftContainerProps;
+
   // Load data
   const refresh = React.useCallback(async () => {
     const result = await loadData();
     // When failed or no data returned, show the loading bar
     setData(result);
   }, [loadData]);
+
+  // Create fields
+  const fieldIndexRef = React.useRef(0);
+  const createFields = React.useCallback(
+    (data: T, maxItems: number = 0) => {
+      let validItems = 0;
+      const items: React.ReactNode[] = [];
+      let i: number = fieldIndexRef.current;
+      for (; i < fields.length; i++) {
+        const field = fields[i];
+        let oneSize: ViewPageItemSize;
+        let oneItem: React.ReactNode;
+        if (typeof field === "function") {
+          // Most flexible way, do whatever you want
+          const createdResult = field(data, refresh);
+          if (createdResult == null || createdResult === "") continue;
+          if (Array.isArray(createdResult)) {
+            const [created, size] = createdResult;
+            oneSize = size;
+            oneItem = created;
+          } else {
+            oneSize = ViewPageSize.line;
+            oneItem = createdResult;
+          }
+        } else {
+          const [itemData, itemLabel, gridProps, size] = getItemField(
+            app,
+            field,
+            data
+          );
+
+          // Some callback function may return '' instead of undefined
+          if (itemData == null || itemData === "") continue;
+
+          oneSize = size;
+          oneItem = (
+            <ViewPageGridItem
+              {...gridProps}
+              key={i}
+              data={itemData}
+              label={itemLabel}
+            />
+          );
+        }
+
+        // Max lines
+        if (maxItems > 0) {
+          const itemSize = getItemSize(bp, oneSize);
+          if (maxItems < validItems + itemSize) {
+            fieldIndexRef.current = i;
+            break;
+          } else {
+            items.push(oneItem);
+            validItems += itemSize;
+          }
+        } else {
+          items.push(oneItem);
+        }
+      }
+
+      if (maxItems === 0) {
+        fieldIndexRef.current = 0;
+      } else {
+        fieldIndexRef.current = i;
+      }
+
+      return items;
+    },
+    [app, refresh, fields, data, bp]
+  );
 
   React.useEffect(() => {
     const refreshHandler: RefreshHandler = async () => {
@@ -337,44 +509,44 @@ export function ViewPage<T extends DataTypes.StringRecord>(
               }
             />
           )}
+          {titleBar && titleBar(data)}
           <Grid2
             container
             justifyContent="left"
-            spacing={spacing}
             className="ET-ViewPage"
             ref={gridRef}
+            spacing={spacing}
             sx={{
               ".MuiTypography-subtitle2": {
                 fontWeight: "bold"
               }
             }}
           >
-            {fields.map((field, index) => {
-              // Get data
-              if (typeof field === "function") {
-                // Most flexible way, do whatever you want
-                return field(data, refresh);
-              }
-
-              const [itemData, itemLabel, gridProps] = getItemField(
-                app,
-                field,
-                data
-              );
-
-              // Some callback function may return '' instead of undefined
-              if (itemData == null || itemData === "") return undefined;
-
-              // Layout
-              return (
-                <ViewPageGridItem
-                  {...gridProps}
-                  key={index}
-                  data={itemData}
-                  label={itemLabel}
-                />
-              );
-            })}
+            {leftContainer && (
+              <React.Fragment>
+                <Grid2
+                  container
+                  className="ET-ViewPage-LeftContainer"
+                  spacing={spacing}
+                  size={size}
+                  {...leftContainerPropsRest}
+                >
+                  {leftContainer(data)}
+                </Grid2>
+                <Grid2
+                  container
+                  className="ET-ViewPage-LeftOthers"
+                  spacing={spacing}
+                  size={ViewPageSize.matchSize(size)}
+                >
+                  {createFields(
+                    data,
+                    leftContainerLines * (12 - getItemSize(bp, size))
+                  )}
+                </Grid2>
+              </React.Fragment>
+            )}
+            {createFields(data)}
           </Grid2>
           {actions !== null && (
             <Stack

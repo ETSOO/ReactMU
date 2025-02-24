@@ -28,7 +28,6 @@ import {
   NotificationReactCallProps,
   UserAction,
   UserActionType,
-  UserCalls,
   useRequiredContext,
   UserState
 } from "@etsoo/react";
