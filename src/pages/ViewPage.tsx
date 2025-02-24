@@ -481,11 +481,18 @@ export function ViewPage<T extends DataTypes.StringRecord>(
     };
   }, [refresh]);
 
+  let leftResult: React.ReactNode;
+
   return (
     <CommonPage
       paddings={paddings}
       onRefresh={supportRefresh ? refresh : undefined}
       onUpdate={supportRefresh ? undefined : refresh}
+      sx={{
+        ".MuiTypography-subtitle2": {
+          fontWeight: "bold"
+        }
+      }}
       {...rest}
       scrollContainer={globalThis}
       fabColumnDirection={fabColumnDirection}
@@ -516,13 +523,8 @@ export function ViewPage<T extends DataTypes.StringRecord>(
             className="ET-ViewPage"
             ref={gridRef}
             spacing={spacing}
-            sx={{
-              ".MuiTypography-subtitle2": {
-                fontWeight: "bold"
-              }
-            }}
           >
-            {leftContainer && (
+            {leftContainer && (leftResult = leftContainer(data)) != null && (
               <React.Fragment>
                 <Grid2
                   container
@@ -531,7 +533,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
                   size={size}
                   {...leftContainerPropsRest}
                 >
-                  {leftContainer(data)}
+                  {leftResult}
                 </Grid2>
                 <Grid2
                   container
