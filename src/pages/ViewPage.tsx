@@ -187,6 +187,11 @@ export interface ViewPageProps<T extends DataTypes.StringRecord>
     | ((data: T, refresh: () => PromiseLike<void>) => React.ReactNode);
 
   /**
+   * Paddings between actions
+   */
+  actionPaddings?: number | Record<string, string | number>;
+
+  /**
    * Children
    */
   children?:
@@ -373,6 +378,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
     loadData,
     paddings = MUGlobal.pagePaddings,
     spacing = MUGlobal.half(MUGlobal.pagePaddings),
+    actionPaddings = MUGlobal.pagePaddings,
     supportRefresh = true,
     fabColumnDirection = true,
     fabTop = true,
@@ -566,10 +572,10 @@ export function ViewPage<T extends DataTypes.StringRecord>(
               direction="row"
               width="100%"
               flexWrap="wrap"
-              justifyContent="flex-end"
-              paddingTop={actions == null ? undefined : paddings}
-              paddingBottom={paddings}
-              gap={paddings}
+              justifyContent="center"
+              paddingTop={actions == null ? undefined : actionPaddings}
+              paddingBottom={actionPaddings}
+              gap={actionPaddings}
             >
               {actions != null && Utils.getResult(actions, data, refresh)}
             </Stack>
