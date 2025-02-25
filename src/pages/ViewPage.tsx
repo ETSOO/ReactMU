@@ -36,6 +36,13 @@ const breakpoints: Breakpoint[] = ["xs", "sm", "md", "lg", "xl"];
  * View page grid item size
  */
 export namespace ViewPageSize {
+  export const large: ViewPageItemSize = {
+    xs: 12,
+    sm: 12,
+    md: 9,
+    lg: 6,
+    xl: 4
+  };
   export const medium: ViewPageItemSize = {
     xs: 12,
     sm: 12,
@@ -119,6 +126,7 @@ export type ViewPageRowType =
   | "default"
   | "small"
   | "medium"
+  | "large"
   | ViewPageItemSize;
 
 /**
@@ -261,6 +269,8 @@ function getResp(singleRow: ViewPageRowType) {
       ? singleRow
       : singleRow === "medium"
       ? ViewPageSize.medium
+      : singleRow === "large"
+      ? ViewPageSize.large
       : singleRow === true
       ? ViewPageSize.line
       : singleRow === false
