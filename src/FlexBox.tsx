@@ -1,5 +1,4 @@
 import { Stack, StackProps } from "@mui/material";
-import React from "react";
 
 /**
  * Horizonal box
@@ -8,6 +7,24 @@ import React from "react";
  */
 export function HBox(props: Omit<StackProps, "ref">) {
   return <Stack direction="row" width="100%" {...props} />;
+}
+
+/**
+ * Horizonal box with list items
+ * @param props Props
+ * @returns Component
+ */
+export function HBoxList(props: Omit<StackProps, "direction">) {
+  return (
+    <Stack
+      spacing={1}
+      gap={1}
+      direction="row"
+      flexWrap="wrap"
+      width="100%"
+      {...props}
+    />
+  );
 }
 
 /**
