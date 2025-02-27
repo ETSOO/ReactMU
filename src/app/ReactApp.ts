@@ -355,6 +355,12 @@ export class ReactApp<S extends IAppSettings, D extends IUser>
     const {
       onFailure = (type: string) => {
         console.log(`Try login failed: ${type}.`);
+        if (
+          globalThis.navigator.onLine &&
+          !type.includes('"title":"Failed to fetch"')
+        ) {
+          this.clearCacheToken();
+        }
         this.toLoginPage(rest);
       },
       onSuccess,
