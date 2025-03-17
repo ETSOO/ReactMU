@@ -15,7 +15,7 @@ export interface TabBoxPanel extends Omit<TabProps, "value" | "children"> {
   /**
    * Panel box props
    */
-  panel?: Omit<BoxProps, "hidden">;
+  panelProps?: Omit<BoxProps, "hidden">;
 
   /**
    * To URL
@@ -53,6 +53,11 @@ export interface TabBoxPros extends BoxProps {
   root?: BoxProps;
 
   /**
+   * Shared tab props
+   */
+  tabProps?: Omit<BoxProps, "hidden">;
+
+  /**
    * Tabs
    */
   tabs: TabBoxPanel[];
@@ -71,6 +76,7 @@ export function TabBox(props: TabBoxPros) {
     root,
     container = {},
     defaultIndex = 0,
+    tabProps,
     tabs
   } = props;
   const { onChange, ...rest } = container;
@@ -96,7 +102,7 @@ export function TabBox(props: TabBoxPros) {
           }}
           {...rest}
         >
-          {tabs.map(({ children, panel, ...tabRest }, index) => (
+          {tabs.map(({ children, panelProps, ...tabRest }, index) => (
             <Tab
               key={index}
               value={index}
@@ -106,8 +112,8 @@ export function TabBox(props: TabBoxPros) {
           ))}
         </Tabs>
       </Box>
-      {tabs.map(({ children, panel }, index) => (
-        <Box key={index} hidden={value !== index} {...panel}>
+      {tabs.map(({ children, panelProps }, index) => (
+        <Box key={index} hidden={value !== index} {...tabProps} {...panelProps}>
           {Utils.getResult(children, value === index)}
         </Box>
       ))}

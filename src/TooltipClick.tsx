@@ -60,8 +60,10 @@ export function TooltipClick(props: TooltipClickProps) {
   return (
     <ClickAwayListener onClickAway={() => setOpen(false)}>
       <Tooltip
-        PopperProps={{
-          disablePortal: true
+        slotProps={{
+          popper: {
+            disablePortal: true
+          }
         }}
         onClose={(event) => {
           setOpen(false);
