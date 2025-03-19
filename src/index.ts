@@ -58,6 +58,7 @@ export * from "./DialogButton";
 export * from "./DnDList";
 export * from "./DraggablePaperComponent";
 export * from "./EmailInput";
+export * from "./ErrorAlert";
 export * from "./FabBox";
 export * from "./FieldSetEx";
 export * from "./FileUploadButton";
