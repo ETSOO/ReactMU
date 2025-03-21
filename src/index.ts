@@ -122,3 +122,4 @@ export * from "./useCurrentBreakpoint";
 export * from "./TooltipClick";
 export * from "./UserAvatar";
 export * from "./UserAvatarEditor";
+export * from "./ViewContainer";
