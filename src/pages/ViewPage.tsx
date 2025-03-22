@@ -129,11 +129,7 @@ export function ViewPage<T extends DataTypes.StringRecord>(
       paddings={paddings}
       onRefresh={supportRefresh ? refresh : undefined}
       onUpdate={supportRefresh ? undefined : refresh}
-      sx={{
-        ".MuiTypography-subtitle2": {
-          fontWeight: "bold"
-        }
-      }}
+      className="ET-ViewPage"
       {...rest}
       scrollContainer={globalThis}
       fabColumnDirection={fabColumnDirection}

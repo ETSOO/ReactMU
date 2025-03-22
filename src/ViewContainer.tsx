@@ -315,8 +315,7 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
     leftContainerLines = 3,
     leftContainerProps = {},
     refresh,
-    spacing = MUGlobal.half(MUGlobal.pagePaddings),
-    ...rest
+    spacing = MUGlobal.half(MUGlobal.pagePaddings)
   } = props;
 
   // Left container
@@ -403,7 +402,7 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
     <Grid2
       container
       justifyContent="left"
-      className="ET-ViewPage"
+      className="ET-ViewContainer"
       ref={gridRef}
       spacing={spacing}
     >
