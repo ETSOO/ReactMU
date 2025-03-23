@@ -71,6 +71,9 @@ export function GridDataFormat(
       );
   }
 
+  // Array
+  if (Array.isArray(data)) return data.join(", ");
+
   if (typeof data === "string") return data;
 
   return `${data}`;

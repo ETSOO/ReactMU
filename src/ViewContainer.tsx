@@ -14,6 +14,7 @@ function formatItemData(
   if (fieldData == null) return undefined;
   if (typeof fieldData === "string") return fieldData;
   if (fieldData instanceof Date) return app.formatDate(fieldData, "d");
+  if (Array.isArray(fieldData)) return fieldData.join(", ");
   return `${fieldData}`;
 }
 
