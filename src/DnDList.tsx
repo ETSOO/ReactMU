@@ -4,18 +4,17 @@ import type {
   DragStartEvent,
   UniqueIdentifier
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  SortingStrategy,
-  horizontalListSortingStrategy,
-  rectSortingStrategy,
-  rectSwappingStrategy,
-  useSortable,
-  verticalListSortingStrategy
-} from "@dnd-kit/sortable";
+import { SortableContext } from "@dnd-kit/sortable/dist/components/SortableContext";
+import { useSortable } from "@dnd-kit/sortable/dist/hooks/useSortable";
+import { horizontalListSortingStrategy } from "@dnd-kit/sortable/dist/strategies/horizontalListSorting";
+import { rectSortingStrategy } from "@dnd-kit/sortable/dist/strategies/rectSorting";
+import { rectSwappingStrategy } from "@dnd-kit/sortable/dist/strategies/rectSwapping";
+import { verticalListSortingStrategy } from "@dnd-kit/sortable/dist/strategies/verticalListSorting";
+import { SortingStrategy } from "@dnd-kit/sortable/dist/types/strategies";
 import type { CSS } from "@dnd-kit/utilities";
 import { DataTypes } from "@etsoo/shared";
-import { Skeleton, Theme, useTheme } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
+import { Theme, useTheme } from "@mui/material/styles";
 import React, { CSSProperties } from "react";
 
 function SortableItem(props: {

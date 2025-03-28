@@ -1,16 +1,13 @@
-import {
-  Button,
-  Container,
-  Drawer,
-  IconButton,
-  Stack,
-  Toolbar
-} from "@mui/material";
 import React from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { DomUtils, NumberUtils } from "@etsoo/shared";
 import { ReactUtils, useDelayedExecutor, useDimensions } from "@etsoo/react";
 import { Labels } from "./app/Labels";
+import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import Drawer from "@mui/material/Drawer";
+import Toolbar from "@mui/material/Toolbar";
 
 /**
  * Search bar props

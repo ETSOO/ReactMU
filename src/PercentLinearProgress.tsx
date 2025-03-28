@@ -1,11 +1,8 @@
-import {
-  Box,
-  LinearProgress,
-  LinearProgressProps,
-  Typography,
-  TypographyProps
-} from "@mui/material";
-import React from "react";
+import Box from "@mui/material/Box";
+import LinearProgress, {
+  LinearProgressProps
+} from "@mui/material/LinearProgress";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 
 export type PercentLinearProgressProps = LinearProgressProps & {
   value: number;

@@ -1,10 +1,13 @@
 import { Utils } from "@etsoo/shared";
-import { Button, Divider, Theme, Typography, useTheme } from "@mui/material";
 import React, { CSSProperties } from "react";
 import { ListMoreDisplay, ListMoreDisplayProps } from "./ListMoreDisplay";
 import { ShowDataComparison } from "./ShowDataComparison";
 import { AuditLineDto } from "@etsoo/appscript";
 import { useAppContext } from "./app/ReactApp";
+import { Theme, useTheme } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 
 /**
  * Audit display props

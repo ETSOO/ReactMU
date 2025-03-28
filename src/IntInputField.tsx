@@ -1,9 +1,11 @@
-import { Box, BoxProps, IconButton, InputAdornment } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React from "react";
 import { NumberUtils } from "@etsoo/shared";
 import { InputField, InputFieldProps } from "./InputField";
+import Box, { BoxProps } from "@mui/material/Box";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
 /**
  * Integer input field props

@@ -1,11 +1,3 @@
-import {
-  Button,
-  ButtonGroup,
-  IconButton,
-  Skeleton,
-  Slider,
-  Stack
-} from "@mui/material";
 import React from "react";
 import type AvatarEditor from "react-avatar-editor";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
@@ -18,6 +10,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { Labels } from "./app/Labels";
 import { FileUploadButton } from "./FileUploadButton";
 import { ImageState } from "react-avatar-editor";
+import Stack from "@mui/material/Stack";
+import Skeleton from "@mui/material/Skeleton";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Slider from "@mui/material/Slider";
 
 const defaultSize = 300;
 

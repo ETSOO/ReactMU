@@ -5,13 +5,14 @@ import {
   AddressState,
   IApiPayload
 } from "@etsoo/appscript";
-import { FormLabel, Grid2, GridSize } from "@mui/material";
 import React from "react";
 import { ComboBox } from "./ComboBox";
 import { Tiplist } from "./Tiplist";
 import { ResponsiveStyleValue } from "./ResponsiveStyleValue";
 import { RegionsRQ } from "./RegionsRQ";
 import { useAppContext } from "./app/ReactApp";
+import Grid, { GridSize } from "@mui/material/Grid";
+import FormLabel from "@mui/material/FormLabel";
 
 /**
  * Address field
@@ -317,17 +318,17 @@ export function AddressSelector(props: AddressSelectorProps) {
   return (
     <React.Fragment>
       {label && (
-        <Grid2 size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <FormLabel
             required={required}
             sx={{ fontSize: (theme) => theme.typography.caption }}
           >
             {label}
           </FormLabel>
-        </Grid2>
+        </Grid>
       )}
       {!hideRegion && (
-        <Grid2 size={breakPoints}>
+        <Grid size={breakPoints}>
           <Tiplist<AddressRegionDb>
             label={regionLabel}
             name={AddressField.Region}
@@ -352,9 +353,9 @@ export function AddressSelector(props: AddressSelectorProps) {
               handleChange([AddressField.Region, value])
             }
           />
-        </Grid2>
+        </Grid>
       )}
-      <Grid2 size={breakPoints}>
+      <Grid size={breakPoints}>
         <ComboBox<AddressState>
           name={AddressField.State}
           label={stateLabel}
@@ -369,8 +370,8 @@ export function AddressSelector(props: AddressSelectorProps) {
             handleChange([AddressField.State, value])
           }
         />
-      </Grid2>
-      <Grid2 size={breakPoints}>
+      </Grid>
+      <Grid size={breakPoints}>
         <ComboBox<AddressCity>
           name={AddressField.City}
           label={cityLabel}
@@ -380,8 +381,8 @@ export function AddressSelector(props: AddressSelectorProps) {
           options={cities}
           onChange={(_event, value) => handleChange([AddressField.City, value])}
         />
-      </Grid2>
-      <Grid2 size={breakPoints}>
+      </Grid>
+      <Grid size={breakPoints}>
         <ComboBox<AddressDistrict>
           name={AddressField.District}
           label={districtLabel}
@@ -393,7 +394,7 @@ export function AddressSelector(props: AddressSelectorProps) {
             handleChange([AddressField.District, value])
           }
         />
-      </Grid2>
+      </Grid>
     </React.Fragment>
   );
 }

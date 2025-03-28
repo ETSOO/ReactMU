@@ -1,6 +1,5 @@
 import { ScrollRestoration } from "@etsoo/react";
 import { DataTypes, Utils } from "@etsoo/shared";
-import { LinearProgress, Stack } from "@mui/material";
 import React from "react";
 import { Labels } from "../app/Labels";
 import { MUGlobal } from "../MUGlobal";
@@ -11,6 +10,8 @@ import { MessageUtils } from "../messages/MessageUtils";
 import type { RefreshHandler } from "../messages/RefreshHandler";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 import { ViewContainer, ViewContainerProps } from "../ViewContainer";
+import LinearProgress from "@mui/material/LinearProgress";
+import Stack from "@mui/material/Stack";
 
 /**
  * View page props

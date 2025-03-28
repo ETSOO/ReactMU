@@ -1,15 +1,13 @@
-import {
-  Avatar,
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  Typography
-} from "@mui/material";
 import React from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { DrawerHeader } from "./DrawerHeader";
 import { useAppContext } from "../app/ReactApp";
+import Drawer from "@mui/material/Drawer";
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
 
 /**
  * Left drawer props

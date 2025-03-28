@@ -1,7 +1,7 @@
 import { ICustomFieldReact } from "@etsoo/react";
-import { Divider } from "@mui/material";
 import React from "react";
 import { CustomFieldUtils } from "./CustomFieldUtils";
+import Divider from "@mui/material/Divider";
 
 /**
  * Divider field creator

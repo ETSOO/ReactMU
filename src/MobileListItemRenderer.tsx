@@ -1,8 +1,11 @@
 import { ListItemReact } from "@etsoo/react";
-import { Card, CardContent, CardHeader, LinearProgress } from "@mui/material";
 import React from "react";
 import { MoreFab } from "./MoreFab";
 import { ScrollerListExInnerItemRendererProps } from "./ScrollerListEx";
+import LinearProgress from "@mui/material/LinearProgress";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
 
 /**
  * Default mobile list item renderer
@@ -58,9 +61,11 @@ export function MobileListItemRenderer<T>(
           )
         }
         title={title}
-        titleTypographyProps={{ variant: "body2" }}
         subheader={subheader}
-        subheaderTypographyProps={{ variant: "caption" }}
+        slotProps={{
+          title: { variant: "body2" },
+          subheader: { variant: "caption" }
+        }}
       />
       <CardContent
         sx={{

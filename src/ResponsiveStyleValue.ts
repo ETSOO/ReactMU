@@ -1,4 +1,4 @@
-import { Breakpoint } from "@mui/material";
+import { Breakpoint } from "@mui/material/styles";
 
 /**
  * Responsive style value

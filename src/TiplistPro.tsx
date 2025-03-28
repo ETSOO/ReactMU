@@ -1,9 +1,9 @@
 import { ReactUtils, useDelayedExecutor } from "@etsoo/react";
 import { DataTypes, ListType2 } from "@etsoo/shared";
-import { Autocomplete, AutocompleteProps } from "@mui/material";
 import React, { ChangeEventHandler } from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { useAppContext } from "./app/ReactApp";
+import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 
 /**
  * TiplistPro props

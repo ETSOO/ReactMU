@@ -1,9 +1,6 @@
-import {
-  FormControl,
-  FormControlProps,
-  FormHelperText,
-  InputLabel
-} from "@mui/material";
+import FormControl, { FormControlProps } from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputLabel from "@mui/material/InputLabel";
 import NotchedOutline from "@mui/material/OutlinedInput";
 import React from "react";
 

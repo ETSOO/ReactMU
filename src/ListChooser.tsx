@@ -1,17 +1,15 @@
 import { useDelayedExecutor } from "@etsoo/react";
 import { DataTypes, DelayedExecutorType, IdDefaultType } from "@etsoo/shared";
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemButtonProps,
-  ListItemText,
-  ListProps,
-  TextField
-} from "@mui/material";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import React from "react";
 import { VBox } from "./FlexBox";
+import ListItemButton, {
+  ListItemButtonProps
+} from "@mui/material/ListItemButton";
+import List, { ListProps } from "@mui/material/List";
+import TextField from "@mui/material/TextField";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 
 type QueryData = {
   title?: string;
@@ -130,7 +128,7 @@ export function ListChooser<
         label={title}
         fullWidth
         variant="standard"
-        inputProps={{ maxLength: 128 }}
+        slotProps={{ htmlInput: { maxLength: 128 } }}
         onChange={(event) => {
           Reflect.set(rq, "title", event.target.value);
           delayed.call();

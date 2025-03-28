@@ -1,4 +1,3 @@
-import { Breakpoint, Grid2, Grid2Props, Typography } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "./MUGlobal";
 import { DataTypes } from "@etsoo/shared";
@@ -6,6 +5,9 @@ import { useCurrentBreakpoint } from "./useCurrentBreakpoint";
 import { GridColumnRenderProps, GridDataType } from "@etsoo/react";
 import { GridDataFormat } from "./GridDataFormat";
 import { ReactAppType, useRequiredAppContext } from "./app/ReactApp";
+import Grid, { GridProps } from "@mui/material/Grid";
+import { Breakpoint } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 function formatItemData(
   app: ReactAppType,
@@ -38,11 +40,11 @@ function getItemField<T extends object>(
   app: ReactAppType,
   field: ViewPageFieldTypeNarrow<T>,
   data: T
-): [React.ReactNode, React.ReactNode, Grid2Props, ViewPageItemSize] {
+): [React.ReactNode, React.ReactNode, GridProps, ViewPageItemSize] {
   // Item data and label
   let itemData: React.ReactNode,
     itemLabel: React.ReactNode,
-    gridProps: Grid2Props = {},
+    gridProps: GridProps = {},
     size: ViewPageItemSize;
 
   if (Array.isArray(field)) {
@@ -174,7 +176,7 @@ export type ViewPageRowType =
 /**
  * View page grid item properties
  */
-export type ViewPageGridItemProps = Grid2Props & {
+export type ViewPageGridItemProps = GridProps & {
   data: React.ReactNode;
   label?: React.ReactNode;
   singleRow?: ViewPageRowType;
@@ -199,7 +201,7 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
 
   // Layout
   return (
-    <Grid2 {...gridProps} {...options}>
+    <Grid {...gridProps} {...options}>
       {label != null && (
         <Typography variant="caption" component="div">
           {label}:
@@ -210,14 +212,14 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
       ) : (
         <Typography variant="subtitle2">{data}</Typography>
       )}
-    </Grid2>
+    </Grid>
   );
 }
 
 /**
  * View page display field
  */
-export interface ViewPageField<T extends object> extends Grid2Props {
+export interface ViewPageField<T extends object> extends GridProps {
   /**
    * Data field
    */
@@ -288,7 +290,7 @@ export type ViewContainerProps<T extends DataTypes.StringRecord> = {
   /**
    * Left container properties
    */
-  leftContainerProps?: Omit<Grid2Props, "size"> & { size?: ViewPageItemSize };
+  leftContainerProps?: Omit<GridProps, "size"> & { size?: ViewPageItemSize };
 
   /**
    * Refresh function
@@ -400,7 +402,7 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
 
   // Layout
   return (
-    <Grid2
+    <Grid
       container
       justifyContent="left"
       className="ET-ViewContainer"
@@ -409,7 +411,7 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
     >
       {leftContainer && (leftResult = leftContainer(data)) != null && (
         <React.Fragment>
-          <Grid2
+          <Grid
             container
             className="ET-ViewPage-LeftContainer"
             spacing={spacing}
@@ -417,8 +419,8 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
             {...leftContainerPropsRest}
           >
             {leftResult}
-          </Grid2>
-          <Grid2
+          </Grid>
+          <Grid
             container
             className="ET-ViewPage-LeftOthers"
             spacing={spacing}
@@ -428,10 +430,10 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
               data,
               leftContainerLines * (12 - getItemSize(bp, size))
             )}
-          </Grid2>
+          </Grid>
         </React.Fragment>
       )}
       {createFields(data)}
-    </Grid2>
+    </Grid>
   );
 }

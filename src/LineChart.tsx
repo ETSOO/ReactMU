@@ -1,7 +1,7 @@
-import { LinearProgress } from "@mui/material";
 import React from "react";
 import type { ChartData, LineControllerChartOptions } from "chart.js" with { "resolution-mode": "import" };
 import type { Line } from "react-chartjs-2" with { "resolution-mode": "import" };
+import LinearProgress from "@mui/material/LinearProgress";
 
 /**
  * Line chart

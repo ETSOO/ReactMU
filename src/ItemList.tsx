@@ -1,19 +1,17 @@
 import React from "react";
 import {
-  Dialog,
-  DialogTitle,
-  List,
-  ListItemText,
-  DialogContent,
-  Button,
-  ListItemButton
-} from "@mui/material";
-import {
   DataTypes,
   IdDefaultType,
   LabelDefaultType,
   ListType
 } from "@etsoo/shared";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 
 /**
  * Item list properties

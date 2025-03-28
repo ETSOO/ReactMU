@@ -1,15 +1,13 @@
 import React from "react";
-import {
-  IconButton,
-  InputAdornment,
-  TextField,
-  TextFieldProps
-} from "@mui/material";
 import { MUGlobal } from "./MUGlobal";
-import { Clear, Visibility } from "@mui/icons-material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import ClearIcon from "@mui/icons-material/Clear";
 import { Keyboard } from "@etsoo/shared";
 import { ReactUtils, useCombinedRefs, useDelayedExecutor } from "@etsoo/react";
 import { useAppContext } from "./app/ReactApp";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
 /**
  * Extended text field props
@@ -191,12 +189,12 @@ export const TextFieldEx = React.forwardRef<
             onTouchEnd={touchEnd}
             title={showIt}
           >
-            <Visibility />
+            <VisibilityIcon />
           </IconButton>
         )}
         {showClear && (
           <IconButton onClick={clearClick} tabIndex={-1} title={clearLabel}>
-            <Clear />
+            <ClearIcon />
           </IconButton>
         )}
       </InputAdornment>

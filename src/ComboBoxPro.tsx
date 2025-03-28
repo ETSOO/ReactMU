@@ -1,8 +1,8 @@
-import { Autocomplete, AutocompleteProps } from "@mui/material";
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { DataTypes, ListType2 } from "@etsoo/shared";
 import { useAppContext } from "./app/ReactApp";
+import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 
 export type ComboBoxProProps<D extends ListType2 = ListType2> = Omit<
   AutocompleteProps<D, false, false, true>,

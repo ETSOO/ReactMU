@@ -1,4 +1,4 @@
-import { Stack, StackProps } from "@mui/material";
+import Stack, { StackProps } from "@mui/material/Stack";
 
 /**
  * Horizonal box

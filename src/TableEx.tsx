@@ -10,23 +10,19 @@ import {
   GridSizeGet
 } from "@etsoo/react";
 import { DataTypes, IdDefaultType } from "@etsoo/shared";
-import {
-  Checkbox,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableCellProps,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableProps,
-  TableRow,
-  TableSortLabel,
-  useTheme
-} from "@mui/material";
 import React from "react";
 import { DataGridRenderers } from "./DataGridRenderers";
+import Table, { TableProps } from "@mui/material/Table";
+import { useTheme } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell, { TableCellProps } from "@mui/material/TableCell";
+import Checkbox from "@mui/material/Checkbox";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import TableBody from "@mui/material/TableBody";
+import TablePagination from "@mui/material/TablePagination";
 
 /**
  * Extended table min width for width-unset column

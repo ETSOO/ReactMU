@@ -5,20 +5,19 @@ import {
   LabelDefaultType,
   ListType
 } from "@etsoo/shared";
-import {
-  Autocomplete,
-  AutocompleteRenderInputParams,
-  IconButton,
-  Stack
-} from "@mui/material";
 import React from "react";
 import { Utils as SharedUtils } from "@etsoo/shared";
 import { ReactUtils } from "@etsoo/react";
-import AddIcon from "@mui/icons-material/Add";
 import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
 import { useAppContext } from "./app/ReactApp";
+import Autocomplete, {
+  AutocompleteRenderInputParams
+} from "@mui/material/Autocomplete";
+import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
 
 /**
  * ComboBox props

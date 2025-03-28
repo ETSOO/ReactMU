@@ -5,21 +5,19 @@ import {
   LabelDefaultType,
   ListType
 } from "@etsoo/shared";
-import {
-  Autocomplete,
-  AutocompleteRenderInputParams,
-  Checkbox
-} from "@mui/material";
 import React from "react";
 import { Utils as SharedUtils } from "@etsoo/shared";
 import { ReactUtils } from "@etsoo/react";
-
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
 import { useAppContext } from "./app/ReactApp";
+import Checkbox from "@mui/material/Checkbox";
+import Autocomplete, {
+  AutocompleteRenderInputParams
+} from "@mui/material/Autocomplete";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;

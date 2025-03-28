@@ -7,7 +7,6 @@ import {
   useCombinedRefs,
   useDimensions
 } from "@etsoo/react";
-import { Box, Stack } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
 import { ScrollerListEx, ScrollerListExProps } from "../ScrollerListEx";
@@ -15,6 +14,8 @@ import { SearchBar } from "../SearchBar";
 import { CommonPage } from "./CommonPage";
 import { GridUtils } from "../GridUtils";
 import type { SearchPageProps } from "./SearchPageProps";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 
 /**
  * List page props

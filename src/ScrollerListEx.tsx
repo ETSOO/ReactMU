@@ -1,10 +1,10 @@
 import { css } from "@emotion/css";
 import { ScrollerList, ScrollerListProps } from "@etsoo/react";
 import { DataTypes, Utils } from "@etsoo/shared";
-import { useTheme } from "@mui/material";
 import React from "react";
 import { ListChildComponentProps } from "react-window";
 import { MouseEventWithDataHandler, MUGlobal } from "./MUGlobal";
+import { useTheme } from "@mui/material/styles";
 
 // Scroll bar size
 const scrollbarSize = 16;

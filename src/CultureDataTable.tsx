@@ -1,8 +1,8 @@
 import { DataTable, DataTableProps } from "./DataTable";
 import React from "react";
 import { ListType1 } from "@etsoo/shared";
-import { GridRenderCellParams } from "@mui/x-data-grid";
 import { useAppContext } from "./app/ReactApp";
+import { GridRenderCellParams } from "@mui/x-data-grid/models/params/gridCellParams";
 
 /**
  * Culture table props

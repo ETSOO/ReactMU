@@ -1,7 +1,9 @@
 import React from "react";
-import { Fab, useScrollTrigger, Zoom } from "@mui/material";
 import VerticalAlignTopIcon from "@mui/icons-material/VerticalAlignTop";
 import { CustomFabProps } from "./CustomFabProps";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
+import Zoom from "@mui/material/Zoom";
+import Fab from "@mui/material/Fab";
 
 /**
  * Scroll to top fab

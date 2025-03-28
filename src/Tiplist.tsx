@@ -1,11 +1,13 @@
 import { ReactUtils, useDelayedExecutor } from "@etsoo/react";
 import { DataTypes, IdDefaultType, ListType2 } from "@etsoo/shared";
-import { Autocomplete, AutocompleteRenderInputParams } from "@mui/material";
 import React from "react";
 import type { AutocompleteExtendedProps } from "./AutocompleteExtendedProps";
 import { SearchField } from "./SearchField";
 import { InputField } from "./InputField";
 import { useAppContext } from "./app/ReactApp";
+import Autocomplete, {
+  AutocompleteRenderInputParams
+} from "@mui/material/Autocomplete";
 
 /**
  * Tiplist props

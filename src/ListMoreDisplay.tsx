@@ -1,11 +1,3 @@
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardProps,
-  CircularProgress
-} from "@mui/material";
 import React from "react";
 import {
   GridData,
@@ -16,6 +8,11 @@ import {
 } from "@etsoo/react";
 import { LoadingButton } from "./LoadingButton";
 import { useAppContext } from "./app/ReactApp";
+import Card, { CardProps } from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import CircularProgress from "@mui/material/CircularProgress";
+import CardActions from "@mui/material/CardActions";
 
 /**
  * ListMoreDisplay props

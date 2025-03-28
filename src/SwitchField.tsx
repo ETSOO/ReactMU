@@ -1,13 +1,10 @@
-import {
-  Box,
-  FormControl,
-  FormControlProps,
-  FormHelperText,
-  InputLabel
-} from "@mui/material";
 import NotchedOutline from "@mui/material/OutlinedInput";
 import React from "react";
 import { SwitchAnt } from "./SwitchAnt";
+import FormControl, { FormControlProps } from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Box from "@mui/material/Box";
+import FormHelperText from "@mui/material/FormHelperText";
 
 /**
  * SwitchField props

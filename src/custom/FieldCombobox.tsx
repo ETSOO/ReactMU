@@ -1,8 +1,8 @@
 import { IdType } from "@etsoo/shared";
-import { Typography } from "@mui/material";
 import React from "react";
 import { ComboBoxMultiple } from "../ComboBoxMultiple";
 import { ICustomFieldReact } from "@etsoo/react";
+import Typography from "@mui/material/Typography";
 
 /**
  * Combobox (multiple values) field creator

@@ -1,8 +1,8 @@
 import { ICustomFieldReact } from "@etsoo/react";
-import { Typography } from "@mui/material";
 import React from "react";
 import { NumberInputField } from "../NumberInputField";
 import { NumberUtils } from "@etsoo/shared";
+import Typography from "@mui/material/Typography";
 
 /**
  * Number input field creator

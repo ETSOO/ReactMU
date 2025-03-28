@@ -1,4 +1,6 @@
-import { Box, BoxProps, Paper, PaperProps, useTheme } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
+import Paper, { PaperProps } from "@mui/material/Paper";
+import { useTheme } from "@mui/material/styles";
 import React from "react";
 
 type SharedProps = keyof BoxProps & keyof PaperProps;

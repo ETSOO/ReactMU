@@ -1,11 +1,8 @@
-import {
-  Box,
-  CircularProgress,
-  CircularProgressProps,
-  Typography,
-  TypographyProps
-} from "@mui/material";
-import React from "react";
+import Box from "@mui/material/Box";
+import CircularProgress, {
+  CircularProgressProps
+} from "@mui/material/CircularProgress";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 
 export type PercentCircularProgressProps = CircularProgressProps & {
   value: number;

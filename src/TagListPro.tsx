@@ -1,10 +1,12 @@
-import { Autocomplete, AutocompleteProps, Checkbox, Chip } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { DataTypes, ListType2 } from "@etsoo/shared";
 import { useAppContext } from "./app/ReactApp";
+import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
+import Checkbox from "@mui/material/Checkbox";
+import Chip from "@mui/material/Chip";
 
 export type TagListProProps<D extends ListType2 = ListType2> = Omit<
   AutocompleteProps<D, true, false, false>,

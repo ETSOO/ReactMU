@@ -1,9 +1,7 @@
-import {
-  Button,
-  ButtonProps,
-  CircularProgress,
+import Button, { ButtonProps } from "@mui/material/Button";
+import CircularProgress, {
   CircularProgressProps
-} from "@mui/material";
+} from "@mui/material/CircularProgress";
 import React from "react";
 
 /**

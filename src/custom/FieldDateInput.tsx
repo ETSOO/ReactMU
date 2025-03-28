@@ -1,8 +1,8 @@
 import { ICustomFieldReact } from "@etsoo/react";
 import { DateUtils } from "@etsoo/shared";
-import { Typography } from "@mui/material";
 import React from "react";
 import { InputField } from "../InputField";
+import Typography from "@mui/material/Typography";
 
 /**
  * Date input field creator

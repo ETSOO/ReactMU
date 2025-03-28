@@ -1,5 +1,6 @@
-import { IconButton, IconButtonProps, useTheme } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import { useTheme } from "@mui/material/styles";
 import React from "react";
 import { useNavigate } from "react-router";
 

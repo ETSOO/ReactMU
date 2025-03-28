@@ -1,4 +1,4 @@
-import { Paper, PaperProps } from "@mui/material";
+import Paper, { PaperProps } from "@mui/material/Paper";
 import React from "react";
 import Draggable from "react-draggable";
 

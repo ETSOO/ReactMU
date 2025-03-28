@@ -1,5 +1,4 @@
-import { IconButton, IconButtonProps } from "@mui/material";
-import React from "react";
+import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import { useNavigate } from "react-router";
 
 /**

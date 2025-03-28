@@ -1,4 +1,3 @@
-import { Button, Grid2 } from "@mui/material";
 import React, { FormEventHandler } from "react";
 import { MUGlobal } from "../MUGlobal";
 import { CommonPage, CommonPageProps } from "./CommonPage";
@@ -8,6 +7,8 @@ import { BackButton } from "../BackButton";
 import { Labels } from "../app/Labels";
 import type { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 
 /**
  * Add / Edit page props
@@ -86,15 +87,10 @@ export function EditPage(props: EditPageProps) {
       )}
       {topPart}
       <form onSubmit={onSubmit}>
-        <Grid2
-          container
-          justifyContent="left"
-          spacing={paddings}
-          paddingTop={1}
-        >
+        <Grid container justifyContent="left" spacing={paddings} paddingTop={1}>
           {children}
-        </Grid2>
-        <Grid2
+        </Grid>
+        <Grid
           container
           position="sticky"
           display="flex"
@@ -126,7 +122,7 @@ export function EditPage(props: EditPageProps) {
             {labels.save}
           </Button>
           {supportBack && <BackButton title={labels.back} />}
-        </Grid2>
+        </Grid>
       </form>
       {bottomPart}
     </CommonPage>

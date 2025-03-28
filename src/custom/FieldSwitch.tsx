@@ -1,7 +1,7 @@
 import { ICustomFieldReact } from "@etsoo/react";
 import React from "react";
 import { SwitchAnt } from "../SwitchAnt";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 
 /**
  * Input field creator

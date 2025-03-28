@@ -5,8 +5,6 @@ import {
 } from "@etsoo/appscript";
 import { CustomFieldReactCollection, ICustomFieldReact } from "@etsoo/react";
 import { IdType, ListType2 } from "@etsoo/shared";
-import { Grid2, GridSize, Typography } from "@mui/material";
-import { TypographyProps } from "@mui/material/Typography";
 import React from "react";
 import { FieldCheckbox } from "./FieldCheckbox";
 import { FieldAmountLabel } from "./FieldAmountLabel";
@@ -22,6 +20,8 @@ import { FieldRadio } from "./FieldRadio";
 import { FieldSelect } from "./FieldSelect";
 import { FieldSwitch } from "./FieldSwitch";
 import { ResponsiveStyleValue } from "../ResponsiveStyleValue";
+import Grid, { GridSize } from "@mui/material/Grid";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 
 /**
  * Custom field utilities
@@ -83,13 +83,13 @@ export namespace CustomFieldUtils {
       const creator = customFieldCreators[field.type];
       if (creator == null) {
         return (
-          <Grid2
+          <Grid
             key={index}
             size={transformSpace(field.space)}
             {...field.gridItemProps}
           >
             {`Type ${field.type} is not supported currently`}
-          </Grid2>
+          </Grid>
         );
       }
 
@@ -115,13 +115,13 @@ export namespace CustomFieldUtils {
       }
 
       return (
-        <Grid2
+        <Grid
           key={name ?? index}
           size={transformSpace(field.space)}
           {...field.gridItemProps}
         >
           {ui}
-        </Grid2>
+        </Grid>
       );
     });
   }

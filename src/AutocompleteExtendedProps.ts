@@ -1,5 +1,5 @@
 import { DataTypes } from "@etsoo/shared";
-import { AutocompleteProps } from "@mui/material";
+import { AutocompleteProps } from "@mui/material/Autocomplete";
 import { ChangeEventHandler } from "react";
 
 /**

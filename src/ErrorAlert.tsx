@@ -1,4 +1,4 @@
-import { Alert, AlertProps } from "@mui/material";
+import Alert, { AlertProps } from "@mui/material/Alert";
 import { useAppContext } from "./app/ReactApp";
 
 /**

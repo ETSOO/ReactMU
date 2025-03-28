@@ -1,4 +1,4 @@
-import { PopoverProps } from "@mui/material";
+import { PopoverProps } from "@mui/material/Popover";
 
 /**
  * Notifier Popup pros

@@ -16,17 +16,14 @@ import {
   useCombinedRefs
 } from "@etsoo/react";
 import { DataTypes, Utils } from "@etsoo/shared";
-import {
-  Box,
-  BoxProps,
-  Checkbox,
-  Paper,
-  TableSortLabel,
-  useTheme
-} from "@mui/material";
 import React from "react";
 import { DataGridRenderers } from "./DataGridRenderers";
 import { MouseEventWithDataHandler } from "./MUGlobal";
+import { useTheme } from "@mui/material/styles";
+import Box, { BoxProps } from "@mui/material/Box";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Paper from "@mui/material/Paper";
 
 /**
  * Footer item renderer props

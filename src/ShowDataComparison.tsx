@@ -1,14 +1,12 @@
 import { AuditLineChangesDto, IApp } from "@etsoo/appscript";
 import { NotificationMessageType } from "@etsoo/notificationbase";
 import { Utils } from "@etsoo/shared";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow
-} from "@mui/material";
 import { useRequiredAppContext } from "./app/ReactApp";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
 
 /**
  * Check obj is instance of AuditLineChangesDto

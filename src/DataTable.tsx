@@ -1,12 +1,9 @@
-import {
-  DataGrid,
-  GridCellModesModel,
-  GridRowId,
-  GridValidRowModel
-} from "@mui/x-data-grid";
-import { DataGridProps } from "@mui/x-data-grid/models/props/DataGridProps";
 import React from "react";
 import { useAppContext } from "./app/ReactApp";
+import { GridRowId, GridValidRowModel } from "@mui/x-data-grid/models/gridRows";
+import { DataGridProps } from "@mui/x-data-grid/models/props/DataGridProps";
+import { GridCellModesModel } from "@mui/x-data-grid/models/api/gridEditingApi";
+import { DataGrid } from "@mui/x-data-grid/DataGrid/DataGrid";
 
 /**
  * Data table selected cell params

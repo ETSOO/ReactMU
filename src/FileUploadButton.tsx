@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@mui/material";
+import Button, { ButtonProps } from "@mui/material/Button";
 import React from "react";
 
 /**

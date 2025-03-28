@@ -1,11 +1,12 @@
 import { CustomFieldData } from "@etsoo/appscript";
 import { CustomFieldReactCollection } from "@etsoo/react";
 import { Utils } from "@etsoo/shared";
-import { Grid2, Grid2Props, Stack } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
 import { CustomFieldUtils } from "./CustomFieldUtils";
 import { useRequiredAppContext } from "../app/ReactApp";
+import Grid, { GridProps } from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 
 function calculateKeys(data: Record<string, unknown>) {
   let count = 0;
@@ -64,7 +65,7 @@ export type CustomFieldWindowProps<D extends CustomFieldData> = {
    * Grid props
    * 网格属性
    */
-  gridProps?: Grid2Props;
+  gridProps?: GridProps;
 
   /**
    * JSON data
@@ -153,7 +154,7 @@ export function CustomFieldWindow<D extends CustomFieldData = CustomFieldData>(
               fullScreen: app.smDown,
               inputs: (
                 <Stack marginTop={1.5}>
-                  <Grid2
+                  <Grid
                     container
                     justifyContent="left"
                     spacing={spacing}
@@ -175,7 +176,7 @@ export function CustomFieldWindow<D extends CustomFieldData = CustomFieldData>(
                         Utils.setNestedValue(data, name, value);
                       }
                     )}
-                  </Grid2>
+                  </Grid>
                 </Stack>
               )
             }

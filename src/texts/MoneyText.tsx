@@ -1,7 +1,6 @@
 import { NumberUtils } from "@etsoo/shared";
-import { Typography } from "@mui/material";
-import React from "react";
 import { NumberTextProps } from "./NumberText";
+import Typography from "@mui/material/Typography";
 
 /**
  * Money text props

@@ -1,8 +1,8 @@
 import { ICustomFieldReact } from "@etsoo/react";
 import { IdType } from "@etsoo/shared";
-import { Typography } from "@mui/material";
 import React from "react";
 import { OptionGroup } from "../OptionGroup";
+import Typography from "@mui/material/Typography";
 
 /**
  * Radio (single value) field creator

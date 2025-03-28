@@ -1,5 +1,7 @@
 import { Utils } from "@etsoo/shared";
-import { Box, BoxProps, Tab, TabProps, Tabs, TabsProps } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
+import Tab, { TabProps } from "@mui/material/Tab";
+import Tabs, { TabsProps } from "@mui/material/Tabs";
 import React from "react";
 import { Link } from "react-router";
 

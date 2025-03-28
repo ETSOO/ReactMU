@@ -5,34 +5,6 @@ import {
   NotificationType
 } from "@etsoo/notificationbase";
 import { DataTypes, DomUtils } from "@etsoo/shared";
-import {
-  Alert,
-  AlertColor,
-  AlertProps,
-  AlertTitle,
-  Backdrop,
-  Box,
-  Button,
-  CircularProgress,
-  CircularProgressProps,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  DialogTitleProps,
-  Fade,
-  IconButton,
-  Popover,
-  Slider,
-  Snackbar,
-  styled,
-  Switch,
-  TextField,
-  Typography
-} from "@mui/material";
-import { Error, Info, Help, Warning, Done } from "@mui/icons-material";
-import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
 import {
   INotificationBaseReact,
@@ -43,6 +15,34 @@ import {
 import { DraggablePaperComponent } from "./DraggablePaperComponent";
 import { LoadingButton, LoadingButtonProps } from "./LoadingButton";
 import { Labels } from "./app/Labels";
+import DialogTitle, { DialogTitleProps } from "@mui/material/DialogTitle";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import IconButton from "@mui/material/IconButton";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContentText from "@mui/material/DialogContentText";
+import Fade from "@mui/material/Fade";
+import Alert, { AlertColor, AlertProps } from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Switch from "@mui/material/Switch";
+import Slider from "@mui/material/Slider";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Popover from "@mui/material/Popover";
+import CircularProgress, {
+  CircularProgressProps
+} from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Snackbar from "@mui/material/Snackbar";
+import CloseIcon from "@mui/icons-material/Close";
+import DoneIcon from "@mui/icons-material/Done";
+import InfoIcon from "@mui/icons-material/Info";
+import WarningIcon from "@mui/icons-material/Warning";
+import ErrorIcon from "@mui/icons-material/Error";
+import HelpIcon from "@mui/icons-material/Help";
 
 type StyledDialogTitleProps = DialogTitleProps & {
   draggable?: boolean;
@@ -94,16 +94,16 @@ export class NotificationMU extends NotificationReact {
     let title = this.title;
     let icon: React.ReactNode;
     if (this.type === NotificationMessageType.Success) {
-      icon = <Done color="primary" />;
+      icon = <DoneIcon color="primary" />;
       title ??= labels.success;
     } else if (this.type === NotificationMessageType.Info) {
-      icon = <Info />;
+      icon = <InfoIcon />;
       title ??= labels.info;
     } else if (this.type === NotificationMessageType.Warning) {
-      icon = <Warning color="secondary" />;
+      icon = <WarningIcon color="secondary" />;
       title ??= labels.warning;
     } else {
-      icon = <Error color="error" />;
+      icon = <ErrorIcon color="error" />;
       title ??= labels.alertTitle;
     }
 
@@ -223,7 +223,7 @@ export class NotificationMU extends NotificationReact {
             draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
           }
         >
-          <Help color="action" />
+          <HelpIcon color="action" />
           <span className="dialogTitle">{title}</span>
           {closable && (
             <IconButton
@@ -462,7 +462,7 @@ export class NotificationMU extends NotificationReact {
               draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
             }
           >
-            <Info color="primary" />
+            <InfoIcon color="primary" />
             <span className="dialogTitle">{title}</span>
             {closable && (
               <IconButton

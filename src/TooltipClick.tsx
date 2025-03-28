@@ -1,5 +1,6 @@
 import { useDelayedExecutor } from "@etsoo/react";
-import { ClickAwayListener, Tooltip, TooltipProps } from "@mui/material";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Tooltip, { TooltipProps } from "@mui/material/Tooltip";
 import React from "react";
 
 /**

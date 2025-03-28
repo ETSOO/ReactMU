@@ -1,6 +1,6 @@
-import { Avatar } from "@mui/material";
 import { BusinessUtils } from "@etsoo/appscript";
 import { useAppContext } from "./app/ReactApp";
+import Avatar from "@mui/material/Avatar";
 
 /**
  * User avatar props

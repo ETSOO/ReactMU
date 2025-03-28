@@ -1,6 +1,6 @@
-import { Button, ButtonProps } from "@mui/material";
-import React from "react";
-import { useNavigate } from "react-router";
+import Button, { ButtonProps } from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
+
 /**
  * ButtonLink props
  */

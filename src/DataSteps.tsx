@@ -1,10 +1,3 @@
-import {
-  Button,
-  IconButton,
-  InputAdornment,
-  TextField,
-  TextFieldProps
-} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -15,6 +8,10 @@ import React from "react";
 import { HBox } from "./FlexBox";
 import { MUGlobal } from "./MUGlobal";
 import { useRequiredAppContext } from "./app/ReactApp";
+import Button from "@mui/material/Button";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
 /**
  * Data step

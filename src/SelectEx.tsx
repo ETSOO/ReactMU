@@ -1,21 +1,6 @@
-import {
-  Checkbox,
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  SelectProps,
-  SelectVariants,
-  Stack
-} from "@mui/material";
 import React from "react";
 import { MUGlobal } from "./MUGlobal";
 import { ListItemRightIcon } from "./ListItemRightIcon";
-import RefreshIcon from "@mui/icons-material/Refresh";
 import {
   ArrayUtils,
   DataTypes,
@@ -25,6 +10,17 @@ import {
   Utils
 } from "@etsoo/shared";
 import { ReactUtils } from "@etsoo/react";
+import Select, { SelectProps, SelectVariants } from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import Checkbox from "@mui/material/Checkbox";
+import ListItemText from "@mui/material/ListItemText";
+import IconButton from "@mui/material/IconButton";
+import FormHelperText from "@mui/material/FormHelperText";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 /**
  * Extended select component props

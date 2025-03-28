@@ -1,4 +1,3 @@
-import { Box, Stack, SxProps, Theme, useMediaQuery } from "@mui/material";
 import React from "react";
 import {
   GridOnScrollProps,
@@ -29,6 +28,10 @@ import {
 import { SearchBar } from "./SearchBar";
 import { Labels } from "./app/Labels";
 import { GridUtils } from "./GridUtils";
+import { SxProps, Theme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 
 /**
  * ResponsibleContainer props

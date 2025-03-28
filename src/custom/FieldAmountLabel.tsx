@@ -1,6 +1,7 @@
 import { ICustomFieldReact } from "@etsoo/react";
 import { NumberUtils } from "@etsoo/shared";
-import { FormHelperText, Typography } from "@mui/material";
+import FormHelperText from "@mui/material/FormHelperText";
+import Typography from "@mui/material/Typography";
 import React from "react";
 
 /**

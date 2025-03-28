@@ -1,8 +1,9 @@
 import { BridgeUtils, IBridgeHost } from "@etsoo/appscript";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, BoxProps, IconButton, IconButtonProps } from "@mui/material";
 import React from "react";
 import { useAppContext } from "./app/ReactApp";
+import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import Box, { BoxProps } from "@mui/material/Box";
 
 /**
  * Bridge close button props

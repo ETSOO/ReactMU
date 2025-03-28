@@ -1,7 +1,8 @@
-import { Stack, Typography } from "@mui/material";
-import Switch, { SwitchProps } from "@mui/material/Switch";
 import React from "react";
 import { useAppContext } from "./app/ReactApp";
+import Switch, { SwitchProps } from "@mui/material/Switch";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 /**
  * Ant style switch props

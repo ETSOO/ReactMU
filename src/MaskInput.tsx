@@ -1,6 +1,6 @@
-import { TextField, TextFieldProps } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "./MUGlobal";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 
 type ReactIMask = typeof import("react-imask", { with: { "resolution-mode": "import" }}).useIMask;
 type RIOpts = Parameters<ReactIMask>[0];

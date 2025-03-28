@@ -1,9 +1,12 @@
 import { DataTypes } from "@etsoo/shared";
-import { InputAdornment, List, ListItem, Popover } from "@mui/material";
 import Typography, { TypographyProps } from "@mui/material/Typography";
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { useAppContext } from "./app/ReactApp";
+import ListItem from "@mui/material/ListItem";
+import Popover from "@mui/material/Popover";
+import List from "@mui/material/List";
+import InputAdornment from "@mui/material/InputAdornment";
 
 type ItemType = DataTypes.IdLabelItem<string | number>;
 

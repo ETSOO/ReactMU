@@ -5,16 +5,13 @@ import {
   ListType,
   Utils
 } from "@etsoo/shared";
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormControlProps,
-  FormGroup,
-  FormHelperText,
-  InputLabel
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import FormControl, { FormControlProps } from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputLabel from "@mui/material/InputLabel";
 import NotchedOutline from "@mui/material/OutlinedInput";
 import React from "react";
 

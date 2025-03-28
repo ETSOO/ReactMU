@@ -1,6 +1,5 @@
 import { DateUtils } from "@etsoo/shared";
-import { Typography, TypographyProps } from "@mui/material";
-import React from "react";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 
 /**
  * Date text props

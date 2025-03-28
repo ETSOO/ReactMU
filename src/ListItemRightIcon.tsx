@@ -1,4 +1,5 @@
-import { ListItemIcon, styled } from "@mui/material";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import { styled } from "@mui/material/styles";
 
 /**
  * List item right icon component

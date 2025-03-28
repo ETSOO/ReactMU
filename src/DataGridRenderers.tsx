@@ -1,11 +1,11 @@
 import React from "react";
-import { CircularProgress } from "@mui/material";
 import { DateUtils, NumberUtils } from "@etsoo/shared";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import { DataGridExFooterItemRendererProps } from "./DataGridEx";
 import { DateText } from "./texts/DateText";
 import { GridCellRendererProps, GridDataType } from "@etsoo/react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 /**
  * Data grid renderers

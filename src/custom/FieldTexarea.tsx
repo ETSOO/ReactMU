@@ -1,7 +1,7 @@
 import { ICustomFieldReact } from "@etsoo/react";
-import { Typography } from "@mui/material";
 import React from "react";
 import { InputField } from "../InputField";
+import Typography from "@mui/material/Typography";
 
 /**
  * Textarea field creator

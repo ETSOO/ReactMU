@@ -1,8 +1,8 @@
 import { IdType } from "@etsoo/shared";
-import { Typography } from "@mui/material";
 import React from "react";
 import { ICustomFieldReact } from "@etsoo/react";
 import { SelectEx } from "../SelectEx";
+import Typography from "@mui/material/Typography";
 
 /**
  * Select (single value) field creator

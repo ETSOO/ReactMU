@@ -1,8 +1,8 @@
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { Currency } from "@etsoo/appscript";
-import { InputAdornment } from "@mui/material";
 import { NumberUtils } from "@etsoo/shared";
+import InputAdornment from "@mui/material/InputAdornment";
 
 /**
  * Number input field properties
@@ -63,31 +63,32 @@ export function NumberInputField(props: NumberInputFieldProps) {
       : undefined,
     endSymbol,
     max = 9999999,
-    InputProps,
+    slotProps = {},
     ...rest
   } = props;
 
   return (
     <InputField
       type="number"
-      inputProps={{
-        min,
-        step,
-        max,
-        style: inputStyle,
-        inputMode: "numeric"
-      }}
-      InputProps={{
-        startAdornment: symbol ? (
-          <React.Fragment>
-            <InputAdornment position="start">{symbol}</InputAdornment>
-          </React.Fragment>
-        ) : undefined,
-        endAdornment: endSymbol ? (
-          <InputAdornment position="end">{endSymbol}</InputAdornment>
-        ) : undefined,
-        ...InputProps
-      }}
+      slotProps={Object.assign(slotProps, {
+        input: {
+          startAdornment: symbol ? (
+            <React.Fragment>
+              <InputAdornment position="start">{symbol}</InputAdornment>
+            </React.Fragment>
+          ) : undefined,
+          endAdornment: endSymbol ? (
+            <InputAdornment position="end">{endSymbol}</InputAdornment>
+          ) : undefined
+        },
+        htmlInput: {
+          min,
+          step,
+          max,
+          style: inputStyle,
+          inputMode: "numeric"
+        }
+      })}
       {...rest}
     />
   );

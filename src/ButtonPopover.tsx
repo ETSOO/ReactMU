@@ -1,4 +1,4 @@
-import { Popover, PopoverOrigin } from "@mui/material";
+import Popover, { PopoverOrigin } from "@mui/material/Popover";
 import React from "react";
 
 /**

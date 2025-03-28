@@ -1,7 +1,7 @@
 import { useDelayedExecutor } from "@etsoo/react";
-import { TextField, TextFieldProps } from "@mui/material";
 import React from "react";
 import { MUGlobal } from "./MUGlobal";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 
 /**
  * Input field props

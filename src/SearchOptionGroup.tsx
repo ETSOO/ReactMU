@@ -4,7 +4,6 @@ import {
   LabelDefaultType,
   ListType
 } from "@etsoo/shared";
-import React from "react";
 import { MUGlobal } from "./MUGlobal";
 import { OptionGroup, OptionGroupProps } from "./OptionGroup";
 

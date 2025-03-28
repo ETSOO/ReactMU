@@ -1,5 +1,6 @@
 import { NumberUtils } from "@etsoo/shared";
-import { Breakpoint, ListItemButtonProps, Theme } from "@mui/material";
+import { ListItemButtonProps } from "@mui/material/ListItemButton";
+import { Breakpoint, Theme } from "@mui/material/styles";
 import { Link } from "react-router";
 
 /**

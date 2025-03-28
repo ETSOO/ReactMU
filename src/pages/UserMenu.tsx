@@ -1,8 +1,9 @@
 import { EventWatcher } from "@etsoo/react";
-import { IconButton, Menu } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router";
 import { UserAvatar } from "../UserAvatar";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
 
 /**
  * User menu props

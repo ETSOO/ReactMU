@@ -1,18 +1,16 @@
 import { DataTypes, ListType2 } from "@etsoo/shared";
-import {
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemButtonProps,
-  ListItemProps,
-  StackProps,
-  Typography
-} from "@mui/material";
 import React from "react";
 import { InputField, InputFieldProps } from "./InputField";
 import { VBox } from "./FlexBox";
 import { useAppContext } from "./app/ReactApp";
+import { StackProps } from "@mui/material/Stack";
+import ListItemButton, {
+  ListItemButtonProps
+} from "@mui/material/ListItemButton";
+import ListItem, { ListItemProps } from "@mui/material/ListItem";
+import LinearProgress from "@mui/material/LinearProgress";
+import Typography from "@mui/material/Typography";
+import List from "@mui/material/List";
 
 /**
  * Quick list props

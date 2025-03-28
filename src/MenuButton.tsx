@@ -1,5 +1,7 @@
 import { DataTypes } from "@etsoo/shared";
-import { Button, ButtonProps, Menu, MenuItem, MenuProps } from "@mui/material";
+import Button, { ButtonProps } from "@mui/material/Button";
+import Menu, { MenuProps } from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 
 export type MenuButtonProps<T extends DataTypes.IdItem> = Omit<
