@@ -70,13 +70,17 @@ export function TagListPro<D extends ListType2 = ListType2>(
       </li>
     ),
     renderTags = (value: readonly D[], getTagProps) =>
-      value.map((option, index) => (
-        <Chip
-          variant="outlined"
-          label={getLabel(option)}
-          {...getTagProps({ index })}
-        />
-      )),
+      value.map((option, index) => {
+        const { key, ...rest } = getTagProps({ index });
+        return (
+          <Chip
+            variant="outlined"
+            key={key}
+            label={getLabel(option)}
+            {...rest}
+          />
+        );
+      }),
     noOptionsText = noOptions,
     loadingText = loadingLabel,
     openText = openDefault,

@@ -63,9 +63,10 @@ export function TagList(props: TagListProps) {
       </li>
     ),
     renderTags = (value: readonly string[], getTagProps) =>
-      value.map((option, index) => (
-        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-      )),
+      value.map((option, index) => {
+        const { key, ...rest } = getTagProps({ index });
+        return <Chip variant="outlined" key={key} label={option} {...rest} />;
+      }),
     noOptionsText = noOptions,
     loadingText = loadingLabel,
     openText = openDefault,
