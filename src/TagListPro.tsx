@@ -56,8 +56,8 @@ export function TagListPro<D extends ListType2 = ListType2>(
 
   // Destruct
   const {
-    renderOption = (props, option, { selected }) => (
-      <li {...props}>
+    renderOption = ({ key, ...props }, option, { selected }) => (
+      <li key={key} {...props}>
         <>
           <Checkbox
             icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
