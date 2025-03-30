@@ -54,6 +54,11 @@ export interface EditPageProps extends Omit<CommonPageProps, "onSubmit"> {
    * Operation message handler
    */
   operationMessageHandler?: OperationMessageHandlerAll;
+
+  /**
+   * Grid spacing
+   */
+  gridSpacing?: number | Record<string, string | number>;
 }
 
 /**
@@ -74,6 +79,7 @@ export function EditPage(props: EditPageProps) {
     bottomPart,
     topPart,
     operationMessageHandler,
+    gridSpacing = MUGlobal.pagePaddings,
     ...rest
   } = props;
 
@@ -87,19 +93,24 @@ export function EditPage(props: EditPageProps) {
       )}
       {topPart}
       <form onSubmit={onSubmit}>
-        <Grid container justifyContent="left" spacing={paddings} paddingTop={1}>
+        <Grid
+          container
+          justifyContent="left"
+          spacing={gridSpacing}
+          paddingTop={1}
+        >
           {children}
         </Grid>
         <Grid
           container
           position="sticky"
           display="flex"
-          gap={paddings}
+          gap={gridSpacing}
           sx={{
             top: "auto",
             bottom: (theme) =>
-              MUGlobal.updateWithTheme(paddings, theme.spacing),
-            paddingTop: paddings
+              MUGlobal.updateWithTheme(gridSpacing, theme.spacing),
+            paddingTop: gridSpacing
           }}
         >
           {isEditing && onDelete && (
