@@ -74,10 +74,10 @@ root.append(container);
 
 // The state provider
 const Provider = ReactApp.notifierProvider;
-const reactRoot = createRoot(container);
 
 act(() => {
   // Concorrent renderer needs act block
+  const reactRoot = createRoot(container);
   reactRoot.render(<Provider />);
 });
 

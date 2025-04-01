@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -40,10 +40,10 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@etsoo/appscript": "^1.6.20",
-    "@etsoo/notificationbase": "^1.1.59",
-    "@etsoo/react": "^1.8.34",
-    "@etsoo/shared": "^1.2.63",
+    "@etsoo/appscript": "^1.6.21",
+    "@etsoo/notificationbase": "^1.1.60",
+    "@etsoo/react": "^1.8.35",
+    "@etsoo/shared": "^1.2.64",
     "@mui/icons-material": "^7.0.1",
     "@mui/material": "^7.0.1",
     "@mui/x-data-grid": "^7.28.2",
@@ -83,6 +83,6 @@
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^26.0.0",
     "typescript": "^5.8.2",
-    "vitest": "^3.0.9"
+    "vitest": "^3.1.1"
   }
 }
