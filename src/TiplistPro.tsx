@@ -47,6 +47,12 @@ export type TiplistProProps<T extends ListType2 = ListType2> = Omit<
   idValue?: T["id"] | null;
 
   /**
+   * Is the id value a string?
+   * @default false
+   */
+  idIsString?: boolean;
+
+  /**
    * Input onChange hanlder
    */
   inputOnChange?: ChangeEventHandler<HTMLInputElement> | undefined;
@@ -107,6 +113,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     defaultValue,
     value,
     idValue,
+    idIsString = false,
     maxItems = 16,
     width,
     name,
@@ -294,7 +301,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
-        type="text"
+        type={idIsString ? "text" : "number"}
         style={{ display: "none" }}
         name={name}
         value={inputValue ?? (state.current.idSet ? "" : localIdValue ?? "")}

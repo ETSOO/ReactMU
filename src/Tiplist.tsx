@@ -74,6 +74,7 @@ export function Tiplist<
     search = false,
     idField = "id" as D,
     idValue,
+    idIsString = false,
     inputAutoComplete = "off",
     inputError,
     inputHelperText,
@@ -287,7 +288,7 @@ export function Tiplist<
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
-        type="text"
+        type={idIsString ? "text" : "number"}
         style={{ display: "none" }}
         name={name}
         value={`${

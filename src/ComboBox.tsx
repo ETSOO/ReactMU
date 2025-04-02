@@ -90,6 +90,7 @@ export function ComboBox<
     autoAddBlankItem = search,
     idField = "id" as D,
     idValue,
+    idIsString = false,
     inputError,
     inputHelperText,
     inputMargin,
@@ -239,8 +240,7 @@ export function ComboBox<
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
-        type="text"
-        style={{ display: "none" }}
+        type={idIsString ? "text" : "number"}
         name={name}
         value={getValue(stateValue)}
         readOnly

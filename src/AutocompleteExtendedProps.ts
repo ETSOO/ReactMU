@@ -24,6 +24,12 @@ export type AutocompleteExtendedProps<
   idValue?: T[D];
 
   /**
+   * Is the id value a string?
+   * @default false
+   */
+  idIsString?: boolean;
+
+  /**
    * Autocomplete for the input
    */
   inputAutoComplete?: string;
