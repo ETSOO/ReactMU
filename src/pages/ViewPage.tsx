@@ -18,7 +18,7 @@ import Stack from "@mui/material/Stack";
  */
 export interface ViewPageProps<T extends DataTypes.StringRecord>
   extends Omit<CommonPageProps, "children">,
-    Omit<ViewContainerProps<T>, "data"> {
+    Omit<ViewContainerProps<T>, "data" | "refresh"> {
   /**
    * Actions
    */
