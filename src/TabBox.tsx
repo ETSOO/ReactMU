@@ -3,7 +3,6 @@ import Box, { BoxProps } from "@mui/material/Box";
 import Tab, { TabProps } from "@mui/material/Tab";
 import Tabs, { TabsProps } from "@mui/material/Tabs";
 import React from "react";
-import { Link } from "react-router";
 
 /**
  * Tab with box panel props
@@ -20,9 +19,9 @@ export interface TabBoxPanel extends Omit<TabProps, "value" | "children"> {
   panelProps?: Omit<BoxProps, "hidden">;
 
   /**
-   * To URL
+   * Tab action
    */
-  to?: string;
+  action?: () => void;
 }
 
 /**
@@ -99,24 +98,27 @@ export function TabBox(props: TabBoxPros) {
         <Tabs
           value={value}
           onChange={(event, newValue) => {
-            setValue(newValue);
-            if (onChange) onChange(event, newValue);
+            if (tabs[newValue].action) {
+              tabs[newValue].action();
+            } else {
+              setValue(newValue);
+              if (onChange) onChange(event, newValue);
+            }
           }}
           {...rest}
         >
-          {tabs.map(({ children, panelProps, ...tabRest }, index) => (
-            <Tab
-              key={index}
-              value={index}
-              LinkComponent={tabRest.to ? Link : undefined}
-              {...tabRest}
-            />
+          {tabs.map(({ action, children, panelProps, ...tabRest }, index) => (
+            <Tab key={index} value={index} {...tabRest} />
           ))}
         </Tabs>
       </Box>
-      {tabs.map(({ children, panelProps }, index) => (
+      {tabs.map(({ action, children, panelProps }, index) => (
         <Box key={index} hidden={value !== index} {...tabProps} {...panelProps}>
-          {Utils.getResult(children, value === index)}
+          {action ? (
+            <React.Fragment />
+          ) : (
+            Utils.getResult(children, value === index)
+          )}
         </Box>
       ))}
     </React.Fragment>
