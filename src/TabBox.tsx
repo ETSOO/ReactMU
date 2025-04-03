@@ -4,6 +4,19 @@ import Tab, { TabProps } from "@mui/material/Tab";
 import Tabs, { TabsProps } from "@mui/material/Tabs";
 import React from "react";
 
+type TabBoxPanelActionType = () => void;
+
+type TabBoxPanelChildrenType =
+  | TabBoxPanelActionType
+  | ((visible: boolean) => React.ReactNode)
+  | React.ReactNode;
+
+function isActionTab(
+  children?: TabBoxPanelChildrenType
+): children is TabBoxPanelActionType {
+  return typeof children === "function" && children.length === 0;
+}
+
 /**
  * Tab with box panel props
  */
@@ -11,17 +24,12 @@ export interface TabBoxPanel extends Omit<TabProps, "value" | "children"> {
   /**
    * Children
    */
-  children?: ((visible: boolean) => React.ReactNode) | React.ReactNode;
+  children: TabBoxPanelChildrenType;
 
   /**
    * Panel box props
    */
   panelProps?: Omit<BoxProps, "hidden">;
-
-  /**
-   * Tab action
-   */
-  action?: () => void;
 }
 
 /**
@@ -98,8 +106,9 @@ export function TabBox(props: TabBoxPros) {
         <Tabs
           value={value}
           onChange={(event, newValue) => {
-            if (tabs[newValue].action) {
-              tabs[newValue].action();
+            const { children } = tabs[newValue];
+            if (isActionTab(children)) {
+              children();
             } else {
               setValue(newValue);
               if (onChange) onChange(event, newValue);
@@ -107,14 +116,14 @@ export function TabBox(props: TabBoxPros) {
           }}
           {...rest}
         >
-          {tabs.map(({ action, children, panelProps, ...tabRest }, index) => (
+          {tabs.map(({ children, panelProps, ...tabRest }, index) => (
             <Tab key={index} value={index} {...tabRest} />
           ))}
         </Tabs>
       </Box>
-      {tabs.map(({ action, children, panelProps }, index) => (
+      {tabs.map(({ children, panelProps }, index) => (
         <Box key={index} hidden={value !== index} {...tabProps} {...panelProps}>
-          {action ? (
+          {isActionTab(children) ? (
             <React.Fragment />
           ) : (
             Utils.getResult(children, value === index)
