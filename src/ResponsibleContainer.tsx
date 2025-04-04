@@ -15,7 +15,8 @@ import {
   ReactUtils,
   ScrollerListRef,
   useCombinedRefs,
-  useDimensions
+  useDimensions,
+  useSearchParamsWithCache
 } from "@etsoo/react";
 import { DataGridEx, DataGridExProps } from "./DataGridEx";
 import { MUGlobal } from "./MUGlobal";
@@ -252,7 +253,7 @@ export function ResponsibleContainer<T extends object, F>(
   };
 
   // Search data
-  const searchData = GridUtils.getSearchData(cacheKey);
+  const searchData = useSearchParamsWithCache(cacheKey);
 
   // On submit callback
   const onSubmit = (data: FormData, _reset: boolean) => {
@@ -437,7 +438,7 @@ export function ResponsibleContainer<T extends object, F>(
     )
       return;
 
-    const f = typeof fields == "function" ? fields(searchData ?? {}) : fields;
+    const f = typeof fields == "function" ? fields(searchData) : fields;
 
     return (
       <SearchBar

@@ -1,7 +1,7 @@
 import { useDelayedExecutor } from "@etsoo/react";
 import React from "react";
-import { MUGlobal } from "./MUGlobal";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
+import { MUGlobal } from "./MUGlobal";
 
 /**
  * Search field props
@@ -32,11 +32,9 @@ export function SearchField(props: SearchFieldProps) {
   // Destruct
   const {
     changeDelay,
-    InputLabelProps = {},
-    InputProps = {},
-    inputProps = {},
     onChange,
     readOnly,
+    slotProps = {},
     size = MUGlobal.searchFieldSize,
     variant = MUGlobal.searchFieldVariant,
     minChars = 0,
@@ -44,13 +42,11 @@ export function SearchField(props: SearchFieldProps) {
   } = props;
 
   // Shrink
-  InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
-
-  // Read only
-  if (readOnly != null) InputProps.readOnly = readOnly;
-
-  // Min characters
-  inputProps["data-min-chars"] = minChars;
+  const defaultProps: typeof slotProps = {
+    input: { readOnly: readOnly },
+    inputLabel: { shrink: MUGlobal.searchFieldShrink },
+    htmlInput: { "data-min-chars": minChars }
+  };
 
   const isMounted = React.useRef(true);
   const delayed =
@@ -90,9 +86,7 @@ export function SearchField(props: SearchFieldProps) {
   // Layout
   return (
     <TextField
-      InputLabelProps={InputLabelProps}
-      InputProps={InputProps}
-      inputProps={inputProps}
+      slotProps={Object.assign(slotProps, defaultProps)}
       onChange={onChangeEx}
       size={size}
       variant={variant}

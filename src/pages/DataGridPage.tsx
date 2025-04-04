@@ -5,7 +5,8 @@ import {
   ScrollerGridForwardRef,
   VariableSizeGrid,
   useCombinedRefs,
-  useDimensions
+  useDimensions,
+  useSearchParamsWithCache
 } from "@etsoo/react";
 import React from "react";
 import { DataGridEx } from "../DataGridEx";
@@ -84,7 +85,7 @@ export function DataGridPage<T extends object, F>(
   };
 
   // Search data
-  const searchData = GridUtils.getSearchData(cacheKey);
+  const searchData = useSearchParamsWithCache(cacheKey);
 
   const onInitLoad = (
     ref: VariableSizeGrid<T>

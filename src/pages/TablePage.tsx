@@ -1,7 +1,8 @@
 import {
   GridLoadDataProps,
   useCombinedRefs,
-  useDimensions
+  useDimensions,
+  useSearchParamsWithCache
 } from "@etsoo/react";
 import { DataTypes, IdDefaultType } from "@etsoo/shared";
 import React from "react";
@@ -93,7 +94,7 @@ export function TablePage<
   };
 
   // Search data
-  const searchData = GridUtils.getSearchData(cacheKey);
+  const searchData = useSearchParamsWithCache(cacheKey);
 
   // Total width
   const totalWidth = React.useMemo(

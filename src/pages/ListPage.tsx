@@ -5,7 +5,8 @@ import {
   ScrollerListForwardRef,
   ScrollerListRef,
   useCombinedRefs,
-  useDimensions
+  useDimensions,
+  useSearchParamsWithCache
 } from "@etsoo/react";
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
@@ -86,7 +87,7 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
   const rect = dimensions[0][2];
 
   // Search data
-  const searchData = GridUtils.getSearchData(cacheKey);
+  const searchData = useSearchParamsWithCache(cacheKey);
 
   const onInitLoad = (
     ref: ScrollerListRef
