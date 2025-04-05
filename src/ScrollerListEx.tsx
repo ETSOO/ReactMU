@@ -47,10 +47,11 @@ const createGridStyle = (
 };
 
 // Default margin
-const defaultMargin = (margin: object, isNarrow?: boolean) => {
+// horizon: null means full horizontal margin, -1 means all half, >=0 means left/right
+const defaultMargin = (margin: object, horizon?: number) => {
   const half = MUGlobal.half(margin);
 
-  if (isNarrow == null) {
+  if (horizon == null) {
     const half = MUGlobal.half(margin);
     return {
       marginLeft: margin,
@@ -60,10 +61,10 @@ const defaultMargin = (margin: object, isNarrow?: boolean) => {
     };
   }
 
-  if (isNarrow) {
+  if (horizon >= 0) {
     return {
-      marginLeft: 0,
-      marginRight: 0,
+      marginLeft: horizon,
+      marginRight: horizon,
       marginTop: half,
       marginBottom: half
     };
@@ -107,12 +108,12 @@ export interface ScrollerListExInnerItemRendererProps<T>
  * Extended ScrollerList ItemSize type
  * 1. Callback function
  * 2. Static sets
- * 3. Dynamic calculation
+ * 3. Dynamic left & right margin calculation
  */
 export type ScrollerListExItemSize =
   | ((index: number) => [number, number] | [number, number, object])
   | [number, number]
-  | [number, object, boolean?];
+  | [number, object, number?];
 
 /**
  * Extended ScrollerList Props
@@ -321,15 +322,11 @@ export function ScrollerListEx<T extends object>(
     | [number, number, object]
     | undefined => {
     if (typeof itemSize === "function") return undefined;
-    const [size, spaces, isNarrow] = itemSize;
+    const [size, spaces, h] = itemSize;
     if (typeof spaces === "number")
       return [size, spaces, defaultMargin(MUGlobal.pagePaddings, undefined)];
 
-    return [
-      size,
-      MUGlobal.getSpace(spaces, theme),
-      defaultMargin(spaces, isNarrow)
-    ];
+    return [size, MUGlobal.getSpace(spaces, theme), defaultMargin(spaces, h)];
   }, [itemSize]);
 
   // Calculate size
