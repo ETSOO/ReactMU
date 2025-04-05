@@ -48,7 +48,7 @@ const createGridStyle = (
 
 // Default margin
 // horizon: null means full horizontal margin, -1 means all half, >=0 means left/right
-const defaultMargin = (margin: object, horizon?: number) => {
+const defaultMargin = (margin: object, horizon?: number | string) => {
   const half = MUGlobal.half(margin);
 
   if (horizon == null) {
@@ -61,7 +61,10 @@ const defaultMargin = (margin: object, horizon?: number) => {
     };
   }
 
-  if (horizon >= 0) {
+  if (
+    (typeof horizon === "number" && horizon >= 0) ||
+    (typeof horizon === "string" && /^-?\d+/.test(horizon))
+  ) {
     return {
       marginLeft: horizon,
       marginRight: horizon,
@@ -113,7 +116,7 @@ export interface ScrollerListExInnerItemRendererProps<T>
 export type ScrollerListExItemSize =
   | ((index: number) => [number, number] | [number, number, object])
   | [number, number]
-  | [number, object, number?];
+  | [number, object, (number | string)?];
 
 /**
  * Extended ScrollerList Props
