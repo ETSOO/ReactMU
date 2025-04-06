@@ -73,6 +73,7 @@ export * from "./InputTipField";
 export * from "./IntInputField";
 export * from "./ItemList";
 export * from "./LineChart";
+export * from "./LinkEx";
 export * from "./ListChooser";
 export * from "./ListItemRightIcon";
 export * from "./ListMoreDisplay";
