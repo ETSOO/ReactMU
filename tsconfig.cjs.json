@@ -5,6 +5,8 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "isolatedModules": true,
+    "allowJs": false,
+    "rootDir": "./src",
     "outDir": "./lib/cjs",
     "noEmit": false,
     "declaration": true,
