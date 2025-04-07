@@ -40,12 +40,13 @@ function getItemField<T extends object>(
   app: ReactAppType,
   field: ViewPageFieldTypeNarrow<T>,
   data: T
-): [React.ReactNode, React.ReactNode, GridProps, ViewPageItemSize] {
+): [React.ReactNode, React.ReactNode, GridProps, ViewPageItemSize, boolean?] {
   // Item data and label
   let itemData: React.ReactNode,
     itemLabel: React.ReactNode,
     gridProps: GridProps = {},
-    size: ViewPageItemSize;
+    size: ViewPageItemSize,
+    isHorizontal: boolean | undefined;
 
   if (Array.isArray(field)) {
     const [fieldData, fieldType, renderProps, singleRow = "small"] = field;
@@ -61,8 +62,12 @@ function getItemField<T extends object>(
       label: fieldLabel,
       renderProps,
       singleRow = "default",
+      horizontal,
       ...rest
     } = field;
+
+    // Horizontal or not
+    isHorizontal = horizontal;
 
     // Size
     size = getResp(singleRow);
@@ -96,7 +101,7 @@ function getItemField<T extends object>(
     gridProps = { size };
   }
 
-  return [itemData, itemLabel, gridProps, size];
+  return [itemData, itemLabel, gridProps, size, isHorizontal];
 }
 
 function getItemSize(bp: Breakpoint, size: ViewPageItemSize) {
@@ -180,6 +185,7 @@ export type ViewPageGridItemProps = GridProps & {
   data: React.ReactNode;
   label?: React.ReactNode;
   singleRow?: ViewPageRowType;
+  horizontal?: boolean;
 };
 
 /**
@@ -189,7 +195,7 @@ export type ViewPageGridItemProps = GridProps & {
  */
 export function ViewPageGridItem(props: ViewPageGridItemProps) {
   // Destruct
-  const { data, label, singleRow, ...gridProps } = props;
+  const { data, label, singleRow, horizontal = false, ...gridProps } = props;
 
   // Default options
   let options = {};
@@ -203,12 +209,16 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
   return (
     <Grid {...gridProps} {...options}>
       {label != null && (
-        <Typography variant="caption" component="div">
+        <Typography variant="caption" component={horizontal ? "span" : "div"}>
           {label}:
         </Typography>
       )}
       {typeof data === "object" ? (
         data
+      ) : horizontal ? (
+        <Typography variant="subtitle2" component="span" marginLeft={0.5}>
+          {data}
+        </Typography>
       ) : (
         <Typography variant="subtitle2">{data}</Typography>
       )}
@@ -239,6 +249,11 @@ export interface ViewPageField<T extends object> extends GridProps {
    * Display as single row
    */
   singleRow?: ViewPageRowType;
+
+  /**
+   * Render as horizontal or not
+   */
+  horizontal?: boolean;
 
   /**
    * Render props
@@ -352,11 +367,8 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
             oneItem = createdResult;
           }
         } else {
-          const [itemData, itemLabel, gridProps, size] = getItemField(
-            app,
-            field,
-            data
-          );
+          const [itemData, itemLabel, gridProps, size, horizontal] =
+            getItemField(app, field, data);
 
           // Some callback function may return '' instead of undefined
           if (itemData == null || itemData === "") continue;
@@ -368,6 +380,7 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
               key={i}
               data={itemData}
               label={itemLabel}
+              horizontal={horizontal}
             />
           );
         }
