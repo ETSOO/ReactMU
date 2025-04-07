@@ -1,7 +1,7 @@
-import { HBox } from "@etsoo/materialui";
 import { Typography } from "@mui/material";
 import Button, { ButtonProps } from "@mui/material/Button";
 import React from "react";
+import { HBox } from "./FlexBox";
 
 /**
  * File upload button props
