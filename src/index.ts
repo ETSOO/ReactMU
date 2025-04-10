@@ -11,6 +11,8 @@ export * from "./custom/CustomFieldUtils";
 export * from "./custom/CustomFieldViewer";
 export * from "./custom/CustomFieldWindow";
 
+export * from "./html/HtmlDiv";
+
 export * from "./messages/MessageUtils";
 export * from "./messages/OperationMessageContainer";
 export * from "./messages/OperationMessageDto";
