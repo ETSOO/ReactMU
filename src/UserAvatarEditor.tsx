@@ -304,7 +304,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
         startIcon={<ImageIcon />}
         fullWidth
         onUploadFiles={handleFileUpload}
-        inputProps={{ multiple: false, accept: "image/png, image/jpeg" }}
+        inputProps={{ accept: "image/png, image/jpeg" }}
       >
         {selectFileLabel}
       </FileUploadButton>

@@ -27,7 +27,7 @@ export type FileUploadButtonProps = ButtonProps<"label"> & {
    */
   inputProps?: Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
-    "type" | "hidden"
+    "type" | "hidden" | "multiple"
   >;
 
   /**
@@ -53,7 +53,7 @@ export function FileUploadButton(props: FileUploadButtonProps) {
   // Destruct
   const {
     dropFilesLabel,
-    maxFiles,
+    maxFiles = 1,
     maxFileSize,
     inputProps,
     onFileInvalid,
@@ -83,7 +83,7 @@ export function FileUploadButton(props: FileUploadButtonProps) {
     const fl = files.length;
     if (fl === 0) return;
 
-    if (maxFiles && maxFiles > 0 && fl > maxFiles) {
+    if (maxFiles > 0 && fl > maxFiles) {
       if (onFileInvalid) onFileInvalid([maxFiles, fl]);
       return;
     }
@@ -128,6 +128,7 @@ export function FileUploadButton(props: FileUploadButtonProps) {
         {children}
         <input
           type="file"
+          multiple={maxFiles > 1}
           hidden={true}
           onChange={(event) => {
             if (onChange) onChange(event);
