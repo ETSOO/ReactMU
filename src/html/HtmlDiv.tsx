@@ -1,4 +1,5 @@
 import DOMPurify from "dompurify";
+import { HTMLAttributes } from "react";
 
 class HtmlDivElement extends HTMLElement {
   constructor() {
@@ -29,9 +30,7 @@ if (!customElements.get("html-div")) {
  * Custom HTML element properties
  * 自定义 HTML 元素属性
  */
-export type HtmlDivProps = Omit<HTMLElement, "children"> & {
-  children: React.ReactNode;
-};
+export type HtmlDivProps = HTMLAttributes<HTMLElement>;
 
 /**
  * Custom HTML element that sanitizes and displays HTML content

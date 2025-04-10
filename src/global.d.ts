@@ -1,5 +1,5 @@
 declare namespace JSX {
   interface IntrinsicElements {
-    "html-div";
+    "html-div": React.HTMLAttributes<HTMLElement>;
   }
 }
