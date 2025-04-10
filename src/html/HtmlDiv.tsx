@@ -13,6 +13,7 @@ class HtmlDivElement extends HTMLElement {
     const wrapper = document.createElement("div");
     if (this.textContent) {
       wrapper.innerHTML = DOMPurify.sanitize(this.textContent);
+      this.textContent = null; // Clear the textContent to avoid duplication
     }
 
     shadow.appendChild(wrapper);
@@ -25,12 +26,20 @@ if (!customElements.get("html-div")) {
 }
 
 /**
+ * Custom HTML element properties
+ * 自定义 HTML 元素属性
+ */
+export type HtmlDivProps = Omit<HTMLElement, "children"> & {
+  children: React.ReactNode;
+};
+
+/**
  * Custom HTML element that sanitizes and displays HTML content
  * 自定义 HTML 元素，用于清理和显示 HTML 内容
  * @param props Properties
  * @returns Component
  */
-export function HtmlDiv(props: React.PropsWithChildren<HTMLElement>) {
+export function HtmlDiv(props: HtmlDivProps) {
   // Destruct
   const { children, ...rest } = props;
 

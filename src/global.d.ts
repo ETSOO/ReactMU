@@ -1,5 +1,5 @@
 declare namespace JSX {
   interface IntrinsicElements {
-    "html-div": HTMLElement;
+    "html-div";
   }
 }
