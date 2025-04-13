@@ -1,3 +1,4 @@
+import { Utils } from "@etsoo/shared";
 import DOMPurify from "dompurify";
 import { HTMLAttributes } from "react";
 
@@ -12,10 +13,18 @@ class HtmlDivElement extends HTMLElement {
 
     // Create a wrapper element to hold the sanitized HTML content
     const wrapper = document.createElement("div");
-    if (this.textContent) {
+    const html = this.innerHTML;
+    if (
+      Utils.hasHtmlEntity(html) &&
+      !Utils.hasHtmlTag(html) &&
+      this.textContent
+    ) {
       wrapper.innerHTML = DOMPurify.sanitize(this.textContent);
-      this.textContent = null; // Clear the textContent to avoid duplication
+    } else {
+      wrapper.innerHTML = DOMPurify.sanitize(html);
     }
+
+    this.textContent = null; // Clear the textContent to avoid duplication
 
     shadow.appendChild(wrapper);
   }
