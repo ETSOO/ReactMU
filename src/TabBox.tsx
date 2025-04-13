@@ -35,7 +35,7 @@ export interface TabBoxPanel extends Omit<TabProps, "value" | "children"> {
 /**
  * Tabs with box props
  */
-export interface TabBoxPros extends Omit<TabsProps, "value"> {
+export interface TabBoxProps extends Omit<TabsProps, "value"> {
   /**
    * Default selected index
    */
@@ -72,7 +72,7 @@ export interface TabBoxPros extends Omit<TabsProps, "value"> {
  * @param props Props
  * @returns Component
  */
-export function TabBox(props: TabBoxPros) {
+export function TabBox(props: TabBoxProps) {
   // Destruct
   const {
     index,
