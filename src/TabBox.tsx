@@ -35,12 +35,7 @@ export interface TabBoxPanel extends Omit<TabProps, "value" | "children"> {
 /**
  * Tabs with box props
  */
-export interface TabBoxPros extends BoxProps {
-  /**
-   * Container props
-   */
-  container?: Omit<TabsProps, "value">;
-
+export interface TabBoxPros extends Omit<TabsProps, "value"> {
   /**
    * Default selected index
    */
@@ -83,12 +78,12 @@ export function TabBox(props: TabBoxPros) {
     index,
     inputName,
     root,
-    container = {},
     defaultIndex = 0,
+    onChange,
     tabProps,
-    tabs
+    tabs,
+    ...rest
   } = props;
-  const { onChange, ...rest } = container;
 
   // State
   const [value, setValue] = React.useState(defaultIndex);
