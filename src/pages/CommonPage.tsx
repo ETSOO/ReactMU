@@ -45,6 +45,11 @@ export interface CommonPageProps extends Omit<ContainerProps, "id"> {
   fabPanel?: boolean;
 
   /**
+   * Fab refresh button is supported or not
+   */
+  fabRefresh?: boolean;
+
+  /**
    * Fab lays in the top
    */
   fabTop?: ((theme: Theme, padding: {}) => object) | boolean;
@@ -117,6 +122,7 @@ export function CommonPage(props: CommonPageProps) {
     scrollContainer,
     supportBack = false,
     targetFields,
+    fabRefresh = onRefresh != null,
     sx = {},
     ...rest
   } = props;
@@ -208,7 +214,7 @@ export function CommonPage(props: CommonPageProps) {
             />
           )}
           {fabButtons}
-          {onRefresh != null && (
+          {fabRefresh && (
             <Fab
               title={labels.refresh}
               size={fabSize}
