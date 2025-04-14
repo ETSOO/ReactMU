@@ -1,3 +1,4 @@
+import { useSearchParamsEx1 } from "@etsoo/react";
 import { Utils } from "@etsoo/shared";
 import Box, { BoxProps } from "@mui/material/Box";
 import Tab, { TabProps } from "@mui/material/Tab";
@@ -47,6 +48,12 @@ export interface TabBoxProps extends Omit<TabsProps, "value"> {
   index?: number;
 
   /**
+   * Index field of the search params
+   * @default 'index'
+   */
+  indexField?: string;
+
+  /**
    * Add a hidden input and its name
    */
   inputName?: string;
@@ -76,6 +83,7 @@ export function TabBox(props: TabBoxProps) {
   // Destruct
   const {
     index,
+    indexField = "index",
     inputName,
     root,
     defaultIndex = 0,
@@ -86,7 +94,10 @@ export function TabBox(props: TabBoxProps) {
   } = props;
 
   // State
-  const [value, setValue] = React.useState(defaultIndex);
+  const [params, setSearchParams] = useSearchParamsEx1({
+    [indexField]: "number"
+  });
+  const [value, setValue] = React.useState(params[indexField] ?? defaultIndex);
 
   React.useEffect(() => {
     if (index == null) return;
@@ -101,6 +112,11 @@ export function TabBox(props: TabBoxProps) {
         <Tabs
           value={value}
           onChange={(event, newValue) => {
+            setSearchParams((prev) => {
+              if (newValue == defaultIndex) prev.delete(indexField);
+              else prev.set(indexField, newValue);
+              return prev;
+            });
             const { children } = tabs[newValue];
             if (isActionTab(children)) {
               children();
