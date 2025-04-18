@@ -1,6 +1,6 @@
 import { QueryRQ } from "@etsoo/appscript";
 import { IdType } from "@etsoo/shared";
-import { GridApiCommunity } from "@mui/x-data-grid/models/api/gridApiCommunity";
+import { GridApiCommunity } from "@mui/x-data-grid/internals";
 
 /**
  * MU utilities

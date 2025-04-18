@@ -72,10 +72,10 @@ const root = document.body;
 const container: HTMLElement = document.createElement("div");
 root.append(container);
 
-// The state provider
-const Provider = ReactApp.notifierProvider;
-
 act(() => {
+  // The state provider
+  const Provider = ReactApp.notifierProvider;
+
   // Concorrent renderer needs act block
   const reactRoot = createRoot(container);
   reactRoot.render(<Provider />);

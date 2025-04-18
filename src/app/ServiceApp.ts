@@ -6,7 +6,8 @@ import {
   BridgeUtils,
   ExternalEndpoint,
   IApi,
-  IApiPayload
+  IApiPayload,
+  TokenAuthRQ
 } from "@etsoo/appscript";
 import { IServiceApp } from "./IServiceApp";
 import { IServiceAppSettings } from "./IServiceAppSettings";
@@ -66,6 +67,23 @@ export class ServiceApp<
     this.coreApi = this.createApi(this.coreName, coreEndpoint);
 
     this.keepLogin = true;
+  }
+
+  /**
+   * Get token authorization request data
+   * @param api API, if not provided, use the core API
+   * @returns Result
+   */
+  getTokenAuthRQ(api?: IApi): TokenAuthRQ {
+    api ??= this.coreApi;
+
+    const auth = api.getAuthorization();
+
+    if (auth == null) {
+      throw new Error("Authorization is required.");
+    }
+
+    return { accessToken: auth.token, tokenScheme: auth.scheme };
   }
 
   /**

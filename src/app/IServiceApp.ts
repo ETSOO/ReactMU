@@ -1,4 +1,9 @@
-import { ApiRefreshTokenDto, IApi, IApiPayload } from "@etsoo/appscript";
+import {
+  ApiRefreshTokenDto,
+  IApi,
+  IApiPayload,
+  TokenAuthRQ
+} from "@etsoo/appscript";
 import { ReactAppType } from "./ReactApp";
 import { IServiceUser, ServiceUserToken } from "./IServiceUser";
 import { IActionResult } from "@etsoo/shared";
@@ -16,6 +21,13 @@ export interface IServiceApp extends ReactAppType {
    * Core system origin
    */
   readonly coreOrigin: string;
+
+  /**
+   * Get token authorization request data
+   * @param api API, if not provided, use the core API
+   * @returns Result
+   */
+  getTokenAuthRQ(api?: IApi): TokenAuthRQ;
 
   /**
    * Load core system UI
