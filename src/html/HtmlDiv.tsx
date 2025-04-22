@@ -36,7 +36,7 @@ class HtmlDivElement extends HTMLElement {
     // Comply with @etsoo/editor default styles
     const style = document.createElement("style");
     style.textContent = `
-    :host {
+    * {
       box-sizing: border-box;
     }
     img { 
