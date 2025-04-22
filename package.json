@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.5.32",
+  "version": "1.5.33",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -84,6 +84,6 @@
     "@vitejs/plugin-react": "^4.4.1",
     "jsdom": "^26.1.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.1"
+    "vitest": "^3.1.2"
   }
 }

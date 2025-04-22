@@ -32,6 +32,23 @@ class HtmlDivElement extends HTMLElement {
     // Create a shadow root
     const shadow = this.attachShadow({ mode: "open" });
 
+    // Default styles
+    // Comply with @etsoo/editor default styles
+    const style = document.createElement("style");
+    style.textContent = `
+    :host {
+      box-sizing: border-box;
+    }
+    img { 
+      max-width: 100%;
+    }
+    pre {
+      background-color: #f3f3f3;
+      padding: 12px;
+    }
+    `;
+    shadow.appendChild(style);
+
     // Create a wrapper element to hold the sanitized HTML content
     const wrapper = document.createElement("div");
     wrapper.style.cssText = this.displayStyle ?? "";
