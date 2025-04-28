@@ -119,7 +119,7 @@ export interface DnDListRef<D extends object> {
 /**
  * DnD sortable list properties
  */
-export interface DnDListPros<D extends object, K extends DataTypes.Keys<D>> {
+export interface DnDListPros<D extends { id: UniqueIdentifier }> {
   /**
    * Get list item style callback
    */
@@ -146,14 +146,9 @@ export interface DnDListPros<D extends object, K extends DataTypes.Keys<D>> {
   items: D[];
 
   /**
-   * Unique key field
-   */
-  keyField: K;
-
-  /**
    * Label field
    */
-  labelField: K;
+  labelField: DataTypes.Keys<D>;
 
   /**
    * Methods ref
@@ -191,16 +186,11 @@ export interface DnDListPros<D extends object, K extends DataTypes.Keys<D>> {
  * @param props Props
  * @returns Component
  */
-export function DnDList<
-  D extends { id: UniqueIdentifier },
-  K extends DataTypes.Keys<D, UniqueIdentifier> = DataTypes.Keys<
-    D,
-    UniqueIdentifier
-  >
->(props: DnDListPros<D, K>) {
+export function DnDList<D extends { id: UniqueIdentifier }>(
+  props: DnDListPros<D>
+) {
   // Destruct
   const {
-    keyField,
     height = 360,
     itemRenderer,
     labelField,
@@ -465,7 +455,7 @@ export function DnDList<
     <DndContextType onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <SortableContextType items={items} strategy={strategy}>
         {items.map((item, index) => {
-          const id = item[keyField] as unknown as UniqueIdentifier;
+          const id = item.id;
           return (
             <SortableItem
               id={id}

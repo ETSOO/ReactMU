@@ -483,7 +483,17 @@ export class ReactApp<S extends IAppSettings, D extends IUser>
     super.userLogin(user, refreshToken);
 
     // Dispatch action
-    if (this.userStateDispatch != null && dispatch !== false)
+    if (dispatch !== false) {
+      this.doLoginDispatch(user);
+    }
+  }
+
+  /**
+   * User login dispatch
+   * @param user New user
+   */
+  protected doLoginDispatch(user: D) {
+    if (this.userStateDispatch != null)
       this.userStateDispatch({
         type: UserActionType.Login,
         user

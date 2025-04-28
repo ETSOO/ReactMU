@@ -210,6 +210,12 @@ export class ServiceApp<
   }
 
   /**
+   * On switch organization handler
+   * This method is called when the organization is switched successfully
+   */
+  protected onSwitchOrg(): Promise<void> | void {}
+
+  /**
    * Switch organization
    * @param organizationId Organization ID
    * @param fromOrganizationId From organization ID
@@ -248,8 +254,14 @@ export class ServiceApp<
     // Override the user data's refresh token
     const user = refreshToken ? { ...result.data, refreshToken } : result.data;
 
-    // User login
-    this.userLoginEx(user, core, true);
+    // User login without dispatch
+    this.userLoginEx(user, core, false);
+
+    // Handle the switch organization
+    await this.onSwitchOrg();
+
+    // Trigger the dispatch at last
+    this.doLoginDispatch(user);
 
     return result;
   }
