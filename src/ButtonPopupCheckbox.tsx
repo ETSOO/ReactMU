@@ -75,10 +75,10 @@ export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
   onAdd?: (ids: string[]) => Promise<false | D[]>;
 
   /**
-   * On change handler
+   * On value change handler
    * @param ids Ids
    */
-  onChange?: (ids: D["id"][]) => void;
+  onValueChange?: (ids: D["id"][]) => void;
 
   /**
    * Popup title
@@ -258,7 +258,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
     labels = {},
     loadData,
     onAdd,
-    onChange,
+    onValueChange,
     popupTitle = label,
     popupMessage,
     required = false,
@@ -299,7 +299,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
 
         setValues(item);
 
-        onChange?.(item);
+        onValueChange?.(item);
       },
       inputs: (
         <ButtonPopupList
