@@ -176,7 +176,11 @@ export function SelectEx<
 
   const setOptionsAdd = React.useCallback(
     (options: readonly T[]) => {
-      setOptions(options);
+      const localOptions = [...options];
+      if (autoAddBlankItem) {
+        Utils.addBlankItem(localOptions, idField, labelField);
+      }
+      setOptions(localOptions);
       if (valueSource != null) doItemChange(options, valueSource, false);
     },
     [valueSource]
@@ -246,9 +250,6 @@ export function SelectEx<
     loadData().then((result) => {
       if (result == null || !isMounted.current) return;
       if (onLoadData) onLoadData(result);
-      if (autoAddBlankItem) {
-        Utils.addBlankItem(result, idField, labelField);
-      }
       setOptionsAdd(result);
     });
   };
