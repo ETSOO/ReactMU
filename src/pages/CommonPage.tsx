@@ -168,16 +168,22 @@ export function CommonPage(props: CommonPageProps) {
     [onUpdateAll, onUpdate, onRefresh]
   );
 
+  const stateDetector = React.useMemo(
+    () => update && app?.stateDetector({ targetFields, update }),
+    [update, targetFields]
+  );
+
   React.useEffect(() => {
     if (updateRef.current && update) {
       update(true, []);
+      updateRef.current = false;
     }
   }, [update]);
 
   // Return the UI
   return (
     <React.Fragment>
-      {update && app?.stateDetector({ targetFields, update })}
+      {stateDetector}
       <Container
         disableGutters={disableGutters}
         maxWidth={maxWidth}
