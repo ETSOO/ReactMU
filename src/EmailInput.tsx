@@ -10,9 +10,16 @@ export type EmailInputProps = Omit<TextFieldProps, "type"> & {};
  * @param props Props
  */
 export function EmailInput(props: EmailInputProps) {
-  props.slotProps ??= {};
-  props.slotProps.htmlInput ??= { maxLength: 128 };
+  // Destruct
+  const { slotProps, ...rest } = props;
 
   // Layout
-  return <TextField type="email" fullWidth {...props} />;
+  return (
+    <TextField
+      type="email"
+      fullWidth
+      slotProps={{ htmlInput: { maxLength: 128 }, ...slotProps }}
+      {...rest}
+    />
+  );
 }
