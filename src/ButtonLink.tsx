@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 /**
  * ButtonLink props
  */
-export type ButtonLinkProps = Omit<ButtonProps, "href" | "onClick"> & {
+export type ButtonLinkProps<T = unknown> = Omit<
+  ButtonProps,
+  "href" | "onClick"
+> & {
   /**
    * To href
    */
@@ -13,7 +16,7 @@ export type ButtonLinkProps = Omit<ButtonProps, "href" | "onClick"> & {
   /**
    * Link state
    */
-  state?: any;
+  state?: T;
 };
 
 /**
@@ -21,7 +24,7 @@ export type ButtonLinkProps = Omit<ButtonProps, "href" | "onClick"> & {
  * @param props Props
  * @returns Component
  */
-export function ButtonLink(props: ButtonLinkProps) {
+export function ButtonLink<T = unknown>(props: ButtonLinkProps<T>) {
   // Destruct
   const { href, state, ...rest } = props;
 

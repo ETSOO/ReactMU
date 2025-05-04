@@ -4,7 +4,10 @@ import { useNavigate } from "react-router";
 /**
  * IconButtonLink props
  */
-export type IconButtonLinkProps = Omit<IconButtonProps, "href" | "onClick"> & {
+export type IconButtonLinkProps<T = unknown> = Omit<
+  IconButtonProps,
+  "href" | "onClick"
+> & {
   /**
    * To href
    */
@@ -13,7 +16,7 @@ export type IconButtonLinkProps = Omit<IconButtonProps, "href" | "onClick"> & {
   /**
    * Link state
    */
-  state?: any;
+  state?: T;
 };
 
 /**
@@ -21,7 +24,7 @@ export type IconButtonLinkProps = Omit<IconButtonProps, "href" | "onClick"> & {
  * @param props Props
  * @returns Component
  */
-export function IconButtonLink(props: IconButtonLinkProps) {
+export function IconButtonLink<T = unknown>(props: IconButtonLinkProps<T>) {
   // Destruct
   const { href, state, ...rest } = props;
 
