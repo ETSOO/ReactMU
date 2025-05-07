@@ -489,15 +489,25 @@ export class ReactApp<S extends IAppSettings, D extends IUser>
   }
 
   /**
+   * User login callback
+   * @param user New user
+   */
+  protected onUserLogin(user: D) {
+    return Promise.resolve();
+  }
+
+  /**
    * User login dispatch
    * @param user New user
    */
   protected doLoginDispatch(user: D) {
-    if (this.userStateDispatch != null)
-      this.userStateDispatch({
-        type: UserActionType.Login,
-        user
-      });
+    this.onUserLogin(user).then(() => {
+      if (this.userStateDispatch != null)
+        this.userStateDispatch({
+          type: UserActionType.Login,
+          user
+        });
+    });
   }
 
   /**
