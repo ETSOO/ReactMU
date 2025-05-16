@@ -11,7 +11,34 @@ import type { RefreshHandler } from "../messages/RefreshHandler";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 import { ViewContainer, ViewContainerProps } from "../ViewContainer";
 import LinearProgress from "@mui/material/LinearProgress";
-import Stack from "@mui/material/Stack";
+import Stack, { StackProps } from "@mui/material/Stack";
+
+/**
+ * View page action bar
+ * @param props Props
+ * @returns Component
+ */
+export function ViewPageActionBar(
+  props: StackProps & {
+    actionPaddings?: number | Record<string, string | number>;
+  }
+) {
+  const { actionPaddings = MUGlobal.pagePaddings, ...rest } = props;
+
+  return (
+    <Stack
+      className="ET-ViewPage-Actions"
+      direction="row"
+      width="100%"
+      flexWrap="wrap"
+      justifyContent="center"
+      paddingTop={actionPaddings}
+      paddingBottom={actionPaddings}
+      gap={actionPaddings}
+      {...rest}
+    ></Stack>
+  );
+}
 
 /**
  * View page props
@@ -166,18 +193,9 @@ export function ViewPage<T extends DataTypes.StringRecord>(
             spacing={spacing}
           />
           {actions !== null && (
-            <Stack
-              className="ET-ViewPage-Actions"
-              direction="row"
-              width="100%"
-              flexWrap="wrap"
-              justifyContent="center"
-              paddingTop={actions == null ? undefined : actionPaddings}
-              paddingBottom={actionPaddings}
-              gap={actionPaddings}
-            >
-              {actions != null && Utils.getResult(actions, data, refresh)}
-            </Stack>
+            <ViewPageActionBar actionPaddings={actionPaddings}>
+              {Utils.getResult(actions, data, refresh)}
+            </ViewPageActionBar>
           )}
           {Utils.getResult(children, data, refresh)}
           {pullToRefresh && (
