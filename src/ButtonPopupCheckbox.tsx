@@ -140,15 +140,12 @@ function ButtonPopupList<D extends DnDItemType>(
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   // State
-  const [selectedIds, setSelectedIdsBase] = React.useState<D["id"][]>([]);
-
-  // Sort items
-  const setSelectedIds = (ids: D["id"][]) => {
-    items.sortByProperty("id", ids);
-    setSelectedIdsBase(ids);
-  };
+  const [selectedIds, setSelectedIds] = React.useState<D["id"][]>([]);
 
   React.useEffect(() => {
+    // Sort items by ids for first load
+    items.sortByProperty("id", ids);
+
     // Set selected ids
     setSelectedIds([...ids]);
   }, [ids]);
