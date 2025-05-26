@@ -1,7 +1,7 @@
 import Button, { ButtonProps } from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import React from "react";
-import { DataTypes, DomUtils, IdType } from "@etsoo/shared";
+import { DataTypes, IdType } from "@etsoo/shared";
 import FormGroup from "@mui/material/FormGroup";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -103,14 +103,20 @@ export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
 
 type ButtonPopupListProps<D extends DnDItemType> = Pick<
   ButtonPopupCheckboxProps<D>,
-  | "addSplitter"
-  | "labelField"
-  | "labelFormatter"
-  | "labels"
-  | "loadData"
-  | "onAdd"
-  | "ids"
->;
+  "addSplitter" | "labelField" | "labels" | "onAdd" | "ids"
+> &
+  Required<Pick<ButtonPopupCheckboxProps<D>, "labelFormatter">> & {
+    /**
+     * Items to be displayed
+     */
+    items: D[];
+
+    /**
+     * On value change handler
+     * @param ids Ids
+     */
+    onValueChange: (ids: D["id"][]) => void;
+  };
 
 function ButtonPopupList<D extends DnDItemType>(
   props: ButtonPopupListProps<D>
@@ -118,19 +124,13 @@ function ButtonPopupList<D extends DnDItemType>(
   // Destruct
   const {
     addSplitter = /\s*[,;]\s*/,
-    ids,
+    ids = [],
+    items,
     labelField,
-    labelFormatter = (data) => {
-      console.log("data", data);
-      if (labelField in data) {
-        return data[labelField] as string;
-      }
-
-      return data.id.toString();
-    },
+    labelFormatter,
     labels,
-    loadData,
-    onAdd
+    onAdd,
+    onValueChange
   } = props;
 
   // Methods
@@ -139,11 +139,18 @@ function ButtonPopupList<D extends DnDItemType>(
   // Ref
   const inputRef = React.useRef<HTMLInputElement>(null);
 
+  // State
+  const [selectedIds, setSelectedIdsBase] = React.useState<D["id"][]>([]);
+
+  // Sort items
+  const setSelectedIds = (ids: D["id"][]) => {
+    items.sortByProperty("id", ids);
+    setSelectedIdsBase(ids);
+  };
+
   React.useEffect(() => {
-    loadData(ids).then((data) => {
-      if (data == null || dndRef.current == null) return;
-      dndRef.current.addItems(data);
-    });
+    // Set selected ids
+    setSelectedIds([...ids]);
   }, [ids]);
 
   return (
@@ -151,7 +158,7 @@ function ButtonPopupList<D extends DnDItemType>(
       <FormGroup>
         <Grid container spacing={0}>
           <DnDList<D>
-            items={[]}
+            items={items}
             labelField={labelField}
             itemRenderer={(item, index, nodeRef, actionNodeRef) => (
               <Grid
@@ -175,7 +182,15 @@ function ButtonPopupList<D extends DnDItemType>(
                     <Checkbox
                       name="item"
                       value={item.id}
-                      defaultChecked={ids?.includes(item.id)}
+                      checked={selectedIds.includes(item.id)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        const newIds = [
+                          ...selectedIds.toggleItem(item.id, checked)
+                        ];
+                        setSelectedIds(newIds);
+                        onValueChange(newIds);
+                      }}
                     />
                   }
                   label={`${index + 1}. ${labelFormatter(item)}`}
@@ -253,7 +268,13 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
     inputName,
     label,
     labelEnd,
-    labelFormatter,
+    labelFormatter = (data) => {
+      if (labelField in data) {
+        return data[labelField] as string;
+      }
+
+      return data.id.toString();
+    },
     labelField,
     labels = {},
     loadData,
@@ -273,11 +294,25 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
   if (!labels.more) labels.more = app.get("more");
 
   // State
-  const [values, setValues] = React.useState<D["id"][]>([]);
+  const [items, setItems] = React.useState<D[]>([]);
+  const [selectedIds, setSelectedIds] = React.useState<D["id"][]>();
+
   React.useEffect(() => {
-    if (ids == null) return;
-    setValues(ids);
+    // Load data
+    loadData().then((data) => {
+      if (data != null) {
+        setItems(data);
+      }
+    });
+  }, []);
+
+  React.useEffect(() => {
+    // Set selected ids
+    setSelectedIds(ids);
   }, [ids]);
+
+  // Selected ids
+  const tempSelectedIds = React.useRef<D["id"][]>();
 
   // Click handler
   const clickHandler = () => {
@@ -285,31 +320,23 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
       title: popupTitle,
       message: popupMessage,
       callback: (form) => {
-        if (form == null) return;
-
-        // Form data
-        const { item = [] } = DomUtils.dataAs(new FormData(form), {
-          item: "string[]"
-        });
-
-        if (required && item.length === 0) {
-          DomUtils.setFocus("item", form);
-          return false;
-        }
-
-        setValues(item);
-
-        onValueChange?.(item);
+        if (form == null || tempSelectedIds.current == null) return;
+        const ids = tempSelectedIds.current;
+        setSelectedIds(ids);
+        onValueChange?.(ids);
       },
       inputs: (
         <ButtonPopupList
           addSplitter={addSplitter}
-          ids={values}
+          ids={selectedIds}
+          items={items}
           labelFormatter={labelFormatter}
           labelField={labelField}
           labels={labels}
-          loadData={loadData}
           onAdd={onAdd}
+          onValueChange={(ids) => {
+            tempSelectedIds.current = ids;
+          }}
         />
       ),
       fullScreen: app.smDown
@@ -323,18 +350,22 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
         style={{ position: "absolute", opacity: 0, width: 0 }}
         name={inputName}
         required={required}
-        defaultValue={values.join(",")}
+        defaultValue={selectedIds?.join(",")}
       />
       <Button
         variant={variant}
         sx={sx}
         onClick={() => clickHandler()}
         {...rest}
+        disabled={!items || items.length === 0}
       >
         {label && <Typography variant="body2">{label}:</Typography>}
-        {values.map((id) => (
-          <Chip key={id} size="small" label={id} />
-        ))}
+        {selectedIds?.map((id) => {
+          const item = items.find((item) => item.id === id);
+          if (item == null) return null;
+
+          return <Chip key={id} size="small" label={labelFormatter(item)} />;
+        })}
         {labelEnd && <Typography variant="caption">{labelEnd}</Typography>}
       </Button>
     </React.Fragment>
