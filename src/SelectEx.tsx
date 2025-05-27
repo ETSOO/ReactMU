@@ -22,6 +22,14 @@ import IconButton from "@mui/material/IconButton";
 import FormHelperText from "@mui/material/FormHelperText";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
+export type SelectExMethods = {
+  /**
+   * Set open state
+   * @param isOpen Open state
+   */
+  setOpen: (isOpen: boolean) => void;
+};
+
 /**
  * Extended select component props
  */
@@ -69,6 +77,11 @@ export type SelectExProps<
    * Load data callback
    */
   loadData?: () => PromiseLike<T[] | null | undefined>;
+
+  /**
+   * Methods
+   */
+  mRef?: React.Ref<SelectExMethods>;
 
   /**
    * Item change callback
@@ -128,6 +141,7 @@ export function SelectEx<
     label,
     labelField = "label" as L,
     loadData,
+    mRef,
     onItemChange,
     onItemClick,
     onLoadData,
@@ -201,6 +215,18 @@ export function SelectEx<
     valueRef.current = newValue;
     setValueStateBase(newValue);
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  React.useImperativeHandle(
+    mRef,
+    () => ({
+      setOpen: (isOpen: boolean) => {
+        setOpen(isOpen);
+      }
+    }),
+    []
+  );
 
   React.useEffect(() => {
     if (valueSource != null) setValueState(valueSource);
@@ -308,9 +334,15 @@ export function SelectEx<
               notched
               label={label}
               required={required}
-              inputProps={{ "data-reset": inputReset }}
+              inputProps={{
+                "aria-hidden": false,
+                "data-reset": inputReset
+              }}
             />
           }
+          open={open}
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
           labelId={labelId}
           name={name}
           multiple={multiple}
