@@ -14,6 +14,7 @@ import TextField from "@mui/material/TextField";
 import { DnDList, DnDListRef } from "./DnDList";
 import { HBox, VBox } from "./FlexBox";
 import { useRequiredAppContext } from "./app/ReactApp";
+import FormLabel from "@mui/material/FormLabel";
 
 type DnDItemType = {
   id: IdType;
@@ -261,7 +262,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
   // Destruct
   const {
     addSplitter,
-    ids,
+    ids = [],
     inputName,
     label,
     labelEnd,
@@ -280,7 +281,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
     popupTitle = label,
     popupMessage,
     required = false,
-    sx = { gap: 1, justifyContent: "flex-start" },
+    sx = { gap: 1, justifyContent: "flex-start", minHeight: "56px" },
     variant = "outlined",
     ...rest
   } = props;
@@ -356,7 +357,14 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
         {...rest}
         disabled={!items || items.length === 0}
       >
-        {label && <Typography variant="body2">{label}:</Typography>}
+        {label && (
+          <FormLabel
+            required={required}
+            sx={{ fontSize: (theme) => theme.typography.body2.fontSize }}
+          >
+            {label}
+          </FormLabel>
+        )}
         {selectedIds?.map((id) => {
           const item = items.find((item) => item.id === id);
           if (item == null) return null;
