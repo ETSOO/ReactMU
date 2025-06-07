@@ -1,26 +1,23 @@
 import Button, { ButtonProps } from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import React from "react";
-import { DataTypes, IdType } from "@etsoo/shared";
-import FormGroup from "@mui/material/FormGroup";
+import { DataTypes, IdType, NumberUtils } from "@etsoo/shared";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import AddIcon from "@mui/icons-material/Add";
-import IconButton from "@mui/material/IconButton";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import Radio from "@mui/material/Radio";
 import TextField from "@mui/material/TextField";
-import { DnDList, DnDListRef } from "./DnDList";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
 import { HBox, VBox } from "./FlexBox";
 import { useRequiredAppContext } from "./app/ReactApp";
-import FormLabel from "@mui/material/FormLabel";
 
 type DnDItemType = {
   id: IdType;
 };
 
-export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
+export type ButtonPopupRadioProps<D extends DnDItemType> = Omit<
   ButtonProps,
   "chidren" | "onClick" | "value"
 > & {
@@ -77,9 +74,9 @@ export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
 
   /**
    * On value change handler
-   * @param ids Ids
+   * @param id Id
    */
-  onValueChange?: (ids: D["id"][]) => void;
+  onValueChange?: (id: D["id"]) => void;
 
   /**
    * Popup title
@@ -99,14 +96,14 @@ export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
   /**
    * Value
    */
-  value?: D["id"][];
+  value?: D["id"];
 };
 
 type ButtonPopupListProps<D extends DnDItemType> = Pick<
-  ButtonPopupCheckboxProps<D>,
-  "addSplitter" | "labelField" | "labels" | "onAdd" | "value"
+  ButtonPopupRadioProps<D>,
+  "addSplitter" | "labels" | "onAdd" | "value"
 > &
-  Required<Pick<ButtonPopupCheckboxProps<D>, "labelFormatter">> & {
+  Required<Pick<ButtonPopupRadioProps<D>, "labelFormatter">> & {
     /**
      * Items to be displayed
      */
@@ -114,9 +111,9 @@ type ButtonPopupListProps<D extends DnDItemType> = Pick<
 
     /**
      * On value change handler
-     * @param ids Ids
+     * @param id Id
      */
-    onValueChange: (ids: D["id"][]) => void;
+    onValueChange: (id: D["id"]) => void;
   };
 
 function ButtonPopupList<D extends DnDItemType>(
@@ -125,81 +122,58 @@ function ButtonPopupList<D extends DnDItemType>(
   // Destruct
   const {
     addSplitter = /\s*[,;]\s*/,
-    value = [],
+    value,
     items,
-    labelField,
     labelFormatter,
     labels,
     onAdd,
     onValueChange
   } = props;
 
-  // Methods
-  const dndRef = React.createRef<DnDListRef<D>>();
-
   // Ref
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   // State
-  const [selectedIds, setSelectedIds] = React.useState<D["id"][]>([]);
+  const [currentValue, setCurrentValue] = React.useState<D["id"]>();
 
   React.useEffect(() => {
-    // Sort items by ids for first load
-    items.sortByProperty("id", value);
-
-    // Set selected ids
-    setSelectedIds([...value]);
+    setCurrentValue(value);
   }, [value]);
 
   return (
     <VBox gap={2}>
-      <FormGroup>
+      <RadioGroup
+        value={currentValue ?? ""}
+        name="radio-buttons-group"
+        onChange={(e, v) => {
+          const checked = e.target.checked;
+          const value = checked
+            ? typeof items[0].id === "number"
+              ? NumberUtils.parse(v)
+              : v
+            : undefined;
+          setCurrentValue(value);
+          onValueChange(value as D["id"]);
+        }}
+      >
         <Grid container spacing={0}>
-          <DnDList<D>
-            items={items}
-            labelField={labelField}
-            itemRenderer={(item, index, nodeRef, actionNodeRef) => (
-              <Grid
-                size={{ xs: 12, md: 6, lg: 4 }}
-                display="flex"
-                justifyContent="flex-start"
-                alignItems="center"
-                gap={1}
-                {...nodeRef}
-              >
-                <IconButton
-                  style={{ cursor: "move" }}
-                  size="small"
-                  title={labels?.dragIndicator}
-                  {...actionNodeRef}
-                >
-                  <DragIndicatorIcon />
-                </IconButton>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="item"
-                      value={item.id}
-                      checked={selectedIds.includes(item.id)}
-                      onChange={(e) => {
-                        const checked = e.target.checked;
-                        const newIds = [
-                          ...selectedIds.toggleItem(item.id, checked)
-                        ];
-                        setSelectedIds(newIds);
-                        onValueChange(newIds);
-                      }}
-                    />
-                  }
-                  label={`${index + 1}. ${labelFormatter(item)}`}
-                />
-              </Grid>
-            )}
-            height={200}
-            mRef={dndRef}
-          ></DnDList>
+          {items.map((item) => (
+            <Grid
+              size={{ xs: 12, md: 6, lg: 4 }}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+              gap={1}
+              key={item.id}
+            >
+              <FormControlLabel
+                control={<Radio value={item.id} />}
+                label={`${labelFormatter(item)}`}
+              />
+            </Grid>
+          ))}
         </Grid>
-      </FormGroup>
+      </RadioGroup>
       {onAdd && (
         <HBox gap={1}>
           <TextField
@@ -222,8 +196,6 @@ function ButtonPopupList<D extends DnDItemType>(
                 return;
               }
 
-              const items = dndRef.current?.getItems() ?? [];
-
               const inputIds = input
                 .split(addSplitter)
                 .filter((id) => !items.some((item) => item.id == id));
@@ -239,8 +211,6 @@ function ButtonPopupList<D extends DnDItemType>(
                 return;
               }
 
-              dndRef.current?.addItems(result);
-
               inputRef.current.value = "";
               inputRef.current.focus();
             }}
@@ -253,8 +223,8 @@ function ButtonPopupList<D extends DnDItemType>(
   );
 }
 
-export function ButtonPopupCheckbox<D extends DnDItemType>(
-  props: ButtonPopupCheckboxProps<D>
+export function ButtonPopupRadio<D extends DnDItemType>(
+  props: ButtonPopupRadioProps<D>
 ) {
   // App
   const app = useRequiredAppContext();
@@ -262,7 +232,6 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
   // Destruct
   const {
     addSplitter,
-    value = [],
     inputName,
     label,
     labelEnd,
@@ -282,6 +251,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
     popupMessage,
     required = false,
     sx = { gap: 1, justifyContent: "flex-start", minHeight: "56px" },
+    value,
     variant = "outlined",
     ...rest
   } = props;
@@ -293,7 +263,11 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
 
   // State
   const [items, setItems] = React.useState<D[]>([]);
-  const [selectedIds, setSelectedIds] = React.useState<D["id"][]>();
+  const [currentValue, setCurrentValue] = React.useState<D["id"]>();
+
+  const item = currentValue
+    ? items.find((item) => item.id === currentValue)
+    : undefined;
 
   React.useEffect(() => {
     // Load data
@@ -305,12 +279,11 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
   }, []);
 
   React.useEffect(() => {
-    // Set selected ids
-    setSelectedIds(value);
+    setCurrentValue(value);
   }, [value]);
 
-  // Selected ids
-  const tempSelectedIds = React.useRef<D["id"][]>();
+  // Selected id
+  const tempSelectedId = React.useRef<D["id"]>();
 
   // Click handler
   const clickHandler = () => {
@@ -318,22 +291,21 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
       title: popupTitle,
       message: popupMessage,
       callback: (form) => {
-        if (form == null || tempSelectedIds.current == null) return;
-        const ids = tempSelectedIds.current;
-        setSelectedIds(ids);
-        onValueChange?.(ids);
+        if (form == null || tempSelectedId.current == null) return;
+        const id = tempSelectedId.current;
+        setCurrentValue(id);
+        onValueChange?.(id);
       },
       inputs: (
         <ButtonPopupList
           addSplitter={addSplitter}
-          value={selectedIds}
+          value={currentValue}
           items={items}
           labelFormatter={labelFormatter}
-          labelField={labelField}
           labels={labels}
           onAdd={onAdd}
-          onValueChange={(ids) => {
-            tempSelectedIds.current = ids;
+          onValueChange={(id) => {
+            tempSelectedId.current = id;
           }}
         />
       ),
@@ -348,7 +320,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
         style={{ position: "absolute", opacity: 0, width: 0 }}
         name={inputName}
         required={required}
-        defaultValue={selectedIds?.join(",")}
+        defaultValue={currentValue}
       />
       <Button
         variant={variant}
@@ -365,21 +337,20 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
             {label}
           </FormLabel>
         )}
-        {selectedIds?.map((id) => {
-          const item = items.find((item) => item.id === id);
-          if (item == null) return null;
-
-          return (
-            <Chip
-              key={id}
-              sx={{
-                pointerEvents: "none"
-              }}
-              size="small"
-              label={labelFormatter(item)}
-            />
-          );
-        })}
+        {item ? (
+          <Chip
+            sx={{
+              height: "auto",
+              pointerEvents: "none",
+              "& .MuiChip-label": {
+                display: "block",
+                whiteSpace: "normal"
+              }
+            }}
+            size="small"
+            label={labelFormatter(item)}
+          />
+        ) : undefined}
         {labelEnd && <Typography variant="caption">{labelEnd}</Typography>}
       </Button>
     </React.Fragment>
