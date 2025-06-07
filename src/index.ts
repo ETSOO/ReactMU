@@ -46,6 +46,7 @@ export * from "./BridgeCloseButton";
 export * from "./ButtonLink";
 export * from "./ButtonPopover";
 export * from "./ButtonPopupCheckbox";
+export * from "./ButtonPopupRadio";
 export * from "./ComboBox";
 export * from "./ComboBoxMultiple";
 export * from "./ComboBoxPro";
