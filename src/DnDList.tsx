@@ -362,6 +362,20 @@ export function DnDList<D extends { id: UniqueIdentifier }>(
     );
   }, []);
 
+  const divRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (divRef.current) {
+      setupDiv(divRef.current);
+    }
+
+    return () => {
+      if (divRef.current) {
+        setupDiv(divRef.current, true);
+      }
+    };
+  }, []);
+
   if (dnd == null) {
     return <Skeleton variant="rectangular" width="100%" height={height} />;
   }
@@ -428,26 +442,34 @@ export function DnDList<D extends { id: UniqueIdentifier }>(
     setActiveId(undefined);
   }
 
-  const setupDiv = (div: HTMLDivElement) => {
+  const doChange = React.useCallback(() => doFormChange(), []);
+
+  const setupDiv = (div: HTMLDivElement, clearup: boolean = false) => {
     // Inputs
     div
       .querySelectorAll("input")
       .forEach((input) =>
-        input.addEventListener("change", () => doFormChange())
+        clearup
+          ? input.removeEventListener("change", doChange)
+          : input.addEventListener("change", doChange)
       );
 
     // Textareas
     div
       .querySelectorAll("textarea")
       .forEach((input) =>
-        input.addEventListener("change", () => doFormChange())
+        clearup
+          ? input.removeEventListener("change", doChange)
+          : input.addEventListener("change", doChange)
       );
 
     // Select
     div
       .querySelectorAll("select")
       .forEach((input) =>
-        input.addEventListener("change", () => doFormChange())
+        clearup
+          ? input.removeEventListener("change", doChange)
+          : input.addEventListener("change", doChange)
       );
   };
 
@@ -475,12 +497,7 @@ export function DnDList<D extends { id: UniqueIdentifier }>(
 
   if (onFormChange) {
     return (
-      <div
-        style={{ width: "100%" }}
-        ref={(div) => {
-          if (div) setupDiv(div);
-        }}
-      >
+      <div style={{ width: "100%" }} ref={divRef}>
         {children}
       </div>
     );

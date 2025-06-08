@@ -158,6 +158,12 @@ function ButtonPopupList<D extends DnDItemType>(
           <DnDList<D>
             items={items}
             labelField={labelField}
+            onFormChange={(items) => {
+              const ids = items
+                .filter((item) => selectedIds.includes(item.id))
+                .map((item) => item.id);
+              onValueChange(ids);
+            }}
             itemRenderer={(item, index, nodeRef, actionNodeRef) => (
               <Grid
                 size={{ xs: 12, md: 6, lg: 4 }}
@@ -187,7 +193,6 @@ function ButtonPopupList<D extends DnDItemType>(
                           ...selectedIds.toggleItem(item.id, checked)
                         ];
                         setSelectedIds(newIds);
-                        onValueChange(newIds);
                       }}
                     />
                   }
