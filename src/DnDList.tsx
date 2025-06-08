@@ -362,6 +362,37 @@ export function DnDList<D extends { id: UniqueIdentifier }>(
     );
   }, []);
 
+  const doChange = React.useCallback(() => doFormChange(), []);
+
+  const setupDiv = (div: HTMLDivElement, clearup: boolean = false) => {
+    // Inputs
+    div
+      .querySelectorAll("input")
+      .forEach((input) =>
+        clearup
+          ? input.removeEventListener("change", doChange)
+          : input.addEventListener("change", doChange)
+      );
+
+    // Textareas
+    div
+      .querySelectorAll("textarea")
+      .forEach((input) =>
+        clearup
+          ? input.removeEventListener("change", doChange)
+          : input.addEventListener("change", doChange)
+      );
+
+    // Select
+    div
+      .querySelectorAll("select")
+      .forEach((input) =>
+        clearup
+          ? input.removeEventListener("change", doChange)
+          : input.addEventListener("change", doChange)
+      );
+  };
+
   const divRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -441,37 +472,6 @@ export function DnDList<D extends { id: UniqueIdentifier }>(
 
     setActiveId(undefined);
   }
-
-  const doChange = React.useCallback(() => doFormChange(), []);
-
-  const setupDiv = (div: HTMLDivElement, clearup: boolean = false) => {
-    // Inputs
-    div
-      .querySelectorAll("input")
-      .forEach((input) =>
-        clearup
-          ? input.removeEventListener("change", doChange)
-          : input.addEventListener("change", doChange)
-      );
-
-    // Textareas
-    div
-      .querySelectorAll("textarea")
-      .forEach((input) =>
-        clearup
-          ? input.removeEventListener("change", doChange)
-          : input.addEventListener("change", doChange)
-      );
-
-    // Select
-    div
-      .querySelectorAll("select")
-      .forEach((input) =>
-        clearup
-          ? input.removeEventListener("change", doChange)
-          : input.addEventListener("change", doChange)
-      );
-  };
 
   const children = (
     <DndContextType onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
