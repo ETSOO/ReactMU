@@ -2,7 +2,6 @@ import Button, { ButtonProps } from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import React from "react";
 import { DataTypes, IdType } from "@etsoo/shared";
-import FormGroup from "@mui/material/FormGroup";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
@@ -153,58 +152,56 @@ function ButtonPopupList<D extends DnDItemType>(
 
   return (
     <VBox gap={2}>
-      <FormGroup>
-        <Grid container spacing={0}>
-          <DnDList<D>
-            items={items}
-            labelField={labelField}
-            onFormChange={(items) => {
-              const ids = items
-                .filter((item) => selectedIds.includes(item.id))
-                .map((item) => item.id);
-              onValueChange(ids);
-            }}
-            itemRenderer={(item, index, nodeRef, actionNodeRef) => (
-              <Grid
-                size={{ xs: 12, md: 6, lg: 4 }}
-                display="flex"
-                justifyContent="flex-start"
-                alignItems="center"
-                gap={1}
-                {...nodeRef}
+      <Grid container spacing={0}>
+        <DnDList<D>
+          items={items}
+          labelField={labelField}
+          onFormChange={(items) => {
+            const ids = items
+              .filter((item) => selectedIds.includes(item.id))
+              .map((item) => item.id);
+            onValueChange(ids);
+          }}
+          itemRenderer={(item, index, nodeRef, actionNodeRef) => (
+            <Grid
+              size={{ xs: 12, md: 6, lg: 4 }}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="center"
+              gap={1}
+              {...nodeRef}
+            >
+              <IconButton
+                style={{ cursor: "move" }}
+                size="small"
+                title={labels?.dragIndicator}
+                {...actionNodeRef}
               >
-                <IconButton
-                  style={{ cursor: "move" }}
-                  size="small"
-                  title={labels?.dragIndicator}
-                  {...actionNodeRef}
-                >
-                  <DragIndicatorIcon />
-                </IconButton>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="item"
-                      value={item.id}
-                      checked={selectedIds.includes(item.id)}
-                      onChange={(e) => {
-                        const checked = e.target.checked;
-                        const newIds = [
-                          ...selectedIds.toggleItem(item.id, checked)
-                        ];
-                        setSelectedIds(newIds);
-                      }}
-                    />
-                  }
-                  label={`${index + 1}. ${labelFormatter(item)}`}
-                />
-              </Grid>
-            )}
-            height={200}
-            mRef={dndRef}
-          ></DnDList>
-        </Grid>
-      </FormGroup>
+                <DragIndicatorIcon />
+              </IconButton>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name="item"
+                    value={item.id}
+                    checked={selectedIds.includes(item.id)}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      const newIds = [
+                        ...selectedIds.toggleItem(item.id, checked)
+                      ];
+                      setSelectedIds(newIds);
+                    }}
+                  />
+                }
+                label={`${index + 1}. ${labelFormatter(item)}`}
+              />
+            </Grid>
+          )}
+          height={200}
+          mRef={dndRef}
+        ></DnDList>
+      </Grid>
       {onAdd && (
         <HBox gap={1}>
           <TextField
