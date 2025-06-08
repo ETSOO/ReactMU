@@ -67,7 +67,7 @@ export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
   /**
    * Load data
    */
-  loadData: () => Promise<D[]>;
+  loadData: D[] | (() => Promise<D[]>);
 
   /**
    * On add handler
@@ -296,12 +296,16 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
   const [selectedIds, setSelectedIds] = React.useState<D["id"][]>();
 
   React.useEffect(() => {
-    // Load data
-    loadData().then((data) => {
-      if (data != null) {
-        setItems(data);
-      }
-    });
+    if (typeof loadData === "function") {
+      // Load data
+      loadData().then((data) => {
+        if (data != null) {
+          setItems(data);
+        }
+      });
+    } else {
+      setItems(loadData);
+    }
   }, [loadData]);
 
   React.useEffect(() => {

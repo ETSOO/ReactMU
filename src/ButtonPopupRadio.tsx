@@ -64,7 +64,7 @@ export type ButtonPopupRadioProps<D extends DnDItemType> = Omit<
   /**
    * Load data
    */
-  loadData: () => Promise<D[]>;
+  loadData: D[] | (() => Promise<D[]>);
 
   /**
    * On add handler
@@ -270,12 +270,16 @@ export function ButtonPopupRadio<D extends DnDItemType>(
     : undefined;
 
   React.useEffect(() => {
-    // Load data
-    loadData().then((data) => {
-      if (data != null) {
-        setItems(data);
-      }
-    });
+    if (typeof loadData === "function") {
+      // Load data
+      loadData().then((data) => {
+        if (data != null) {
+          setItems(data);
+        }
+      });
+    } else {
+      setItems(loadData);
+    }
   }, [loadData]);
 
   React.useEffect(() => {
