@@ -302,7 +302,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
         setItems(data);
       }
     });
-  }, []);
+  }, [loadData]);
 
   React.useEffect(() => {
     // Set selected ids

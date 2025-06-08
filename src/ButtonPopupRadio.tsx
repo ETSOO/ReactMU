@@ -276,7 +276,7 @@ export function ButtonPopupRadio<D extends DnDItemType>(
         setItems(data);
       }
     });
-  }, []);
+  }, [loadData]);
 
   React.useEffect(() => {
     setCurrentValue(value);
