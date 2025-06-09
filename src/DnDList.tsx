@@ -119,7 +119,21 @@ export interface DnDListRef<D extends object> {
 /**
  * DnD sortable list properties
  */
-export interface DnDListPros<D extends { id: UniqueIdentifier }> {
+export interface DnDListPros<
+  D extends { id: UniqueIdentifier },
+  E extends React.ElementType = React.ElementType
+> {
+  /**
+   * Component type to render the list into
+   * Default is React.Fragment
+   */
+  component?: E;
+
+  /**
+   * Component props
+   */
+  componentProps?: React.ComponentProps<E>;
+
   /**
    * Get list item style callback
    */
@@ -186,11 +200,13 @@ export interface DnDListPros<D extends { id: UniqueIdentifier }> {
  * @param props Props
  * @returns Component
  */
-export function DnDList<D extends { id: UniqueIdentifier }>(
-  props: DnDListPros<D>
-) {
+export function DnDList<
+  D extends { id: UniqueIdentifier },
+  E extends React.ElementType = React.ElementType
+>(props: DnDListPros<D, E>) {
   // Destruct
   const {
+    componentProps,
     height = 360,
     itemRenderer,
     labelField,
@@ -200,6 +216,8 @@ export function DnDList<D extends { id: UniqueIdentifier }>(
     onFormChange,
     onDragEnd
   } = props;
+
+  const Component = props.component || React.Fragment;
 
   // Theme
   const theme = useTheme();
@@ -476,21 +494,23 @@ export function DnDList<D extends { id: UniqueIdentifier }>(
   const children = (
     <DndContextType onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <SortableContextType items={items} strategy={strategy}>
-        {items.map((item, index) => {
-          const id = item.id;
-          return (
-            <SortableItem
-              id={id}
-              useSortableType={useSortableType}
-              CSSType={CSSType}
-              key={id}
-              style={getItemStyle!(index, id === activeId)}
-              itemRenderer={(nodeRef, actionNodeRef) =>
-                itemRenderer(item, index, nodeRef, actionNodeRef)
-              }
-            />
-          );
-        })}
+        <Component {...componentProps}>
+          {items.map((item, index) => {
+            const id = item.id;
+            return (
+              <SortableItem
+                id={id}
+                useSortableType={useSortableType}
+                CSSType={CSSType}
+                key={id}
+                style={getItemStyle!(index, id === activeId)}
+                itemRenderer={(nodeRef, actionNodeRef) =>
+                  itemRenderer(item, index, nodeRef, actionNodeRef)
+                }
+              />
+            );
+          })}
+        </Component>
       </SortableContextType>
     </DndContextType>
   );
