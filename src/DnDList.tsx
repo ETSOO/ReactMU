@@ -231,8 +231,11 @@ export function DnDList<
   }, [props.items]);
 
   const doFormChange = React.useCallback(
-    (newItems?: D[]) => {
-      if (onFormChange) onFormChange(newItems ?? items);
+    (newItems?: D[] | Event) => {
+      if (onFormChange) {
+        const locals = Array.isArray(newItems) ? newItems : items;
+        onFormChange(locals);
+      }
     },
     [items, onFormChange]
   );
@@ -380,16 +383,14 @@ export function DnDList<
     );
   }, []);
 
-  const doChange = React.useCallback(() => doFormChange(), []);
-
   const setupDiv = (div: HTMLDivElement, clearup: boolean = false) => {
     // Inputs
     div
       .querySelectorAll("input")
       .forEach((input) =>
         clearup
-          ? input.removeEventListener("change", doChange)
-          : input.addEventListener("change", doChange)
+          ? input.removeEventListener("change", doFormChange)
+          : input.addEventListener("change", doFormChange)
       );
 
     // Textareas
@@ -397,8 +398,8 @@ export function DnDList<
       .querySelectorAll("textarea")
       .forEach((input) =>
         clearup
-          ? input.removeEventListener("change", doChange)
-          : input.addEventListener("change", doChange)
+          ? input.removeEventListener("change", doFormChange)
+          : input.addEventListener("change", doFormChange)
       );
 
     // Select
@@ -406,24 +407,12 @@ export function DnDList<
       .querySelectorAll("select")
       .forEach((input) =>
         clearup
-          ? input.removeEventListener("change", doChange)
-          : input.addEventListener("change", doChange)
+          ? input.removeEventListener("change", doFormChange)
+          : input.addEventListener("change", doFormChange)
       );
   };
 
-  const divRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (divRef.current) {
-      setupDiv(divRef.current);
-    }
-
-    return () => {
-      if (divRef.current) {
-        setupDiv(divRef.current, true);
-      }
-    };
-  }, []);
+  const divRef = React.useRef<HTMLDivElement>();
 
   if (dnd == null) {
     return <Skeleton variant="rectangular" width="100%" height={height} />;
@@ -517,7 +506,19 @@ export function DnDList<
 
   if (onFormChange) {
     return (
-      <div style={{ width: "100%" }} ref={divRef}>
+      <div
+        style={{ width: "100%" }}
+        ref={(div) => {
+          if (div && divRef.current != div) {
+            if (divRef.current) {
+              setupDiv(divRef.current, true);
+            }
+
+            divRef.current = div;
+            setupDiv(div);
+          }
+        }}
+      >
         {children}
       </div>
     );
