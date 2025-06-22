@@ -76,6 +76,7 @@ export * from "./InputField";
 export * from "./InputTipField";
 export * from "./IntInputField";
 export * from "./ItemList";
+export * from "./JsonDataInput";
 export * from "./LineChart";
 export * from "./LinkEx";
 export * from "./ListChooser";
