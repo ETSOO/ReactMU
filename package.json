@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.5.63",
+  "version": "1.5.64",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -57,7 +57,7 @@
     "react-avatar-editor": "^13.0.2",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1",
-    "react-draggable": "^4.4.6",
+    "react-draggable": "^4.5.0",
     "react-imask": "7.6.1"
   },
   "overrides": {
@@ -81,7 +81,7 @@
     "@types/react-dom": "^18.3.7",
     "@types/react-input-mask": "^3.0.6",
     "@types/react-window": "^1.8.8",
-    "@vitejs/plugin-react": "^4.5.2",
+    "@vitejs/plugin-react": "^4.6.0",
     "jsdom": "^26.1.0",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
