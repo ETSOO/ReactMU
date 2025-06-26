@@ -1,5 +1,5 @@
-import { InputField, InputFieldProps } from "@etsoo/materialui";
 import React from "react";
+import { InputField, InputFieldProps } from "./InputField";
 
 /**
  * Data load field properties
