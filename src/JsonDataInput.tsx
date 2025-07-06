@@ -14,14 +14,14 @@ export type JsonDataInputProps = Omit<InputFieldProps, "multiple">;
  */
 export function JsonDataInput(props: JsonDataInputProps) {
   // Destruct
-  const { onChange, rows = 3, ...rest } = props;
+  const { error, helperText, onChange, rows = 3, ...rest } = props;
 
   // Global app
   const app = useRequiredAppContext();
   const jsonError = app.get("jsonDataError") ?? "JSON format error";
 
   // Error message
-  const [error, setError] = React.useState<string>();
+  const [localError, setError] = React.useState<string>();
 
   // Layout
   return (
@@ -29,8 +29,8 @@ export function JsonDataInput(props: JsonDataInputProps) {
       multiline
       rows={rows}
       {...rest}
-      error={!!error}
-      helperText={error}
+      error={localError ? true : error}
+      helperText={localError ?? helperText}
       onChange={(e) => {
         if (onChange) {
           onChange(e);
