@@ -36,6 +36,10 @@ function getResp(singleRow: ViewPageRowType) {
   return size;
 }
 
+function addLabelEnd(label: string) {
+  return label + ":";
+}
+
 function getItemField<T extends object>(
   app: ReactAppType,
   field: ViewPageFieldTypeNarrow<T>,
@@ -51,7 +55,7 @@ function getItemField<T extends object>(
   if (Array.isArray(field)) {
     const [fieldData, fieldType, renderProps, singleRow = "small"] = field;
     itemData = GridDataFormat(data[fieldData], fieldType, renderProps);
-    itemLabel = app.get<string>(fieldData) ?? fieldData;
+    itemLabel = addLabelEnd(app.get<string>(fieldData) ?? fieldData);
     size = getResp(singleRow);
     gridProps = { size };
   } else if (typeof field === "object") {
@@ -87,16 +91,16 @@ function getItemField<T extends object>(
       fieldLabel === ""
         ? undefined
         : fieldLabel == null && typeof fieldData === "string"
-        ? app.get<string>(fieldData) ?? fieldData
+        ? addLabelEnd(app.get<string>(fieldData) ?? fieldData)
         : typeof fieldLabel === "function"
         ? fieldLabel(data)
         : fieldLabel != null
-        ? app.get<string>(fieldLabel) ?? fieldLabel
+        ? addLabelEnd(app.get<string>(fieldLabel) ?? fieldLabel)
         : undefined;
   } else {
     // Single field format
     itemData = formatItemData(app, data[field]);
-    itemLabel = app.get<string>(field) ?? field;
+    itemLabel = addLabelEnd(app.get<string>(field) ?? field);
     size = ViewPageSize.small;
     gridProps = { size };
   }
@@ -210,7 +214,7 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
     <Grid {...gridProps} {...options}>
       {label != null && (
         <Typography variant="caption" component={horizontal ? "span" : "div"}>
-          {label}:
+          {label}
         </Typography>
       )}
       {typeof data === "object" ? (
