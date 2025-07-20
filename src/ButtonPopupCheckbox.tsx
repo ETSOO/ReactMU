@@ -136,18 +136,24 @@ function ButtonPopupList<D extends DnDItemType>(
   // Methods
   const dndRef = React.createRef<DnDListRef<D>>();
 
-  // Ref
+  // Refs
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const tempSelectedIds = React.useRef<D["id"][]>([]);
 
   // State
   const [selectedIds, setSelectedIds] = React.useState<D["id"][]>([]);
+
+  const setSelectedIdsHandler = (ids: D["id"][]) => {
+    tempSelectedIds.current = ids;
+    setSelectedIds(ids);
+  };
 
   React.useEffect(() => {
     // Sort items by ids for first load
     items.sortByProperty("id", value);
 
     // Set selected ids
-    setSelectedIds([...value]);
+    setSelectedIdsHandler([...value]);
   }, [value]);
 
   return (
@@ -159,8 +165,9 @@ function ButtonPopupList<D extends DnDItemType>(
         labelField={labelField}
         onFormChange={(items) => {
           const ids = items
-            .filter((item) => selectedIds.includes(item.id))
+            .filter((item) => tempSelectedIds.current.includes(item.id))
             .map((item) => item.id);
+
           onValueChange(ids);
         }}
         itemRenderer={(item, index, nodeRef, actionNodeRef) => (
@@ -191,7 +198,7 @@ function ButtonPopupList<D extends DnDItemType>(
                     const newIds = [
                       ...selectedIds.toggleItem(item.id, checked)
                     ];
-                    setSelectedIds(newIds);
+                    setSelectedIdsHandler(newIds);
                   }}
                 />
               }
