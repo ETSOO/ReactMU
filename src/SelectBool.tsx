@@ -7,8 +7,13 @@ import { useAppContext } from "./app/ReactApp";
  */
 export type SelectBoolProps = Omit<
   SelectExProps<ListType1>,
-  "options" | "loadData"
->;
+  "options" | "loadData" | "value"
+> & {
+  /**
+   * Value
+   */
+  value?: boolean;
+};
 
 /**
  * SelectBool (yes/no)
@@ -20,7 +25,7 @@ export function SelectBool(props: SelectBoolProps) {
   const app = useAppContext();
 
   // Destruct
-  const { search = true, autoAddBlankItem = search, ...rest } = props;
+  const { search = true, autoAddBlankItem = search, value, ...rest } = props;
 
   // Options
   const options = app?.getBools() ?? [];
@@ -28,5 +33,12 @@ export function SelectBool(props: SelectBoolProps) {
   if (autoAddBlankItem) Utils.addBlankItem(options);
 
   // Layout
-  return <SelectEx<ListType1> options={options} search={search} {...rest} />;
+  return (
+    <SelectEx<ListType1>
+      options={options}
+      search={search}
+      value={`${value ?? ""}`}
+      {...rest}
+    />
+  );
 }
