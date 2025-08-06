@@ -9,7 +9,7 @@ type TabBoxPanelActionType = () => void;
 
 type TabBoxPanelChildrenType =
   | TabBoxPanelActionType
-  | ((visible: boolean) => React.ReactNode)
+  | ((visible: boolean, index: number) => React.ReactNode)
   | React.ReactNode;
 
 function isActionTab(
@@ -137,7 +137,7 @@ export function TabBox(props: TabBoxProps) {
           {isActionTab(children) ? (
             <React.Fragment />
           ) : (
-            Utils.getResult(children, value === index)
+            Utils.getResult(children, value === index, index)
           )}
         </Box>
       ))}
