@@ -4,34 +4,6 @@ import { DataTypes, DomUtils, IActionResult, Utils } from "@etsoo/shared";
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
 
-if (typeof localStorage === "undefined") {
-  const mockLocalStorage = (() => {
-    let store = {} as Storage;
-
-    return {
-      getItem(key: string) {
-        return store[key];
-      },
-
-      setItem(key: string, value: string) {
-        store[key] = value;
-      },
-
-      removeItem(key: string) {
-        delete store[key];
-      },
-
-      clear() {
-        store = {} as Storage;
-      }
-    };
-  })();
-
-  Object.defineProperty(globalThis, "localStorage", {
-    value: mockLocalStorage
-  });
-}
-
 // Detected country or region
 const { detectedCountry } = DomUtils;
 
