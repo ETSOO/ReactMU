@@ -70,7 +70,7 @@ export function DataGridPage<T extends object, F>(
     }
   );
 
-  const initLoadedRef = React.useRef<boolean>();
+  const initLoadedRef = React.useRef<boolean>(null);
 
   // On submit callback
   const onSubmit = (data: FormData, _reset: boolean) => {

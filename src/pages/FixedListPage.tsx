@@ -56,7 +56,7 @@ export function FixedListPage<T extends object, F>(
     ref?: ScrollerListForwardRef<T>;
   }>({});
 
-  const initLoadedRef = React.useRef<boolean>();
+  const initLoadedRef = React.useRef<boolean>(null);
 
   // Scroll container
   const [scrollContainer, updateScrollContainer] = React.useState<

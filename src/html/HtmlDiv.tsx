@@ -1,5 +1,6 @@
 import { Utils } from "@etsoo/shared";
 import { HTMLAttributes } from "react";
+import DOMPurify from "dompurify";
 
 class HtmlDivElement extends HTMLElement {
   static get observedAttributes() {
@@ -96,7 +97,7 @@ class HtmlDivElement extends HTMLElement {
     ) {
       wrapper.innerHTML = this.textContent;
     } else {
-      wrapper.innerHTML = html;
+      wrapper.innerHTML = DOMPurify.sanitize(html);
     }
 
     this.textContent = null; // Clear the textContent to avoid duplication
@@ -106,6 +107,17 @@ class HtmlDivElement extends HTMLElement {
 // Define the custom element only once
 if (!customElements.get("html-div")) {
   customElements.define("html-div", HtmlDivElement);
+}
+
+declare module "react" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "html-div": React.DetailedHTMLProps<
+        React.HTMLAttributes<HtmlDivElement>,
+        HtmlDivElement
+      >;
+    }
+  }
 }
 
 /**
@@ -119,14 +131,6 @@ export type HtmlDivProps = HTMLAttributes<HTMLElement> & {
    */
   displayStyle?: string;
 };
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "html-div": React.HTMLAttributes<HTMLElement>;
-    }
-  }
-}
 
 /**
  * Custom HTML element that sanitizes and displays HTML content

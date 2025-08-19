@@ -62,7 +62,7 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
     if (first) reset();
   });
 
-  const initLoadedRef = React.useRef<boolean>();
+  const initLoadedRef = React.useRef<boolean>(null);
 
   const reset = () => {
     if (states.data == null || states.ref == null) return;

@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.5.70",
+  "version": "1.5.71",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -42,7 +42,7 @@
     "@emotion/styled": "^11.14.1",
     "@etsoo/appscript": "^1.6.43",
     "@etsoo/notificationbase": "^1.1.63",
-    "@etsoo/react": "^1.8.49",
+    "@etsoo/react": "^1.8.51",
     "@etsoo/shared": "^1.2.75",
     "@mui/icons-material": "^7.3.1",
     "@mui/material": "^7.3.1",
@@ -53,17 +53,12 @@
     "eventemitter3": "^5.0.1",
     "pica": "^9.0.1",
     "pulltorefreshjs": "^0.1.22",
-    "react": "^18.3.1",
+    "react": "^19.1.1",
     "react-avatar-editor": "^13.0.2",
     "react-chartjs-2": "^5.3.0",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.1.1",
     "react-draggable": "^4.5.0",
     "react-imask": "7.6.1"
-  },
-  "overrides": {
-    "react": "$react",
-    "react-dom": "$react-dom",
-    "@emotion/react": "$@emotion/react"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
@@ -76,9 +71,9 @@
     "@testing-library/react": "^16.3.0",
     "@types/pica": "^9.0.5",
     "@types/pulltorefreshjs": "^0.1.7",
-    "@types/react": "^18.3.23",
+    "@types/react": "^19.1.10",
     "@types/react-avatar-editor": "^13.0.4",
-    "@types/react-dom": "^18.3.7",
+    "@types/react-dom": "^19.1.7",
     "@types/react-input-mask": "^3.0.6",
     "@types/react-window": "^1.8.8",
     "@vitejs/plugin-react": "^5.0.1",

@@ -210,7 +210,7 @@ export function SelectEx<
 
   // Value state
   const [valueState, setValueStateBase] = React.useState<unknown>(valueSource);
-  const valueRef = React.useRef<unknown>();
+  const valueRef = React.useRef<unknown>(null);
   const setValueState = (newValue: unknown) => {
     valueRef.current = newValue;
     setValueStateBase(newValue);
@@ -268,7 +268,7 @@ export function SelectEx<
   };
 
   // Refs
-  const divRef = React.useRef<HTMLDivElement>();
+  const divRef = React.useRef<HTMLDivElement>(null);
 
   // Refresh list data
   const refreshData = () => {

@@ -263,7 +263,7 @@ export function ScrollerListEx<T extends object>(
   props: ScrollerListExProps<T>
 ) {
   // Selected item ref
-  const selectedItem = React.useRef<[HTMLDivElement, T]>();
+  const selectedItem = React.useRef<[HTMLDivElement, T]>(null);
 
   const onMouseDown = (div: HTMLDivElement, data: T) => {
     // Destruct

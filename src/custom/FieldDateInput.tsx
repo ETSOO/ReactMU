@@ -16,7 +16,7 @@ export const FieldDateInput: ICustomFieldReact<Date> = ({
   defaultValue
 }) => {
   // Ref
-  const inputRef = React.useRef<HTMLInputElement>();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const getValue = () =>
     inputRef.current == null

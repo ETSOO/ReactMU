@@ -26,7 +26,7 @@ export const FieldJson: ICustomFieldReact<object> = ({
   defaultValue
 }) => {
   // Ref
-  const inputRef = React.useRef<HTMLInputElement>();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const getValue = () => parseJson(inputRef.current?.value);
 

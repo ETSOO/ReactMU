@@ -323,7 +323,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
   }, [value]);
 
   // Selected ids
-  const tempSelectedIds = React.useRef<D["id"][]>();
+  const tempSelectedIds = React.useRef<D["id"][]>(null);
 
   // Click handler
   const clickHandler = () => {

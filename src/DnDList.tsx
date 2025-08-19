@@ -412,7 +412,7 @@ export function DnDList<
       );
   };
 
-  const divRef = React.useRef<HTMLDivElement>();
+  const divRef = React.useRef<HTMLDivElement>(null);
 
   if (dnd == null) {
     return <Skeleton variant="rectangular" width="100%" height={height} />;

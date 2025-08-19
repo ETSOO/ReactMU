@@ -96,7 +96,7 @@ export namespace CustomFieldUtils {
       const Creator = creator;
       const mref = React.createRef<CustomFieldRef<unknown>>();
 
-      let ui: JSX.Element | string = (
+      let ui: React.ReactNode = (
         <Creator
           field={field}
           mref={mref}

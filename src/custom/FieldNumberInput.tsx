@@ -16,7 +16,7 @@ export const FieldNumberInput: ICustomFieldReact<number> = ({
   defaultValue
 }) => {
   // Ref
-  const inputRef = React.useRef<HTMLInputElement>();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const getValue = () => {
     const value = inputRef.current?.valueAsNumber;

@@ -15,7 +15,7 @@ export const FieldInput: ICustomFieldReact<string> = ({
   defaultValue
 }) => {
   // Ref
-  const inputRef = React.useRef<HTMLInputElement>();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const getValue = () => inputRef.current?.value;
 

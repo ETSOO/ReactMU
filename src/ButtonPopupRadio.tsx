@@ -287,7 +287,7 @@ export function ButtonPopupRadio<D extends DnDItemType>(
   }, [value]);
 
   // Selected id
-  const tempSelectedId = React.useRef<D["id"]>();
+  const tempSelectedId = React.useRef<D["id"]>(null);
 
   // Click handler
   const clickHandler = () => {
