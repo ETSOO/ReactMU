@@ -60,6 +60,11 @@
     "react-draggable": "^4.5.0",
     "react-imask": "7.6.1"
   },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom",
+    "@emotion/react": "$@emotion/react"
+  },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.3",
