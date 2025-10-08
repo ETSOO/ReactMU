@@ -11,7 +11,6 @@ import {
   GridLoaderStates,
   ScrollerGrid,
   ScrollerGridForwardRef,
-  ScrollerGridItemRendererProps,
   ScrollerGridProps,
   useCombinedRefs
 } from "@etsoo/react";
@@ -24,6 +23,8 @@ import Box, { BoxProps } from "@mui/material/Box";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
+import { GridUtils } from "./GridUtils";
+import { useGridCacheInitLoad } from "./uses/useGridCacheInitLoad";
 
 /**
  * Footer item renderer props
@@ -44,7 +45,13 @@ export type DataGridExProps<
   P extends GridJsonData = GridLoadDataProps
 > = Omit<
   ScrollerGridProps<T, P>,
-  "itemRenderer" | "columnCount" | "columnWidth" | "width"
+  | "cellComponent"
+  | "columnCount"
+  | "columnWidth"
+  | "onClick"
+  | "onDoubleClick"
+  | "onInitLoad"
+  | "width"
 > & {
   /**
    * Alternating colors for odd/even rows
@@ -116,6 +123,14 @@ export type DataGridExProps<
    * Click handler
    */
   onClick?: MouseEventWithDataHandler<T>;
+
+  /**
+   * Data change handler
+   * @param rows Rows
+   * @param rowIndex Row index
+   * @param columnIndex Column index
+   */
+  onDataChange?: (rows: T[], rowIndex: number, columnIndex: number) => void;
 
   /**
    * Selectable to support hover over and out effect and row clickable
@@ -355,6 +370,8 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
     alternatingColors = [theme.palette.grey[100], undefined],
     borderRowsCount,
     bottomHeight = 53,
+    cacheKey,
+    cacheMinutes = 15,
     checkable = false,
     className,
     columns,
@@ -369,7 +386,9 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
     idField = "id" as DataTypes.Keys<T>,
     mRef = React.createRef(),
     onClick,
+    onDataChange,
     onDoubleClick,
+    onUpdateRows,
     selectable = true,
     selectedColor = "#edf4fb",
     width,
@@ -432,6 +451,9 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
       columns.unshift(cbColumn);
     }
   }
+
+  // Init handler
+  const initHandler = useGridCacheInitLoad<T>(cacheKey, cacheMinutes);
 
   const refs = React.useRef<{ ref?: ScrollerGridForwardRef<T> }>({});
 
@@ -501,107 +523,6 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
     });
   };
 
-  /**
-   * Item renderer
-   */
-  const itemRenderer = ({
-    columnIndex,
-    rowIndex,
-    style,
-    data,
-    selectedItems,
-    setItems
-  }: ScrollerGridItemRendererProps<T>) => {
-    // Column
-    const {
-      align,
-      cellRenderer = DataGridRenderers.defaultCellRenderer,
-      cellBoxStyle,
-      field,
-      type,
-      valueFormatter,
-      renderProps
-    } = columns[columnIndex];
-
-    // Props
-    const formatProps: GridCellFormatterProps<T> = {
-      data,
-      field,
-      rowIndex,
-      columnIndex
-    };
-
-    let rowClass = `DataGridEx-Cell${rowIndex % 2}`;
-    if (
-      borderRowsCount != null &&
-      borderRowsCount > 0 &&
-      (rowIndex + 1) % borderRowsCount === 0
-    ) {
-      rowClass += ` DataGridEx-Cell-Border`;
-    }
-
-    // Selected
-    const selected =
-      data != null &&
-      (selectedRowIndex.current === rowIndex ||
-        selectedItems.some(
-          (selectedItem) =>
-            selectedItem != null && selectedItem[idField] === data[idField]
-        ));
-
-    if (selected) {
-      rowClass += ` DataGridEx-Selected`;
-    }
-
-    // Box style
-    const boxStyle =
-      data == null || cellBoxStyle == null
-        ? undefined
-        : typeof cellBoxStyle === "function"
-        ? cellBoxStyle(data)
-        : cellBoxStyle;
-
-    const cellProps: BoxProps = {
-      className: "DataGridEx-Cell",
-      textAlign: GridAlignGet(align, type),
-      sx: { ...boxStyle }
-    };
-
-    const child = cellRenderer({
-      data,
-      field,
-      formattedValue: valueFormatter ? valueFormatter(formatProps) : undefined,
-      selected,
-      type,
-      rowIndex,
-      columnIndex,
-      cellProps,
-      renderProps:
-        typeof renderProps === "function" ? renderProps(data) : renderProps,
-      setItems
-    });
-
-    return (
-      <div
-        className={rowClass}
-        style={style}
-        data-row={rowIndex}
-        data-column={columnIndex}
-        onMouseDown={selectable && !checkable ? handleMouseDown : undefined}
-        onMouseOver={selectable ? handleMouseOver : undefined}
-        onMouseOut={selectable ? handleMouseOut : undefined}
-        onClick={(event) => onClick && data != null && onClick(event, data)}
-        onDoubleClick={(event) =>
-          onDoubleClick && data != null && onDoubleClick(event, data)
-        }
-      >
-        <Box {...cellProps} onMouseEnter={handleMouseEnter}>
-          {child}
-        </Box>
-      </div>
-    );
-  };
-
   // Column width calculator
   const widthCalculator = React.useMemo(
     () => DataGridExCalColumns(columns),
@@ -630,6 +551,14 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
     [columns, width]
   );
 
+  const onUpdateRowsHandler = React.useCallback(
+    (rows: T[], state: GridLoaderStates<T>) => {
+      GridUtils.getUpdateRowsHandler<T>(cacheKey)?.(rows, state);
+      onUpdateRows?.(rows, state);
+    },
+    [onUpdateRows, cacheKey]
+  );
+
   // Table
   const table = React.useMemo(() => {
     return (
@@ -640,18 +569,132 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
           className,
           createGridStyle(alternatingColors, selectedColor, hoverColor)
         )}
+        onCellsRendered={
+          cacheKey
+            ? (visibleCells) =>
+                sessionStorage.setItem(
+                  `${cacheKey}-scroll`,
+                  JSON.stringify(visibleCells)
+                )
+            : undefined
+        }
+        onInitLoad={initHandler}
+        onUpdateRows={onUpdateRowsHandler}
+        cellComponent={({ rowIndex, columnIndex, style, rows, states }) => {
+          // Column
+          const {
+            align,
+            cellRenderer = DataGridRenderers.defaultCellRenderer,
+            cellBoxStyle,
+            field,
+            type,
+            valueFormatter,
+            renderProps
+          } = columns[columnIndex];
+
+          // Data
+          const data = rows[rowIndex];
+
+          // Props
+          const formatProps: GridCellFormatterProps<T> = {
+            data,
+            field,
+            rowIndex,
+            columnIndex
+          };
+
+          let rowClass = `DataGridEx-Cell${rowIndex % 2}`;
+          if (
+            borderRowsCount != null &&
+            borderRowsCount > 0 &&
+            (rowIndex + 1) % borderRowsCount === 0
+          ) {
+            rowClass += ` DataGridEx-Cell-Border`;
+          }
+
+          // Selected
+          const selected =
+            data != null &&
+            (selectedRowIndex.current === rowIndex ||
+              states.selectedItems.some(
+                (selectedItem) =>
+                  selectedItem != null &&
+                  selectedItem[idField] === data[idField]
+              ));
+
+          if (selected) {
+            rowClass += ` DataGridEx-Selected`;
+          }
+
+          // Box style
+          const boxStyle =
+            data == null || cellBoxStyle == null
+              ? undefined
+              : typeof cellBoxStyle === "function"
+              ? cellBoxStyle(data)
+              : cellBoxStyle;
+
+          const cellProps: BoxProps = {
+            className: "DataGridEx-Cell",
+            textAlign: GridAlignGet(align, type),
+            sx: { ...boxStyle }
+          };
+
+          const child = cellRenderer({
+            data,
+            field,
+            formattedValue: valueFormatter
+              ? valueFormatter(formatProps)
+              : undefined,
+            selected,
+            type,
+            rowIndex,
+            columnIndex,
+            cellProps,
+            renderProps:
+              typeof renderProps === "function"
+                ? renderProps(data)
+                : renderProps,
+            triggerChange: () => onDataChange?.(rows, rowIndex, columnIndex)
+          });
+
+          return (
+            <div
+              className={rowClass}
+              style={style}
+              data-row={rowIndex}
+              data-column={columnIndex}
+              onMouseDown={
+                selectable && !checkable ? handleMouseDown : undefined
+              }
+              onMouseOver={selectable ? handleMouseOver : undefined}
+              onMouseOut={selectable ? handleMouseOut : undefined}
+              onClick={(event) =>
+                onClick && data != null && onClick(event, data)
+              }
+              onDoubleClick={(event) =>
+                onDoubleClick && data != null && onDoubleClick(event, data)
+              }
+            >
+              <Box {...cellProps} onMouseEnter={handleMouseEnter}>
+                {child}
+              </Box>
+            </div>
+          );
+        }}
         columnCount={columns.length}
         columnWidth={columnWidth}
         defaultOrderBy={defaultOrderBy}
         height={
-          height -
-          headerHeight -
-          (hideFooter ? 0 : bottomHeight + 1) -
-          scrollbarSize
+          typeof height === "number"
+            ? height -
+              headerHeight -
+              (hideFooter ? 0 : bottomHeight + 1) -
+              scrollbarSize
+            : height
         }
         headerRenderer={headerRenderer}
         idField={idField}
-        itemRenderer={itemRenderer}
         footerRenderer={hideFooter ? undefined : footerRenderer}
         width={Math.max(width ?? 0, widthCalculator.total)}
         mRef={mRefLocal}

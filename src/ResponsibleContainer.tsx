@@ -1,19 +1,11 @@
 import React from "react";
 import {
-  GridOnScrollProps,
-  ListChildComponentProps,
-  ListOnScrollProps,
-  VariableSizeGrid
-} from "react-window";
-import {
   GridColumn,
   GridJsonData,
   GridLoadDataProps,
-  GridLoaderStates,
   GridMethodRef,
   GridTemplateType,
   ReactUtils,
-  ScrollerListRef,
   useCombinedRefs,
   useDimensions,
   useSearchParamsWithCache
@@ -23,8 +15,8 @@ import { MUGlobal } from "./MUGlobal";
 import { PullToRefreshUI } from "./PullToRefreshUI";
 import {
   ScrollerListEx,
-  ScrollerListExInnerItemRendererProps,
-  ScrollerListExItemSize
+  ScrollerListExItemSize,
+  ScrollerListExProps
 } from "./ScrollerListEx";
 import { SearchBar } from "./SearchBar";
 import { Labels } from "./app/Labels";
@@ -95,16 +87,9 @@ export type ResponsibleContainerProps<T extends object, F> = Omit<
   height?: number;
 
   /**
-   * Inner item renderer
-   */
-  innerItemRenderer: (
-    props: ScrollerListExInnerItemRendererProps<T>
-  ) => React.ReactNode;
-
-  /**
    * Item renderer
    */
-  itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
+  itemRenderer?: ScrollerListExProps<T>["itemRenderer"];
 
   /**
    * Item size, a function indicates its a variable size list
@@ -228,6 +213,8 @@ export function ResponsibleContainer<T extends object, F>(
   const mRefs = useCombinedRefs(mRef, (ref: GridMethodRef<T>) => {
     if (ref == null) return;
     state.ref = ref;
+
+    if (ref.element && elementReady) elementReady(ref.element, true);
   });
 
   // Screen size detection
@@ -289,57 +276,6 @@ export function ResponsibleContainer<T extends object, F>(
     }
   );
 
-  const onInitLoad = (
-    ref: VariableSizeGrid<T> | ScrollerListRef
-  ): [T[], Partial<GridLoaderStates<T>>?] | null | undefined => {
-    // Avoid repeatedly load from cache
-    if (refs.current.initLoaded || !cacheKey) return undefined;
-
-    // Cache data
-    const cacheData = GridUtils.getCacheData<T>(cacheKey, cacheMinutes);
-    if (cacheData) {
-      const { rows, state } = cacheData;
-
-      GridUtils.mergeSearchData(state, searchData);
-
-      // Scroll position
-      const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
-      if (scrollData) {
-        if ("resetAfterColumnIndex" in ref) {
-          const { scrollLeft, scrollTop } = JSON.parse(
-            scrollData
-          ) as GridOnScrollProps;
-
-          globalThis.setTimeout(
-            () => ref.scrollTo({ scrollLeft, scrollTop }),
-            0
-          );
-        } else {
-          const { scrollOffset } = JSON.parse(scrollData) as ListOnScrollProps;
-
-          globalThis.setTimeout(() => ref.scrollTo(scrollOffset), 0);
-        }
-      }
-
-      // Update flag value
-      refs.current.initLoaded = true;
-
-      // Return cached rows and state
-      return [rows, state];
-    }
-
-    return undefined;
-  };
-
-  const onListScroll = (props: ListOnScrollProps) => {
-    if (!cacheKey || !refs.current.initLoaded) return;
-    sessionStorage.setItem(`${cacheKey}-scroll`, JSON.stringify(props));
-  };
-  const onGridScroll = (props: GridOnScrollProps) => {
-    if (!cacheKey || !refs.current.initLoaded) return;
-    sessionStorage.setItem(`${cacheKey}-scroll`, JSON.stringify(props));
-  };
-
   // Rect
   const rect = dimensions[0][2];
 
@@ -372,8 +308,8 @@ export function ResponsibleContainer<T extends object, F>(
       heightLocal = adjustFabHeight(heightLocal, showDataGrid);
 
     if (showDataGrid) {
-      // Delete
-      delete rest.itemRenderer;
+      // Remove useless props
+      const { itemRenderer, ...gridProps } = rest;
 
       return (
         <Box className="DataGridBox">
@@ -384,28 +320,25 @@ export function ResponsibleContainer<T extends object, F>(
             loadData={localLoadData}
             mRef={mRefs}
             onDoubleClick={(_, data) => quickAction && quickAction(data)}
-            outerRef={(element?: HTMLDivElement) => {
-              if (element != null && elementReady) elementReady(element, true);
-            }}
-            onScroll={onGridScroll}
             columns={columns}
-            onUpdateRows={GridUtils.getUpdateRowsHandler<T>(cacheKey)}
-            onInitLoad={onInitLoad}
-            {...rest}
+            {...gridProps}
           />
         </Box>
       );
     }
 
-    // Delete
-    delete rest.checkable;
-    delete rest.borderRowsCount;
-    delete rest.bottomHeight;
-    delete rest.footerItemRenderer;
-    delete rest.headerHeight;
-    delete rest.hideFooter;
-    delete rest.hoverColor;
-    delete rest.selectable;
+    // Remove useless props
+    const {
+      checkable,
+      borderRowsCount,
+      bottomHeight,
+      footerItemRenderer,
+      headerHeight,
+      hideFooter,
+      hoverColor,
+      selectable,
+      ...listProps
+    } = rest;
 
     return (
       <Box className="ListBox" sx={{ height: heightLocal }}>
@@ -413,17 +346,11 @@ export function ResponsibleContainer<T extends object, F>(
           autoLoad={!hasFields}
           height={heightLocal}
           loadData={localLoadData}
-          onUpdateRows={GridUtils.getUpdateRowsHandler<T>(cacheKey)}
-          onInitLoad={onInitLoad}
           mRef={mRefs}
           onClick={(event, data) =>
             quickAction && ReactUtils.isSafeClick(event) && quickAction(data)
           }
-          oRef={(element) => {
-            if (element != null && elementReady) elementReady(element, false);
-          }}
-          onScroll={onListScroll}
-          {...rest}
+          {...listProps}
         />
       </Box>
     );

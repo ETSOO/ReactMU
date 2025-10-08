@@ -1,10 +1,16 @@
 import { css } from "@emotion/css";
-import { ScrollerList, ScrollerListProps } from "@etsoo/react";
+import {
+  GridLoaderStates,
+  ScrollerList,
+  ScrollerListProps
+} from "@etsoo/react";
 import { DataTypes, Utils } from "@etsoo/shared";
 import React from "react";
-import { ListChildComponentProps } from "react-window";
 import { MouseEventWithDataHandler, MUGlobal } from "./MUGlobal";
 import { useTheme } from "@mui/material/styles";
+import { GridUtils } from "./GridUtils";
+import { useListCacheInitLoad } from "./uses/useListCacheInitLoad";
+import Box from "@mui/material/Box";
 
 // Scroll bar size
 const scrollbarSize = 16;
@@ -84,12 +90,21 @@ const defaultMargin = (margin: object, horizon?: number | string) => {
 /**
  * Extended ScrollerList inner item renderer props
  */
-export interface ScrollerListExInnerItemRendererProps<T>
-  extends ListChildComponentProps<T> {
+export type ScrollerListExItemRendererProps<T> = {
   /**
-   * Item selected
+   * Row index
    */
-  selected: boolean;
+  index: number;
+
+  /**
+   * Row data
+   */
+  data: T;
+
+  /**
+   * Style
+   */
+  style: React.CSSProperties;
 
   /**
    * Item height
@@ -105,7 +120,12 @@ export interface ScrollerListExInnerItemRendererProps<T>
    * Default margins
    */
   margins: object;
-}
+
+  /**
+   * Item selected
+   */
+  selected: boolean;
+};
 
 /**
  * Extended ScrollerList ItemSize type
@@ -123,7 +143,7 @@ export type ScrollerListExItemSize =
  */
 export type ScrollerListExProps<T extends object> = Omit<
   ScrollerListProps<T>,
-  "itemRenderer" | "itemSize"
+  "rowComponent" | "rowHeight" | "onClick" | "onDoubleClick" | "onInitLoad"
 > & {
   /**
    * Alternating colors for odd/even rows
@@ -131,16 +151,19 @@ export type ScrollerListExProps<T extends object> = Omit<
   alternatingColors?: [string?, string?];
 
   /**
-   * Inner item renderer
+   * Cache key
    */
-  innerItemRenderer: (
-    props: ScrollerListExInnerItemRendererProps<T>
-  ) => React.ReactNode;
+  cacheKey?: string;
+
+  /**
+   * Cache minutes
+   */
+  cacheMinutes?: number;
 
   /**
    * Item renderer
    */
-  itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
+  itemRenderer?: (props: ScrollerListExItemRendererProps<T>) => React.ReactNode;
 
   /**
    * Item size, a function indicates its a variable size list
@@ -167,92 +190,6 @@ export type ScrollerListExProps<T extends object> = Omit<
    */
   selectedColor?: string;
 };
-
-interface defaultItemRendererProps<T> extends ListChildComponentProps<T> {
-  /**
-   * onMouseDown callback
-   */
-  onMouseDown: (div: HTMLDivElement, data: T) => void;
-
-  /**
-   * Inner item renderer
-   */
-  innerItemRenderer: (
-    props: ScrollerListExInnerItemRendererProps<T>
-  ) => React.ReactNode;
-
-  /**
-   * Item height
-   */
-  itemHeight: number;
-
-  /**
-   * Double click handler
-   */
-  onDoubleClick?: MouseEventWithDataHandler<T>;
-
-  /**
-   * Click handler
-   */
-  onClick?: MouseEventWithDataHandler<T>;
-
-  /**
-   * Item space
-   */
-  space: number;
-
-  /**
-   * Default margins
-   */
-  margins: object;
-
-  /**
-   * Item selected
-   */
-  selected: boolean;
-}
-
-// Default itemRenderer
-function defaultItemRenderer<T>({
-  index,
-  innerItemRenderer,
-  data,
-  onMouseDown,
-  selected,
-  style,
-  itemHeight,
-  onClick,
-  onDoubleClick,
-  space,
-  margins
-}: defaultItemRendererProps<T>) {
-  // Child
-  const child = innerItemRenderer({
-    index,
-    data,
-    style,
-    selected,
-    itemHeight,
-    space,
-    margins
-  });
-
-  let rowClass = `ScrollerListEx-Row${index % 2}`;
-  if (selected) rowClass += ` ${selectedClassName}`;
-
-  // Layout
-  return (
-    <div
-      className={rowClass}
-      style={style}
-      onMouseDown={(event) => onMouseDown(event.currentTarget, data)}
-      onClick={(event) => onClick && onClick(event, data)}
-      onDoubleClick={(event) => onDoubleClick && onDoubleClick(event, data)}
-    >
-      {child}
-    </div>
-  );
-}
 
 /**
  * Extended ScrollerList
@@ -293,29 +230,31 @@ export function ScrollerListEx<T extends object>(
   const {
     alternatingColors = [undefined, undefined],
     className,
+    cacheKey,
+    cacheMinutes = 15,
     idField = "id" as DataTypes.Keys<T>,
-    innerItemRenderer,
     itemSize,
-    itemRenderer = (itemProps) => {
-      const [itemHeight, space, margins] = calculateItemSize(itemProps.index);
-      return defaultItemRenderer({
-        itemHeight,
-        innerItemRenderer,
-        onMouseDown,
-        onClick,
-        onDoubleClick,
-        space,
-        margins,
-        selected: isSelected(itemProps.data),
-        ...itemProps
-      });
-    },
+    itemRenderer = ({ data, itemHeight, margins }) => (
+      <Box
+        component="pre"
+        sx={{
+          height: itemHeight,
+          ...margins
+        }}
+      >
+        {JSON.stringify(data)}
+      </Box>
+    ),
     onClick,
     onDoubleClick,
+    onUpdateRows,
     onSelectChange,
     selectedColor = "#edf4fb",
     ...rest
   } = props;
+
+  // Init handler
+  const initHandler = useListCacheInitLoad<T>(cacheKey, cacheMinutes);
 
   // Theme
   const theme = useTheme();
@@ -346,11 +285,13 @@ export function ScrollerListEx<T extends object>(
     return itemSizeResult!;
   };
 
-  // Local item size
-  const itemSizeLocal = (index: number) => {
-    const [size, space] = calculateItemSize(index);
-    return size + space;
-  };
+  const onUpdateRowsHandler = React.useCallback(
+    (rows: T[], state: GridLoaderStates<T>) => {
+      GridUtils.getUpdateRowsHandler<T>(cacheKey)?.(rows, state);
+      onUpdateRows?.(rows, state);
+    },
+    [onUpdateRows, cacheKey]
+  );
 
   // Layout
   return (
@@ -361,8 +302,55 @@ export function ScrollerListEx<T extends object>(
         createGridStyle(alternatingColors, selectedColor)
       )}
       idField={idField}
-      itemRenderer={itemRenderer}
-      itemSize={itemSizeLocal}
+      onRowsRendered={
+        cacheKey
+          ? (visibleRows) =>
+              sessionStorage.setItem(
+                `${cacheKey}-scroll`,
+                JSON.stringify(visibleRows)
+              )
+          : undefined
+      }
+      onInitLoad={initHandler}
+      onUpdateRows={onUpdateRowsHandler}
+      rowComponent={({ index, items, style }) => {
+        const data = items[index];
+        const selected = isSelected(data);
+        const rowClass = `ScrollerListEx-Row${index % 2}${
+          selected ? ` ${selectedClassName}` : ""
+        }`;
+
+        const [itemHeight, space, margins] = calculateItemSize(index);
+
+        // Child
+        const child = itemRenderer({
+          index,
+          data,
+          style,
+          selected,
+          itemHeight,
+          space,
+          margins
+        });
+
+        return (
+          <div
+            className={rowClass}
+            style={style}
+            onMouseDown={(event) => onMouseDown(event.currentTarget, data)}
+            onClick={(event) => onClick && onClick(event, data)}
+            onDoubleClick={(event) =>
+              onDoubleClick && onDoubleClick(event, data)
+            }
+          >
+            {child}
+          </div>
+        );
+      }}
+      rowHeight={(index) => {
+        const [size, space] = calculateItemSize(index);
+        return size + space;
+      }}
       {...rest}
     />
   );

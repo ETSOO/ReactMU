@@ -7,7 +7,8 @@ import {
   GridLoaderPartialStates,
   GridLoaderStates,
   GridMethodRef,
-  GridSizeGet
+  GridSizeGet,
+  ScrollToRowParam
 } from "@etsoo/react";
 import { DataTypes, IdDefaultType } from "@etsoo/shared";
 import React from "react";
@@ -78,6 +79,14 @@ export type TableExProps<
     mRef?: React.Ref<TableExMethodRef<T>>;
 
     /**
+     * Data change handler
+     * @param rows Rows
+     * @param rowIndex Row index
+     * @param columnIndex Column index
+     */
+    onDataChange?: (rows: T[], rowIndex: number, columnIndex: number) => void;
+
+    /**
      * On items select change
      */
     onSelectChange?: (selectedItems: T[]) => void;
@@ -117,6 +126,7 @@ export function TableEx<
     loadData,
     maxHeight,
     mRef,
+    onDataChange,
     onSelectChange,
     rowHeight = 53,
     otherHeight = 110,
@@ -183,6 +193,10 @@ export function TableEx<
   React.useImperativeHandle(
     mRef,
     () => ({
+      get element() {
+        return null;
+      },
+
       delete(index) {
         const item = rows.at(index);
         if (item) {
@@ -192,27 +206,20 @@ export function TableEx<
         }
         return item;
       },
+
       insert(item, start) {
         const newRows = [...rows];
         newRows.splice(start, 0, item);
         setRows(newRows);
       },
-      /**
-       * Refresh data
-       */
+
       refresh(): void {
         loadDataLocal();
       },
 
-      /**
-       * Reset
-       */
       reset,
-      scrollToRef(scrollOffset: number): void {
-        // Not implemented
-      },
 
-      scrollToItemRef(index: number): void {
+      scrollToRow(param: ScrollToRowParam): void {
         // Not implemented
       }
     }),
@@ -513,7 +520,8 @@ export function TableEx<
                           rowIndex,
                           columnIndex,
                           cellProps,
-                          setItems
+                          triggerChange: () =>
+                            onDataChange?.(rows, rowIndex, columnIndex)
                         })
                       ) : (
                         <React.Fragment>&nbsp;</React.Fragment>

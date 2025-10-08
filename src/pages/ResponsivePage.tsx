@@ -5,10 +5,9 @@ import { CommonPage } from "./CommonPage";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 import type { DataGridPageProps } from "./DataGridPageProps";
 import type {
-  ScrollerListExInnerItemRendererProps,
-  ScrollerListExItemSize
+  ScrollerListExItemSize,
+  ScrollerListExProps
 } from "../ScrollerListEx";
-import { ListChildComponentProps } from "react-window";
 import { GridMethodRef } from "@etsoo/react";
 import type { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
 
@@ -30,16 +29,9 @@ export type ResponsePageProps<T extends object, F> = DataGridPageProps<T, F> & {
   dataGridMinWidth?: number;
 
   /**
-   * Inner item renderer
-   */
-  innerItemRenderer: (
-    props: ScrollerListExInnerItemRendererProps<T>
-  ) => React.ReactNode;
-
-  /**
    * Item renderer
    */
-  itemRenderer?: (props: ListChildComponentProps<T>) => React.ReactElement;
+  itemRenderer?: ScrollerListExProps<T>["itemRenderer"];
 
   /**
    * Item size, a function indicates its a variable size list

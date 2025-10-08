@@ -1,9 +1,6 @@
 import {
   GridLoadDataProps,
-  GridLoaderStates,
-  ListOnScrollProps,
   ScrollerListForwardRef,
-  ScrollerListRef,
   useCombinedRefs,
   useDimensions,
   useSearchParamsWithCache
@@ -56,8 +53,6 @@ export function FixedListPage<T extends object, F>(
     ref?: ScrollerListForwardRef<T>;
   }>({});
 
-  const initLoadedRef = React.useRef<boolean>(null);
-
   // Scroll container
   const [scrollContainer, updateScrollContainer] = React.useState<
     HTMLElement | undefined
@@ -71,6 +66,8 @@ export function FixedListPage<T extends object, F>(
       const first = states.ref == null;
 
       states.ref = ref;
+
+      if (ref.element) updateScrollContainer(ref.element);
 
       if (first) reset();
     }
@@ -92,44 +89,6 @@ export function FixedListPage<T extends object, F>(
       GridUtils.createLoader(props, fieldTemplate, cacheKey, false),
       lastItem
     );
-  };
-
-  // Search data
-  const searchData = useSearchParamsWithCache(cacheKey);
-
-  const onInitLoad = (
-    ref: ScrollerListRef
-  ): [T[], Partial<GridLoaderStates<T>>?] | null | undefined => {
-    // Avoid repeatedly load from cache
-    if (initLoadedRef.current || !cacheKey) return undefined;
-
-    // Cache data
-    const cacheData = GridUtils.getCacheData<T>(cacheKey, cacheMinutes);
-    if (cacheData) {
-      const { rows, state } = cacheData;
-
-      GridUtils.mergeSearchData(state, searchData);
-
-      // Scroll position
-      const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
-      if (scrollData) {
-        const { scrollOffset } = JSON.parse(scrollData) as ListOnScrollProps;
-        globalThis.setTimeout(() => ref.scrollTo(scrollOffset), 0);
-      }
-
-      // Update flag value
-      initLoadedRef.current = true;
-
-      // Return cached rows and state
-      return [rows, state];
-    }
-
-    return undefined;
-  };
-
-  const onListScroll = (props: ListOnScrollProps) => {
-    if (!cacheKey || !initLoadedRef.current) return;
-    sessionStorage.setItem(`${cacheKey}-scroll`, JSON.stringify(props));
   };
 
   // Watch container
@@ -159,18 +118,15 @@ export function FixedListPage<T extends object, F>(
             height={height}
             loadData={localLoadData}
             mRef={refs}
-            onUpdateRows={GridUtils.getUpdateRowsHandler<T>(cacheKey)}
-            onInitLoad={onInitLoad}
-            onScroll={onListScroll}
-            oRef={(element) => {
-              if (element != null) updateScrollContainer(element);
-            }}
             {...rest}
           />
         </Box>
       );
     }
   }, [rect]);
+
+  // Search data
+  const searchData = useSearchParamsWithCache(cacheKey);
 
   const f = typeof fields == "function" ? fields(searchData ?? {}) : fields;
 

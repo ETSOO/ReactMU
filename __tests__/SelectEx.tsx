@@ -1,4 +1,4 @@
-import React, { act } from "react";
+import { act } from "react";
 import { SelectEx } from "../src";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { ListType1, Utils } from "@etsoo/shared";

@@ -1,8 +1,9 @@
 import { AddressUtils, Culture } from "@etsoo/appscript";
 import { ReactApp } from "../src";
 import { DataTypes, DomUtils, IActionResult, Utils } from "@etsoo/shared";
-import React, { act } from "react";
+import { act } from "react";
 import { createRoot } from "react-dom/client";
+import { screen, waitFor } from "@testing-library/react";
 
 // Detected country or region
 const { detectedCountry } = DomUtils;
@@ -77,7 +78,7 @@ act(() => {
   reactRoot.render(<Provider />);
 });
 
-test("Test for properties", () => {
+test("Test for properties", async () => {
   const result: IActionResult = {
     ok: false,
     type: "https://tools.ietf.org/html/rfc9110#section-15.5.1",
@@ -96,10 +97,13 @@ test("Test for properties", () => {
     app.alertResult(result);
   });
 
-  expect(root.innerHTML).toContain(result.title);
+  await waitFor(() => {
+    const item = screen.getByText(result.title!);
+    expect(item.classList.contains("MuiDialogContent-root")).toBeTruthy();
+  });
 });
 
-test("Test for alertResult", () => {
+test("Test for alertResult", async () => {
   const result: IActionResult = {
     ok: false,
     type: "TokenExpired",
@@ -111,7 +115,8 @@ test("Test for alertResult", () => {
     app.alertResult(result);
   });
 
-  expect(root.innerHTML).toContain(
-    '<span style="font-size: 9px;">(TokenExpired)</span>'
-  );
+  await waitFor(() => {
+    const item = screen.getByText("(TokenExpired)");
+    expect(item.nodeName).toBe("SPAN");
+  });
 });

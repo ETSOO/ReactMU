@@ -1,9 +1,6 @@
 import {
   GridLoadDataProps,
-  GridLoaderStates,
-  ListOnScrollProps,
   ScrollerListForwardRef,
-  ScrollerListRef,
   useCombinedRefs,
   useDimensions,
   useSearchParamsWithCache
@@ -62,8 +59,6 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
     if (first) reset();
   });
 
-  const initLoadedRef = React.useRef<boolean>(null);
-
   const reset = () => {
     if (states.data == null || states.ref == null) return;
     states.ref.reset({ data: states.data });
@@ -89,41 +84,6 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
   // Search data
   const searchData = useSearchParamsWithCache(cacheKey);
 
-  const onInitLoad = (
-    ref: ScrollerListRef
-  ): [T[], Partial<GridLoaderStates<T>>?] | null | undefined => {
-    // Avoid repeatedly load from cache
-    if (initLoadedRef.current || !cacheKey) return undefined;
-
-    // Cache data
-    const cacheData = GridUtils.getCacheData<T>(cacheKey, cacheMinutes);
-    if (cacheData) {
-      const { rows, state } = cacheData;
-
-      GridUtils.mergeSearchData(state, searchData);
-
-      // Scroll position
-      const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
-      if (scrollData) {
-        const { scrollOffset } = JSON.parse(scrollData) as ListOnScrollProps;
-        globalThis.setTimeout(() => ref.scrollTo(scrollOffset), 0);
-      }
-
-      // Update flag value
-      initLoadedRef.current = true;
-
-      // Return cached rows and state
-      return [rows, state];
-    }
-
-    return undefined;
-  };
-
-  const onListScroll = (props: ListOnScrollProps) => {
-    if (!cacheKey || !initLoadedRef.current) return;
-    sessionStorage.setItem(`${cacheKey}-scroll`, JSON.stringify(props));
-  };
-
   const f = typeof fields == "function" ? fields(searchData ?? {}) : fields;
 
   // Layout
@@ -148,9 +108,6 @@ export function ListPage<T extends object, F>(props: ListPageProps<T, F>) {
         <ScrollerListEx<T>
           autoLoad={false}
           loadData={localLoadData}
-          onUpdateRows={GridUtils.getUpdateRowsHandler<T>(cacheKey)}
-          onInitLoad={onInitLoad}
-          onScroll={onListScroll}
           mRef={refs}
           {...rest}
         />

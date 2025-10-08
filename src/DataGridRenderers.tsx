@@ -23,7 +23,8 @@ export namespace DataGridRenderers {
     formattedValue,
     columnIndex,
     type,
-    renderProps
+    renderProps,
+    triggerChange
   }: GridCellRendererProps<T>): React.ReactNode {
     // Is loading
     if (data == null) {

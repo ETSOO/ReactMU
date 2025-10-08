@@ -1,11 +1,11 @@
 import { ListItemReact } from "@etsoo/react";
 import React from "react";
 import { MoreFab } from "./MoreFab";
-import { ScrollerListExInnerItemRendererProps } from "./ScrollerListEx";
 import LinearProgress from "@mui/material/LinearProgress";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
+import { ScrollerListExItemRendererProps } from "./ScrollerListEx";
 
 /**
  * Default mobile list item renderer
@@ -15,7 +15,7 @@ import CardContent from "@mui/material/CardContent";
  * @returns Component
  */
 export function MobileListItemRenderer<T>(
-  { data, itemHeight, margins }: ScrollerListExInnerItemRendererProps<T>,
+  { data, itemHeight, margins }: ScrollerListExItemRendererProps<T>,
   renderer: (
     data: T
   ) => [
