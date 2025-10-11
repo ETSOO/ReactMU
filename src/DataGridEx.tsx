@@ -51,8 +51,9 @@ export type DataGridExProps<
   | "onClick"
   | "onDoubleClick"
   | "onInitLoad"
+  | "rowHeight"
   | "width"
-> & {
+> & Partial<Pick<ScrollerGridProps<T, P>, "rowHeight">> & {
   /**
    * Alternating colors for odd/even rows
    */
@@ -389,6 +390,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
     onDataChange,
     onDoubleClick,
     onUpdateRows,
+    rowHeight = 53,
     selectable = true,
     selectedColor = "#edf4fb",
     width,
@@ -696,6 +698,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
         headerRenderer={headerRenderer}
         idField={idField}
         footerRenderer={hideFooter ? undefined : footerRenderer}
+        rowHeight={rowHeight}
         width={Math.max(width ?? 0, widthCalculator.total)}
         mRef={mRefLocal}
         {...rest}

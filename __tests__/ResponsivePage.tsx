@@ -1,12 +1,12 @@
-import { act, render } from "@testing-library/react";
+import { act, render, renderHook } from "@testing-library/react";
 import {
-  MUGlobal,
   MobileListItemRenderer,
   ReactAppContext,
   ResponsivePage,
   SearchField
 } from "../src";
 import React from "react";
+import { GridMethodRef } from "@etsoo/react";
 
 globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
@@ -32,15 +32,21 @@ const fieldTemplate = {
   name: "string"
 } as const;
 
-it("Render ResponsePage", async () => {
+it("Render ResponsivePage", async () => {
   act(() => {
+    // Hook
+    const { result: ref } = renderHook(() =>
+      React.useRef<GridMethodRef<Data>>(undefined)
+    );
+
     // Act
     render(
       <ReactAppContext.Provider value={null}>
         <ResponsivePage<Data, typeof fieldTemplate>
           fields={[<SearchField label="Keyword" name="keyword" minChars={2} />]}
           height={200}
-          itemSize={[118, MUGlobal.pagePaddings]}
+          rowHeight={[53, 116]}
+          mRef={ref.current}
           fieldTemplate={fieldTemplate}
           loadData={({ id }) =>
             Promise.resolve([
@@ -58,7 +64,7 @@ it("Render ResponsePage", async () => {
               valueFormatter: ({ data }) => data?.deviceName ?? data?.name
             }
           ]}
-          innerItemRenderer={(props) =>
+          itemRenderer={(props) =>
             MobileListItemRenderer(props, (data) => {
               return [
                 data.name,

@@ -1,20 +1,23 @@
 import React from "react";
 import { MUGlobal } from "../MUGlobal";
-import { ResponsibleContainer } from "../ResponsibleContainer";
+import {
+  ResponsibleContainer,
+  ResponsibleContainerProps
+} from "../ResponsibleContainer";
 import { CommonPage } from "./CommonPage";
 import { OperationMessageContainer } from "../messages/OperationMessageContainer";
 import type { DataGridPageProps } from "./DataGridPageProps";
-import type {
-  ScrollerListExItemSize,
-  ScrollerListExProps
-} from "../ScrollerListEx";
+import type { ScrollerListExProps } from "../ScrollerListEx";
 import { GridMethodRef } from "@etsoo/react";
 import type { OperationMessageHandlerAll } from "../messages/OperationMessageHandler";
 
 /**
  * Response page props
  */
-export type ResponsePageProps<T extends object, F> = DataGridPageProps<T, F> & {
+export type ResponsePageProps<T extends object, F> = Omit<
+  DataGridPageProps<T, F>,
+  "mRef" | "rowHeight"
+> & {
   /**
    *
    * @param height Current height
@@ -34,14 +37,9 @@ export type ResponsePageProps<T extends object, F> = DataGridPageProps<T, F> & {
   itemRenderer?: ScrollerListExProps<T>["itemRenderer"];
 
   /**
-   * Item size, a function indicates its a variable size list
-   */
-  itemSize: ScrollerListExItemSize;
-
-  /**
    * Methods
    */
-  mRef?: React.MutableRefObject<GridMethodRef<T> | undefined>;
+  mRef?: React.RefObject<GridMethodRef<T> | undefined>;
 
   /**
    * Pull to refresh data
@@ -57,6 +55,11 @@ export type ResponsePageProps<T extends object, F> = DataGridPageProps<T, F> & {
    * Operation message handler
    */
   operationMessageHandler?: OperationMessageHandlerAll;
+
+  /**
+   * Row height
+   */
+  rowHeight?: ResponsibleContainerProps<T, F>["rowHeight"];
 };
 
 /**

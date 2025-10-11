@@ -7,7 +7,6 @@ import {
 import { DataTypes, Utils } from "@etsoo/shared";
 import React from "react";
 import { MouseEventWithDataHandler, MUGlobal } from "./MUGlobal";
-import { useTheme } from "@mui/material/styles";
 import { GridUtils } from "./GridUtils";
 import { useListCacheInitLoad } from "./uses/useListCacheInitLoad";
 import Box from "@mui/material/Box";
@@ -52,32 +51,9 @@ const createGridStyle = (
   });
 };
 
-// Default margin
-// horizon: null means full horizontal margin, -1 means all half, >=0 means left/right
-const defaultMargin = (margin: object, horizon?: number | string) => {
-  const half = MUGlobal.half(margin);
-
-  if (horizon == null) {
-    const half = MUGlobal.half(margin);
-    return {
-      marginLeft: margin,
-      marginRight: margin,
-      marginTop: half,
-      marginBottom: half
-    };
-  }
-
-  if (
-    (typeof horizon === "number" && horizon >= 0) ||
-    (typeof horizon === "string" && /^-?\d+/.test(horizon))
-  ) {
-    return {
-      marginLeft: horizon,
-      marginRight: horizon,
-      marginTop: half,
-      marginBottom: half
-    };
-  }
+// Default margins
+const defaultMargins = () => {
+  const half = MUGlobal.half(MUGlobal.pagePaddings);
 
   return {
     marginLeft: half,
@@ -107,16 +83,6 @@ export type ScrollerListExItemRendererProps<T> = {
   style: React.CSSProperties;
 
   /**
-   * Item height
-   */
-  itemHeight: number;
-
-  /**
-   * Item space
-   */
-  space: number;
-
-  /**
    * Default margins
    */
   margins: object;
@@ -128,68 +94,60 @@ export type ScrollerListExItemRendererProps<T> = {
 };
 
 /**
- * Extended ScrollerList ItemSize type
- * 1. Callback function
- * 2. Static sets
- * 3. Dynamic left & right margin calculation
- */
-export type ScrollerListExItemSize =
-  | ((index: number) => [number, number] | [number, number, object])
-  | [number, number]
-  | [number, object, (number | string)?];
-
-/**
  * Extended ScrollerList Props
  */
 export type ScrollerListExProps<T extends object> = Omit<
   ScrollerListProps<T>,
   "rowComponent" | "rowHeight" | "onClick" | "onDoubleClick" | "onInitLoad"
-> & {
-  /**
-   * Alternating colors for odd/even rows
-   */
-  alternatingColors?: [string?, string?];
+> &
+  Partial<Pick<ScrollerListProps<T>, "rowHeight">> & {
+    /**
+     * Alternating colors for odd/even rows
+     */
+    alternatingColors?: [string?, string?];
 
-  /**
-   * Cache key
-   */
-  cacheKey?: string;
+    /**
+     * Cache key
+     */
+    cacheKey?: string;
 
-  /**
-   * Cache minutes
-   */
-  cacheMinutes?: number;
+    /**
+     * Cache minutes
+     */
+    cacheMinutes?: number;
 
-  /**
-   * Item renderer
-   */
-  itemRenderer?: (props: ScrollerListExItemRendererProps<T>) => React.ReactNode;
+    /**
+     * Cell margins, default to half of MUGlobal.pagePaddings
+     */
+    cellMargins?: object;
 
-  /**
-   * Item size, a function indicates its a variable size list
-   */
-  itemSize: ScrollerListExItemSize;
+    /**
+     * Item renderer
+     */
+    itemRenderer?: (
+      props: ScrollerListExItemRendererProps<T>
+    ) => React.ReactNode;
 
-  /**
-   * Double click handler
-   */
-  onDoubleClick?: MouseEventWithDataHandler<T>;
+    /**
+     * Double click handler
+     */
+    onDoubleClick?: MouseEventWithDataHandler<T>;
 
-  /**
-   * Click handler
-   */
-  onClick?: MouseEventWithDataHandler<T>;
+    /**
+     * Click handler
+     */
+    onClick?: MouseEventWithDataHandler<T>;
 
-  /**
-   * On items select change
-   */
-  onSelectChange?: (selectedItems: T[]) => void;
+    /**
+     * On items select change
+     */
+    onSelectChange?: (selectedItems: T[]) => void;
 
-  /**
-   * Selected color
-   */
-  selectedColor?: string;
-};
+    /**
+     * Selected color
+     */
+    selectedColor?: string;
+  };
 
 /**
  * Extended ScrollerList
@@ -232,15 +190,15 @@ export function ScrollerListEx<T extends object>(
     className,
     cacheKey,
     cacheMinutes = 15,
+    cellMargins = defaultMargins(),
     idField = "id" as DataTypes.Keys<T>,
-    itemSize,
-    itemRenderer = ({ data, itemHeight, margins }) => (
+    itemRenderer = ({ data, margins, style }) => (
       <Box
         component="pre"
         sx={{
-          height: itemHeight,
           ...margins
         }}
+        style={style}
       >
         {JSON.stringify(data)}
       </Box>
@@ -249,41 +207,13 @@ export function ScrollerListEx<T extends object>(
     onDoubleClick,
     onUpdateRows,
     onSelectChange,
+    rowHeight = 116,
     selectedColor = "#edf4fb",
     ...rest
   } = props;
 
   // Init handler
   const initHandler = useListCacheInitLoad<T>(cacheKey, cacheMinutes);
-
-  // Theme
-  const theme = useTheme();
-
-  // Cache calculation
-  const itemSizeResult = React.useMemo(():
-    | [number, number, object]
-    | undefined => {
-    if (typeof itemSize === "function") return undefined;
-    const [size, spaces, h] = itemSize;
-    if (typeof spaces === "number")
-      return [size, spaces, defaultMargin(MUGlobal.pagePaddings, undefined)];
-
-    return [size, MUGlobal.getSpace(spaces, theme), defaultMargin(spaces, h)];
-  }, [itemSize]);
-
-  // Calculate size
-  const calculateItemSize = (index: number): [number, number, object] => {
-    // Callback function
-    if (typeof itemSize === "function") {
-      const result = itemSize(index);
-      if (result.length == 2)
-        return [...result, defaultMargin(MUGlobal.pagePaddings)];
-      return result;
-    }
-
-    // Calculation
-    return itemSizeResult!;
-  };
 
   const onUpdateRowsHandler = React.useCallback(
     (rows: T[], state: GridLoaderStates<T>) => {
@@ -313,14 +243,13 @@ export function ScrollerListEx<T extends object>(
       }
       onInitLoad={initHandler}
       onUpdateRows={onUpdateRowsHandler}
-      rowComponent={({ index, items, style }) => {
+      rowComponent={(cellProps) => {
+        const { index, style, items } = cellProps;
         const data = items[index];
         const selected = isSelected(data);
         const rowClass = `ScrollerListEx-Row${index % 2}${
           selected ? ` ${selectedClassName}` : ""
         }`;
-
-        const [itemHeight, space, margins] = calculateItemSize(index);
 
         // Child
         const child = itemRenderer({
@@ -328,9 +257,7 @@ export function ScrollerListEx<T extends object>(
           data,
           style,
           selected,
-          itemHeight,
-          space,
-          margins
+          margins: cellMargins
         });
 
         return (
@@ -347,10 +274,7 @@ export function ScrollerListEx<T extends object>(
           </div>
         );
       }}
-      rowHeight={(index) => {
-        const [size, space] = calculateItemSize(index);
-        return size + space;
-      }}
+      rowHeight={rowHeight}
       {...rest}
     />
   );

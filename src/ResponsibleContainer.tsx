@@ -13,11 +13,7 @@ import {
 import { DataGridEx, DataGridExProps } from "./DataGridEx";
 import { MUGlobal } from "./MUGlobal";
 import { PullToRefreshUI } from "./PullToRefreshUI";
-import {
-  ScrollerListEx,
-  ScrollerListExItemSize,
-  ScrollerListExProps
-} from "./ScrollerListEx";
+import { ScrollerListEx, ScrollerListExProps } from "./ScrollerListEx";
 import { SearchBar } from "./SearchBar";
 import { Labels } from "./app/Labels";
 import { GridUtils } from "./GridUtils";
@@ -31,14 +27,7 @@ import Stack from "@mui/material/Stack";
  */
 export type ResponsibleContainerProps<T extends object, F> = Omit<
   DataGridExProps<T>,
-  | "height"
-  | "itemKey"
-  | "loadData"
-  | "mRef"
-  | "onScroll"
-  | "onItemsRendered"
-  | "onInitLoad"
-  | "onUpdateRows"
+  "height" | "loadData" | "mRef" | "onInitLoad" | "onUpdateRows" | "rowHeight"
 > & {
   /**
    * Height will be deducted
@@ -92,11 +81,6 @@ export type ResponsibleContainerProps<T extends object, F> = Omit<
   itemRenderer?: ScrollerListExProps<T>["itemRenderer"];
 
   /**
-   * Item size, a function indicates its a variable size list
-   */
-  itemSize: ScrollerListExItemSize;
-
-  /**
    * Load data callback
    */
   loadData: (
@@ -107,7 +91,7 @@ export type ResponsibleContainerProps<T extends object, F> = Omit<
   /**
    * Methods
    */
-  mRef?: React.MutableRefObject<GridMethodRef<T> | undefined>;
+  mRef?: React.RefObject<GridMethodRef<T> | undefined>;
 
   /**
    * Element ready callback
@@ -128,6 +112,19 @@ export type ResponsibleContainerProps<T extends object, F> = Omit<
    * Quick action for double click or click under mobile
    */
   quickAction?: (data: T) => void;
+
+  /**
+   * Row height
+   * @param isGrid Is displaying as DataGrid
+   */
+  rowHeight?:
+    | number
+    | [number, number]
+    | (<B extends boolean>(
+        isGrid: B
+      ) => B extends true
+        ? DataGridExProps<T>["rowHeight"]
+        : ScrollerListExProps<T>["rowHeight"]);
 
   /**
    * Size ready to read miliseconds span
@@ -196,6 +193,7 @@ export function ResponsibleContainer<T extends object, F>(
     paddings = MUGlobal.pagePaddings,
     pullToRefresh = true,
     quickAction,
+    rowHeight,
     sizeReadyMiliseconds = 0,
     searchBarHeight = 45.6,
     searchBarBottom = 8,
@@ -238,6 +236,17 @@ export function ResponsibleContainer<T extends object, F>(
       lastItem
     );
   };
+
+  const getRowHeight = React.useCallback(
+    <B extends boolean>(isGrid: B) => {
+      if (rowHeight == null) return undefined;
+      else if (typeof rowHeight === "number")
+        return isGrid ? undefined : rowHeight;
+      else if (Array.isArray(rowHeight)) return rowHeight[isGrid ? 0 : 1];
+      else return rowHeight<B>(isGrid);
+    },
+    [rowHeight]
+  );
 
   // Search data
   const searchData = useSearchParamsWithCache(cacheKey);
@@ -321,6 +330,7 @@ export function ResponsibleContainer<T extends object, F>(
             mRef={mRefs}
             onDoubleClick={(_, data) => quickAction && quickAction(data)}
             columns={columns}
+            rowHeight={getRowHeight(true)}
             {...gridProps}
           />
         </Box>
@@ -337,6 +347,7 @@ export function ResponsibleContainer<T extends object, F>(
       hideFooter,
       hoverColor,
       selectable,
+      onCellsRendered,
       ...listProps
     } = rest;
 
@@ -350,6 +361,7 @@ export function ResponsibleContainer<T extends object, F>(
           onClick={(event, data) =>
             quickAction && ReactUtils.isSafeClick(event) && quickAction(data)
           }
+          rowHeight={getRowHeight(false)}
           {...listProps}
         />
       </Box>
