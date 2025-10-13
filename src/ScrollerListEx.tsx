@@ -56,8 +56,8 @@ const defaultMargins = () => {
   const half = MUGlobal.half(MUGlobal.pagePaddings);
 
   return {
-    marginLeft: half,
-    marginRight: half,
+    marginLeft: 0,
+    marginRight: 0,
     marginTop: half,
     marginBottom: half
   };
@@ -192,13 +192,12 @@ export function ScrollerListEx<T extends object>(
     cacheMinutes = 15,
     cellMargins = defaultMargins(),
     idField = "id" as DataTypes.Keys<T>,
-    itemRenderer = ({ data, margins, style }) => (
+    itemRenderer = ({ data, margins }) => (
       <Box
         component="pre"
         sx={{
           ...margins
         }}
-        style={style}
       >
         {JSON.stringify(data)}
       </Box>

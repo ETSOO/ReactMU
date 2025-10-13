@@ -15,7 +15,7 @@ import { ScrollerListExItemRendererProps } from "./ScrollerListEx";
  * @returns Component
  */
 export function MobileListItemRenderer<T>(
-  { data, margins, style }: ScrollerListExItemRendererProps<T>,
+  { data, margins }: ScrollerListExItemRendererProps<T>,
   renderer: (
     data: T
   ) => [
@@ -37,7 +37,6 @@ export function MobileListItemRenderer<T>(
       sx={{
         ...margins
       }}
-      style={style}
     >
       <CardHeader
         sx={{ paddingBottom: 0.5 }}
