@@ -6,7 +6,7 @@ import {
 } from "@etsoo/react";
 import { DataTypes, Utils } from "@etsoo/shared";
 import React from "react";
-import { MouseEventWithDataHandler, MUGlobal } from "./MUGlobal";
+import { MouseEventWithDataHandler } from "./MUGlobal";
 import { GridUtils } from "./GridUtils";
 import { useListCacheInitLoad } from "./uses/useListCacheInitLoad";
 import Box from "@mui/material/Box";
@@ -51,18 +51,6 @@ const createGridStyle = (
   });
 };
 
-// Default margins
-const defaultMargins = () => {
-  const half = MUGlobal.half(MUGlobal.pagePaddings);
-
-  return {
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: half,
-    marginBottom: half
-  };
-};
-
 /**
  * Extended ScrollerList inner item renderer props
  */
@@ -81,11 +69,6 @@ export type ScrollerListExItemRendererProps<T> = {
    * Style
    */
   style: React.CSSProperties;
-
-  /**
-   * Default margins
-   */
-  margins: object;
 
   /**
    * Item selected
@@ -115,11 +98,6 @@ export type ScrollerListExProps<T extends object> = Omit<
      * Cache minutes
      */
     cacheMinutes?: number;
-
-    /**
-     * Cell margins, default to half of MUGlobal.pagePaddings
-     */
-    cellMargins?: object;
 
     /**
      * Item renderer
@@ -190,15 +168,9 @@ export function ScrollerListEx<T extends object>(
     className,
     cacheKey,
     cacheMinutes = 15,
-    cellMargins = defaultMargins(),
     idField = "id" as DataTypes.Keys<T>,
-    itemRenderer = ({ data, margins }) => (
-      <Box
-        component="pre"
-        sx={{
-          ...margins
-        }}
-      >
+    itemRenderer = ({ data }) => (
+      <Box component="pre" sx={{ height: "100%", overflow: "auto" }}>
         {JSON.stringify(data)}
       </Box>
     ),
@@ -255,8 +227,7 @@ export function ScrollerListEx<T extends object>(
           index,
           data,
           style,
-          selected,
-          margins: cellMargins
+          selected
         });
 
         return (

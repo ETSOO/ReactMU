@@ -6,16 +6,18 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import { ScrollerListExItemRendererProps } from "./ScrollerListEx";
+import { SxProps, Theme } from "@mui/material/styles";
 
 /**
  * Default mobile list item renderer
  * @param param0 List renderer props
  * @param margin Margin
  * @param renderer Renderer for card content
+ * @param cellSX Cell sx
  * @returns Component
  */
 export function MobileListItemRenderer<T>(
-  { data, margins }: ScrollerListExItemRendererProps<T>,
+  { data }: ScrollerListExItemRendererProps<T>,
   renderer: (
     data: T
   ) => [
@@ -24,7 +26,8 @@ export function MobileListItemRenderer<T>(
     React.ReactNode | (ListItemReact | boolean)[],
     React.ReactNode,
     React.ReactNode?
-  ]
+  ],
+  cellSX?: SxProps<Theme>
 ) {
   // Loading
   if (data == null) return <LinearProgress />;
@@ -33,11 +36,7 @@ export function MobileListItemRenderer<T>(
   const [title, subheader, actions, children, cardActions] = renderer(data);
 
   return (
-    <Card
-      sx={{
-        ...margins
-      }}
-    >
+    <Card sx={{ height: "100%", overflow: "auto", ...cellSX }}>
       <CardHeader
         sx={{ paddingBottom: 0.5 }}
         action={
@@ -66,15 +65,7 @@ export function MobileListItemRenderer<T>(
           subheader: { variant: "caption" }
         }}
       />
-      <CardContent
-        sx={{
-          paddingTop: 0,
-          paddingBottom:
-            cardActions == null ? Reflect.get(margins, "marginBottom") ?? 0 : 0
-        }}
-      >
-        {children}
-      </CardContent>
+      <CardContent>{children}</CardContent>
       {cardActions}
     </Card>
   );
