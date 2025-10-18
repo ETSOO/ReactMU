@@ -13,7 +13,6 @@ import {
   useListCacheInitLoad
 } from "./uses/useListCacheInitLoad";
 import Box from "@mui/material/Box";
-import { SxProps, Theme } from "@mui/material/styles";
 
 // Scroll bar size
 const scrollbarSize = 16;
@@ -85,8 +84,13 @@ export type ScrollerListExItemRendererProps<T> = {
  */
 export const ScrollerListExItemDefaultStyles: React.CSSProperties = {
   height: `calc(100% - 16px)`,
+
+  /**
+   * default rowHeight is 150px when 16px margin top/bottom
+   */
   marginTop: "8px",
   marginBottom: "8px",
+
   overflow: "auto"
 };
 
@@ -192,7 +196,7 @@ export function ScrollerListEx<T extends object>(
     onDoubleClick,
     onUpdateRows,
     onSelectChange,
-    rowHeight = 142,
+    rowHeight = 150,
     selectedColor = "#edf4fb",
     ...rest
   } = props;
@@ -201,9 +205,13 @@ export function ScrollerListEx<T extends object>(
   const initHandler = useListCacheInitLoad<T>(cacheKey, cacheMinutes);
 
   const onUpdateRowsHandler = React.useCallback(
-    (rows: T[], state: GridLoaderStates<T>) => {
+    (rows: T[], state: GridLoaderStates<T>, reset: boolean) => {
       GridUtils.getUpdateRowsHandler<T>(cacheKey)?.(rows, state);
-      onUpdateRows?.(rows, state);
+      onUpdateRows?.(rows, state, reset);
+
+      if (cacheKey && reset) {
+        sessionStorage.removeItem(listCacheKeyGenerator(cacheKey));
+      }
     },
     [onUpdateRows, cacheKey]
   );

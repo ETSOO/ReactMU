@@ -560,9 +560,13 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
   );
 
   const onUpdateRowsHandler = React.useCallback(
-    (rows: T[], state: GridLoaderStates<T>) => {
+    (rows: T[], state: GridLoaderStates<T>, reset: boolean) => {
       GridUtils.getUpdateRowsHandler<T>(cacheKey)?.(rows, state);
-      onUpdateRows?.(rows, state);
+      onUpdateRows?.(rows, state, reset);
+
+      if (cacheKey && reset) {
+        sessionStorage.removeItem(gridCacheKeyGenerator(cacheKey));
+      }
     },
     [onUpdateRows, cacheKey]
   );
