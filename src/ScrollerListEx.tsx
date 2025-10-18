@@ -13,6 +13,7 @@ import {
   useListCacheInitLoad
 } from "./uses/useListCacheInitLoad";
 import Box from "@mui/material/Box";
+import { SxProps, Theme } from "@mui/material/styles";
 
 // Scroll bar size
 const scrollbarSize = 16;
@@ -77,6 +78,16 @@ export type ScrollerListExItemRendererProps<T> = {
    * Item selected
    */
   selected: boolean;
+};
+
+/**
+ * Default styles for item renderer
+ */
+export const ScrollerListExItemDefaultStyles: React.CSSProperties = {
+  height: `calc(100% - 16px)`,
+  marginTop: "8px",
+  marginBottom: "8px",
+  overflow: "auto"
 };
 
 /**
@@ -173,7 +184,7 @@ export function ScrollerListEx<T extends object>(
     cacheMinutes = 15,
     idField = "id" as DataTypes.Keys<T>,
     itemRenderer = ({ data }) => (
-      <Box component="pre" sx={{ height: "100%", overflow: "auto" }}>
+      <Box component="pre" sx={ScrollerListExItemDefaultStyles}>
         {JSON.stringify(data)}
       </Box>
     ),
@@ -181,7 +192,7 @@ export function ScrollerListEx<T extends object>(
     onDoubleClick,
     onUpdateRows,
     onSelectChange,
-    rowHeight = 116,
+    rowHeight = 142,
     selectedColor = "#edf4fb",
     ...rest
   } = props;

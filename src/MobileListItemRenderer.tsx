@@ -5,7 +5,10 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
-import { ScrollerListExItemRendererProps } from "./ScrollerListEx";
+import {
+  ScrollerListExItemDefaultStyles,
+  ScrollerListExItemRendererProps
+} from "./ScrollerListEx";
 import { SxProps, Theme } from "@mui/material/styles";
 
 /**
@@ -38,9 +41,7 @@ export function MobileListItemRenderer<T>(
   return (
     <Card
       sx={{
-        height: `calc(100% - 8px)`,
-        marginTop: "8px",
-        overflow: "auto",
+        ...ScrollerListExItemDefaultStyles,
         ...cellSX
       }}
     >
