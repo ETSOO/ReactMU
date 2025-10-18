@@ -208,15 +208,15 @@ export function ResponsibleContainer<T extends object, F>(
   const refs = React.useRef<LocalRefs<T>>({});
   const state = refs.current;
 
+  // Screen size detection
+  const showDataGrid = useMediaQuery("(min-width:600px)");
+
   const mRefs = useCombinedRefs(mRef, (ref: GridMethodRef<T>) => {
     if (ref == null) return;
     state.ref = ref;
 
-    if (ref.element && elementReady) elementReady(ref.element, true);
+    if (ref.element) elementReady?.(ref.element, showDataGrid);
   });
-
-  // Screen size detection
-  const showDataGrid = useMediaQuery("(min-width:600px)");
 
   // Update mounted state
   React.useEffect(() => {

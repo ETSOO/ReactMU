@@ -188,29 +188,30 @@ const createGridStyle = (
   });
 };
 
-const rowItems = (
+const rowItem = (
   div: HTMLDivElement,
   callback: (div: HTMLDivElement) => void
 ) => {
   const row = div.dataset["row"];
   if (div.parentElement == null || row == null) return;
-  doRowItems(div.parentElement, parseFloat(row), callback);
+  doRowItem(div.parentElement, parseFloat(row), callback);
 };
 
-const doRowItems = (
+const doRowItem = (
   parent: HTMLElement,
   rowIndex: number,
   callback: (div: HTMLDivElement) => void
 ) => {
-  if (parent == null || rowIndex == null) return;
+  if (parent == null || parent.parentElement == null || rowIndex == null)
+    return;
 
-  parent
-    ?.querySelectorAll<HTMLDivElement>(
-      `div[role="row"][aria-rowindex="${rowIndex}"]`
-    )
-    .forEach((rowItem) => {
-      callback(rowItem);
-    });
+  // New react-window version uses an extra div
+  // <div role="row" aria-rowindex="1">...</div>
+  const row = parent.parentElement?.querySelector<HTMLDivElement>(
+    `div[role="row"] > div[data-row="${rowIndex}"]`
+  );
+
+  if (row) callback(row);
 };
 
 /**
@@ -507,12 +508,12 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
     if (isNaN(rowIndex) || rowIndex === selectedRowIndex.current) return;
 
     if (selectedRowIndex.current != -1) {
-      doRowItems(div.parentElement, selectedRowIndex.current, (preDiv) => {
+      doRowItem(div.parentElement, selectedRowIndex.current, (preDiv) => {
         preDiv.classList.remove("DataGridEx-Selected");
       });
     }
 
-    rowItems(div, (currentDiv) => {
+    rowItem(div, (currentDiv) => {
       currentDiv.classList.add("DataGridEx-Selected");
     });
 
@@ -520,13 +521,13 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
   };
 
   const handleMouseOver = (event: React.MouseEvent<HTMLDivElement>) => {
-    rowItems(event.currentTarget, (div) => {
+    rowItem(event.currentTarget, (div) => {
       div.classList.add("DataGridEx-Hover");
     });
   };
 
   const handleMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
-    rowItems(event.currentTarget, (div) => {
+    rowItem(event.currentTarget, (div) => {
       div.classList.remove("DataGridEx-Hover");
     });
   };
