@@ -8,7 +8,10 @@ import { DataTypes, Utils } from "@etsoo/shared";
 import React from "react";
 import { MouseEventWithDataHandler } from "./MUGlobal";
 import { GridUtils } from "./GridUtils";
-import { useListCacheInitLoad } from "./uses/useListCacheInitLoad";
+import {
+  listCacheKeyGenerator,
+  useListCacheInitLoad
+} from "./uses/useListCacheInitLoad";
 import Box from "@mui/material/Box";
 
 // Scroll bar size
@@ -207,7 +210,7 @@ export function ScrollerListEx<T extends object>(
         cacheKey
           ? (visibleRows) =>
               sessionStorage.setItem(
-                `${cacheKey}-scroll`,
+                listCacheKeyGenerator(cacheKey),
                 JSON.stringify(visibleRows)
               )
           : undefined

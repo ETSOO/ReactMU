@@ -324,6 +324,8 @@ export function ResponsibleContainer<T extends object, F>(
         <Box className="DataGridBox">
           <DataGridEx<T>
             autoLoad={!hasFields}
+            cacheKey={cacheKey}
+            cacheMinutes={cacheMinutes}
             height={heightLocal}
             width={rect.width}
             loadData={localLoadData}
@@ -355,6 +357,8 @@ export function ResponsibleContainer<T extends object, F>(
       <Box className="ListBox" sx={{ height: heightLocal }}>
         <ScrollerListEx<T>
           autoLoad={!hasFields}
+          cacheKey={cacheKey}
+          cacheMinutes={cacheMinutes}
           height={heightLocal}
           loadData={localLoadData}
           mRef={mRefs}

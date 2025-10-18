@@ -24,7 +24,10 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import { GridUtils } from "./GridUtils";
-import { useGridCacheInitLoad } from "./uses/useGridCacheInitLoad";
+import {
+  gridCacheKeyGenerator,
+  useGridCacheInitLoad
+} from "./uses/useGridCacheInitLoad";
 
 /**
  * Footer item renderer props
@@ -53,102 +56,103 @@ export type DataGridExProps<
   | "onInitLoad"
   | "rowHeight"
   | "width"
-> & Partial<Pick<ScrollerGridProps<T, P>, "rowHeight">> & {
-  /**
-   * Alternating colors for odd/even rows
-   */
-  alternatingColors?: [string?, string?];
+> &
+  Partial<Pick<ScrollerGridProps<T, P>, "rowHeight">> & {
+    /**
+     * Alternating colors for odd/even rows
+     */
+    alternatingColors?: [string?, string?];
 
-  /**
-   * Cache key
-   */
-  cacheKey?: string;
+    /**
+     * Cache key
+     */
+    cacheKey?: string;
 
-  /**
-   * Cache minutes
-   */
-  cacheMinutes?: number;
+    /**
+     * Cache minutes
+     */
+    cacheMinutes?: number;
 
-  /**
-   * Checkable to choose multiple items
-   * @default false
-   */
-  checkable?: boolean;
+    /**
+     * Checkable to choose multiple items
+     * @default false
+     */
+    checkable?: boolean;
 
-  /**
-   * Rows count to have the bottom border
-   */
-  borderRowsCount?: number;
+    /**
+     * Rows count to have the bottom border
+     */
+    borderRowsCount?: number;
 
-  /**
-   * Bottom height
-   */
-  bottomHeight?: number;
+    /**
+     * Bottom height
+     */
+    bottomHeight?: number;
 
-  /**
-   * Columns
-   */
-  columns: GridColumn<T>[];
+    /**
+     * Columns
+     */
+    columns: GridColumn<T>[];
 
-  /**
-   * Footer item renderer
-   */
-  footerItemRenderer?: (
-    rows: T[],
-    props: DataGridExFooterItemRendererProps<T>
-  ) => React.ReactNode;
+    /**
+     * Footer item renderer
+     */
+    footerItemRenderer?: (
+      rows: T[],
+      props: DataGridExFooterItemRendererProps<T>
+    ) => React.ReactNode;
 
-  /**
-   * Header height
-   * @default 56
-   */
-  headerHeight?: number;
+    /**
+     * Header height
+     * @default 56
+     */
+    headerHeight?: number;
 
-  /**
-   * Hide the footer
-   * @default false
-   */
-  hideFooter?: boolean;
+    /**
+     * Hide the footer
+     * @default false
+     */
+    hideFooter?: boolean;
 
-  /**
-   * Hover color
-   */
-  hoverColor?: string;
+    /**
+     * Hover color
+     */
+    hoverColor?: string;
 
-  /**
-   * Double click handler
-   */
-  onDoubleClick?: MouseEventWithDataHandler<T>;
+    /**
+     * Double click handler
+     */
+    onDoubleClick?: MouseEventWithDataHandler<T>;
 
-  /**
-   * Click handler
-   */
-  onClick?: MouseEventWithDataHandler<T>;
+    /**
+     * Click handler
+     */
+    onClick?: MouseEventWithDataHandler<T>;
 
-  /**
-   * Data change handler
-   * @param rows Rows
-   * @param rowIndex Row index
-   * @param columnIndex Column index
-   */
-  onDataChange?: (rows: T[], rowIndex: number, columnIndex: number) => void;
+    /**
+     * Data change handler
+     * @param rows Rows
+     * @param rowIndex Row index
+     * @param columnIndex Column index
+     */
+    onDataChange?: (rows: T[], rowIndex: number, columnIndex: number) => void;
 
-  /**
-   * Selectable to support hover over and out effect and row clickable
-   * @default true
-   */
-  selectable?: boolean;
+    /**
+     * Selectable to support hover over and out effect and row clickable
+     * @default true
+     */
+    selectable?: boolean;
 
-  /**
-   * Selected color
-   */
-  selectedColor?: string;
+    /**
+     * Selected color
+     */
+    selectedColor?: string;
 
-  /**
-   * Width
-   */
-  width?: number;
-};
+    /**
+     * Width
+     */
+    width?: number;
+  };
 
 // Borders
 const boldBorder = "2px solid rgba(224, 224, 224, 1)";
@@ -201,7 +205,9 @@ const doRowItems = (
   if (parent == null || rowIndex == null) return;
 
   parent
-    ?.querySelectorAll<HTMLDivElement>(`div[data-row="${rowIndex}"]`)
+    ?.querySelectorAll<HTMLDivElement>(
+      `div[role="row"][aria-rowindex="${rowIndex}"]`
+    )
     .forEach((rowItem) => {
       callback(rowItem);
     });
@@ -575,7 +581,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
           cacheKey
             ? (visibleCells) =>
                 sessionStorage.setItem(
-                  `${cacheKey}-scroll`,
+                  gridCacheKeyGenerator(cacheKey),
                   JSON.stringify(visibleCells)
                 )
             : undefined

@@ -8,6 +8,10 @@ import React from "react";
 import { GridUtils } from "../GridUtils";
 import { ExtendUtils } from "@etsoo/shared";
 
+export function listCacheKeyGenerator(cacheKey: string) {
+  return `${cacheKey}-list-scroll`;
+}
+
 export function useListCacheInitLoad<T extends object>(
   cacheKey: string | undefined,
   cacheMinutes: number
@@ -33,7 +37,9 @@ export function useListCacheInitLoad<T extends object>(
 
     return (ref: ListImperativeAPI) => {
       // Scroll position
-      const scrollData = sessionStorage.getItem(`${cacheKey}-scroll`);
+      const scrollData = sessionStorage.getItem(
+        listCacheKeyGenerator(cacheKey)
+      );
       if (scrollData) {
         const data = JSON.parse(scrollData) as OnRowsRenderedData;
         ExtendUtils.waitFor(

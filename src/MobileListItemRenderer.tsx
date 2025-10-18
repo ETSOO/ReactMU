@@ -36,7 +36,14 @@ export function MobileListItemRenderer<T>(
   const [title, subheader, actions, children, cardActions] = renderer(data);
 
   return (
-    <Card sx={{ height: "100%", overflow: "auto", ...cellSX }}>
+    <Card
+      sx={{
+        height: `calc(100% - 8px)`,
+        marginTop: "8px",
+        overflow: "auto",
+        ...cellSX
+      }}
+    >
       <CardHeader
         sx={{ paddingBottom: 0.5 }}
         action={
