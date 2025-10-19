@@ -205,13 +205,15 @@ const doRowItem = (
   if (parent == null || parent.parentElement == null || rowIndex == null)
     return;
 
-  // New react-window version uses an extra div
+  // New react-window version uses an extra div outside the rendered row
   // <div role="row" aria-rowindex="1">...</div>
-  const row = parent.parentElement?.querySelector<HTMLDivElement>(
-    `div[role="row"] > div[data-row="${rowIndex}"]`
-  );
-
-  if (row) callback(row);
+  parent.parentElement
+    ?.querySelectorAll<HTMLDivElement>(
+      `div[role="row"] > div[data-row="${rowIndex}"]`
+    )
+    .forEach((row) => {
+      callback(row);
+    });
 };
 
 /**
