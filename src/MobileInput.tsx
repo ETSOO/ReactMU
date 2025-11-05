@@ -1,37 +1,37 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 
 /**
- * Email input props
+ * Mobile input props
  */
-export type EmailInputProps = Omit<TextFieldProps, "type"> & {};
+export type MobileInputProps = Omit<TextFieldProps, "type"> & {};
 
 /**
- * Email input
+ * Mobile input
  * @param props Props
  */
-export function EmailInput(props: EmailInputProps) {
+export function MobileInput(props: MobileInputProps) {
   // Destruct
   const {
     slotProps,
     autoCapitalize = "none",
     autoCorrect = "off",
-    autoComplete = "email",
+    autoComplete = "mobile",
     fullWidth = true,
-    name = "email",
+    name = "mobile",
     ...rest
   } = props;
 
   // Layout
   return (
     <TextField
-      type="email"
+      type="tel"
       autoCapitalize={autoCapitalize}
       autoCorrect={autoCorrect}
       autoComplete={autoComplete}
       fullWidth={fullWidth}
       name={name}
       slotProps={{
-        htmlInput: { inputMode: "email", maxLength: 128 },
+        htmlInput: { inputMode: "tel", maxLength: 18 },
         ...slotProps
       }}
       {...rest}

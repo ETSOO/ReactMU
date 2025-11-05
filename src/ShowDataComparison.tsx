@@ -1,6 +1,6 @@
 import { AuditLineChangesDto, IApp } from "@etsoo/appscript";
 import { NotificationMessageType } from "@etsoo/notificationbase";
-import { Utils } from "@etsoo/shared";
+import { DataTypes, Utils } from "@etsoo/shared";
 import { useRequiredAppContext } from "./app/ReactApp";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -71,7 +71,9 @@ export const ShowDataComparison = (
   }));
 
   if (equalCheck)
-    rows = rows.filter((item) => !Utils.equals(item.oldValue, item.newValue));
+    rows = rows.filter(
+      (item) => !DataTypes.isDeepEqual(item.oldValue, item.newValue)
+    );
 
   const inputs = (
     <Table>

@@ -8,12 +8,6 @@ import {
 import React from "react";
 import { GridMethodRef } from "@etsoo/react";
 
-globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn()
-}));
-
 type Data = {
   id: number;
   name: string;

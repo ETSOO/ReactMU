@@ -1,26 +1,10 @@
+import { MockResizeObserver, NodeStorage } from "@etsoo/shared";
 import { vi } from "vitest";
 
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
 
-vi.mock("localStorage", () => {
-  let store = {} as Storage;
-  return {
-    default: {
-      getItem(key: string) {
-        return store[key];
-      },
+// Stub the global ResizeObserver
+vi.stubGlobal("ResizeObserver", MockResizeObserver);
 
-      setItem(key: string, value: string) {
-        store[key] = value;
-      },
-
-      removeItem(key: string) {
-        delete store[key];
-      },
-
-      clear() {
-        store = {} as Storage;
-      }
-    }
-  };
-});
+// Mock localStorage
+vi.mock("localStorage", () => new NodeStorage());
