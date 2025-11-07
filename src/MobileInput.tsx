@@ -1,4 +1,5 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Mobile input props
@@ -10,6 +11,9 @@ export type MobileInputProps = Omit<TextFieldProps, "type"> & {};
  * @param props Props
  */
 export function MobileInput(props: MobileInputProps) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     slotProps,
@@ -17,6 +21,7 @@ export function MobileInput(props: MobileInputProps) {
     autoCorrect = "off",
     autoComplete = "mobile",
     fullWidth = true,
+    label = app?.get("mobile"),
     name = "mobile",
     ...rest
   } = props;
@@ -29,6 +34,7 @@ export function MobileInput(props: MobileInputProps) {
       autoCorrect={autoCorrect}
       autoComplete={autoComplete}
       fullWidth={fullWidth}
+      label={label}
       name={name}
       slotProps={{
         htmlInput: { inputMode: "tel", maxLength: 18 },

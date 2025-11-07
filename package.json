@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.5.81",
+  "version": "1.5.82",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -46,7 +46,7 @@
     "@etsoo/shared": "^1.2.79",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
-    "@mui/x-data-grid": "^8.16.0",
+    "@mui/x-data-grid": "^8.17.0",
     "chart.js": "^4.5.1",
     "chartjs-plugin-datalabels": "^2.2.0",
     "dompurify": "^3.3.0",
