@@ -11,7 +11,7 @@ export type PhoneInputProps = Omit<TextFieldProps, "type"> & {};
  * Phone input
  * @param props Props
  */
-export function PhoInput(props: PhoneInputProps) {
+export function PhoneInput(props: PhoneInputProps) {
   // Global app
   const app = useAppContext();
 
