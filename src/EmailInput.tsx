@@ -1,5 +1,6 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { useAppContext } from "./app/ReactApp";
+import { MUGlobal } from "./MUGlobal";
 
 /**
  * Email input props
@@ -16,15 +17,18 @@ export function EmailInput(props: EmailInputProps) {
 
   // Destruct
   const {
-    slotProps,
     autoCapitalize = "none",
     autoCorrect = "off",
     autoComplete = "email",
     fullWidth = true,
     label = app?.get("email"),
     name = "email",
+    slotProps,
     ...rest
   } = props;
+
+  // Slot props
+  const { htmlInput, inputLabel, ...restSlotProps } = slotProps ?? {};
 
   // Layout
   return (
@@ -37,8 +41,9 @@ export function EmailInput(props: EmailInputProps) {
       label={label}
       name={name}
       slotProps={{
-        htmlInput: { inputMode: "email", maxLength: 128 },
-        ...slotProps
+        htmlInput: { inputMode: "email", maxLength: 128, ...htmlInput },
+        inputLabel: { shrink: MUGlobal.inputFieldShrink, ...inputLabel },
+        ...restSlotProps
       }}
       {...rest}
     />

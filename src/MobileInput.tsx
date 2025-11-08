@@ -1,5 +1,6 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { useAppContext } from "./app/ReactApp";
+import { MUGlobal } from "./MUGlobal";
 
 /**
  * Mobile input props
@@ -26,6 +27,9 @@ export function MobileInput(props: MobileInputProps) {
     ...rest
   } = props;
 
+  // Slot props
+  const { htmlInput, inputLabel, ...restSlotProps } = slotProps ?? {};
+
   // Layout
   return (
     <TextField
@@ -37,8 +41,9 @@ export function MobileInput(props: MobileInputProps) {
       label={label}
       name={name}
       slotProps={{
-        htmlInput: { inputMode: "tel", maxLength: 18 },
-        ...slotProps
+        htmlInput: { inputMode: "tel", maxLength: 18, ...htmlInput },
+        inputLabel: { shrink: MUGlobal.inputFieldShrink, ...inputLabel },
+        ...restSlotProps
       }}
       {...rest}
     />

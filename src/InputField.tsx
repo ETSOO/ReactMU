@@ -39,10 +39,10 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
   (props, ref) => {
     // Destruct
     const {
-      changeDelay,
-      InputLabelProps = {},
       InputProps = {},
       inputProps = {},
+      changeDelay,
+      slotProps,
       onChange,
       onChangeDelay,
       readOnly,
@@ -52,14 +52,8 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
       ...rest
     } = props;
 
-    // Shrink
-    InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
-
-    // Read only
-    if (readOnly != null) InputProps.readOnly = readOnly;
-
-    // Min characters
-    inputProps["data-min-chars"] = minChars;
+    // Slot props
+    const { htmlInput, input, inputLabel, ...restSlotProps } = slotProps ?? {};
 
     const isMounted = React.useRef(true);
     const createDelayed = () => {
@@ -100,9 +94,19 @@ export const InputField = React.forwardRef<HTMLDivElement, InputFieldProps>(
     return (
       <TextField
         ref={ref}
-        InputLabelProps={InputLabelProps}
-        InputProps={InputProps}
-        inputProps={inputProps}
+        slotProps={{
+          htmlInput: {
+            ["data-min-chars"]: minChars,
+            ...htmlInput,
+            ...inputProps
+          },
+          input: { readOnly, ...input, ...InputProps },
+          inputLabel: {
+            shrink: MUGlobal.inputFieldShrink,
+            ...inputLabel
+          },
+          ...restSlotProps
+        }}
         onChange={onChangeEx}
         size={size}
         variant={variant}
