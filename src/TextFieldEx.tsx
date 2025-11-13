@@ -54,6 +54,11 @@ export type TextFieldExProps = TextFieldProps & {
    * Show password button
    */
   showPassword?: boolean;
+
+  /**
+   * Methods
+   */
+  mRef?: React.Ref<TextFieldExMethods>;
 };
 
 /**
@@ -67,10 +72,7 @@ export interface TextFieldExMethods {
   setError(error: React.ReactNode): void;
 }
 
-export const TextFieldEx = React.forwardRef<
-  TextFieldExMethods,
-  TextFieldExProps
->((props, ref) => {
+export function TextFieldEx(props: TextFieldExProps) {
   // Global app
   const app = useAppContext();
 
@@ -86,6 +88,7 @@ export const TextFieldEx = React.forwardRef<
     helperText,
     InputLabelProps = {},
     InputProps = {},
+    slotProps,
     onChange,
     onClear,
     onKeyDown,
@@ -97,8 +100,12 @@ export const TextFieldEx = React.forwardRef<
     showPassword,
     type,
     variant = MUGlobal.textFieldVariant,
+    mRef,
     ...rest
   } = props;
+
+  // Slot props
+  const { input, inputLabel, ...restSlotProps } = slotProps ?? {};
 
   // Shrink
   InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
@@ -120,19 +127,19 @@ export const TextFieldEx = React.forwardRef<
 
   let typeEx = showPassword ? "password" : type;
 
-  let input: HTMLInputElement | undefined;
+  let inputEle: HTMLInputElement | undefined;
   const localRef = (ref: HTMLInputElement) => {
-    input = ref;
+    inputEle = ref;
 
-    if (input.value !== "") {
+    if (inputEle.value !== "") {
       updateEmpty(false);
     }
   };
 
   const doClear = () => {
-    if (input == null) return;
-    ReactUtils.triggerChange(input, "", false);
-    input.focus();
+    if (inputEle == null) return;
+    ReactUtils.triggerChange(inputEle, "", false);
+    inputEle.focus();
   };
 
   const clearClick = () => {
@@ -152,24 +159,24 @@ export const TextFieldEx = React.forwardRef<
 
   const touchStart = async (e: React.TouchEvent | React.MouseEvent) => {
     // Show the password
-    if (input) {
+    if (inputEle) {
       if (onVisibility) {
-        const result = await onVisibility(input);
+        const result = await onVisibility(inputEle);
         if (result === false) return;
       }
 
-      input.blur();
-      input.type = "text";
+      inputEle.blur();
+      inputEle.type = "text";
     }
     preventDefault(e);
   };
 
   const touchEnd = (e: React.TouchEvent | React.MouseEvent) => {
     // Show the password
-    if (input) {
+    if (inputEle) {
       if (onVisibility) return;
 
-      input.type = "password";
+      inputEle.type = "password";
     }
     preventDefault(e);
   };
@@ -218,7 +225,7 @@ export const TextFieldEx = React.forwardRef<
         };
 
   React.useImperativeHandle(
-    ref,
+    mRef,
     () => ({
       /**
        * Set error
@@ -277,13 +284,19 @@ export const TextFieldEx = React.forwardRef<
       fullWidth={fullWidth}
       helperText={helperTextEx}
       inputRef={useCombinedRefs(inputRef, localRef)}
-      InputProps={InputProps}
-      InputLabelProps={InputLabelProps}
       onChange={onChangeEx}
       onKeyDown={onKeyPressEx}
+      slotProps={{
+        input: { readOnly, ...input, ...InputProps },
+        inputLabel: {
+          shrink: MUGlobal.inputFieldShrink,
+          ...inputLabel
+        },
+        ...restSlotProps
+      }}
       type={typeEx}
       variant={variant}
       {...rest}
     />
   );
-});
+}

@@ -75,10 +75,7 @@ export type IntInputFieldProps = Omit<
 /**
  * Integer input field (controlled)
  */
-export const IntInputField = React.forwardRef<
-  HTMLDivElement,
-  IntInputFieldProps
->((props, ref) => {
+export function IntInputField(props: IntInputFieldProps) {
   // Destruct
   const {
     min = 0,
@@ -130,25 +127,20 @@ export const IntInputField = React.forwardRef<
   // Layout
   const layout = (
     <InputField
-      ref={ref}
       type="number"
       value={localValue == null ? (required ? min : "") : localValue}
-      inputProps={{
-        min,
-        step,
-        max,
-        style: inputStyle,
-        inputMode: "numeric"
-      }}
-      InputProps={{
-        startAdornment: symbol ? (
-          <React.Fragment>
-            <InputAdornment position="start">{symbol}</InputAdornment>
-          </React.Fragment>
-        ) : undefined,
-        endAdornment: endSymbol ? (
-          <InputAdornment position="end">{endSymbol}</InputAdornment>
-        ) : undefined
+      slotProps={{
+        input: {
+          startAdornment: symbol ? (
+            <React.Fragment>
+              <InputAdornment position="start">{symbol}</InputAdornment>
+            </React.Fragment>
+          ) : undefined,
+          endAdornment: endSymbol ? (
+            <InputAdornment position="end">{endSymbol}</InputAdornment>
+          ) : undefined
+        },
+        htmlInput: { min, step, max, style: inputStyle, inputMode: "numeric" }
       }}
       sx={
         buttons
@@ -234,4 +226,4 @@ export const IntInputField = React.forwardRef<
       </Box>
     );
   else return layout;
-});
+}

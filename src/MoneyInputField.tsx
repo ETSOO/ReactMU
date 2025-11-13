@@ -1,4 +1,3 @@
-import React from "react";
 import { IntInputField, IntInputFieldProps } from "./IntInputField";
 
 /**
@@ -9,13 +8,10 @@ export type MoneyInputFieldProps = IntInputFieldProps & {};
 /**
  * Money input field (controlled)
  */
-export const MoneyInputField = React.forwardRef<
-  HTMLDivElement,
-  MoneyInputFieldProps
->((props, ref) => {
+export function MoneyInputField(props: MoneyInputFieldProps) {
   // Destruct
   const { step = 0.01, ...rest } = props;
 
   // Layout
-  return <IntInputField ref={ref} step={step} {...rest} />;
-});
+  return <IntInputField step={step} {...rest} />;
+}

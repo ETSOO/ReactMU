@@ -1,11 +1,11 @@
-import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { useAppContext } from "./app/ReactApp";
 import { MUGlobal } from "./MUGlobal";
+import { InputField, InputFieldProps } from "./InputField";
 
 /**
  * Phone input props
  */
-export type PhoneInputProps = Omit<TextFieldProps, "type"> & {};
+export type PhoneInputProps = Omit<InputFieldProps, "type"> & {};
 
 /**
  * Phone input
@@ -32,7 +32,7 @@ export function PhoneInput(props: PhoneInputProps) {
 
   // Layout
   return (
-    <TextField
+    <InputField
       type="tel"
       autoCapitalize={autoCapitalize}
       autoCorrect={autoCorrect}

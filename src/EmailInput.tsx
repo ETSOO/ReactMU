@@ -1,11 +1,11 @@
-import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { useAppContext } from "./app/ReactApp";
 import { MUGlobal } from "./MUGlobal";
+import { InputField, InputFieldProps } from "./InputField";
 
 /**
  * Email input props
  */
-export type EmailInputProps = Omit<TextFieldProps, "type"> & {};
+export type EmailInputProps = Omit<InputFieldProps, "type"> & {};
 
 /**
  * Email input
@@ -32,7 +32,7 @@ export function EmailInput(props: EmailInputProps) {
 
   // Layout
   return (
-    <TextField
+    <InputField
       type="email"
       autoCapitalize={autoCapitalize}
       autoCorrect={autoCorrect}
