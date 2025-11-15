@@ -1,4 +1,4 @@
-import { DataTypes } from "@etsoo/shared";
+import { DataTypes, IdType } from "@etsoo/shared";
 import Typography, { TypographyProps } from "@mui/material/Typography";
 import React from "react";
 import { InputField } from "./InputField";
@@ -11,7 +11,9 @@ import { EmailInput } from "./EmailInput";
 import { MobileInput } from "./MobileInput";
 import { PhoneInput } from "./PhoneInput";
 
-type ItemType = DataTypes.IdLabelItem<string | number>;
+type ItemType = {
+  id: IdType;
+};
 
 const componentMap = {
   input: InputField,
@@ -100,7 +102,7 @@ export function InputTipField<
       sx: { color: (theme) => theme.palette.error.main, cursor: "pointer" }
     },
     loadData,
-    itemLabel = (item) => item.label,
+    itemLabel = (item) => DataTypes.getObjectItemLabel(item),
     renderItem = (item) => <ListItem key={item.id}>{itemLabel(item)}</ListItem>
   } = componentProps;
 
