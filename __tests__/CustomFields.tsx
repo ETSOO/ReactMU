@@ -137,13 +137,13 @@ it("Render FieldSelect", async () => {
     );
   });
 
-  const button = screen.getByRole("combobox");
+  const button = await screen.findByRole("combobox");
 
   act(() => {
     // Act, click to open the dropdown list
     vi.useFakeTimers();
     fireEvent.mouseDown(button);
-    vi.advanceTimersByTime(100);
+    vi.runAllTimers();
   });
 
   const input = document.querySelector<HTMLInputElement>("input");

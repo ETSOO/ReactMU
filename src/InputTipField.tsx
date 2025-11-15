@@ -1,7 +1,7 @@
 import { DataTypes, IdType } from "@etsoo/shared";
 import Typography, { TypographyProps } from "@mui/material/Typography";
 import React from "react";
-import { InputField } from "./InputField";
+import { InputField, InputFieldProps } from "./InputField";
 import { useAppContext } from "./app/ReactApp";
 import ListItem from "@mui/material/ListItem";
 import Popover from "@mui/material/Popover";
@@ -16,7 +16,6 @@ type ItemType = {
 };
 
 const componentMap = {
-  input: InputField,
   email: EmailInput,
   phone: PhoneInput,
   mobile: MobileInput
@@ -25,58 +24,66 @@ const componentMap = {
 type ComponentMap = typeof componentMap;
 type ComponentKey = keyof ComponentMap;
 
+type ComponentProps<T extends ItemType> = {
+  /**
+   * Load data
+   * @param value Duplicate test value
+   */
+  loadData(value: string): Promise<[T[]?, string?]>;
+
+  /**
+   * Label props
+   */
+  labelProps?: Omit<TypographyProps, "onClick">;
+
+  /**
+   * Custom item label
+   * @param item List item data
+   * @returns Result
+   */
+  itemLabel?: (item: T) => React.ReactNode;
+
+  /**
+   * Custom render item
+   * @param item List item data
+   * @returns Result
+   */
+  renderItem?: (item: T) => React.ReactNode;
+};
+
 /**
  * InputField with tips properties
  */
-export type InputTipFieldProps<
-  T extends ItemType = ItemType,
-  K extends ComponentKey = "input"
-> = Omit<React.ComponentProps<ComponentMap[K]>, "component"> & {
-  /**
-   * Component key
-   */
-  component?: K;
-
+export type InputTipFieldProps<T extends ItemType = ItemType> = {
   /**
    * Component properties
    */
-  componentProps: {
-    /**
-     * Load data
-     * @param value Duplicate test value
-     */
-    loadData(value: string): Promise<[T[]?, string?]>;
-
-    /**
-     * Label props
-     */
-    labelProps?: Omit<TypographyProps, "onClick">;
-
-    /**
-     * Custom item label
-     * @param item List item data
-     * @returns Result
-     */
-    itemLabel?: (item: T) => React.ReactNode;
-
-    /**
-     * Custom render item
-     * @param item List item data
-     * @returns Result
-     */
-    renderItem?: (item: T) => React.ReactNode;
-  };
-};
+  componentProps: ComponentProps<T>;
+} & (
+  | ({
+      /**
+       * Component properties
+       */
+      componentProps: ComponentProps<T>;
+    } & {
+      [K in ComponentKey]: {
+        /**
+         * Component key
+         */
+        component: K;
+      } & Omit<React.ComponentProps<ComponentMap[K]>, "component">;
+    }[ComponentKey])
+  | ({ component?: "input" } & Omit<InputFieldProps, "component">)
+);
 
 /**
  * InputField with tips
  * @param props Props
  * @returns Component
  */
-export function InputTipField<
-  T extends ItemType = ItemType,
-  K extends ComponentKey = "input"
->(props: InputTipFieldProps<T, K>) {
+export function InputTipField<T extends ItemType = ItemType>(
+  props: InputTipFieldProps<T>
+) {
   // Global app
   const app = useAppContext();
 
@@ -108,7 +115,8 @@ export function InputTipField<
 
   const { input, ...slotRests } = slotProps;
 
-  const Component = componentMap[component];
+  const Component =
+    component === "input" ? InputField : componentMap[component];
 
   const load = (value: string) => {
     if (value.length < 2) {
@@ -160,7 +168,7 @@ export function InputTipField<
           },
           ...slotRests
         }}
-        {...(rest as any)}
+        {...rest}
       />
     </React.Fragment>
   );

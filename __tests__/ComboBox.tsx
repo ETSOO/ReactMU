@@ -1,6 +1,11 @@
-import React from "react";
 import { ComboBox } from "../src";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor
+} from "@testing-library/react";
 
 it("Render ComboBox", async () => {
   // Arrange
@@ -21,21 +26,15 @@ it("Render ComboBox", async () => {
     );
   });
 
-  await vi.waitFor(
-    async () => {
-      await screen.findByRole("button");
-    },
-    {
-      timeout: 500, // default is 1000
-      interval: 20 // default is 50
-    }
-  );
+  await waitFor(async () => {
+    const button = await screen.findByRole("button");
 
-  // Act, click the list
-  const clicked = fireEvent.click(screen.getByRole("button"));
-  expect(clicked).toBeTruthy();
+    // Act, click the list
+    const clicked = fireEvent.click(button);
+    expect(clicked).toBeTruthy();
 
-  // Get list item
-  const item = screen.getByText("Name 1");
-  expect(item.nodeName).toBe("LI");
+    // Get list item
+    const item = await screen.findByText("Name 1");
+    expect(item.nodeName).toBe("LI");
+  });
 });
