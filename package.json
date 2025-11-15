@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.5.85",
+  "version": "1.5.86",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -76,13 +76,13 @@
     "@testing-library/react": "^16.3.0",
     "@types/pica": "^9.0.5",
     "@types/pulltorefreshjs": "^0.1.7",
-    "@types/react": "^19.2.4",
+    "@types/react": "^19.2.5",
     "@types/react-avatar-editor": "^13.0.4",
     "@types/react-dom": "^19.2.3",
     "@types/react-input-mask": "^3.0.6",
     "@vitejs/plugin-react": "^5.1.1",
     "jsdom": "^27.2.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.9"
   }
 }

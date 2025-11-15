@@ -29,41 +29,41 @@ type ComponentKey = keyof ComponentMap;
 export type InputTipFieldProps<
   T extends ItemType = ItemType,
   K extends ComponentKey = "input"
-> = {
+> = Omit<React.ComponentProps<ComponentMap[K]>, "component"> & {
   /**
    * Component key
    */
   component?: K;
 
   /**
-   * Component props
+   * Component properties
    */
-  componentProps?: React.ComponentProps<ComponentMap[K]>;
+  componentProps: {
+    /**
+     * Load data
+     * @param value Duplicate test value
+     */
+    loadData(value: string): Promise<[T[]?, string?]>;
 
-  /**
-   * Load data
-   * @param value Duplicate test value
-   */
-  loadData(value: string): Promise<[T[]?, string?]>;
+    /**
+     * Label props
+     */
+    labelProps?: Omit<TypographyProps, "onClick">;
 
-  /**
-   * Label props
-   */
-  labelProps?: Omit<TypographyProps, "onClick">;
+    /**
+     * Custom item label
+     * @param item List item data
+     * @returns Result
+     */
+    itemLabel?: (item: T) => React.ReactNode;
 
-  /**
-   * Custom item label
-   * @param item List item data
-   * @returns Result
-   */
-  itemLabel?: (item: T) => React.ReactNode;
-
-  /**
-   * Custom render item
-   * @param item List item data
-   * @returns Result
-   */
-  renderItem?: (item: T) => React.ReactNode;
+    /**
+     * Custom render item
+     * @param item List item data
+     * @returns Result
+     */
+    renderItem?: (item: T) => React.ReactNode;
+  };
 };
 
 /**
@@ -85,22 +85,28 @@ export function InputTipField<
 
   // Destruct
   const {
+    component = "input",
+    componentProps,
+    changeDelay = 480,
+    onChangeDelay,
+    fullWidth = true,
+    slotProps = {},
+    ...rest
+  } = props;
+
+  const {
     labelProps = {
       title: app?.get("clickForDetails"),
       sx: { color: (theme) => theme.palette.error.main, cursor: "pointer" }
     },
     loadData,
     itemLabel = (item) => item.label,
-    renderItem = (item) => <ListItem key={item.id}>{itemLabel(item)}</ListItem>,
-    component = "input",
-    componentProps = {} as React.ComponentProps<ComponentMap[K]>,
-    ...rest
-  } = props;
+    renderItem = (item) => <ListItem key={item.id}>{itemLabel(item)}</ListItem>
+  } = componentProps;
 
-  const { changeDelay = 480, onChangeDelay, slotProps = {} } = componentProps;
   const { input, ...slotRests } = slotProps;
 
-  const Component: typeof InputField = componentMap[component];
+  const Component = componentMap[component];
 
   const load = (value: string) => {
     if (value.length < 2) {
@@ -129,6 +135,7 @@ export function InputTipField<
       </Popover>
       <Component
         changeDelay={changeDelay}
+        fullWidth={fullWidth}
         onChangeDelay={(event) => {
           load(event.target.value);
           if (onChangeDelay) onChangeDelay(event);
@@ -151,7 +158,7 @@ export function InputTipField<
           },
           ...slotRests
         }}
-        {...rest}
+        {...(rest as any)}
       />
     </React.Fragment>
   );
