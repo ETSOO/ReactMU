@@ -127,6 +127,8 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     openText = openDefault,
     getOptionDisabled,
     getOptionLabel,
+    getOptionKey = (option) =>
+      typeof option === "string" ? option : option.id,
     onChange,
     onValueChange,
     minChars,
@@ -379,6 +381,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         noOptionsText={noOptionsText}
         loadingText={loadingText}
         openText={openText}
+        getOptionKey={getOptionKey}
         getOptionDisabled={(item) => {
           if (item.id === -1) return true;
           return getOptionDisabled ? getOptionDisabled(item) : false;

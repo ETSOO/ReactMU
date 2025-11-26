@@ -122,6 +122,7 @@ export function ComboBoxMultiple<
       </li>
     ),
     getOptionLabel = (option: T) => `${option[labelField]}`,
+    getOptionKey = (option: T) => `${option[idField]}`,
     sx = { minWidth: "150px" },
     noOptionsText = labels?.noOptions,
     loadingText = labels?.loading,
@@ -260,6 +261,7 @@ export function ComboBoxMultiple<
         }
         disableCloseOnSelect={disableCloseOnSelect}
         getOptionLabel={getOptionLabel}
+        getOptionKey={getOptionKey}
         multiple
         isOptionEqualToValue={(option: T, value: T) =>
           option[idField] === value[idField]

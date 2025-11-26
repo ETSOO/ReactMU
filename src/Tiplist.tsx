@@ -97,6 +97,7 @@ export function Tiplist<
     noOptionsText = noOptions,
     loadingText = loading,
     openText = openDefault,
+    getOptionKey = (option) => `${option[idField]}`,
     getOptionLabel,
     getOptionDisabled,
     sx = {},
@@ -389,6 +390,7 @@ export function Tiplist<
             ? getOptionLabel(item)
             : DataTypes.getObjectItemLabel(item);
         }}
+        getOptionKey={getOptionKey}
         {...rest}
       />
     </div>

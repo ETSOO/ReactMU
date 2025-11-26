@@ -56,6 +56,8 @@ export function TagListPro<D extends ListType2 = ListType2>(
 
   // Destruct
   const {
+    getOptionKey = (option) =>
+      typeof option === "string" ? option : option.id,
     renderOption = ({ key, ...props }, option, { selected }) => (
       <li key={key} {...props}>
         <>
@@ -69,7 +71,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
         </>
       </li>
     ),
-    renderTags = (value: readonly D[], getTagProps) =>
+    renderValue = (value: readonly D[], getTagProps) =>
       value.map((option, index) => {
         const { key, ...rest } = getTagProps({ index });
         return (
@@ -141,7 +143,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
       disableCloseOnSelect={disableCloseOnSelect}
       openOnFocus={openOnFocus}
       renderOption={renderOption}
-      renderTags={renderTags}
+      renderValue={renderValue}
       renderInput={(params) => (
         <InputField
           label={label}
@@ -165,6 +167,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
         );
       }}
       getOptionLabel={(item) => getLabel(item)}
+      getOptionKey={getOptionKey}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       noOptionsText={noOptionsText}
       loadingText={loadingText}

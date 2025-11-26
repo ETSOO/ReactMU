@@ -55,6 +55,10 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
 
   // Destruct
   const {
+    getOptionKey = (option) =>
+      typeof option === "string" ? option : option.id,
+    getOptionLabel = (option) =>
+      typeof option === "object" ? DataTypes.getListItemLabel(option) : option,
     noOptionsText = noOptions,
     loadingText = loadingLabel,
     openText = openDefault,
@@ -132,9 +136,8 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
           }}
         />
       )}
-      getOptionLabel={(item) =>
-        typeof item === "object" ? DataTypes.getListItemLabel(item) : item
-      }
+      getOptionLabel={getOptionLabel}
+      getOptionKey={getOptionKey}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       noOptionsText={noOptionsText}
       loadingText={loadingText}
