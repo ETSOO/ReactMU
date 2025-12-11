@@ -404,7 +404,7 @@ export class NotificationMU extends NotificationReact {
       if (type === "switch") {
         localInputs = (
           <Switch
-            inputRef={inputRef}
+            slotProps={{ input: { ref: inputRef } }}
             {...inputProps}
             value="true"
             autoFocus
