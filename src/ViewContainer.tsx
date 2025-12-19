@@ -74,7 +74,9 @@ function getItemField<T extends object>(
     isHorizontal = horizontal;
 
     // Size
-    size = getResp(singleRow);
+    size = getResp(
+      typeof singleRow === "function" ? singleRow(data) : singleRow
+    );
 
     gridProps = {
       ...rest,
@@ -252,7 +254,7 @@ export interface ViewPageField<T extends object> extends GridProps {
   /**
    * Display as single row
    */
-  singleRow?: ViewPageRowType;
+  singleRow?: ViewPageRowType | ((item: T) => ViewPageRowType);
 
   /**
    * Render as horizontal or not
