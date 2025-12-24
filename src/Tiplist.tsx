@@ -285,7 +285,7 @@ export function Tiplist<
 
   // Layout
   return (
-    <div>
+    <React.Fragment>
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
@@ -393,6 +393,6 @@ export function Tiplist<
         getOptionKey={getOptionKey}
         {...rest}
       />
-    </div>
+    </React.Fragment>
   );
 }

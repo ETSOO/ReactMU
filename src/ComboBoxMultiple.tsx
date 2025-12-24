@@ -239,7 +239,7 @@ export function ComboBoxMultiple<
 
   // Layout
   return (
-    <div>
+    <React.Fragment>
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
@@ -306,6 +306,6 @@ export function ComboBoxMultiple<
         loadingText={loadingText}
         {...rest}
       />
-    </div>
+    </React.Fragment>
   );
 }

@@ -299,7 +299,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
 
   // Layout
   return (
-    <div>
+    <React.Fragment>
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
@@ -394,6 +394,6 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         }}
         {...rest}
       />
-    </div>
+    </React.Fragment>
   );
 }

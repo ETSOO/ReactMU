@@ -236,7 +236,7 @@ export function ComboBox<
 
   // Layout
   return (
-    <div>
+    <React.Fragment>
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
@@ -311,6 +311,6 @@ export function ComboBox<
           </IconButton>
         )}
       </Stack>
-    </div>
+    </React.Fragment>
   );
 }
