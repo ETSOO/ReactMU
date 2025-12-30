@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.5.93",
+  "version": "1.5.94",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -40,9 +40,9 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@etsoo/appscript": "^1.6.50",
+    "@etsoo/appscript": "^1.6.51",
     "@etsoo/notificationbase": "^1.1.66",
-    "@etsoo/react": "^1.8.66",
+    "@etsoo/react": "^1.8.67",
     "@etsoo/shared": "^1.2.80",
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
@@ -62,8 +62,7 @@
   },
   "overrides": {
     "react": "$react",
-    "react-dom": "$react-dom",
-    "@emotion/react": "$@emotion/react"
+    "react-dom": "$react-dom"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
@@ -81,7 +80,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/react-input-mask": "^3.0.6",
     "@vitejs/plugin-react": "^5.1.2",
-    "jsdom": "^27.3.0",
+    "jsdom": "^27.4.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
   }
