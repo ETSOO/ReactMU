@@ -233,6 +233,15 @@ export function SearchBar(props: SearchBarProps) {
     let newIndex: number = others;
     for (let c: number = 0; c < others; c++) {
       const child = children[c];
+
+      // Ignore it when it's input and hidden or display none
+      if (
+        child instanceof HTMLInputElement &&
+        (child.type === "hidden" || child.offsetParent == null)
+      ) {
+        continue;
+      }
+
       const cachedWidth = child.getAttribute(cachedWidthName);
       let childWidth: number;
       if (cachedWidth) {
