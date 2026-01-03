@@ -83,7 +83,7 @@ export type CustomFieldWindowProps<D extends CustomFieldData> = {
    * Input ref
    * 输入框引用
    */
-  inputRef?: React.MutableRefObject<HTMLInputElement | null>;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 
   /**
    * On update callback
