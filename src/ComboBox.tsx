@@ -241,7 +241,7 @@ export function ComboBox<
         ref={inputRef}
         data-reset={inputReset ?? true}
         type={idIsString ? "text" : "number"}
-        style={{ display: "none" }}
+        style={{ display: "none", width: 1 }}
         name={name}
         value={getValue(stateValue)}
         readOnly

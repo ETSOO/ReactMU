@@ -244,7 +244,7 @@ export function ComboBoxMultiple<
         ref={inputRef}
         data-reset={inputReset ?? true}
         type="text"
-        style={{ display: "none" }}
+        style={{ display: "none", width: 1 }}
         name={name}
         value={getValue(stateValue)}
         readOnly

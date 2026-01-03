@@ -237,7 +237,8 @@ export function SearchBar(props: SearchBarProps) {
       // Ignore it when it's input and hidden or display none
       if (
         child instanceof HTMLInputElement &&
-        (child.type === "hidden" || child.offsetParent == null)
+        (child.type === "hidden" ||
+          (child.parentElement == null && child.readOnly))
       ) {
         continue;
       }

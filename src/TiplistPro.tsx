@@ -304,7 +304,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         ref={inputRef}
         data-reset={inputReset ?? true}
         type={idIsString ? "text" : "number"}
-        style={{ display: "none" }}
+        style={{ display: "none", width: 1 }}
         name={name}
         value={inputValue ?? (state.current.idSet ? "" : localIdValue ?? "")}
         readOnly
