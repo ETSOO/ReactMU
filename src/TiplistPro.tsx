@@ -299,12 +299,12 @@ export function TiplistPro<T extends ListType2 = ListType2>(
 
   // Layout
   return (
-    <React.Fragment>
+    <div style={{ flex: 2 }}>
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
         type={idIsString ? "text" : "number"}
-        style={{ display: "none", width: 1 }}
+        style={{ display: "none" }}
         name={name}
         value={inputValue ?? (state.current.idSet ? "" : localIdValue ?? "")}
         readOnly
@@ -394,6 +394,6 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         }}
         {...rest}
       />
-    </React.Fragment>
+    </div>
   );
 }

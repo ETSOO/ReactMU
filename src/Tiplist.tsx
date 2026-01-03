@@ -285,12 +285,12 @@ export function Tiplist<
 
   // Layout
   return (
-    <React.Fragment>
+    <div style={{ flex: 2 }}>
       <input
         ref={inputRef}
         data-reset={inputReset ?? true}
         type={idIsString ? "text" : "number"}
-        style={{ display: "none", width: 1 }}
+        style={{ display: "none" }}
         name={name}
         value={`${
           inputValue ?? (state.current.idSet ? "" : localIdValue ?? "")
@@ -393,6 +393,6 @@ export function Tiplist<
         getOptionKey={getOptionKey}
         {...rest}
       />
-    </React.Fragment>
+    </div>
   );
 }

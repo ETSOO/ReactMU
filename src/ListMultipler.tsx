@@ -124,7 +124,7 @@ export function ListMultipler<T extends object>(props: ListMultiplerProps<T>) {
       {name && (
         <input
           type={inputType}
-          style={{ display: "none", width: 1 }}
+          style={{ display: "none" }}
           name={name}
           value={ids.join(",")}
           readOnly
