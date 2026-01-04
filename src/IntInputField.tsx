@@ -87,7 +87,7 @@ export function IntInputField(props: IntInputFieldProps) {
     endSymbol,
     symbol,
     value,
-    changeDelay = 600,
+    changeDelay = [600],
     onChangeDelay,
     onChange,
     onFocus = (event) => event.currentTarget.select(),

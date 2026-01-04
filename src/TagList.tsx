@@ -27,7 +27,7 @@ export type TagListProps = Omit<
   /**
    * Input props
    */
-  inputProps?: Omit<InputFieldProps, "onChange">;
+  inputProps?: Omit<InputFieldProps, "onChangeDelay">;
 
   /**
    * Max items
@@ -62,7 +62,7 @@ export function TagList(props: TagListProps) {
         {option}
       </li>
     ),
-    renderTags = (value: readonly string[], getTagProps) =>
+    renderValue = (value: readonly string[], getTagProps) =>
       value.map((option, index) => {
         const { key, ...rest } = getTagProps({ index });
         return <Chip variant="outlined" key={key} label={option} {...rest} />;
@@ -129,12 +129,11 @@ export function TagList(props: TagListProps) {
       clearOnBlur
       openOnFocus={openOnFocus}
       renderOption={renderOption}
-      renderTags={renderTags}
+      renderValue={renderValue}
       renderInput={(params) => (
         <InputField
           label={label}
-          changeDelay={480}
-          onChange={async (event) => {
+          onChangeDelay={async (event) => {
             // Stop bubble
             event.preventDefault();
             event.stopPropagation();

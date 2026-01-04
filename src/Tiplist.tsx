@@ -177,8 +177,13 @@ export function Tiplist<
     // Stop bubble
     event.stopPropagation();
 
+    const value = event.currentTarget.value;
+    if (minChars && minChars > 0 && value.length < minChars) {
+      return;
+    }
+
     // Call with delay
-    delayed.call(undefined, event.currentTarget.value);
+    delayed.call(undefined, value);
   };
 
   // Directly load data
@@ -349,7 +354,6 @@ export function Tiplist<
               label={label}
               name={name + "Input"}
               margin={inputMargin}
-              minChars={minChars}
               variant={inputVariant}
               required={inputRequired}
               autoComplete={inputAutoComplete}
@@ -363,7 +367,6 @@ export function Tiplist<
               label={label}
               name={name + "Input"}
               margin={inputMargin}
-              minChars={minChars}
               variant={inputVariant}
               required={inputRequired}
               autoComplete={inputAutoComplete}

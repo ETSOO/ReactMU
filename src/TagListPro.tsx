@@ -28,7 +28,7 @@ export type TagListProProps<D extends ListType2 = ListType2> = Omit<
   /**
    * Input props
    */
-  inputProps?: Omit<InputFieldProps, "onChange">;
+  inputProps?: Omit<InputFieldProps, "onChangeDelay">;
 
   /**
    * Max items
@@ -147,8 +147,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
       renderInput={(params) => (
         <InputField
           label={label}
-          changeDelay={480}
-          onChange={async (event) => {
+          onChangeDelay={async (event) => {
             // Stop bubble
             event.preventDefault();
             event.stopPropagation();

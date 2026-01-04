@@ -194,8 +194,13 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     // Stop bubble
     event.stopPropagation();
 
+    const value = event.currentTarget.value;
+    if (minChars && minChars > 0 && value.length < minChars) {
+      return;
+    }
+
     // Call with delay
-    delayed.call(undefined, event.currentTarget.value);
+    delayed.call(undefined, value);
   };
 
   // Directly load data
@@ -363,7 +368,6 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         loading={states.loading}
         renderInput={(params) => (
           <InputField
-            minChars={minChars}
             {...inputProps}
             {...params}
             onChange={changeHandle}

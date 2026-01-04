@@ -96,7 +96,7 @@ export function InputTipField<T extends ItemType = ItemType>(
   const {
     component = "input",
     componentProps,
-    changeDelay = 480,
+    changeDelay,
     onChangeDelay,
     fullWidth = true,
     slotProps = {},

@@ -8,12 +8,12 @@ import TextField, { TextFieldProps } from "@mui/material/TextField";
  */
 export type InputFieldProps = TextFieldProps & {
   /**
-   * Change delay (ms) to avoid repeatly dispatch onChange
+   * Change [delay (ms), Minimum characters] to avoid repeatly dispatch
    */
-  changeDelay?: number;
+  changeDelay?: [number, number?];
 
   /**
-   * Change delay handler, without it onChange will be applied
+   * Change delay handler
    */
   onChangeDelay?: React.ChangeEventHandler<
     HTMLTextAreaElement | HTMLInputElement
@@ -23,11 +23,6 @@ export type InputFieldProps = TextFieldProps & {
    * Is the field read only?
    */
   readOnly?: boolean;
-
-  /**
-   * Minimum characters to trigger the change event
-   */
-  minChars?: number;
 };
 
 /**
@@ -41,13 +36,12 @@ export function InputField(props: InputFieldProps) {
     InputProps = {},
     inputProps = {},
     slotProps,
-    changeDelay,
     onChange,
     onChangeDelay,
+    changeDelay = onChangeDelay ? [480] : undefined,
     readOnly,
     size = MUGlobal.inputFieldSize,
     variant = MUGlobal.inputFieldVariant,
-    minChars = 0,
     ...rest
   } = props;
 
@@ -56,9 +50,8 @@ export function InputField(props: InputFieldProps) {
 
   const isMounted = React.useRef(true);
   const createDelayed = () => {
-    if (changeDelay != null && changeDelay >= 1) {
-      const changeHandler = onChangeDelay ?? onChange;
-      if (changeHandler) return useDelayedExecutor(changeHandler, changeDelay);
+    if (onChangeDelay && changeDelay && changeDelay[0] >= 1) {
+      return useDelayedExecutor(onChangeDelay, changeDelay[0]);
     }
     return undefined;
   };
@@ -67,17 +60,19 @@ export function InputField(props: InputFieldProps) {
   const onChangeEx = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    // Min characters check
-    const len = event.target.value.length;
-    if (len > 0 && len < minChars) {
-      // Avoid to trigger the form change event
-      event.stopPropagation();
-      event.preventDefault();
-      return;
-    }
+    // Change handler
+    onChange?.(event);
 
-    if (onChange && (delayed == null || onChangeDelay != null)) onChange(event);
-    delayed?.call(undefined, event);
+    if (onChangeDelay && changeDelay && delayed) {
+      const [_, minChars = 0] = changeDelay;
+
+      if (minChars > 0) {
+        const len = event.target.value.length;
+        if (len < minChars) return;
+      }
+
+      delayed.call(undefined, event);
+    }
   };
 
   React.useEffect(() => {
@@ -92,7 +87,7 @@ export function InputField(props: InputFieldProps) {
     <TextField
       slotProps={{
         htmlInput: {
-          ["data-min-chars"]: minChars,
+          ["data-min-chars"]: changeDelay?.[1],
           ...htmlInput,
           ...inputProps
         },

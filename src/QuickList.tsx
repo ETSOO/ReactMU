@@ -118,11 +118,11 @@ export function QuickList<T extends ListType2 = ListType2>(
     <VBox gap={gap} height={height} {...rest}>
       <InputField
         label={label}
-        changeDelay={480}
         onChangeDelay={(event) => {
           // Stop bubble
           event.preventDefault();
           event.stopPropagation();
+
           loadDataLocal(event.target.value);
         }}
         fullWidth
