@@ -102,6 +102,7 @@ export function Tiplist<
     getOptionDisabled,
     sx = {},
     minChars,
+    disabled,
     ...rest
   } = props;
 
@@ -302,10 +303,12 @@ export function Tiplist<
         }`}
         readOnly
         onChange={inputOnChange}
+        disabled={disabled}
       />
       {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
       <Autocomplete<T, undefined, false, false>
         filterOptions={(options, _state) => options}
+        disabled={disabled}
         value={states.value}
         options={states.options}
         onChange={(event, value, reason, details) => {

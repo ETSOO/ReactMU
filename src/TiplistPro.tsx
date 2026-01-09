@@ -132,6 +132,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
     onChange,
     onValueChange,
     minChars,
+    disabled,
     ...rest
   } = props;
 
@@ -314,12 +315,14 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         value={inputValue ?? (state.current.idSet ? "" : localIdValue ?? "")}
         readOnly
         onChange={inputOnChange}
+        disabled={disabled}
       />
       {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
       <Autocomplete<T, false, false, true>
         filterOptions={(options, _state) => options}
         value={states.value}
         options={states.options}
+        disabled={disabled}
         freeSolo
         clearOnBlur={false}
         onChange={(event, value, reason, details) => {

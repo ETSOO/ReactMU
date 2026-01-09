@@ -86,6 +86,7 @@ export function ComboBox<
 
   // Destruct
   const {
+    disabled,
     search = false,
     autoAddBlankItem = search,
     idField = "id" as D,
@@ -246,11 +247,13 @@ export function ComboBox<
         value={getValue(stateValue)}
         readOnly
         onChange={inputOnChange}
+        disabled={disabled}
       />
       {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
       <Stack gap={0.5} direction="row" width="100%">
         <Autocomplete<T, false, false, false>
           value={stateValue}
+          disabled={disabled}
           disableCloseOnSelect={disableCloseOnSelect}
           getOptionLabel={getOptionLabel}
           isOptionEqualToValue={(option: T, value: T) =>

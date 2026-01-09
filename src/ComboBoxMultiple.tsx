@@ -126,6 +126,7 @@ export function ComboBoxMultiple<
     sx = { minWidth: "150px" },
     noOptionsText = labels?.noOptions,
     loadingText = labels?.loading,
+    disabled,
     ...rest
   } = props;
 
@@ -249,6 +250,7 @@ export function ComboBoxMultiple<
         value={getValue(stateValue)}
         readOnly
         onChange={inputOnChange}
+        disabled={disabled}
       />
       {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
       <Autocomplete<T, true, false, false>
@@ -259,6 +261,7 @@ export function ComboBoxMultiple<
             ? stateValue
             : [stateValue]
         }
+        disabled={disabled}
         disableCloseOnSelect={disableCloseOnSelect}
         getOptionLabel={getOptionLabel}
         getOptionKey={getOptionKey}
