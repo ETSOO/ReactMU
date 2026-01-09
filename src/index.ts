@@ -61,6 +61,7 @@ export * from "./DataSteps";
 export * from "./DataTable";
 export * from "./DialogButton";
 export * from "./DnDList";
+export * from "./DownUpButton";
 export * from "./DraggablePaperComponent";
 export * from "./EmailInput";
 export * from "./ErrorAlert";
