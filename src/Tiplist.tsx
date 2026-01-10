@@ -220,7 +220,7 @@ export function Tiplist<
 
       if (id && options && onValueChange) {
         const option = options.find((o) => o[idField] === id);
-        if (option) onValueChange(option);
+        if (option) onValueChange(option, inputRef.current);
       }
 
       // Indicates loading completed
@@ -318,7 +318,7 @@ export function Tiplist<
           // Custom
           if (onChange != null) onChange(event, value, reason, details);
 
-          if (onValueChange) onValueChange(value);
+          if (onValueChange) onValueChange(value, inputRef.current);
 
           // For clear case
           if (reason === "clear") {

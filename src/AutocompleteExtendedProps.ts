@@ -96,6 +96,7 @@ export type AutocompleteExtendedProps<
   /**
    * Value change handler
    * @param value New value
+   * @param input Input element
    */
-  onValueChange?: (value: T | null) => void;
+  onValueChange?: (value: T | null, input?: HTMLInputElement | null) => void;
 };

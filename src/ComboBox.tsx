@@ -160,7 +160,7 @@ export function ComboBox<
   React.useEffect(() => {
     if (localValue != null && localValue != stateValue) {
       setStateValue(localValue);
-      if (onValueChange) onValueChange(localValue);
+      if (onValueChange) onValueChange(localValue, inputRef.current);
     }
   }, [localValue]);
 
@@ -266,7 +266,7 @@ export function ComboBox<
             // Custom
             if (onChange != null) onChange(event, value, reason, details);
 
-            if (onValueChange) onValueChange(value);
+            if (onValueChange) onValueChange(value, inputRef.current);
           }}
           openOnFocus={openOnFocus}
           sx={sx}
