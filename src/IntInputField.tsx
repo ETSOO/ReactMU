@@ -6,6 +6,7 @@ import { InputField, InputFieldProps } from "./InputField";
 import Box, { BoxProps } from "@mui/material/Box";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+import { useCombinedRefs } from "@etsoo/react";
 
 /**
  * Integer input field props
@@ -81,6 +82,7 @@ export function IntInputField(props: IntInputFieldProps) {
     min = 0,
     step = 1,
     max = 9999999,
+    inputRef,
     inputStyle = { textAlign: "right" },
     boxProps,
     buttons,
@@ -96,8 +98,20 @@ export function IntInputField(props: IntInputFieldProps) {
     ...rest
   } = props;
 
+  const isControlled = value !== undefined;
+
   // State
-  const [localValue, setLocalValue] = React.useState<number | string>();
+  const [localValue, setInnerLocalValue] = React.useState<number | string>();
+
+  const localRef = React.useRef<HTMLInputElement>(null);
+
+  function setLocalValue(value: number | string | undefined) {
+    if (isControlled) {
+      setInnerLocalValue(value);
+    } else if (localRef.current) {
+      localRef.current.value = value?.toString() ?? "";
+    }
+  }
 
   const setValue = (
     value: number | undefined,
@@ -121,14 +135,23 @@ export function IntInputField(props: IntInputFieldProps) {
   };
 
   React.useEffect(() => {
-    setValue(value, undefined, true);
-  }, [value]);
+    if (isControlled) setValue(value, undefined, true);
+  }, [value, isControlled]);
 
   // Layout
   const layout = (
     <InputField
       type="number"
-      value={localValue == null ? (required ? min : "") : localValue}
+      inputRef={useCombinedRefs(inputRef, localRef)}
+      value={
+        isControlled
+          ? localValue == null
+            ? required
+              ? min
+              : ""
+            : localValue
+          : undefined
+      }
       slotProps={{
         input: {
           startAdornment: symbol ? (
