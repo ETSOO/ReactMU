@@ -121,6 +121,7 @@ export function TagList(props: TagListProps) {
         }
       }}
       onClose={() => {
+        setOptions([]);
         setOpen(false);
       }}
       options={options}

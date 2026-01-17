@@ -26,6 +26,11 @@ export type TagListProProps<D extends ListType2 = ListType2> = Omit<
   ) => PromiseLike<D[] | null | undefined>;
 
   /**
+   * Load value from ids
+   */
+  loadIdValue?: () => PromiseLike<D[] | null | undefined>;
+
+  /**
    * Input props
    */
   inputProps?: Omit<InputFieldProps, "onChangeDelay">;
@@ -87,6 +92,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
     loadingText = loadingLabel,
     openText = openDefault,
     loadData,
+    loadIdValue,
     maxItems = 16,
     disableCloseOnSelect = true,
     openOnFocus = true,
@@ -100,9 +106,10 @@ export function TagListPro<D extends ListType2 = ListType2>(
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<readonly D[]>([]);
   const [loading, setLoading] = React.useState(false);
+  const [valueState, setValueState] = React.useState<D[]>(value ?? []);
 
   const currentValue = React.useRef<readonly D[]>([]);
-  currentValue.current = value ?? [];
+  currentValue.current = valueState;
 
   const loadDataLocal = async (keyword?: string) => {
     setLoading(true);
@@ -124,6 +131,15 @@ export function TagListPro<D extends ListType2 = ListType2>(
     setLoading(false);
   };
 
+  React.useEffect(() => {
+    if (loadIdValue) {
+      loadIdValue().then((result) => {
+        if (result == null) return;
+        setValueState(result);
+      });
+    }
+  }, [loadIdValue]);
+
   return (
     <Autocomplete<D, true, false, false>
       multiple
@@ -136,6 +152,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
         }
       }}
       onClose={() => {
+        setOptions([]);
         setOpen(false);
       }}
       options={options}
@@ -171,7 +188,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
       noOptionsText={noOptionsText}
       loadingText={loadingText}
       openText={openText}
-      value={value}
+      value={valueState}
       onChange={(event, value, reason, details) => {
         currentValue.current = value;
         if (onChange) onChange(event, value, reason, details);
