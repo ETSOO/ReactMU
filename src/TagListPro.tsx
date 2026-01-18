@@ -183,6 +183,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
         );
       }}
       getOptionKey={getOptionKey}
+      getOptionLabel={getOptionLabel}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       noOptionsText={noOptionsText}
       loadingText={loadingText}
