@@ -107,15 +107,12 @@ export function TagListPro<D extends ListType2 = ListType2>(
   const [loading, setLoading] = React.useState(false);
   const [valueState, setValueState] = React.useState<D[]>(value ?? []);
 
-  const currentValue = React.useRef<readonly D[]>([]);
-  currentValue.current = valueState;
-
   const loadDataLocal = async (keyword?: string) => {
     setLoading(true);
     const result = (await loadData(keyword, maxItems)) ?? [];
     const len = result.length;
 
-    currentValue.current.forEach((item) => {
+    valueState.forEach((item) => {
       if (!result.some((r) => r.id === item.id)) result.push(item);
     });
 
@@ -190,7 +187,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
       openText={openText}
       value={valueState}
       onChange={(event, value, reason, details) => {
-        currentValue.current = value;
+        setValueState(value);
         if (onChange) onChange(event, value, reason, details);
       }}
       {...rest}

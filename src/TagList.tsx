@@ -85,9 +85,7 @@ export function TagList(props: TagListProps) {
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<readonly string[]>([]);
   const [loading, setLoading] = React.useState(false);
-
-  const currentValue = React.useRef<readonly string[]>([]);
-  currentValue.current = value ?? [];
+  const [valueState, setValueState] = React.useState<string[]>(value ?? []);
 
   const loadDataLocal = async (keyword?: string) => {
     setLoading(true);
@@ -95,7 +93,7 @@ export function TagList(props: TagListProps) {
 
     const len = result.length;
 
-    currentValue.current.forEach((item) => {
+    valueState.forEach((item) => {
       if (!result.includes(item)) result.push(item);
     });
 
@@ -146,15 +144,16 @@ export function TagList(props: TagListProps) {
           {...params}
         />
       )}
+      getOptionLabel={getOptionLabel}
       getOptionDisabled={(item) => {
         return item === moreLabel;
       }}
       noOptionsText={noOptionsText}
       loadingText={loadingText}
       openText={openText}
-      value={value}
+      value={valueState}
       onChange={(event, value, reason, details) => {
-        currentValue.current = value;
+        setValueState(value);
         if (onChange) onChange(event, value, reason, details);
       }}
       {...rest}
