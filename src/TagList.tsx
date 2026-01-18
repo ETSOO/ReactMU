@@ -51,6 +51,7 @@ export function TagList(props: TagListProps) {
 
   // Destruct
   const {
+    getOptionLabel = (option) => option,
     renderOption = ({ key, ...props }, option, { selected }) => (
       <li key={key} {...props}>
         <Checkbox
@@ -59,7 +60,7 @@ export function TagList(props: TagListProps) {
           style={{ marginRight: 8 }}
           checked={selected}
         />
-        {option}
+        {getOptionLabel(option)}
       </li>
     ),
     renderValue = (value: readonly string[], getTagProps) =>

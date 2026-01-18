@@ -57,12 +57,11 @@ export function TagListPro<D extends ListType2 = ListType2>(
 
   const moreLabel = more + "...";
 
-  const getLabel = (item: D) => DataTypes.getListItemLabel(item);
-
   // Destruct
   const {
     getOptionKey = (option) =>
       typeof option === "string" ? option : option.id,
+    getOptionLabel = (option) => DataTypes.getListItemLabel(option),
     renderOption = ({ key, ...props }, option, { selected }) => (
       <li key={key} {...props}>
         <>
@@ -72,7 +71,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
             style={{ marginRight: 8 }}
             checked={selected}
           />
-          {getLabel(option)}
+          {getOptionLabel(option)}
         </>
       </li>
     ),
@@ -83,7 +82,7 @@ export function TagListPro<D extends ListType2 = ListType2>(
           <Chip
             variant="outlined"
             key={key}
-            label={getLabel(option)}
+            label={getOptionLabel(option)}
             {...rest}
           />
         );
@@ -179,10 +178,10 @@ export function TagListPro<D extends ListType2 = ListType2>(
         return (
           typeof item.id === "number" &&
           item.id < 0 &&
-          getLabel(item) === moreLabel
+          "name" in item &&
+          item["name"] === moreLabel
         );
       }}
-      getOptionLabel={(item) => getLabel(item)}
       getOptionKey={getOptionKey}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       noOptionsText={noOptionsText}

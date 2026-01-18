@@ -27,10 +27,11 @@ it("Render ComboBox", async () => {
   });
 
   await waitFor(async () => {
-    const button = await screen.findByRole("button");
+    const button = document.querySelector("button");
+    expect(button).toBeTruthy();
 
     // Act, click the list
-    const clicked = fireEvent.click(button);
+    const clicked = fireEvent.click(button!);
     expect(clicked).toBeTruthy();
 
     // Get list item
