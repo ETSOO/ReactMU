@@ -1,9 +1,9 @@
-import { IntInputField, IntInputFieldProps } from "./IntInputField";
+import { NumberInputField, NumberInputFieldProps } from "./NumberInputField";
 
 /**
  * Money input field props
  */
-export type MoneyInputFieldProps = IntInputFieldProps & {};
+export type MoneyInputFieldProps = NumberInputFieldProps & {};
 
 /**
  * Money input field (controlled)
@@ -13,5 +13,5 @@ export function MoneyInputField(props: MoneyInputFieldProps) {
   const { step = 0.01, ...rest } = props;
 
   // Layout
-  return <IntInputField step={step} {...rest} />;
+  return <NumberInputField step={step} {...rest} />;
 }
