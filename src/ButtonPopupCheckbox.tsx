@@ -13,7 +13,11 @@ import TextField from "@mui/material/TextField";
 import { HBox, VBox } from "./FlexBox";
 import { useRequiredAppContext } from "./app/ReactApp";
 import FormLabel from "@mui/material/FormLabel";
-import { DnDList, DnDListRef } from "./DnDList";
+import {
+  DnDSortableList,
+  DnDSortableListProps,
+  DnDSortableListRef
+} from "./DnDSortableList";
 
 type DnDItemType = {
   id: IdType;
@@ -46,7 +50,7 @@ export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
   /**
    * Label field in items
    */
-  labelField: DataTypes.Keys<D>;
+  labelField: DnDSortableListProps<D>["labelField"];
 
   /**
    * Label formatter
@@ -134,7 +138,7 @@ function ButtonPopupList<D extends DnDItemType>(
   } = props;
 
   // Methods
-  const dndRef = React.createRef<DnDListRef<D>>();
+  const dndRef = React.createRef<DnDSortableListRef<D>>();
 
   // Refs
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -158,32 +162,37 @@ function ButtonPopupList<D extends DnDItemType>(
 
   return (
     <VBox gap={2}>
-      <DnDList<D>
+      <DnDSortableList<D>
         component={Grid}
         componentProps={{ container: true, spacing: 0 }}
         items={items}
         labelField={labelField}
-        onFormChange={(items) => {
+        onChange={(items) => {
           const ids = items
             .filter((item) => tempSelectedIds.current.includes(item.id))
             .map((item) => item.id);
 
           onValueChange(ids);
         }}
-        itemRenderer={(item, index, nodeRef, actionNodeRef) => (
+        itemRenderer={(
+          item,
+          style,
+          { sortable: { index }, ref, handleRef }
+        ) => (
           <Grid
             size={{ xs: 12, md: 6, lg: 4 }}
             display="flex"
             justifyContent="flex-start"
             alignItems="center"
             gap={1}
-            {...nodeRef}
+            ref={ref}
+            style={style}
           >
             <IconButton
               style={{ cursor: "move" }}
               size="small"
               title={labels?.dragIndicator}
-              {...actionNodeRef}
+              ref={handleRef}
             >
               <DragIndicatorIcon />
             </IconButton>
@@ -206,9 +215,8 @@ function ButtonPopupList<D extends DnDItemType>(
             />
           </Grid>
         )}
-        height={200}
         mRef={dndRef}
-      ></DnDList>
+      ></DnDSortableList>
       {onAdd && (
         <HBox gap={1}>
           <TextField
@@ -276,6 +284,8 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
     label,
     labelEnd,
     labelFormatter = (data) => {
+      if (typeof labelField === "function") return labelField(data);
+
       if (labelField in data) {
         return data[labelField] as string;
       }

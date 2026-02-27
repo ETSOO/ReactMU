@@ -60,7 +60,7 @@ export * from "./DataLoadField";
 export * from "./DataSteps";
 export * from "./DataTable";
 export * from "./DialogButton";
-export * from "./DnDList";
+export * from "./DnDSortableList";
 export * from "./DownUpButton";
 export * from "./DraggablePaperComponent";
 export * from "./EmailInput";
