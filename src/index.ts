@@ -7,6 +7,7 @@ export * from "./app/Labels";
 export * from "./app/ReactApp";
 export * from "./app/ServiceApp";
 
+export * from "./custom/CustomAttributeArea";
 export * from "./custom/CustomFieldUtils";
 export * from "./custom/CustomFieldViewer";
 export * from "./custom/CustomFieldWindow";
@@ -79,6 +80,7 @@ export * from "./InputTipField";
 export * from "./IntInputField";
 export * from "./ItemList";
 export * from "./JsonDataInput";
+export * from "./JsonTextField";
 export * from "./LineChart";
 export * from "./LinkEx";
 export * from "./ListChooser";
