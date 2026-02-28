@@ -1,7 +1,7 @@
 import { DataTypes, IdType } from "@etsoo/shared";
 import React from "react";
 import { CSSProperties, Theme, useTheme } from "@mui/material/styles";
-import { useSortable } from "@dnd-kit/react/sortable";
+import { isSortableOperation, useSortable } from "@dnd-kit/react/sortable";
 import { DragDropEvents, DragDropProvider } from "@dnd-kit/react";
 
 /**
@@ -126,7 +126,7 @@ export type DnDSortableListProps<
    */
   onDragStart?: (
     items: D[],
-    source: Parameters<DragDropEvents["dragstart"]>[0]
+    event: Parameters<DragDropEvents["dragstart"]>[0]
   ) => void;
 
   /**
@@ -293,10 +293,37 @@ export function DnDSortableList<
     };
   }, [items, labelFn, changeItems]);
 
+  function handleDragEnd(...args: Parameters<DragDropEvents["dragend"]>) {
+    // Event
+    const event = args[0];
+
+    // Cancelled
+    if (event.canceled) return;
+
+    if (isSortableOperation(event.operation) && event.operation.source) {
+      const { initialIndex, index } = event.operation.source;
+      if (initialIndex === index) return;
+
+      // Clone
+      const newItems = [...items];
+
+      // Removed item
+      const [removed] = newItems.splice(initialIndex, 1);
+
+      // Insert to the destination index
+      newItems.splice(index, 0, removed);
+
+      changeItems(newItems);
+
+      // Drag end handler
+      onDragEnd?.(newItems, ...args);
+    }
+  }
+
   return (
     <DragDropProvider
-      onDragStart={(source) => onDragStart?.(items, source)}
-      onDragEnd={(source, target) => onDragEnd?.(items, source, target)}
+      onDragStart={(event) => onDragStart?.(items, event)}
+      onDragEnd={(event, manager) => handleDragEnd(event, manager)}
     >
       <Component {...componentProps}>
         {items.map((item, index) => {

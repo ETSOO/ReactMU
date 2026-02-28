@@ -2,7 +2,7 @@ import Button, { ButtonProps } from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import React from "react";
 import { DataTypes, IdType } from "@etsoo/shared";
-import Grid from "@mui/material/Grid";
+import Grid, { GridSize } from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,6 +18,7 @@ import {
   DnDSortableListProps,
   DnDSortableListRef
 } from "./DnDSortableList";
+import { ResponsiveStyleValue } from "./ResponsiveStyleValue";
 
 type DnDItemType = {
   id: IdType;
@@ -100,6 +101,11 @@ export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
   required?: boolean;
 
   /**
+   * Item size
+   */
+  itemSize?: ResponsiveStyleValue<GridSize>;
+
+  /**
    * Value
    */
   value?: D["id"][];
@@ -107,7 +113,7 @@ export type ButtonPopupCheckboxProps<D extends DnDItemType> = Omit<
 
 type ButtonPopupListProps<D extends DnDItemType> = Pick<
   ButtonPopupCheckboxProps<D>,
-  "addSplitter" | "labelField" | "labels" | "onAdd" | "value"
+  "addSplitter" | "labelField" | "labels" | "onAdd" | "value" | "itemSize"
 > &
   Required<Pick<ButtonPopupCheckboxProps<D>, "labelFormatter">> & {
     /**
@@ -130,6 +136,7 @@ function ButtonPopupList<D extends DnDItemType>(
     addSplitter = /\s*[,;]\s*/,
     value = [],
     items,
+    itemSize = { xs: 12, md: 6, lx: 4 },
     labelField,
     labelFormatter,
     labels,
@@ -180,7 +187,7 @@ function ButtonPopupList<D extends DnDItemType>(
           { sortable: { index }, ref, handleRef }
         ) => (
           <Grid
-            size={{ xs: 12, md: 6, lg: 4 }}
+            size={itemSize}
             display="flex"
             justifyContent="flex-start"
             alignItems="center"
@@ -281,6 +288,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
     addSplitter,
     value = [],
     inputName,
+    itemSize,
     label,
     labelEnd,
     labelFormatter = (data) => {
@@ -353,6 +361,7 @@ export function ButtonPopupCheckbox<D extends DnDItemType>(
           items={items}
           labelFormatter={labelFormatter}
           labelField={labelField}
+          itemSize={itemSize}
           labels={labels}
           onAdd={onAdd}
           onValueChange={(ids) => {
