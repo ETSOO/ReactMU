@@ -215,6 +215,7 @@ function ButtonPopupList<D extends DnDItemType>(
                       ...selectedIds.toggleItem(item.id, checked)
                     ];
                     setSelectedIdsHandler(newIds);
+                    onValueChange(newIds);
                   }}
                 />
               }
