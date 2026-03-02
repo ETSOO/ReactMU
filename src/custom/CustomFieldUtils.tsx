@@ -84,7 +84,7 @@ export namespace CustomFieldUtils {
       if (creator == null) {
         return (
           <Grid
-            key={index}
+            key={field.name ?? index}
             size={transformSpace(field.space)}
             {...field.gridItemProps}
           >
@@ -153,14 +153,14 @@ export namespace CustomFieldUtils {
       space === "full"
         ? { xs: 12 }
         : space === "quater"
-        ? { sm: 12, md: 6, lg: 3 }
-        : space === "five"
-        ? { sm: 12, md: 5 }
-        : space === "seven"
-        ? { sm: 12, md: 7 }
-        : space === "half1"
-        ? { xs: 12, sm: 6 }
-        : { sm: 12, md: 6 };
+          ? { sm: 12, md: 6, lg: 3 }
+          : space === "five"
+            ? { sm: 12, md: 5 }
+            : space === "seven"
+              ? { sm: 12, md: 7 }
+              : space === "half1"
+                ? { xs: 12, sm: 6 }
+                : { sm: 12, md: 6 };
     return size;
   }
 

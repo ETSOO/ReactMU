@@ -8,6 +8,7 @@ export * from "./app/ReactApp";
 export * from "./app/ServiceApp";
 
 export * from "./custom/CustomAttributeArea";
+export * from "./custom/CustomFieldUI";
 export * from "./custom/CustomFieldUtils";
 export * from "./custom/CustomFieldViewer";
 export * from "./custom/CustomFieldWindow";
