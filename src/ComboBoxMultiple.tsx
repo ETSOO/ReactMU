@@ -110,8 +110,8 @@ export function ComboBoxMultiple<
     openOnFocus = true,
     value,
     disableCloseOnSelect = true,
-    renderOption = (props, option, { selected }) => (
-      <li {...props}>
+    renderOption = ({ key, ...restProps }, option, { selected }) => (
+      <li key={key} {...restProps}>
         <Checkbox
           icon={icon}
           checkedIcon={checkedIcon}
@@ -137,43 +137,27 @@ export function ComboBoxMultiple<
   const [localOptions, setOptions] = React.useState(options ?? []);
   const isMounted = React.useRef(true);
 
-  // Local default value
-  const localValue: T[] | null | undefined =
-    idValue != null
-      ? localOptions.filter((o) => o[idField] === idValue)
-      : idValues != null
-      ? localOptions.filter((o) => idValues?.includes(o[idField]))
-      : defaultValue?.concat() ?? value?.concat();
+  const propertyWay = loadData == null;
+  React.useEffect(() => {
+    if (propertyWay && options != null) {
+      setOptions(options);
+    }
+  }, [options, propertyWay]);
 
   // State
   // null for controlled
   const [stateValue, setStateValue] = React.useState<T[] | null>(null);
 
   React.useEffect(() => {
+    const localValue: T[] | null | undefined =
+      idValue != null
+        ? localOptions.filter((o) => o[idField] === idValue)
+        : idValues != null
+          ? localOptions.filter((o) => idValues?.includes(o[idField]))
+          : (defaultValue?.concat() ?? value?.concat());
+
     setStateValue(localValue ?? []);
-  }, [localValue]);
-
-  // When options change
-  // [options] will cause infinite loop
-  const propertyWay = loadData == null;
-  React.useEffect(() => {
-    if (propertyWay && options != null) {
-      setOptions(options);
-
-      if (stateValue != null) {
-        if (Array.isArray(stateValue)) {
-          const newState = stateValue.filter((item) =>
-            options.some((option) => option[idField] === item[idField])
-          );
-          setStateValue(newState);
-        } else if (
-          !options.some((option) => option[idField] === stateValue[idField])
-        ) {
-          setStateValue(null);
-        }
-      }
-    }
-  }, [options, propertyWay]);
+  }, [localOptions, idField, idValue, idValues, defaultValue, value]);
 
   // Add readOnly
   const addReadOnly = (params: AutocompleteRenderInputParams) => {
@@ -258,8 +242,8 @@ export function ComboBoxMultiple<
           stateValue == null
             ? []
             : Array.isArray(stateValue)
-            ? stateValue
-            : [stateValue]
+              ? stateValue
+              : [stateValue]
         }
         disabled={disabled}
         disableCloseOnSelect={disableCloseOnSelect}

@@ -44,6 +44,8 @@ export const FieldCombobox: ICustomFieldReact<IdType[]> = ({
     );
   }
 
+  const { required, inputRequired, ...mainRests } = field.mainSlotProps || {};
+
   return (
     <ComboBoxMultiple
       label={field.label ?? ""}
@@ -52,12 +54,13 @@ export const FieldCombobox: ICustomFieldReact<IdType[]> = ({
       options={field.options}
       fullWidth
       idValues={ids}
+      inputRequired={required || inputRequired}
       onChange={(_event, value) => {
         const ids = value.map((v) => v.id);
         setIds(ids);
         onChange(name, ids);
       }}
-      {...field.mainSlotProps}
+      {...mainRests}
     />
   );
 };
