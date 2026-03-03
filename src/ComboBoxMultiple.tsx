@@ -167,6 +167,12 @@ export function ComboBoxMultiple<
 
     Object.assign(params.inputProps, { "data-reset": inputReset });
 
+    params.inputProps.onInvalid = (event) => {
+      if (inputRequired && stateValue != null && stateValue.length > 0) {
+        event.preventDefault();
+      }
+    };
+
     if (dataReadonly) {
       params.inputProps.onKeyDown = (event) => {
         if (Keyboard.isTypingContent(event.key)) {

@@ -1,5 +1,4 @@
 import { CustomFieldData } from "@etsoo/appscript";
-import React from "react";
 import { CustomFieldUtils } from "./CustomFieldUtils";
 
 /**
@@ -38,23 +37,19 @@ export function CustomFieldUI<D extends CustomFieldData = CustomFieldData>(
   props: CustomFieldUIProps<D>
 ) {
   // Destruct
-  const { fields, onChange, value } = props;
-
-  const data = React.useRef<Record<string, unknown>>({});
-
-  const getValue = React.useCallback(
-    (field: CustomFieldData) => {
-      if (!field.name) return undefined;
-      return value?.[field.name];
-    },
-    [value]
-  );
-
-  const doChange = React.useCallback((name: string, value: unknown) => {
-    data.current[name] = value;
-    onChange?.(data.current, name, value);
-  }, []);
+  const { fields, onChange, value = {} } = props;
 
   // Layout
-  return CustomFieldUtils.create(fields, {}, getValue, doChange);
+  return CustomFieldUtils.create(
+    fields,
+    {},
+    (field) => {
+      if (!field.name) return undefined;
+      return value[field.name];
+    },
+    (name, fieldValue) => {
+      value[name] = fieldValue;
+      onChange?.(value, name, fieldValue);
+    }
+  );
 }

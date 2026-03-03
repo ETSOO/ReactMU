@@ -50,11 +50,11 @@ export const FieldCombobox: ICustomFieldReact<IdType[]> = ({
     <ComboBoxMultiple
       label={field.label ?? ""}
       inputHelperText={field.helperText}
+      inputRequired={required || inputRequired}
       name={name}
       options={field.options}
       fullWidth
       idValues={ids}
-      inputRequired={required || inputRequired}
       onChange={(_event, value) => {
         const ids = value.map((v) => v.id);
         setIds(ids);
