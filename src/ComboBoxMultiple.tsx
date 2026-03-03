@@ -132,6 +132,7 @@ export function ComboBoxMultiple<
 
   // Value input ref
   const inputRef = React.createRef<HTMLInputElement>();
+  const localRef = React.useRef<HTMLInputElement>(undefined);
 
   // Options state
   const [localOptions, setOptions] = React.useState(options ?? []);
@@ -147,6 +148,12 @@ export function ComboBoxMultiple<
   // State
   // null for controlled
   const [stateValue, setStateValue] = React.useState<T[] | null>(null);
+
+  const selectedCount = stateValue?.length ?? 0;
+  React.useEffect(() => {
+    if (localRef.current && inputRequired)
+      localRef.current.required = selectedCount === 0;
+  }, [inputRequired, selectedCount]);
 
   React.useEffect(() => {
     const localValue: T[] | null | undefined =
@@ -166,12 +173,6 @@ export function ComboBoxMultiple<
     }
 
     Object.assign(params.inputProps, { "data-reset": inputReset });
-
-    params.inputProps.onInvalid = (event) => {
-      if (inputRequired && stateValue != null && stateValue.length > 0) {
-        event.preventDefault();
-      }
-    };
 
     if (dataReadonly) {
       params.inputProps.onKeyDown = (event) => {
@@ -279,6 +280,7 @@ export function ComboBoxMultiple<
               required={inputRequired}
               error={inputError}
               helperText={inputHelperText}
+              inputRef={localRef}
             />
           ) : (
             <InputField
@@ -290,6 +292,7 @@ export function ComboBoxMultiple<
               required={inputRequired}
               error={inputError}
               helperText={inputHelperText}
+              inputRef={localRef}
             />
           )
         }
