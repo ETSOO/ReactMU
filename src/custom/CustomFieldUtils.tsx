@@ -199,4 +199,24 @@ export namespace CustomFieldUtils {
       }
     }
   }
+
+  /**
+   * Update values for all fields
+   * @param collections Field component collections
+   * @param value New value
+   */
+  export function updateValues<D extends CustomFieldData = CustomFieldData>(
+    collections: CustomFieldReactCollection<D>,
+    value: Record<string, unknown>
+  ) {
+    for (const key in collections) {
+      const c = collections[key];
+      if (c == null) continue;
+
+      const [ref, data] = c;
+      if (ref.current == null || !data.name) continue;
+
+      ref.current.setValue(value[data.name]);
+    }
+  }
 }

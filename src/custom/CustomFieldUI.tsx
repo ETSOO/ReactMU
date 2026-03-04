@@ -1,4 +1,6 @@
-import { CustomFieldData } from "@etsoo/appscript";
+import { CustomFieldData, CustomFieldRef } from "@etsoo/appscript";
+import { CustomFieldReactCollection } from "@etsoo/react";
+import React from "react";
 import { CustomFieldUtils } from "./CustomFieldUtils";
 
 /**
@@ -9,6 +11,11 @@ export type CustomFieldUIProps<D extends CustomFieldData = CustomFieldData> = {
    * Custom fields
    */
   fields: D[];
+
+  /**
+   * Initial value
+   */
+  initialValue?: Record<string, unknown>;
 
   /**
    * Change event
@@ -23,9 +30,9 @@ export type CustomFieldUIProps<D extends CustomFieldData = CustomFieldData> = {
   ) => void;
 
   /**
-   * Initial value
+   * Methods reference
    */
-  value?: Record<string, unknown>;
+  mref: React.Ref<CustomFieldRef<Record<string, unknown>>>;
 };
 
 /**
@@ -37,19 +44,40 @@ export function CustomFieldUI<D extends CustomFieldData = CustomFieldData>(
   props: CustomFieldUIProps<D>
 ) {
   // Destruct
-  const { fields, onChange, value = {} } = props;
+  const { fields, initialValue, mref, onChange } = props;
+
+  // Field component collections
+  const collections: CustomFieldReactCollection<D> = {};
+
+  // Value reference
+  const valueRef = React.useRef<Record<string, unknown>>({ ...initialValue });
+
+  // Methods
+  React.useImperativeHandle(
+    mref,
+    () => ({
+      getValue: () => valueRef.current,
+      setValue: (value) => {
+        if (!!value && typeof value === "object") {
+          valueRef.current = { ...value };
+          CustomFieldUtils.updateValues(collections, valueRef.current);
+        }
+      }
+    }),
+    []
+  );
 
   // Layout
   return CustomFieldUtils.create(
     fields,
-    {},
+    collections,
     (field) => {
       if (!field.name) return undefined;
-      return value[field.name];
+      return valueRef.current[field.name];
     },
     (name, fieldValue) => {
-      value[name] = fieldValue;
-      onChange?.(value, name, fieldValue);
+      valueRef.current[name] = fieldValue;
+      onChange?.(valueRef.current, name, fieldValue);
     }
   );
 }
