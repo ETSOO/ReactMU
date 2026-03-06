@@ -2,6 +2,7 @@ import { CustomFieldData, CustomFieldRef } from "@etsoo/appscript";
 import { CustomFieldReactCollection } from "@etsoo/react";
 import React from "react";
 import { CustomFieldUtils } from "./CustomFieldUtils";
+import { useAppContext } from "../app/ReactApp";
 
 /**
  * CustomFieldUI component props
@@ -46,6 +47,9 @@ export function CustomFieldUI<D extends CustomFieldData = CustomFieldData>(
   // Destruct
   const { fields, initialValue, mref, onChange } = props;
 
+  // App
+  const app = useAppContext();
+
   // Field component collections
   const collections: CustomFieldReactCollection<D> = {};
 
@@ -78,6 +82,7 @@ export function CustomFieldUI<D extends CustomFieldData = CustomFieldData>(
     (name, fieldValue) => {
       valueRef.current[name] = fieldValue;
       onChange?.(valueRef.current, name, fieldValue);
-    }
+    },
+    (input) => app?.get(input) ?? input
   );
 }

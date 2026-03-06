@@ -68,7 +68,10 @@ function InputItemUIs({ data }: { data?: CustomFieldData }) {
           onValueChange={(item) => {
             const type = item?.id;
             optionsRef.current!.disabled =
-              type !== "combobox" && type !== "select";
+              type !== "combobox" &&
+              type !== "select" &&
+              type !== "checkbox" &&
+              type !== "radio";
 
             const nameInput = nameRef.current!;
             if (
