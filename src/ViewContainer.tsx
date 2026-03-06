@@ -25,14 +25,14 @@ function getResp(singleRow: ViewPageRowType) {
     typeof singleRow === "object"
       ? singleRow
       : singleRow === "medium"
-      ? ViewPageSize.medium
-      : singleRow === "large"
-      ? ViewPageSize.large
-      : singleRow === true
-      ? ViewPageSize.line
-      : singleRow === false
-      ? ViewPageSize.smallLine
-      : ViewPageSize.small;
+        ? ViewPageSize.medium
+        : singleRow === "large"
+          ? ViewPageSize.large
+          : singleRow === true
+            ? ViewPageSize.line
+            : singleRow === false
+              ? ViewPageSize.smallLine
+              : ViewPageSize.small;
   return size;
 }
 
@@ -93,12 +93,12 @@ function getItemField<T extends object>(
       fieldLabel === ""
         ? undefined
         : fieldLabel == null && typeof fieldData === "string"
-        ? addLabelEnd(app.get<string>(fieldData) ?? fieldData)
-        : typeof fieldLabel === "function"
-        ? fieldLabel(data)
-        : fieldLabel != null
-        ? addLabelEnd(app.get<string>(fieldLabel) ?? fieldLabel)
-        : undefined;
+          ? addLabelEnd(app.get<string>(fieldData) ?? fieldData)
+          : typeof fieldLabel === "function"
+            ? fieldLabel(data)
+            : fieldLabel != null
+              ? addLabelEnd(app.get<string>(fieldLabel) ?? fieldLabel)
+              : undefined;
   } else {
     // Single field format
     itemData = formatItemData(app, data[field]);
@@ -126,7 +126,7 @@ function getItemSize(bp: Breakpoint, size: ViewPageItemSize) {
 /**
  * View page item size
  */
-export type ViewPageItemSize = Record<Breakpoint, number | undefined>;
+export type ViewPageItemSize = Partial<Record<Breakpoint, number>>;
 
 const breakpoints: Breakpoint[] = ["xs", "sm", "md", "lg", "xl"];
 

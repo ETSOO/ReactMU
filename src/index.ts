@@ -11,6 +11,7 @@ export * from "./custom/CustomAttributeArea";
 export * from "./custom/CustomFieldUI";
 export * from "./custom/CustomFieldUtils";
 export * from "./custom/CustomFieldViewer";
+export * from "./custom/CustomFieldViewUI";
 export * from "./custom/CustomFieldWindow";
 
 export * from "./html/HtmlDiv";
