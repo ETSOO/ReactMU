@@ -373,13 +373,7 @@ export function ResponsibleContainer<T extends object, F>(
   })();
 
   const searchBar = React.useMemo(() => {
-    if (
-      !hasFields ||
-      showDataGrid == null ||
-      rect?.width == null ||
-      rect.width < 20
-    )
-      return;
+    if (!hasFields || rect?.width == null || rect.width < 20) return;
 
     const f = typeof fields == "function" ? fields(searchData) : fields;
 
@@ -395,12 +389,9 @@ export function ResponsibleContainer<T extends object, F>(
   }, [showDataGrid, hasFields, searchBarHeight, rect?.width]);
 
   // Pull container
-  const pullContainer =
-    showDataGrid == null
-      ? undefined
-      : showDataGrid
-      ? ".DataGridEx-Body"
-      : ".ScrollerListEx-Body";
+  const pullContainer = showDataGrid
+    ? ".DataGridEx-Body"
+    : ".ScrollerListEx-Body";
 
   // Layout
   return (
