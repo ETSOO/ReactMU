@@ -100,7 +100,7 @@ const setChildState = (child: Element, enabled: boolean) => {
   }
 };
 
-function checkFormEvent(event: React.FormEvent<HTMLFormElement>) {
+function checkFormEvent(event: React.ChangeEvent<HTMLFormElement>) {
   if (event.nativeEvent.cancelable && !event.nativeEvent.composed) return true;
 
   if (
@@ -291,7 +291,7 @@ export function SearchBar(props: SearchBarProps) {
   const hasMoreItems = moreItems.length > 0;
 
   // Handle main form
-  const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleForm = (event: React.ChangeEvent<HTMLFormElement>) => {
     if (checkFormEvent(event)) return;
 
     if (state.form == null) state.form = event.currentTarget;
@@ -305,7 +305,7 @@ export function SearchBar(props: SearchBarProps) {
   };
 
   // More form change
-  const moreFormChange = (event: React.FormEvent<HTMLFormElement>) => {
+  const moreFormChange = (event: React.ChangeEvent<HTMLFormElement>) => {
     if (checkFormEvent(event)) return;
 
     if (state.moreForm == null) state.moreForm = event.currentTarget;

@@ -1,4 +1,4 @@
-import React, { FormEventHandler } from "react";
+import React, { SubmitEventHandler } from "react";
 import { MUGlobal } from "../MUGlobal";
 import { CommonPage, CommonPageProps } from "./CommonPage";
 import SaveIcon from "@mui/icons-material/Save";
@@ -22,7 +22,7 @@ export interface EditPageProps extends Omit<CommonPageProps, "onSubmit"> {
   /**
    * On form submit
    */
-  onSubmit?: FormEventHandler<HTMLFormElement>;
+  onSubmit?: SubmitEventHandler<HTMLFormElement>;
 
   /**
    * On delete callback
