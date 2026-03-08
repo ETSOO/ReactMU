@@ -294,7 +294,7 @@ export function SearchBar(props: SearchBarProps) {
   const handleForm = (event: React.ChangeEvent<HTMLFormElement>) => {
     if (checkFormEvent(event)) return;
 
-    if (state.form == null) state.form = event.currentTarget;
+    state.form = event.currentTarget;
 
     delayed.call();
   };
@@ -308,7 +308,7 @@ export function SearchBar(props: SearchBarProps) {
   const moreFormChange = (event: React.ChangeEvent<HTMLFormElement>) => {
     if (checkFormEvent(event)) return;
 
-    if (state.moreForm == null) state.moreForm = event.currentTarget;
+    state.moreForm = event.currentTarget;
 
     delayed.call();
   };
@@ -317,7 +317,9 @@ export function SearchBar(props: SearchBarProps) {
   const handleSubmitInstant = (reset: boolean = false) => {
     // Prepare data
     const data = new FormData(state.form);
-    if (state.moreForm != null) {
+
+    // Check 'hasMoreItems' to make sure the 'moreForm' is rendered by purpose
+    if (hasMoreItems && state.moreForm != null) {
       DomUtils.mergeFormData(data, new FormData(state.moreForm));
     }
 
