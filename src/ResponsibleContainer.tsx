@@ -275,8 +275,9 @@ export function ResponsibleContainer<T extends object, F>(
         state.mounted !== true &&
         Math.abs(rect.width - lastRect.width) <= 32 &&
         Math.abs(rect.height - lastRect.height) <= 32
-      )
+      ) {
         return true;
+      }
 
       // Hold the new rect
       state.rect = rect;

@@ -14,6 +14,11 @@ import Toolbar from "@mui/material/Toolbar";
  */
 export interface SearchBarProps {
   /**
+   * Auto submit delay miliseconds, default is 100ms
+   */
+  autoSubmitDelay?: number;
+
+  /**
    * Style class name
    */
   className?: string;
@@ -123,6 +128,7 @@ function checkFormEvent(event: React.FormEvent<HTMLFormElement>) {
 export function SearchBar(props: SearchBarProps) {
   // Destruct
   const {
+    autoSubmitDelay = 100,
     className,
     fields,
     onSubmit,
@@ -157,8 +163,9 @@ export function SearchBar(props: SearchBarProps) {
       if (
         rect.width === state.lastMaxWidth ||
         (!state.hasMore && rect.width > state.lastMaxWidth)
-      )
+      ) {
         return false;
+      }
 
       // Len
       const len = target.children.length;
@@ -331,12 +338,14 @@ export function SearchBar(props: SearchBarProps) {
 
   React.useEffect(() => {
     // Delayed way
-    delayed.call(100);
+    if (autoSubmitDelay > 0) {
+      delayed.call(autoSubmitDelay);
+    }
 
     return () => {
       delayed.clear();
     };
-  }, [className]);
+  }, [autoSubmitDelay]);
 
   // Layout
   return (
