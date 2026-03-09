@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.6.27",
+  "version": "1.6.28",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/ETSOO/ReactMU#readme",
   "dependencies": {
+    "@base-ui/react": "^1.2.0",
     "@dnd-kit/react": "^0.3.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
