@@ -9,7 +9,10 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 
-export default function NumberSpinner({
+/**
+ * Number spinner component
+ */
+export function NumberSpinner({
   id: idProp,
   label,
   error,

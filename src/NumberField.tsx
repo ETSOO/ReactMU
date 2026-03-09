@@ -17,7 +17,10 @@ function SSRInitialFilled(_: BaseNumberField.Root.Props) {
 }
 SSRInitialFilled.muiName = "Input";
 
-export default function NumberField({
+/**
+ * Number field component
+ */
+export function NumberField({
   id: idProp,
   label,
   error,
