@@ -61,20 +61,22 @@ export function NumberSpinner({
           />
         }
       >
-        <FormLabel
-          htmlFor={id}
-          sx={{
-            display: "inline-block",
-            cursor: "ew-resize",
-            fontSize: "0.875rem",
-            color: "text.primary",
-            fontWeight: 500,
-            lineHeight: 1.5,
-            mb: 0.5
-          }}
-        >
-          {label}
-        </FormLabel>
+        {label != null && (
+          <FormLabel
+            htmlFor={id}
+            sx={{
+              display: "inline-block",
+              cursor: "ew-resize",
+              fontSize: "0.875rem",
+              color: "text.primary",
+              fontWeight: 500,
+              lineHeight: 1.5,
+              mb: 0.5
+            }}
+          >
+            {label}
+          </FormLabel>
+        )}
         <BaseNumberField.ScrubAreaCursor>
           <OpenInFullIcon
             fontSize="small"
