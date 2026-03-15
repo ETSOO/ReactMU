@@ -4,7 +4,9 @@ import {
 } from "@etsoo/notificationbase";
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
-import { NotifierMU } from "../src";
+import { NotificationMUDataMethods, NotifierMU, VBox } from "../src";
+import TextField from "@mui/material/TextField";
+import { waitFor, screen, fireEvent } from "@testing-library/react";
 
 // Without it will popup error:
 // The current testing environment is not configured to support act
@@ -15,11 +17,11 @@ const root = document.body;
 const container: HTMLElement = document.createElement("div");
 root.append(container);
 
-// The state provider
-const Provider = NotifierMU.setup();
-const reactRoot = createRoot(container);
-
 act(() => {
+  // The state provider
+  const Provider = NotifierMU.setup();
+  const reactRoot = createRoot(container);
+
   // Concorrent renderer needs act block
   reactRoot.render(<Provider />);
 });
@@ -137,6 +139,77 @@ test("Prompt tests", async () => {
   vi.runOnlyPendingTimers();
 });
 
+type DataType = {
+  name: string;
+  age: number;
+};
+
+function DataCollector(props: { mRef: React.Ref<NotificationMUDataMethods> }) {
+  const { mRef } = props;
+  const nameRef = React.createRef<HTMLInputElement>();
+  const ageRef = React.createRef<HTMLInputElement>();
+
+  function getValue(): DataType | undefined {
+    if (!nameRef.current?.value) {
+      nameRef.current?.focus();
+      return undefined;
+    }
+
+    if (!ageRef.current?.valueAsNumber) {
+      ageRef.current?.focus();
+      return undefined;
+    }
+
+    return {
+      name: nameRef.current.value,
+      age: ageRef.current.valueAsNumber
+    };
+  }
+
+  React.useImperativeHandle(mRef, () => ({
+    getValue
+  }));
+
+  return (
+    <VBox>
+      <TextField name="name" required inputRef={nameRef} />
+      <TextField name="age" type="number" required inputRef={ageRef} />
+    </VBox>
+  );
+}
+
+test("Data tests", async () => {
+  const name = "John Doe";
+  const age = 30;
+
+  act(() => {
+    // Add the notification
+    notifier.data<DataType>(
+      <DataCollector mRef={React.createRef<NotificationMUDataMethods>()} />,
+      (result) => {
+        expect(result).toEqual({ name, age });
+        return true;
+      },
+      "Data Modal"
+    );
+  });
+
+  const button = screen.getByText("OK");
+  expect(button).toBeInTheDocument();
+
+  const nameInput = root.querySelector<HTMLInputElement>('input[name="name"]');
+  expect(nameInput).not.toBeNull();
+  nameInput!.value = name;
+
+  const ageInput = root.querySelector<HTMLInputElement>('input[name="age"]');
+  expect(ageInput).not.toBeNull();
+  ageInput!.value = age.toString();
+
+  await act(async () => {
+    button.click();
+  });
+});
+
 test("Prompt tests with form submit", async () => {
   // Click
   const handleClick = vi.fn((result: boolean) => {
@@ -151,17 +224,14 @@ test("Prompt tests with form submit", async () => {
     });
   });
 
+  const button = screen.getByText("OK");
+  expect(button).toBeInTheDocument();
+
   await act(async () => {
-    (
-      root
-        .getElementsByTagName("form")[0]
-        .elements.namedItem("okButton") as HTMLButtonElement
-    )?.click();
+    button.click();
   });
 
   expect(handleClick).toHaveBeenCalled();
-
-  vi.runOnlyPendingTimers();
 });
 
 test("Message tests", () => {

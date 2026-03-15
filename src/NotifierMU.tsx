@@ -71,6 +71,36 @@ const IconDialogTitle = styled(DialogTitle, {
 `;
 
 /**
+ * MU notification data methods
+ */
+export interface NotificationMUDataMethods {
+  getValue(): unknown;
+}
+
+/**
+ * MU notification data props
+ */
+export type NotificationMUDataProps = {
+  mRef: React.RefObject<NotificationMUDataMethods>;
+};
+
+function isFunctionComponentElement(
+  node: React.ReactNode
+): node is React.ReactElement<
+  NotificationMUDataProps,
+  React.FunctionComponent<NotificationMUDataProps>
+> {
+  return (
+    React.isValidElement(node) &&
+    typeof node.type === "function" &&
+    !(node.type.prototype && node.type.prototype.isReactComponent) &&
+    node.props != null &&
+    typeof node.props === "object" &&
+    "mRef" in node.props
+  );
+}
+
+/**
  * MU notification
  */
 export class NotificationMU extends NotificationReact {
@@ -319,6 +349,145 @@ export class NotificationMU extends NotificationReact {
     );
   }
 
+  // Create data collector
+  private createData(_props: NotificationRenderProps, className?: string) {
+    const labels = Labels.NotificationMU;
+    const title = this.title ?? labels.promptTitle;
+
+    const {
+      buttons,
+      cancelLabel = labels.promptCancel,
+      okLabel = labels.promptOK,
+      cancelButton = true,
+      inputs,
+      // type, not used
+      fullScreen,
+      fullWidth = true,
+      maxWidth,
+      primaryButton = true,
+      primaryButtonProps,
+      inputProps,
+      closable = false,
+      draggable = fullScreen === true ? false : true
+    } = this.inputProps ?? {};
+
+    const content = inputs ?? this.content;
+    if (!isFunctionComponentElement(content) || content.props.mRef == null) {
+      throw new Error(
+        "Data collector content must be a function component with mRef prop"
+      );
+    }
+
+    const mRef = content.props.mRef;
+
+    const errorRef = React.createRef<HTMLSpanElement>();
+
+    const setError = (error?: string) => {
+      if (errorRef.current == null) return;
+      errorRef.current.innerText = error ?? "";
+    };
+
+    // Setup callback
+    const options = this.renderSetup ? this.renderSetup({}) : undefined;
+
+    const handleSubmit = async () => {
+      if (this.onReturn) {
+        // Get the value
+        const value = mRef.current?.getValue();
+        if (value == null) {
+          return false;
+        }
+
+        const result = this.onReturn(value);
+
+        // returns false to prevent default dismiss
+        const v = await result;
+        if (v === false) {
+          return false;
+        }
+
+        if (typeof v === "string") {
+          setError(v);
+          return false;
+        }
+      }
+
+      this.dismiss();
+      return true;
+    };
+
+    return (
+      <Dialog
+        key={this.id}
+        open={this.open}
+        PaperComponent={draggable ? DraggablePaperComponent : undefined}
+        className={className}
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        fullScreen={fullScreen}
+        {...options}
+      >
+        <IconDialogTitle
+          draggable={draggable}
+          className={
+            draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
+          }
+        >
+          <InfoIcon color="primary" />
+          <span className="dialogTitle">{title}</span>
+          {closable && (
+            <IconButton
+              className="MuiDialogContent-root-close-button"
+              size="small"
+              onClick={() => this.returnValue("CLOSE")}
+            >
+              <CloseIcon />
+            </IconButton>
+          )}
+        </IconDialogTitle>
+        <DialogContent {...inputProps}>
+          {content}
+          <Typography
+            variant="caption"
+            display="block"
+            ref={errorRef}
+            color="error"
+          />
+        </DialogContent>
+        <DialogActions>
+          {buttons ? (
+            buttons(this, handleSubmit)
+          ) : (
+            <React.Fragment>
+              {cancelButton && (
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    if (this.onReturn) this.onReturn(undefined);
+                    this.dismiss();
+                  }}
+                >
+                  {cancelLabel}
+                </Button>
+              )}
+              {primaryButton && (
+                <LoadingButton
+                  color="primary"
+                  autoFocus
+                  onClick={handleSubmit}
+                  name="okButton"
+                  {...primaryButtonProps}
+                >
+                  {okLabel}
+                </LoadingButton>
+              )}
+            </React.Fragment>
+          )}
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
   // Create prompt
   private createPrompt(_props: NotificationRenderProps, className?: string) {
     const labels = Labels.NotificationMU;
@@ -350,18 +519,18 @@ export class NotificationMU extends NotificationReact {
     };
 
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
-      // Result
-      let result:
-        | boolean
-        | string
-        | void
-        | PromiseLike<boolean | string | void> = undefined;
-
       const input = inputRef.current;
 
       if (this.onReturn) {
         // Inputs case, no HTMLForm set to value, set the current form
         if (inputs && value == null) value = event.currentTarget.form;
+
+        // Result
+        let result:
+          | boolean
+          | string
+          | void
+          | PromiseLike<boolean | string | void> = undefined;
 
         if (input) {
           if (type === "switch") {
@@ -378,19 +547,20 @@ export class NotificationMU extends NotificationReact {
         } else if (value != null) {
           result = this.onReturn(value);
         }
-      }
 
-      // Get the value
-      // returns false to prevent default dismiss
-      const v = await result;
-      if (v === false) {
-        input?.focus();
-        return false;
-      }
-      if (typeof v === "string") {
-        setError(v);
-        input?.focus();
-        return false;
+        // Get the value
+        // returns false to prevent default dismiss
+        const v = await result;
+        if (v === false) {
+          input?.focus();
+          return false;
+        }
+
+        if (typeof v === "string") {
+          setError(v);
+          input?.focus();
+          return false;
+        }
       }
 
       this.dismiss();
@@ -606,6 +776,8 @@ export class NotificationMU extends NotificationReact {
       return this.createLoading(props, className);
     } else if (this.type === NotificationType.Confirm) {
       return this.createConfirm(props, className);
+    } else if (this.type === NotificationType.Data) {
+      return this.createData(props, className);
     } else if (this.type === NotificationType.Prompt) {
       return this.createPrompt(props, className);
     } else if (this.type === NotificationType.Popup) {
