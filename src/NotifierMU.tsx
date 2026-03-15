@@ -81,7 +81,7 @@ export interface NotificationMUDataMethods {
  * MU notification data props
  */
 export type NotificationMUDataProps = {
-  mRef: React.RefObject<NotificationMUDataMethods>;
+  mRef: React.RefObject<NotificationMUDataMethods | null>;
 };
 
 function isFunctionComponentElement(

@@ -4,9 +4,14 @@ import {
 } from "@etsoo/notificationbase";
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
-import { NotificationMUDataMethods, NotifierMU, VBox } from "../src";
+import {
+  NotificationMUDataMethods,
+  NotificationMUDataProps,
+  NotifierMU,
+  VBox
+} from "../src";
 import TextField from "@mui/material/TextField";
-import { waitFor, screen, fireEvent } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 
 // Without it will popup error:
 // The current testing environment is not configured to support act
@@ -144,7 +149,7 @@ type DataType = {
   age: number;
 };
 
-function DataCollector(props: { mRef: React.Ref<NotificationMUDataMethods> }) {
+function DataCollector(props: NotificationMUDataProps) {
   const { mRef } = props;
   const nameRef = React.createRef<HTMLInputElement>();
   const ageRef = React.createRef<HTMLInputElement>();
