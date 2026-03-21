@@ -644,7 +644,7 @@ export class NotificationMU extends NotificationReact {
               </IconButton>
             )}
           </IconDialogTitle>
-          <DialogContent>
+          <DialogContent dividers>
             {typeof this.content === "string" ? (
               <DialogContentText>{this.content}</DialogContentText>
             ) : (
