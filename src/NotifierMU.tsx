@@ -425,6 +425,7 @@ export class NotificationMU extends NotificationReact {
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         fullScreen={fullScreen}
+        scroll="paper"
         {...options}
       >
         <IconDialogTitle
@@ -613,6 +614,7 @@ export class NotificationMU extends NotificationReact {
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         fullScreen={fullScreen}
+        scroll="paper"
         {...options}
       >
         <form
