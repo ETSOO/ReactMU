@@ -606,92 +606,94 @@ export class NotificationMU extends NotificationReact {
     const options = this.renderSetup ? this.renderSetup({}) : undefined;
 
     return (
-      <form
+      <Dialog
         key={this.id}
-        onSubmit={(event) => {
-          event.preventDefault();
-          (
-            event.currentTarget.elements.namedItem(
-              "okButton"
-            ) as HTMLButtonElement
-          )?.click();
-          return false;
-        }}
-      >
-        <Dialog
-          open={this.open}
-          PaperComponent={draggable ? DraggablePaperComponent : undefined}
-          className={className}
-          fullWidth={fullWidth}
-          maxWidth={maxWidth}
-          fullScreen={fullScreen}
-          scroll="paper"
-          {...options}
-        >
-          <IconDialogTitle
-            draggable={draggable}
-            className={
-              draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
+        open={this.open}
+        PaperComponent={draggable ? DraggablePaperComponent : undefined}
+        slotProps={{
+          paper: {
+            component: "form",
+            onSubmit: (event: React.SubmitEvent<HTMLFormElement>) => {
+              event.preventDefault();
+              (
+                event.currentTarget.elements.namedItem(
+                  "okButton"
+                ) as HTMLButtonElement
+              )?.click();
+              return false;
             }
-          >
-            <InfoIcon color="primary" />
-            <span className="dialogTitle">{title}</span>
-            {closable && (
-              <IconButton
-                className="MuiDialogContent-root-close-button"
-                size="small"
-                onClick={() => this.returnValue("CLOSE")}
-              >
-                <CloseIcon />
-              </IconButton>
-            )}
-          </IconDialogTitle>
-          <DialogContent dividers>
-            {typeof this.content === "string" ? (
-              <DialogContentText>{this.content}</DialogContentText>
-            ) : (
-              this.content
-            )}
-            {localInputs}
-            <Typography
-              variant="caption"
-              display="block"
-              ref={errorRef}
-              color="error"
-            />
-          </DialogContent>
-          <DialogActions>
-            {buttons ? (
-              buttons(this, handleSubmit)
-            ) : (
-              <React.Fragment>
-                {cancelButton && (
-                  <Button
-                    color="secondary"
-                    onClick={() => {
-                      if (this.onReturn) this.onReturn(undefined);
-                      this.dismiss();
-                    }}
-                  >
-                    {cancelLabel}
-                  </Button>
-                )}
-                {primaryButton && (
-                  <LoadingButton
-                    color="primary"
-                    autoFocus
-                    onClick={handleSubmit}
-                    name="okButton"
-                    {...primaryButtonProps}
-                  >
-                    {okLabel}
-                  </LoadingButton>
-                )}
-              </React.Fragment>
-            )}
-          </DialogActions>
-        </Dialog>
-      </form>
+          }
+        }}
+        className={className}
+        fullWidth={fullWidth}
+        maxWidth={maxWidth}
+        fullScreen={fullScreen}
+        scroll="paper"
+        {...options}
+      >
+        <IconDialogTitle
+          draggable={draggable}
+          className={
+            draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
+          }
+        >
+          <InfoIcon color="primary" />
+          <span className="dialogTitle">{title}</span>
+          {closable && (
+            <IconButton
+              className="MuiDialogContent-root-close-button"
+              size="small"
+              onClick={() => this.returnValue("CLOSE")}
+            >
+              <CloseIcon />
+            </IconButton>
+          )}
+        </IconDialogTitle>
+        <DialogContent dividers>
+          {typeof this.content === "string" ? (
+            <DialogContentText>{this.content}</DialogContentText>
+          ) : (
+            this.content
+          )}
+          {localInputs}
+          <Typography
+            variant="caption"
+            display="block"
+            ref={errorRef}
+            color="error"
+          />
+        </DialogContent>
+        <DialogActions>
+          {buttons ? (
+            buttons(this, handleSubmit)
+          ) : (
+            <React.Fragment>
+              {cancelButton && (
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    if (this.onReturn) this.onReturn(undefined);
+                    this.dismiss();
+                  }}
+                >
+                  {cancelLabel}
+                </Button>
+              )}
+              {primaryButton && (
+                <LoadingButton
+                  color="primary"
+                  autoFocus
+                  onClick={handleSubmit}
+                  name="okButton"
+                  {...primaryButtonProps}
+                >
+                  {okLabel}
+                </LoadingButton>
+              )}
+            </React.Fragment>
+          )}
+        </DialogActions>
+      </Dialog>
     );
   }
 
