@@ -606,27 +606,27 @@ export class NotificationMU extends NotificationReact {
     const options = this.renderSetup ? this.renderSetup({}) : undefined;
 
     return (
-      <Dialog
+      <form
         key={this.id}
-        open={this.open}
-        PaperComponent={draggable ? DraggablePaperComponent : undefined}
-        className={className}
-        fullWidth={fullWidth}
-        maxWidth={maxWidth}
-        fullScreen={fullScreen}
-        scroll="paper"
-        {...options}
+        onSubmit={(event) => {
+          event.preventDefault();
+          (
+            event.currentTarget.elements.namedItem(
+              "okButton"
+            ) as HTMLButtonElement
+          )?.click();
+          return false;
+        }}
       >
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            (
-              event.currentTarget.elements.namedItem(
-                "okButton"
-              ) as HTMLButtonElement
-            )?.click();
-            return false;
-          }}
+        <Dialog
+          open={this.open}
+          PaperComponent={draggable ? DraggablePaperComponent : undefined}
+          className={className}
+          fullWidth={fullWidth}
+          maxWidth={maxWidth}
+          fullScreen={fullScreen}
+          scroll="paper"
+          {...options}
         >
           <IconDialogTitle
             draggable={draggable}
@@ -690,8 +690,8 @@ export class NotificationMU extends NotificationReact {
               </React.Fragment>
             )}
           </DialogActions>
-        </form>
-      </Dialog>
+        </Dialog>
+      </form>
     );
   }
 
