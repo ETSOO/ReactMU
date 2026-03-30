@@ -318,8 +318,7 @@ export function SearchBar(props: SearchBarProps) {
     // Prepare data
     const data = new FormData(state.form);
 
-    // Check 'hasMoreItems' to make sure the 'moreForm' is rendered by purpose
-    if (hasMoreItems && state.moreForm != null) {
+    if (state.moreForm != null) {
       DomUtils.mergeFormData(data, new FormData(state.moreForm));
     }
 
