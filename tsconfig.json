@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
-    "target": "ES2022",
-    "module": "ES2022",
+    "target": "ES2025",
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "allowJs": false,
     "isolatedModules": true,

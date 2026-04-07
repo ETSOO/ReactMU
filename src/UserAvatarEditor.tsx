@@ -1,5 +1,4 @@
 import React from "react";
-import type AvatarEditor from "react-avatar-editor";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
@@ -9,7 +8,10 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { Labels } from "./app/Labels";
 import { FileUploadButton } from "./FileUploadButton";
-import { ImageState } from "react-avatar-editor";
+import AvatarEditor, {
+  type ImageState,
+  type AvatarEditorRef
+} from "react-avatar-editor";
 import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -132,7 +134,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     maxWidth == null || maxWidth < defaultSize ? 2 * width : maxWidth;
 
   // Ref
-  const ref = React.createRef<AvatarEditor>();
+  const ref = React.useRef<AvatarEditorRef>(null);
 
   // Image type
   const type = React.useRef<string>("image/jpeg");
@@ -196,6 +198,13 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
 
   // Handle image load
   const handleLoad = (imageInfo: ImageState) => {
+    if (
+      imageInfo.resource == null ||
+      imageInfo.height == null ||
+      imageInfo.width == null
+    )
+      return;
+
     // Ignore too small images
     if (imageInfo.resource.width < 10 || imageInfo.resource.height < 10) return;
 
@@ -293,9 +302,6 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     }
   };
 
-  // Load the component
-  const AE = React.lazy(() => import("react-avatar-editor"));
-
   return (
     <Stack direction="column" spacing={0.5} width={containerWidth}>
       <FileUploadButton
@@ -314,7 +320,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
             <Skeleton variant="rounded" width={width} height={localHeight} />
           }
         >
-          <AE
+          <AvatarEditor
             ref={ref}
             border={border}
             width={width}
