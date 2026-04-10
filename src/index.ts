@@ -140,3 +140,6 @@ export * from "./TooltipClick";
 export * from "./UserAvatar";
 export * from "./UserAvatarEditor";
 export * from "./ViewContainer";
+
+// Icons
+export { default as AccountTreeIcon } from "@mui/icons-material/AccountTree";
