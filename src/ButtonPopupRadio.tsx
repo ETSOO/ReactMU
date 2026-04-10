@@ -148,7 +148,7 @@ function ButtonPopupList<D extends DnDItemType>(
   }, [value]);
 
   return (
-    <VBox gap={2}>
+    <VBox spacing={2}>
       <RadioGroup
         value={currentValue ?? ""}
         name="radio-buttons-group"
@@ -167,10 +167,12 @@ function ButtonPopupList<D extends DnDItemType>(
           {items.map((item) => (
             <Grid
               size={itemSize}
-              display="flex"
-              justifyContent="flex-start"
-              alignItems="center"
-              gap={1}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start"
+              }}
+              spacing={1}
               key={item.id}
             >
               <FormControlLabel
@@ -182,7 +184,7 @@ function ButtonPopupList<D extends DnDItemType>(
         </Grid>
       </RadioGroup>
       {onAdd && (
-        <HBox gap={1}>
+        <HBox spacing={1}>
           <TextField
             variant="outlined"
             label={labels?.more}

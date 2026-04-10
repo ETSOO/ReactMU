@@ -11,10 +11,7 @@ type ValueType = string | number | Date | null | undefined;
 /**
  * TwoField Input props
  */
-export type TwoFieldInputProps = Omit<
-  InputFieldProps,
-  "InputProps" | "value"
-> & {
+export type TwoFieldInputProps = Omit<InputFieldProps, "value"> & {
   /**
    * Values
    */
@@ -37,8 +34,8 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
   // Destruct
   const {
     name,
-    inputProps,
-    type = inputProps?.inputMode,
+    slotProps,
+    type,
     values,
     onValuesChange,
     onChange,
@@ -46,13 +43,15 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
     ...rest
   } = props;
 
+  const { htmlInput, input, ...restSlotProps } = slotProps ?? {};
+
   // Local values
   const localValues: [ValueType, ValueType] =
     values == null
       ? [null, null]
       : Array.isArray(values)
-      ? (values as [ValueType, ValueType])
-      : [values as ValueType, null];
+        ? (values as [ValueType, ValueType])
+        : [values as ValueType, null];
 
   // Ref
   const valueRef = React.useRef<[ValueType, ValueType]>(localValues);
@@ -100,29 +99,32 @@ export function TwoFieldInput(props: TwoFieldInputProps) {
       type={type}
       value={formatValue(localValues[0], type)}
       ref={dimensions[0][0]}
-      inputProps={inputProps}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment
-            position="end"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1
-            }}
-          >
-            <ArrowRightAltIcon />
-            <Input
-              type={type}
-              name={`${name}-end`}
-              value={formatValue(localValues[1], type)}
-              disableUnderline
-              onInput={onInput}
-              onChange={handleChange}
-              inputProps={inputProps}
-            />
-          </InputAdornment>
-        )
+      slotProps={{
+        input: {
+          ...input,
+          endAdornment: (
+            <InputAdornment
+              position="end"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1
+              }}
+            >
+              <ArrowRightAltIcon />
+              <Input
+                type={type}
+                name={`${name}-end`}
+                value={formatValue(localValues[1], type)}
+                disableUnderline
+                onInput={onInput}
+                onChange={handleChange}
+                slotProps={{ input: htmlInput as any }} // Fix it in the future
+              />
+            </InputAdornment>
+          )
+        },
+        ...restSlotProps
       }}
       onInput={onInput}
       onChange={handleChange}

@@ -199,8 +199,8 @@ export function OptionGroupFlag<
                 ? typeValue
                 : undefined
               : event.target.checked
-              ? value | typeValue
-              : value ^ typeValue
+                ? value | typeValue
+                : value ^ typeValue
           ) as (T[D] & number) | undefined;
 
           if (onValueChange) onValueChange(newValue);
@@ -248,9 +248,7 @@ export function OptionGroupFlag<
             }}
           />
         ) : (
-          <Box paddingLeft={2} paddingY="7px">
-            {group}
-          </Box>
+          <Box sx={{ paddingLeft: 2, paddingY: "7px" }}>{group}</Box>
         )}
       </FormControl>
       {helperText && (

@@ -3,6 +3,7 @@ import { InputField, InputFieldProps } from "./InputField";
 import { Currency } from "@etsoo/appscript";
 import { NumberUtils } from "@etsoo/shared";
 import InputAdornment from "@mui/material/InputAdornment";
+import { NumberFieldInput } from "@base-ui/react/number-field";
 
 /**
  * Number input field properties

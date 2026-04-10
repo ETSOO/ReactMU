@@ -222,7 +222,11 @@ export function ViewPageGridItem(props: ViewPageGridItemProps) {
       {typeof data === "object" ? (
         data
       ) : horizontal ? (
-        <Typography variant="subtitle2" component="span" marginLeft={0.5}>
+        <Typography
+          variant="subtitle2"
+          component="span"
+          sx={{ marginLeft: 0.5 }}
+        >
           {data}
         </Typography>
       ) : (
@@ -423,10 +427,10 @@ export function ViewContainer<T extends DataTypes.StringRecord>(
   return (
     <Grid
       container
-      justifyContent="left"
       className="ET-ViewContainer"
       ref={gridRef}
       spacing={spacing}
+      sx={{ justifyContent: "left" }}
     >
       {leftContainer && (leftResult = leftContainer(data)) != null && (
         <React.Fragment>

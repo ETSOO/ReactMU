@@ -99,9 +99,9 @@ export function CustomFieldViewer(props: CustomFieldViewerProps) {
   return (
     <Grid
       container
-      justifyContent="left"
       spacing={spacing}
       sx={{
+        justifyContent: "left",
         ".MuiTypography-subtitle2": {
           fontWeight: "bold"
         }
@@ -122,8 +122,13 @@ export function CustomFieldViewer(props: CustomFieldViewerProps) {
             size={CustomFieldUtils.transformSpace(field.space)}
             {...field.gridItemProps}
           >
-            <VBox gap={verticalGap}>
-              <Typography fontWeight="bold" fontSize="small" {...titleProps}>
+            <VBox spacing={verticalGap}>
+              <Typography
+                component="div"
+                fontWeight="bold"
+                fontSize="small"
+                {...titleProps}
+              >
                 {field.label ?? name}
               </Typography>
               <Typography {...valueProps}>

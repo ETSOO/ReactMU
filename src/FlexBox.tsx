@@ -5,8 +5,8 @@ import Stack, { StackProps } from "@mui/material/Stack";
  * @param props Props
  * @returns Component
  */
-export function HBox(props: Omit<StackProps, "ref">) {
-  return <Stack direction="row" width="100%" {...props} />;
+export function HBox(props: Omit<StackProps, "ref" | "direction">) {
+  return <Stack direction="row" {...props} />;
 }
 
 /**
@@ -15,14 +15,14 @@ export function HBox(props: Omit<StackProps, "ref">) {
  * @returns Component
  */
 export function HBoxList(props: Omit<StackProps, "direction">) {
+  const { sx, ...rest } = props;
+
   return (
     <Stack
       spacing={1}
-      gap={1}
       direction="row"
-      flexWrap="wrap"
-      width="100%"
-      {...props}
+      sx={{ flexWrap: "wrap", ...sx }}
+      {...rest}
     />
   );
 }
@@ -32,6 +32,6 @@ export function HBoxList(props: Omit<StackProps, "direction">) {
  * @param props Props
  * @returns Component
  */
-export function VBox(props: Omit<StackProps, "ref">) {
+export function VBox(props: Omit<StackProps, "ref" | "direction">) {
   return <Stack direction="column" {...props} />;
 }

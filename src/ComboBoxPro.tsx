@@ -138,7 +138,7 @@ export function ComboBoxPro<D extends ListType2 = ListType2>(
       )}
       getOptionLabel={getOptionLabel}
       getOptionKey={getOptionKey}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      isOptionEqualToValue={(option, value) => option.id === (value as D).id}
       noOptionsText={noOptionsText}
       loadingText={loadingText}
       openText={openText}

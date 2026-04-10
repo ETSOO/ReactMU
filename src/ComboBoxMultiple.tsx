@@ -172,10 +172,10 @@ export function ComboBoxMultiple<
       Object.assign(params, { readOnly });
     }
 
-    Object.assign(params.inputProps, { "data-reset": inputReset });
+    Object.assign(params.slotProps.htmlInput, { "data-reset": inputReset });
 
     if (dataReadonly) {
-      params.inputProps.onKeyDown = (event) => {
+      params.slotProps.htmlInput.onKeyDown = (event) => {
         if (Keyboard.isTypingContent(event.key)) {
           event.preventDefault();
         }
@@ -184,7 +184,9 @@ export function ComboBoxMultiple<
 
     // https://stackoverflow.com/questions/15738259/disabling-chrome-autofill
     // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html
-    Object.assign(params.inputProps, { autoComplete: inputAutoComplete });
+    Object.assign(params.slotProps.htmlInput, {
+      autoComplete: inputAutoComplete
+    });
 
     return params;
   };

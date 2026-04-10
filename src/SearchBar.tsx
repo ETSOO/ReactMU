@@ -362,14 +362,14 @@ export function SearchBar(props: SearchBarProps) {
         <Stack
           ref={dimensions[0][0]}
           className="SearchBarContainer"
-          justifyContent="center"
-          alignItems="center"
           direction="row"
           spacing={`${itemGap}px`}
-          width={width}
-          overflow="hidden"
-          paddingTop="6px"
           sx={{
+            alignItems: "center",
+            justifyContent: "center",
+            width,
+            overflow: "hidden",
+            paddingTop: "6px",
             "& > :not(style)": {
               flexBasis: "auto",
               flexGrow: 0,
@@ -429,10 +429,10 @@ export function SearchBar(props: SearchBarProps) {
           >
             <Stack
               direction="column"
-              alignItems="stretch"
               spacing={2}
-              padding={2}
               sx={{
+                padding: 2,
+                alignItems: "stretch",
                 "& > :not(style)": {
                   minWidth: "100px"
                 }

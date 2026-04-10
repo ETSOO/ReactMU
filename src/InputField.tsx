@@ -33,8 +33,6 @@ export type InputFieldProps = TextFieldProps & {
 export function InputField(props: InputFieldProps) {
   // Destruct
   const {
-    InputProps = {},
-    inputProps = {},
     slotProps,
     onChange,
     onChangeDelay,
@@ -88,10 +86,9 @@ export function InputField(props: InputFieldProps) {
       slotProps={{
         htmlInput: {
           ["data-min-chars"]: changeDelay?.[1],
-          ...htmlInput,
-          ...inputProps
+          ...htmlInput
         },
-        input: { readOnly, ...input, ...InputProps },
+        input: { readOnly, ...input },
         inputLabel: {
           shrink: MUGlobal.inputFieldShrink,
           ...inputLabel

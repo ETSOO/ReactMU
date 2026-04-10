@@ -408,11 +408,11 @@ export function ResponsibleContainer<T extends object, F>(
           ref={dimensions[0][0]}
           className="SearchBox"
           sx={{
+            marginBottom: hasFields
+              ? `${searchBarBottom}px!important`
+              : undefined,
             height: hasFields ? searchBarHeight : 0
           }}
-          marginBottom={
-            hasFields ? `${searchBarBottom}px!important` : undefined
-          }
         >
           {searchBar}
         </Box>

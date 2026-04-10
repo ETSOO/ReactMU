@@ -1,7 +1,7 @@
 import Button, { ButtonProps } from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import React from "react";
-import { DataTypes, IdType } from "@etsoo/shared";
+import { IdType } from "@etsoo/shared";
 import Grid, { GridSize } from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
@@ -168,7 +168,7 @@ function ButtonPopupList<D extends DnDItemType>(
   }, [value]);
 
   return (
-    <VBox gap={2}>
+    <VBox spacing={2}>
       <DnDSortableList<D>
         component={Grid}
         componentProps={{ container: true, spacing: 0 }}
@@ -188,12 +188,14 @@ function ButtonPopupList<D extends DnDItemType>(
         ) => (
           <Grid
             size={itemSize}
-            display="flex"
-            justifyContent="flex-start"
-            alignItems="center"
-            gap={1}
+            spacing={1}
             ref={ref}
-            style={style}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              ...style
+            }}
           >
             <IconButton
               style={{ cursor: "move" }}
@@ -226,7 +228,7 @@ function ButtonPopupList<D extends DnDItemType>(
         mRef={dndRef}
       ></DnDSortableList>
       {onAdd && (
-        <HBox gap={1}>
+        <HBox spacing={1}>
           <TextField
             variant="outlined"
             label={labels?.more}

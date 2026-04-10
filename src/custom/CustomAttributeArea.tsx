@@ -55,7 +55,7 @@ function InputItemUIs({ data }: { data?: CustomFieldData }) {
   const optionsRef = React.useRef<HTMLInputElement>(null);
 
   return (
-    <Grid container spacing={2} marginTop={1}>
+    <Grid container spacing={2} sx={{ marginTop: 1 }}>
       <Grid size={{ xs: 12, sm: 6 }}>
         <ComboBox
           name="type"
@@ -334,7 +334,7 @@ function InputUIs({
 
   return (
     <React.Fragment>
-      <HBox marginBottom={0.5} gap={1} alignItems="center">
+      <HBox spacing={1} sx={{ marginTop: 0.5, alignItems: "center" }}>
         <Typography>{labels.sortTip}</Typography>
         <Button
           size="small"
@@ -364,7 +364,7 @@ function InputUIs({
                   size={{ xs: 12, sm: 12 }}
                   ref={ref}
                   style={style}
-                  gap={1}
+                  spacing={1}
                 >
                   <Grid size={smallSize}>
                     <IconButton

@@ -250,12 +250,14 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
     return (
       <Box
         className="DataGridEx-Header"
-        display="flex"
-        alignItems="center"
-        borderBottom={boldBorder}
-        fontWeight={500}
-        minWidth={widthCalculator.total}
-        height={headerHeight}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          borderBottom: boldBorder,
+          fontWeight: 500,
+          minWidth: widthCalculator.total,
+          height: headerHeight
+        }}
       >
         {columns.map((column, index) => {
           // Destruct
@@ -309,8 +311,10 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
           return (
             <Box
               key={field ?? index.toString()}
-              textAlign={GridAlignGet(align, type)}
-              width={columnWidth(index)}
+              sx={{
+                textAlign: GridAlignGet(align, type),
+                width: columnWidth(index)
+              }}
             >
               <Box
                 className="DataGridEx-Cell"
@@ -330,12 +334,14 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
     return (
       <Box
         className="DataGridEx-Footer"
-        display="flex"
-        alignItems="center"
-        borderTop={thinBorder}
-        marginTop="1px"
-        minWidth={widthCalculator.total}
-        height={bottomHeight - 1}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          borderTop: thinBorder,
+          marginTop: "1px",
+          minHeight: widthCalculator.total,
+          height: bottomHeight - 1
+        }}
       >
         {columns.map((column, index) => {
           // Destruct
@@ -358,8 +364,10 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
           return (
             <Box
               key={"bottom-" + (field ?? index.toString())}
-              textAlign={GridAlignGet(align, type)}
-              width={columnWidth(index)}
+              sx={{
+                textAlign: GridAlignGet(align, type),
+                width: columnWidth(index)
+              }}
             >
               <Box
                 className="DataGridEx-Cell"
@@ -646,13 +654,12 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
             data == null || cellBoxStyle == null
               ? undefined
               : typeof cellBoxStyle === "function"
-              ? cellBoxStyle(data)
-              : cellBoxStyle;
+                ? cellBoxStyle(data)
+                : cellBoxStyle;
 
           const cellProps: BoxProps = {
             className: "DataGridEx-Cell",
-            textAlign: GridAlignGet(align, type),
-            sx: { ...boxStyle }
+            sx: { textAlign: GridAlignGet(align, type), ...boxStyle }
           };
 
           const child = cellRenderer({

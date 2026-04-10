@@ -159,8 +159,8 @@ export function OptionGroup<
       defaultValue == null
         ? []
         : Array.isArray(defaultValue)
-        ? defaultValue
-        : [defaultValue],
+          ? defaultValue
+          : [defaultValue],
     [defaultValue]
   );
 
@@ -294,9 +294,7 @@ export function OptionGroup<
             }}
           />
         ) : (
-          <Box paddingLeft={2} paddingY="7px">
-            {group}
-          </Box>
+          <Box sx={{ paddingLeft: 2, paddingY: "7px" }}>{group}</Box>
         )}
       </FormControl>
       {helperText && (

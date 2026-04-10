@@ -29,8 +29,8 @@ function parseJsonData(jsonData: unknown): [Record<string, unknown>, number] {
         typeof jsonData === "object"
           ? jsonData
           : typeof jsonData === "string"
-          ? JSON.parse(jsonData)
-          : {};
+            ? JSON.parse(jsonData)
+            : {};
     } catch {}
   }
   return [data, calculateKeys(data)];
@@ -153,12 +153,12 @@ export function CustomFieldWindow<D extends CustomFieldData = CustomFieldData>(
             {
               fullScreen: app.smDown,
               inputs: (
-                <Stack marginTop={1.5}>
+                <Stack sx={{ marginTop: 1.5 }}>
                   <Grid
                     container
-                    justifyContent="left"
                     spacing={spacing}
                     sx={{
+                      justifyContent: "left",
                       ".MuiTypography-subtitle2": {
                         fontWeight: "bold"
                       }

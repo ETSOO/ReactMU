@@ -380,7 +380,7 @@ export class NotificationMU extends NotificationReact {
 
     const mRef = content.props.mRef;
 
-    const errorRef = React.createRef<HTMLSpanElement>();
+    const errorRef = React.createRef<HTMLDivElement>();
 
     const setError = (error?: string) => {
       if (errorRef.current == null) return;
@@ -449,8 +449,8 @@ export class NotificationMU extends NotificationReact {
         <DialogContent {...inputProps}>
           {content}
           <Typography
+            component="div"
             variant="caption"
-            display="block"
             ref={errorRef}
             color="error"
           />
@@ -512,7 +512,7 @@ export class NotificationMU extends NotificationReact {
     } = this.inputProps ?? {};
 
     const inputRef = React.createRef<HTMLInputElement>();
-    const errorRef = React.createRef<HTMLSpanElement>();
+    const errorRef = React.createRef<HTMLDivElement>();
 
     const setError = (error?: string) => {
       if (errorRef.current == null) return;
@@ -657,8 +657,8 @@ export class NotificationMU extends NotificationReact {
           )}
           {localInputs}
           <Typography
+            component="div"
             variant="caption"
-            display="block"
             ref={errorRef}
             color="error"
           />
@@ -747,11 +747,11 @@ export class NotificationMU extends NotificationReact {
         {...options}
       >
         <Box
-          display="flex"
-          flexDirection="column"
-          flexWrap="nowrap"
-          alignItems="center"
           sx={{
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "nowrap",
+            alignItems: "center",
             "& > :not(style) + :not(style)": {
               marginTop: (theme) => theme.spacing(1)
             }
@@ -759,7 +759,7 @@ export class NotificationMU extends NotificationReact {
         >
           <CircularProgress {...setupProps} />
           {content && (
-            <Box maxWidth={maxWidth === false ? undefined : maxWidth}>
+            <Box sx={{ maxWidth: maxWidth === false ? undefined : maxWidth }}>
               {content}
             </Box>
           )}
@@ -918,11 +918,11 @@ export class NotifierMU extends NotifierReact {
         open
       >
         <Box
-          display="flex"
-          flexDirection="column"
-          flexWrap="nowrap"
           key={`box-${alignText}`}
           sx={{
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "nowrap",
             "& > :not(style) + :not(style)": {
               marginTop: (theme) => theme.spacing(1)
             }

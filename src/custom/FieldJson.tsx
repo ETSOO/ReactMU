@@ -36,8 +36,8 @@ export const FieldJson: ICustomFieldReact<object> = ({
         typeof value === "object"
           ? value
           : typeof value === "string"
-          ? parseJson(value)
-          : undefined;
+            ? parseJson(value)
+            : undefined;
       inputRef.current.value = obj ? JSON.stringify(obj, null, 4) : "";
     }
   };
@@ -68,7 +68,7 @@ export const FieldJson: ICustomFieldReact<object> = ({
       fullWidth
       multiline
       rows={4}
-      inputProps={{ maxLength: 1280 }}
+      slotProps={{ htmlInput: { maxLength: 1280 } }}
       inputRef={inputRef}
       onChange={() => onChange(name, getValue())}
       {...field.mainSlotProps}

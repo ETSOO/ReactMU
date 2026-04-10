@@ -23,18 +23,20 @@ export function ViewPageActionBar(
     actionPaddings?: number | Record<string, string | number>;
   }
 ) {
-  const { actionPaddings = MUGlobal.pagePaddings, ...rest } = props;
+  const { actionPaddings = MUGlobal.pagePaddings, sx, ...rest } = props;
 
   return (
     <Stack
       className="ET-ViewPage-Actions"
       direction="row"
-      width="100%"
-      flexWrap="wrap"
-      justifyContent="center"
-      paddingTop={actionPaddings}
-      paddingBottom={actionPaddings}
-      gap={actionPaddings}
+      spacing={actionPaddings}
+      sx={{
+        flexWrap: "wrap",
+        justifyContent: "center",
+        paddingTop: actionPaddings,
+        paddingBottom: actionPaddings,
+        ...sx
+      }}
       {...rest}
     ></Stack>
   );
@@ -44,7 +46,8 @@ export function ViewPageActionBar(
  * View page props
  */
 export interface ViewPageProps<T extends DataTypes.StringRecord>
-  extends Omit<CommonPageProps, "children">,
+  extends
+    Omit<CommonPageProps, "children">,
     Omit<ViewContainerProps<T>, "data" | "refresh"> {
   /**
    * Actions

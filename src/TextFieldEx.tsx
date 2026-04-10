@@ -86,8 +86,6 @@ export function TextFieldEx(props: TextFieldExProps) {
     error,
     fullWidth = true,
     helperText,
-    InputLabelProps = {},
-    InputProps = {},
     slotProps,
     onChange,
     onClear,
@@ -107,15 +105,9 @@ export function TextFieldEx(props: TextFieldExProps) {
   // Slot props
   const { input, inputLabel, ...restSlotProps } = slotProps ?? {};
 
-  // Shrink
-  InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
-
   // State
   const [errorText, updateErrorText] = React.useState<React.ReactNode>();
   const [empty, updateEmpty] = React.useState<boolean>(true);
-
-  // Read only
-  if (readOnly != null) InputProps.readOnly = readOnly;
 
   // Calculate
   let errorEx = error;
@@ -180,33 +172,6 @@ export function TextFieldEx(props: TextFieldExProps) {
     }
     preventDefault(e);
   };
-
-  // Show password and/or clear button
-  if (!empty && (showPassword || showClear)) {
-    InputProps.endAdornment = (
-      <InputAdornment position="end">
-        {showPassword && (
-          <IconButton
-            tabIndex={-1}
-            onContextMenu={(event) => event.preventDefault()}
-            onMouseDown={touchStart}
-            onMouseUp={touchEnd}
-            onTouchStart={touchStart}
-            onTouchCancel={touchEnd}
-            onTouchEnd={touchEnd}
-            title={showIt}
-          >
-            <VisibilityIcon />
-          </IconButton>
-        )}
-        {showClear && (
-          <IconButton onClick={clearClick} tabIndex={-1} title={clearLabel}>
-            <ClearIcon />
-          </IconButton>
-        )}
-      </InputAdornment>
-    );
-  }
 
   // Extend key precess
   const onKeyPressEx =
@@ -287,7 +252,38 @@ export function TextFieldEx(props: TextFieldExProps) {
       onChange={onChangeEx}
       onKeyDown={onKeyPressEx}
       slotProps={{
-        input: { readOnly, ...input, ...InputProps },
+        input: {
+          endAdornment:
+            !empty && (showPassword || showClear) ? (
+              <InputAdornment position="end">
+                {showPassword && (
+                  <IconButton
+                    tabIndex={-1}
+                    onContextMenu={(event) => event.preventDefault()}
+                    onMouseDown={touchStart}
+                    onMouseUp={touchEnd}
+                    onTouchStart={touchStart}
+                    onTouchCancel={touchEnd}
+                    onTouchEnd={touchEnd}
+                    title={showIt}
+                  >
+                    <VisibilityIcon />
+                  </IconButton>
+                )}
+                {showClear && (
+                  <IconButton
+                    onClick={clearClick}
+                    tabIndex={-1}
+                    title={clearLabel}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                )}
+              </InputAdornment>
+            ) : undefined,
+          readOnly,
+          ...input
+        },
         inputLabel: {
           shrink: MUGlobal.inputFieldShrink,
           ...inputLabel

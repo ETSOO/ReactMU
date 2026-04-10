@@ -159,7 +159,7 @@ export function Tiplist<
 
     // https://stackoverflow.com/questions/15738259/disabling-chrome-autofill
     // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html
-    Object.assign(params.inputProps, {
+    Object.assign(params.slotProps.htmlInput, {
       autoComplete: inputAutoComplete,
       "data-reset": inputReset
     });
@@ -299,7 +299,7 @@ export function Tiplist<
         style={{ display: "none" }}
         name={name}
         value={`${
-          inputValue ?? (state.current.idSet ? "" : localIdValue ?? "")
+          inputValue ?? (state.current.idSet ? "" : (localIdValue ?? ""))
         }`}
         readOnly
         onChange={inputOnChange}

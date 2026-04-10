@@ -65,17 +65,16 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
 
   // Destruct
   const {
-    InputLabelProps = {},
     jsonValue,
     valueFormatter = (_data) => "...",
     onValueChange,
     steps,
     value = "",
+    slotProps,
     ...rest
   } = props;
 
-  // Shrink
-  InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
+  const { input, htmlInput, inputLabel, ...restSlotProps } = slotProps ?? {};
 
   // Current index
   const indexRef = React.useRef<number>(-1);
@@ -99,11 +98,13 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
       ...rest,
       buttons: (n, callback) => (
         <HBox
-          paddingLeft={2}
-          paddingRight={2}
-          paddingBottom={2}
-          gap={2}
-          justifyContent="space-between"
+          spacing={2}
+          sx={{
+            justifyContent: "space-between",
+            paddingLeft: 2,
+            paddingRight: 2,
+            paddingBottom: 2
+          }}
         >
           {index === 0 ? (
             <Button
@@ -179,21 +180,25 @@ export function DataSteps<T extends object>(props: DataStepsProps<T>) {
   return (
     <TextField
       autoComplete="off"
-      InputLabelProps={InputLabelProps}
-      inputProps={{ style: { cursor: "pointer" } }}
-      InputProps={{
-        onKeyDown: (event) => {
-          if (event.key === "Tab") return;
-          cancelInput(event);
+      slotProps={{
+        input: {
+          onKeyDown: (event) => {
+            if (event.key === "Tab") return;
+            cancelInput(event);
+          },
+          onPaste: cancelInput,
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton edge="end" size="small">
+                <StartIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+          ...input
         },
-        onPaste: cancelInput,
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton edge="end" size="small">
-              <StartIcon />
-            </IconButton>
-          </InputAdornment>
-        )
+        htmlInput: { style: { cursor: "pointer" }, ...htmlInput },
+        inputLabel: { shrink: MUGlobal.searchFieldShrink, ...inputLabel },
+        ...restSlotProps
       }}
       onClick={() => showStep(0)}
       value={localValue}

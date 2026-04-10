@@ -116,9 +116,7 @@ export function SwitchField(props: SwitchFieldProps) {
             }}
           />
         ) : (
-          <Box paddingLeft={2} paddingY="7px">
-            {group}
-          </Box>
+          <Box sx={{ paddingLeft: 2, paddingY: "7px" }}>{group}</Box>
         )}
       </FormControl>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}

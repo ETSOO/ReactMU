@@ -303,7 +303,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
   };
 
   return (
-    <Stack direction="column" spacing={0.5} width={containerWidth}>
+    <Stack direction="column" spacing={0.5} sx={{ width: containerWidth }}>
       <FileUploadButton
         variant="outlined"
         size="medium"
@@ -349,8 +349,7 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
       <Stack
         spacing={0.5}
         direction="row"
-        sx={{ paddingBottom: 2 }}
-        alignItems="center"
+        sx={{ alignItems: "center", paddingBottom: 2 }}
       >
         <IconButton
           size="small"

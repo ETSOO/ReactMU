@@ -32,25 +32,16 @@ export function SearchField(props: SearchFieldProps) {
   // Destruct
   const {
     changeDelay,
-    InputLabelProps = {},
-    InputProps = {},
-    inputProps = {},
     onChange,
     readOnly,
     size = MUGlobal.searchFieldSize,
     variant = MUGlobal.searchFieldVariant,
     minChars = 0,
+    slotProps,
     ...rest
   } = props;
 
-  // Shrink
-  InputLabelProps.shrink ??= MUGlobal.searchFieldShrink;
-
-  // Read only
-  if (readOnly != null) InputProps.readOnly = readOnly;
-
-  // Min characters
-  inputProps["data-min-chars"] = minChars;
+  const { input, inputLabel, htmlInput, ...restSlotProps } = slotProps ?? {};
 
   const isMounted = React.useRef(true);
   const delayed =
@@ -90,12 +81,15 @@ export function SearchField(props: SearchFieldProps) {
   // Layout
   return (
     <TextField
-      InputLabelProps={InputLabelProps}
-      InputProps={InputProps}
-      inputProps={inputProps}
       onChange={onChangeEx}
       size={size}
       variant={variant}
+      slotProps={{
+        input: { readOnly, ...input },
+        inputLabel: { shrink: MUGlobal.searchFieldShrink, ...inputLabel },
+        htmlInput: { ["data-min-chars"]: minChars, ...htmlInput },
+        ...restSlotProps
+      }}
       {...rest}
     />
   );

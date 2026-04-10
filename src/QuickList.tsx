@@ -88,9 +88,9 @@ export function QuickList<T extends ListType2 = ListType2>(
     itemProps,
     loadData,
     noMatchesLabel = app?.get("noMatches"),
-    gap = 1,
-    height = "480px",
+    spacing = 1,
     onItemClick,
+    sx,
     ...rest
   } = props;
 
@@ -115,7 +115,7 @@ export function QuickList<T extends ListType2 = ListType2>(
 
   // Layout
   return (
-    <VBox gap={gap} height={height} {...rest}>
+    <VBox spacing={spacing} sx={{ height: "480px", ...sx }} {...rest}>
       <InputField
         label={label}
         onChangeDelay={(event) => {
@@ -131,7 +131,7 @@ export function QuickList<T extends ListType2 = ListType2>(
       {loading ? (
         <LinearProgress />
       ) : items.length === 0 ? (
-        <Typography textAlign="center">{noMatchesLabel}</Typography>
+        <Typography align="center">{noMatchesLabel}</Typography>
       ) : (
         <List>
           {items.map((item) => (

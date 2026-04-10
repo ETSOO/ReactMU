@@ -72,7 +72,7 @@ export function SwitchAnt(props: SwitchAntProps) {
 
   // Layout
   return (
-    <Stack direction="row" spacing={1} alignItems="center">
+    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
       <Typography
         onClick={() => controlChecked && ref.current?.click()}
         sx={{
@@ -86,7 +86,7 @@ export function SwitchAnt(props: SwitchAntProps) {
       </Typography>
       <Switch
         checked={controlChecked}
-        inputRef={ref}
+        ref={ref}
         value={value}
         onChange={onChangeLocal}
         {...rest}

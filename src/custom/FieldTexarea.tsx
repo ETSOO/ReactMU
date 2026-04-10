@@ -44,7 +44,7 @@ export const FieldTexarea: ICustomFieldReact<string> = ({
       fullWidth
       multiline
       rows={4}
-      inputProps={{ maxLength: 1280 }}
+      slotProps={{ htmlInput: { maxLength: 1280 } }}
       inputRef={inputRef}
       defaultValue={defaultValue}
       onChange={() => onChange(name, getValue())}

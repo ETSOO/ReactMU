@@ -165,7 +165,7 @@ export function MoreFab(props: MoreFabProps) {
         transformOrigin={transformOrigin}
         open={open}
         onClose={handleClose}
-        PaperProps={PaperProps}
+        slotProps={{ paper: PaperProps }}
       >
         {actionsLocal.map(({ label, icon, action }, index) =>
           label === "-" ? (
@@ -182,13 +182,13 @@ export function MoreFab(props: MoreFabProps) {
                     }
                   : { component: Link, to: action }
                 : Array.isArray(action)
-                ? { component: Link, to: action[0], state: action[1] }
-                : {
-                    onClick: (event: React.MouseEvent) => {
-                      handleClose();
-                      if (typeof action === "function") action(event);
-                    }
-                  })}
+                  ? { component: Link, to: action[0], state: action[1] }
+                  : {
+                      onClick: (event: React.MouseEvent) => {
+                        handleClose();
+                        if (typeof action === "function") action(event);
+                      }
+                    })}
             >
               {icon != null && <ListItemIcon>{icon}</ListItemIcon>}
               <ListItemText inset={icon == null && hasIcon}>

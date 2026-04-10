@@ -151,7 +151,7 @@ export function ComboBox<
   const localValue: T | null | undefined =
     idValue != null
       ? localOptions.find((o) => o[idField] === idValue)
-      : defaultValue ?? value;
+      : (defaultValue ?? value);
 
   // State
   // null for controlled
@@ -171,10 +171,10 @@ export function ComboBox<
       Object.assign(params, { readOnly });
     }
 
-    Object.assign(params.inputProps, { "data-reset": inputReset });
+    Object.assign(params.slotProps.htmlInput, { "data-reset": inputReset });
 
     if (dataReadonly) {
-      params.inputProps.onKeyDown = (event) => {
+      params.slotProps.htmlInput.onKeyDown = (event) => {
         if (Keyboard.isTypingContent(event.key)) {
           event.preventDefault();
         }
@@ -183,7 +183,9 @@ export function ComboBox<
 
     // https://stackoverflow.com/questions/15738259/disabling-chrome-autofill
     // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html
-    Object.assign(params.inputProps, { autoComplete: inputAutoComplete });
+    Object.assign(params.slotProps.htmlInput, {
+      autoComplete: inputAutoComplete
+    });
 
     return params;
   };
@@ -250,7 +252,7 @@ export function ComboBox<
         disabled={disabled}
       />
       {/* Previous input will reset first with "disableClearable = false", next input trigger change works */}
-      <Stack gap={0.5} direction="row" width="100%">
+      <Stack spacing={0.5} direction="row">
         <Autocomplete<T, false, false, false>
           value={stateValue}
           disabled={disabled}

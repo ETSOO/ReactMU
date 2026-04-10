@@ -312,7 +312,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
         type={idIsString ? "text" : "number"}
         style={{ display: "none" }}
         name={name}
-        value={inputValue ?? (state.current.idSet ? "" : localIdValue ?? "")}
+        value={inputValue ?? (state.current.idSet ? "" : (localIdValue ?? ""))}
         readOnly
         onChange={inputOnChange}
         disabled={disabled}
@@ -383,7 +383,7 @@ export function TiplistPro<T extends ListType2 = ListType2>(
             data-reset={inputReset}
           />
         )}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
+        isOptionEqualToValue={(option, value) => option.id === (value as T).id}
         sx={sx}
         noOptionsText={noOptionsText}
         loadingText={loadingText}

@@ -104,11 +104,12 @@ export function FileUploadButton(props: FileUploadButtonProps) {
   // Layout
   return (
     <HBox
-      alignItems="center"
-      flexWrap="wrap"
-      border={(theme) =>
-        dragOver ? "1px dashed " + theme.palette.warning.main : undefined
-      }
+      sx={{
+        alignItems: "center",
+        flexWrap: "wrap",
+        border: (theme) =>
+          dragOver ? "1px dashed " + theme.palette.warning.main : undefined
+      }}
       spacing={0.5}
       {...(dropFilesLabel == null
         ? undefined

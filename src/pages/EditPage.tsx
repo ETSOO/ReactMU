@@ -95,18 +95,17 @@ export function EditPage(props: EditPageProps) {
       <form onSubmit={onSubmit}>
         <Grid
           container
-          justifyContent="left"
           spacing={gridSpacing}
-          paddingTop={1}
+          sx={{ justifyContent: "left", paddingTop: 1 }}
         >
           {children}
         </Grid>
         <Grid
           container
-          position="sticky"
-          display="flex"
-          gap={gridSpacing}
+          spacing={gridSpacing}
           sx={{
+            position: "sticky",
+            display: "flex",
             top: "auto",
             bottom: (theme) =>
               MUGlobal.updateWithTheme(gridSpacing, theme.spacing),
