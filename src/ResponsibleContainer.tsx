@@ -252,8 +252,9 @@ export function ResponsibleContainer<T extends object, F>(
   const searchData = useSearchParamsWithCache(cacheKey);
 
   // On submit callback
-  const onSubmit = (data: FormData, _reset: boolean) => {
-    if (data == null || state.ref == null) return;
+  // Current UI may be rendered but the search bar rerendered with new data, check init to avoid reset and load new data
+  const onSubmit = (data: FormData, _reset: boolean, init: boolean) => {
+    if (data == null || state.ref == null || (state.mounted && init)) return;
     state.ref.reset({ data });
   };
 
@@ -385,9 +386,10 @@ export function ResponsibleContainer<T extends object, F>(
         className={`searchBar${showDataGrid ? "Grid" : "List"}`}
         width={rect.width}
         top={searchBarTop}
+        autoSubmitDelay={rest.autoLoad === false ? 0 : undefined}
       />
     );
-  }, [showDataGrid, hasFields, searchBarHeight, rect?.width]);
+  }, [showDataGrid, hasFields, searchBarHeight, rect?.width, rest.autoLoad]);
 
   // Pull container
   const pullContainer = showDataGrid

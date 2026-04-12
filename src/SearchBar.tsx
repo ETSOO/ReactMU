@@ -41,7 +41,11 @@ export interface SearchBarProps {
   /**
    * On submit callback
    */
-  onSubmit: (data: FormData, reset: boolean) => void | PromiseLike<void>;
+  onSubmit: (
+    data: FormData,
+    reset: boolean,
+    init: boolean
+  ) => void | PromiseLike<void>;
 
   /**
    * Top position, true means Toolbar's height
@@ -314,7 +318,10 @@ export function SearchBar(props: SearchBarProps) {
   };
 
   // Submit at once
-  const handleSubmitInstant = (reset: boolean = false) => {
+  const handleSubmitInstant = (
+    reset: boolean = false,
+    init: boolean = false
+  ) => {
     // Prepare data
     const data = new FormData(state.form);
 
@@ -322,7 +329,7 @@ export function SearchBar(props: SearchBarProps) {
       DomUtils.mergeFormData(data, new FormData(state.moreForm));
     }
 
-    onSubmit(data, reset);
+    onSubmit(data, reset, init);
   };
 
   const delayed = useDelayedExecutor(handleSubmitInstant, 480);
@@ -339,8 +346,8 @@ export function SearchBar(props: SearchBarProps) {
 
   React.useEffect(() => {
     // Delayed way
-    if (autoSubmitDelay > 0) {
-      delayed.call(autoSubmitDelay);
+    if (autoSubmitDelay > 10) {
+      delayed.call(autoSubmitDelay, false, true);
     }
 
     return () => {

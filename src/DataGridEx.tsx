@@ -339,7 +339,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
           alignItems: "center",
           borderTop: thinBorder,
           marginTop: "1px",
-          minHeight: widthCalculator.total,
+          minWidth: widthCalculator.total,
           height: bottomHeight - 1
         }}
       >
