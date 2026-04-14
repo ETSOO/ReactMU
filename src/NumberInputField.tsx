@@ -43,11 +43,6 @@ export type NumberInputFieldProps = Omit<
   max?: number;
 
   /**
-   * Is search field?
-   */
-  search?: boolean;
-
-  /**
    * Step value
    */
   step?: number;
@@ -69,7 +64,6 @@ export function NumberInputField(props: NumberInputFieldProps) {
       : undefined,
     endSymbol,
     max = 9999999,
-    search = false,
     slotProps = {},
     ...rest
   } = props;
@@ -77,7 +71,6 @@ export function NumberInputField(props: NumberInputFieldProps) {
   return (
     <InputField
       type="number"
-      size={search ? MUGlobal.searchFieldSize : undefined}
       slotProps={Object.assign(slotProps, {
         input: {
           startAdornment: symbol ? (
@@ -89,7 +82,6 @@ export function NumberInputField(props: NumberInputFieldProps) {
             <InputAdornment position="end">{endSymbol}</InputAdornment>
           ) : undefined
         },
-        inputLabel: { shrink: search ? MUGlobal.searchFieldShrink : undefined },
         htmlInput: {
           min,
           step,
@@ -98,7 +90,6 @@ export function NumberInputField(props: NumberInputFieldProps) {
           inputMode: "numeric"
         }
       })}
-      variant={search ? MUGlobal.searchFieldVariant : undefined}
       {...rest}
     />
   );

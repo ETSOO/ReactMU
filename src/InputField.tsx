@@ -23,6 +23,11 @@ export type InputFieldProps = TextFieldProps & {
    * Is the field read only?
    */
   readOnly?: boolean;
+
+  /**
+   * Search case
+   */
+  search?: boolean;
 };
 
 /**
@@ -38,8 +43,9 @@ export function InputField(props: InputFieldProps) {
     onChangeDelay,
     changeDelay = onChangeDelay ? [480] : undefined,
     readOnly,
-    size = MUGlobal.inputFieldSize,
-    variant = MUGlobal.inputFieldVariant,
+    search = false,
+    size = search ? MUGlobal.searchFieldSize : MUGlobal.inputFieldSize,
+    variant = search ? MUGlobal.searchFieldVariant : MUGlobal.inputFieldVariant,
     ...rest
   } = props;
 
@@ -90,7 +96,9 @@ export function InputField(props: InputFieldProps) {
         },
         input: { readOnly, ...input },
         inputLabel: {
-          shrink: MUGlobal.inputFieldShrink,
+          shrink: search
+            ? MUGlobal.searchFieldShrink
+            : MUGlobal.inputFieldShrink,
           ...inputLabel
         },
         ...restSlotProps
