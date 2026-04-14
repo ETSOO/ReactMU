@@ -2,7 +2,7 @@ import { DataTypes, IdType } from "@etsoo/shared";
 import React from "react";
 import { CSSProperties, Theme, useTheme } from "@mui/material/styles";
 import { isSortableOperation, useSortable } from "@dnd-kit/react/sortable";
-import { DragDropEvents, DragDropProvider } from "@dnd-kit/react";
+import { DragDropEventHandlers, DragDropProvider } from "@dnd-kit/react";
 
 /**
  * DnD sortable item default style
@@ -126,7 +126,7 @@ export type DnDSortableListProps<
    */
   onDragStart?: (
     items: D[],
-    event: Parameters<DragDropEvents["dragstart"]>[0]
+    event: Parameters<DragDropEventHandlers["onDragStart"]>[0]
   ) => void;
 
   /**
@@ -134,7 +134,7 @@ export type DnDSortableListProps<
    */
   onDragEnd?: (
     items: D[],
-    ...args: Parameters<DragDropEvents["dragend"]>
+    ...args: Parameters<DragDropEventHandlers["onDragEnd"]>
   ) => void;
 };
 
@@ -293,7 +293,9 @@ export function DnDSortableList<
     };
   }, [items, labelFn, changeItems]);
 
-  function handleDragEnd(...args: Parameters<DragDropEvents["dragend"]>) {
+  function handleDragEnd(
+    ...args: Parameters<DragDropEventHandlers["onDragEnd"]>
+  ) {
     // Event
     const event = args[0];
 

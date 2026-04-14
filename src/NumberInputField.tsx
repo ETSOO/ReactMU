@@ -3,7 +3,7 @@ import { InputField, InputFieldProps } from "./InputField";
 import { Currency } from "@etsoo/appscript";
 import { NumberUtils } from "@etsoo/shared";
 import InputAdornment from "@mui/material/InputAdornment";
-import { NumberFieldInput } from "@base-ui/react/number-field";
+import { MUGlobal } from "./MUGlobal";
 
 /**
  * Number input field properties
@@ -43,6 +43,11 @@ export type NumberInputFieldProps = Omit<
   max?: number;
 
   /**
+   * Is search field?
+   */
+  search?: boolean;
+
+  /**
    * Step value
    */
   step?: number;
@@ -64,6 +69,7 @@ export function NumberInputField(props: NumberInputFieldProps) {
       : undefined,
     endSymbol,
     max = 9999999,
+    search = false,
     slotProps = {},
     ...rest
   } = props;
@@ -71,6 +77,7 @@ export function NumberInputField(props: NumberInputFieldProps) {
   return (
     <InputField
       type="number"
+      size={search ? MUGlobal.searchFieldSize : undefined}
       slotProps={Object.assign(slotProps, {
         input: {
           startAdornment: symbol ? (
@@ -82,6 +89,7 @@ export function NumberInputField(props: NumberInputFieldProps) {
             <InputAdornment position="end">{endSymbol}</InputAdornment>
           ) : undefined
         },
+        inputLabel: { shrink: search ? MUGlobal.searchFieldShrink : undefined },
         htmlInput: {
           min,
           step,
@@ -90,6 +98,7 @@ export function NumberInputField(props: NumberInputFieldProps) {
           inputMode: "numeric"
         }
       })}
+      variant={search ? MUGlobal.searchFieldVariant : undefined}
       {...rest}
     />
   );
