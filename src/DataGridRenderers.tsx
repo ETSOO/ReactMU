@@ -31,16 +31,19 @@ export namespace DataGridRenderers {
       // First column, show loading indicator
       if (columnIndex === 0) return <CircularProgress size={15} />;
 
-      // Others return undefined
-      return undefined;
+      // Others return
+      return;
     }
 
+    // No formatted value
+    if (formattedValue === undefined) return;
+
     // No formatted value and data field
-    if (formattedValue == null && field == null) return undefined;
+    if (formattedValue == null && field == null) return;
 
     // Cell value
     const value = formattedValue ?? data[field!];
-    if (value == null) return undefined;
+    if (value == null) return;
 
     // For unknow and string type, keep the simple format
     if (type === GridDataType.Unkwown) return value;
@@ -139,7 +142,5 @@ export namespace DataGridRenderers {
         return loadedItems.toLocaleString() + (hasNextPage ? "+" : "");
       }
     }
-
-    return undefined;
   }
 }

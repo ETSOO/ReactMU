@@ -665,9 +665,7 @@ export function DataGridEx<T extends object>(props: DataGridExProps<T>) {
           const child = cellRenderer({
             data,
             field,
-            formattedValue: valueFormatter
-              ? valueFormatter(formatProps)
-              : undefined,
+            formattedValue: valueFormatter ? valueFormatter(formatProps) : null,
             selected,
             type,
             rowIndex,
