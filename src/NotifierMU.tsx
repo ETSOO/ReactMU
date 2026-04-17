@@ -71,7 +71,6 @@ const IconDialogTitle = styled(DialogTitle, {
 `;
 
 const setError = (div?: HTMLDivElement | null, error?: string) => {
-  console.log("setError", error, div == null);
   if (div == null) return;
   div.innerText = error ?? "";
   div.style.paddingTop = error ? "8px" : "0px";
@@ -387,7 +386,7 @@ export class NotificationMU extends NotificationReact {
 
     const mRef = content.props.mRef;
 
-    let errorDiv: HTMLDivElement | null = null;
+    const errorRef = React.createRef<HTMLDivElement>();
 
     // Setup callback
     const options = this.renderSetup ? this.renderSetup({}) : undefined;
@@ -412,7 +411,7 @@ export class NotificationMU extends NotificationReact {
         }
 
         if (typeof v === "string") {
-          setError(errorDiv, v);
+          setError(errorRef.current, v);
           return false;
         }
       }
@@ -456,9 +455,7 @@ export class NotificationMU extends NotificationReact {
           <Typography
             component="div"
             variant="caption"
-            ref={(div) => {
-              errorDiv = div;
-            }}
+            ref={errorRef}
             color="error"
             align="center"
           />
@@ -520,8 +517,7 @@ export class NotificationMU extends NotificationReact {
     } = this.inputProps ?? {};
 
     const inputRef = React.createRef<HTMLInputElement>();
-
-    let errorDiv: HTMLDivElement | null = null;
+    const errorRef = React.createRef<HTMLDivElement>();
 
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
       // Error
@@ -565,7 +561,7 @@ export class NotificationMU extends NotificationReact {
         }
 
         if (typeof v === "string") {
-          setError(errorDiv, v);
+          setError(errorRef.current, v);
           input?.focus();
           return false;
         }
@@ -667,7 +663,7 @@ export class NotificationMU extends NotificationReact {
             component="div"
             variant="caption"
             ref={(div) => {
-              errorDiv = div;
+              console.log("ref", div);
             }}
             color="error"
             align="center"
