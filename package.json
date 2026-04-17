@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.6.46",
+  "version": "1.6.47",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -46,7 +46,7 @@
     "@etsoo/shared": "^1.2.83",
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.0",
-    "@mui/x-data-grid": "^9.0.1",
+    "@mui/x-data-grid": "^9.0.2",
     "chart.js": "^4.5.1",
     "chartjs-plugin-datalabels": "^2.2.0",
     "dompurify": "^3.4.0",
@@ -81,7 +81,7 @@
     "@types/react-input-mask": "^3.0.6",
     "@vitejs/plugin-react": "^6.0.1",
     "jsdom": "^29.0.2",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.4"
   }
 }

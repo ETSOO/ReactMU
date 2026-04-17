@@ -70,6 +70,13 @@ const IconDialogTitle = styled(DialogTitle, {
     `}
 `;
 
+const setError = (div?: HTMLDivElement | null, error?: string) => {
+  console.log("setError", error, div == null);
+  if (div == null) return;
+  div.innerText = error ?? "";
+  div.style.paddingTop = error ? "8px" : "0px";
+};
+
 /**
  * MU notification data methods
  */
@@ -380,17 +387,15 @@ export class NotificationMU extends NotificationReact {
 
     const mRef = content.props.mRef;
 
-    const errorRef = React.createRef<HTMLDivElement>();
-
-    const setError = (error?: string) => {
-      if (errorRef.current == null) return;
-      errorRef.current.innerText = error ?? "";
-    };
+    let errorDiv: HTMLDivElement | null = null;
 
     // Setup callback
     const options = this.renderSetup ? this.renderSetup({}) : undefined;
 
     const handleSubmit = async () => {
+      // Clear error
+      setError(undefined);
+
       if (this.onReturn) {
         // Get the value
         const value = mRef.current?.getValue();
@@ -407,7 +412,7 @@ export class NotificationMU extends NotificationReact {
         }
 
         if (typeof v === "string") {
-          setError(v);
+          setError(errorDiv, v);
           return false;
         }
       }
@@ -451,8 +456,11 @@ export class NotificationMU extends NotificationReact {
           <Typography
             component="div"
             variant="caption"
-            ref={errorRef}
+            ref={(div) => {
+              errorDiv = div;
+            }}
             color="error"
+            align="center"
           />
         </DialogContent>
         <DialogActions>
@@ -512,14 +520,13 @@ export class NotificationMU extends NotificationReact {
     } = this.inputProps ?? {};
 
     const inputRef = React.createRef<HTMLInputElement>();
-    const errorRef = React.createRef<HTMLDivElement>();
 
-    const setError = (error?: string) => {
-      if (errorRef.current == null) return;
-      errorRef.current.innerText = error ?? "";
-    };
+    let errorDiv: HTMLDivElement | null = null;
 
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+      // Error
+      setError(undefined);
+
       const input = inputRef.current;
 
       if (this.onReturn) {
@@ -558,7 +565,7 @@ export class NotificationMU extends NotificationReact {
         }
 
         if (typeof v === "string") {
-          setError(v);
+          setError(errorDiv, v);
           input?.focus();
           return false;
         }
@@ -659,8 +666,11 @@ export class NotificationMU extends NotificationReact {
           <Typography
             component="div"
             variant="caption"
-            ref={errorRef}
+            ref={(div) => {
+              errorDiv = div;
+            }}
             color="error"
+            align="center"
           />
         </DialogContent>
         <DialogActions>
