@@ -662,9 +662,7 @@ export class NotificationMU extends NotificationReact {
           <Typography
             component="div"
             variant="caption"
-            ref={(div) => {
-              console.log("ref", div);
-            }}
+            ref={errorRef}
             color="error"
             align="center"
           />
