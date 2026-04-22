@@ -156,6 +156,18 @@ export class NotificationMU extends NotificationReact {
       return true;
     };
 
+    const base = () =>
+      primaryButton && (
+        <LoadingButton
+          {...setupProps}
+          onClick={callback}
+          autoFocus
+          {...primaryButtonProps}
+        >
+          {okLabel}
+        </LoadingButton>
+      );
+
     return (
       <Dialog
         key={this.id}
@@ -194,18 +206,7 @@ export class NotificationMU extends NotificationReact {
           {inputs}
         </DialogContent>
         <DialogActions>
-          {buttons
-            ? buttons(this, callback)
-            : primaryButton && (
-                <LoadingButton
-                  {...setupProps}
-                  onClick={callback}
-                  autoFocus
-                  {...primaryButtonProps}
-                >
-                  {okLabel}
-                </LoadingButton>
-              )}
+          {buttons ? buttons(this, callback, base) : base()}
         </DialogActions>
       </Dialog>
     );
@@ -241,6 +242,29 @@ export class NotificationMU extends NotificationReact {
       await this.returnValue(value);
       return true;
     };
+
+    const base = () => (
+      <React.Fragment>
+        {cancelButton && (
+          <LoadingButton
+            color="secondary"
+            onClick={async (event) => await callback(event, false)}
+          >
+            {cancelLabel}
+          </LoadingButton>
+        )}
+        {primaryButton && (
+          <LoadingButton
+            color="primary"
+            onClick={async (event) => await callback(event, true)}
+            autoFocus
+            {...primaryButtonProps}
+          >
+            {okLabel}
+          </LoadingButton>
+        )}
+      </React.Fragment>
+    );
 
     return (
       <Dialog
@@ -280,30 +304,7 @@ export class NotificationMU extends NotificationReact {
           {inputs}
         </DialogContent>
         <DialogActions>
-          {buttons ? (
-            buttons(this, callback)
-          ) : (
-            <React.Fragment>
-              {cancelButton && (
-                <LoadingButton
-                  color="secondary"
-                  onClick={async (event) => await callback(event, false)}
-                >
-                  {cancelLabel}
-                </LoadingButton>
-              )}
-              {primaryButton && (
-                <LoadingButton
-                  color="primary"
-                  onClick={async (event) => await callback(event, true)}
-                  autoFocus
-                  {...primaryButtonProps}
-                >
-                  {okLabel}
-                </LoadingButton>
-              )}
-            </React.Fragment>
-          )}
+          {buttons ? buttons(this, callback, base) : base()}
         </DialogActions>
       </Dialog>
     );
@@ -420,6 +421,33 @@ export class NotificationMU extends NotificationReact {
       return true;
     };
 
+    const base = () => (
+      <React.Fragment>
+        {cancelButton && (
+          <Button
+            color="secondary"
+            onClick={() => {
+              if (this.onReturn) this.onReturn(undefined);
+              this.dismiss();
+            }}
+          >
+            {cancelLabel}
+          </Button>
+        )}
+        {primaryButton && (
+          <LoadingButton
+            color="primary"
+            autoFocus
+            onClick={handleSubmit}
+            name="okButton"
+            {...primaryButtonProps}
+          >
+            {okLabel}
+          </LoadingButton>
+        )}
+      </React.Fragment>
+    );
+
     return (
       <Dialog
         key={this.id}
@@ -461,34 +489,7 @@ export class NotificationMU extends NotificationReact {
           />
         </DialogContent>
         <DialogActions>
-          {buttons ? (
-            buttons(this, handleSubmit)
-          ) : (
-            <React.Fragment>
-              {cancelButton && (
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    if (this.onReturn) this.onReturn(undefined);
-                    this.dismiss();
-                  }}
-                >
-                  {cancelLabel}
-                </Button>
-              )}
-              {primaryButton && (
-                <LoadingButton
-                  color="primary"
-                  autoFocus
-                  onClick={handleSubmit}
-                  name="okButton"
-                  {...primaryButtonProps}
-                >
-                  {okLabel}
-                </LoadingButton>
-              )}
-            </React.Fragment>
-          )}
+          {buttons ? buttons(this, handleSubmit, base) : base()}
         </DialogActions>
       </Dialog>
     );
@@ -608,6 +609,33 @@ export class NotificationMU extends NotificationReact {
     // Setup callback
     const options = this.renderSetup ? this.renderSetup({}) : undefined;
 
+    const base = () => (
+      <React.Fragment>
+        {cancelButton && (
+          <Button
+            color="secondary"
+            onClick={() => {
+              if (this.onReturn) this.onReturn(undefined);
+              this.dismiss();
+            }}
+          >
+            {cancelLabel}
+          </Button>
+        )}
+        {primaryButton && (
+          <LoadingButton
+            color="primary"
+            autoFocus
+            onClick={handleSubmit}
+            name="okButton"
+            {...primaryButtonProps}
+          >
+            {okLabel}
+          </LoadingButton>
+        )}
+      </React.Fragment>
+    );
+
     return (
       <Dialog
         key={this.id}
@@ -668,34 +696,7 @@ export class NotificationMU extends NotificationReact {
           />
         </DialogContent>
         <DialogActions>
-          {buttons ? (
-            buttons(this, handleSubmit)
-          ) : (
-            <React.Fragment>
-              {cancelButton && (
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    if (this.onReturn) this.onReturn(undefined);
-                    this.dismiss();
-                  }}
-                >
-                  {cancelLabel}
-                </Button>
-              )}
-              {primaryButton && (
-                <LoadingButton
-                  color="primary"
-                  autoFocus
-                  onClick={handleSubmit}
-                  name="okButton"
-                  {...primaryButtonProps}
-                >
-                  {okLabel}
-                </LoadingButton>
-              )}
-            </React.Fragment>
-          )}
+          {buttons ? buttons(this, handleSubmit, base) : base()}
         </DialogActions>
       </Dialog>
     );
