@@ -149,6 +149,7 @@ export {
   DataGrid,
   Toolbar,
   ToolbarButton,
+  useGridApiContext,
   useGridSelector,
   type GridColDef,
   type GridSlots
