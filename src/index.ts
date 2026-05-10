@@ -143,3 +143,6 @@ export * from "./ViewContainer";
 
 // Icons
 export { default as AccountTreeIcon } from "@mui/icons-material/AccountTree";
+
+// Datagrid
+export { DataGrid, type GridColDef } from "@mui/x-data-grid";
