@@ -150,6 +150,7 @@ export {
   Toolbar,
   ToolbarButton,
   useGridApiContext,
+  useGridApiRef,
   useGridSelector,
   type GridColDef,
   type GridSlots
