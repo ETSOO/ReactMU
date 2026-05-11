@@ -153,5 +153,6 @@ export {
   useGridApiRef,
   useGridSelector,
   type GridColDef,
+  type GridRowId,
   type GridSlots
 } from "@mui/x-data-grid";
