@@ -47,6 +47,7 @@ export * from "./AutocompleteExtendedProps";
 export * from "./BackButton";
 export * from "./BridgeCloseButton";
 export * from "./ButtonLink";
+export * from "./ButtonList";
 export * from "./ButtonPopover";
 export * from "./ButtonPopupCheckbox";
 export * from "./ButtonPopupRadio";
