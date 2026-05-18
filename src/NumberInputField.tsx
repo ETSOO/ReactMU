@@ -46,6 +46,12 @@ export type NumberInputFieldProps = Omit<
    * Step value
    */
   step?: number;
+
+  /**
+   * Number value change handler
+   * @param value New value
+   */
+  onNumberChange?: (value: number | undefined) => void;
 };
 
 /**
@@ -64,6 +70,8 @@ export function NumberInputField(props: NumberInputFieldProps) {
       : undefined,
     endSymbol,
     max = 9999999,
+    onChange,
+    onNumberChange,
     slotProps = {},
     ...rest
   } = props;
@@ -71,6 +79,20 @@ export function NumberInputField(props: NumberInputFieldProps) {
   return (
     <InputField
       type="number"
+      onChange={(event) => {
+        onChange?.(event);
+
+        if (onNumberChange) {
+          const input = event.target;
+          if (input.checkValidity()) {
+            const qty = NumberUtils.parse(input.value);
+            onNumberChange(qty);
+          } else {
+            input.reportValidity();
+            onNumberChange(undefined);
+          }
+        }
+      }}
       slotProps={Object.assign(slotProps, {
         input: {
           startAdornment: symbol ? (
