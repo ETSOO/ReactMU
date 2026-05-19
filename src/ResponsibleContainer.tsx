@@ -68,7 +68,7 @@ export type ResponsibleContainerProps<T extends object, F> = Omit<
   /**
    * Search field template
    */
-  readonly fieldTemplate: F;
+  readonly fieldTemplate?: F;
 
   /**
    * Grid height
