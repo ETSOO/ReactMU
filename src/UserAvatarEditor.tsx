@@ -251,6 +251,18 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     setEditorState(newState);
   };
 
+  let picaInstance: any;
+
+  // toBlob helper
+  // Convenience method, similar to canvas.toBlob(), but with promise interface & polyfill for old browsers.
+  const toBlob = (
+    canvas: HTMLCanvasElement,
+    mimeType: string = type.current,
+    quality: number = 1
+  ) => {
+    return picaInstance.toBlob(canvas, mimeType, quality);
+  };
+
   // Handle done
   const handleDone = async () => {
     // Data
@@ -260,18 +272,10 @@ export function UserAvatarEditor(props: UserAvatarEditorProps) {
     if (data == null) return;
 
     // pica
-    const pica = (await import("pica")).default;
-    const picaInstance = pica();
-
-    // toBlob helper
-    // Convenience method, similar to canvas.toBlob(), but with promise interface & polyfill for old browsers.
-    const toBlob = (
-      canvas: HTMLCanvasElement,
-      mimeType: string = type.current,
-      quality: number = 1
-    ) => {
-      return picaInstance.toBlob(canvas, mimeType, quality);
-    };
+    if (picaInstance == null) {
+      const pica = (await import("pica")).Pica;
+      picaInstance = new pica();
+    }
 
     if (data.width > maxWidthCalculated) {
       // Target height

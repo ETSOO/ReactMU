@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.6.58",
+  "version": "1.6.59",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -51,7 +51,7 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "dompurify": "^3.4.5",
     "eventemitter3": "^5.0.4",
-    "pica": "^9.0.1",
+    "pica": "^10.0.1",
     "pulltorefreshjs": "^0.1.22",
     "react": "^19.2.6",
     "react-avatar-editor": "^15.1.0",

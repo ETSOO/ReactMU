@@ -60,6 +60,16 @@ export type ResponsePageProps<T extends object, F> = Omit<
    * Row height
    */
   rowHeight?: ResponsibleContainerProps<T, F>["rowHeight"];
+
+  /**
+   * Header
+   */
+  header?: React.ReactNode;
+
+  /**
+   * Footer
+   */
+  footer?: React.ReactNode;
 };
 
 /**
@@ -71,7 +81,13 @@ export function ResponsivePage<T extends object, F>(
   props: ResponsePageProps<T, F>
 ) {
   // Destruct
-  const { pageProps = {}, operationMessageHandler, ...rest } = props;
+  const {
+    pageProps = {},
+    operationMessageHandler,
+    header,
+    footer,
+    ...rest
+  } = props;
 
   pageProps.paddings ??= MUGlobal.pagePaddings;
   const { paddings, fabColumnDirection, ...pageRest } = pageProps;
@@ -91,6 +107,7 @@ export function ResponsivePage<T extends object, F>(
       {operationMessageHandler && (
         <OperationMessageContainer handler={operationMessageHandler} />
       )}
+      {header}
       <ResponsibleContainer<T, F>
         paddings={paddings}
         containerBoxSx={(paddings, hasField, _dataGrid) => {
@@ -124,6 +141,7 @@ export function ResponsivePage<T extends object, F>(
         }}
         {...rest}
       />
+      {footer}
     </CommonPage>
   );
 }
