@@ -28,7 +28,7 @@ export type SearchPageProps<T extends object, F> = GridLoader<
   /**
    * Search field template
    */
-  readonly fieldTemplate: F;
+  readonly fieldTemplate?: F;
 
   /**
    * Page props
