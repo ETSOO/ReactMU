@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.6.62",
+  "version": "1.6.63",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -36,7 +36,7 @@
   },
   "homepage": "https://github.com/ETSOO/ReactMU#readme",
   "dependencies": {
-    "@base-ui/react": "^1.4.1",
+    "@base-ui/react": "^1.5.0",
     "@dnd-kit/react": "^0.4.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -75,13 +75,13 @@
     "@testing-library/react": "^16.3.2",
     "@types/pica": "^9.0.5",
     "@types/pulltorefreshjs": "^0.1.7",
-    "@types/react": "^19.2.14",
+    "@types/react": "^19.2.15",
     "@types/react-avatar-editor": "^13.0.4",
     "@types/react-dom": "^19.2.3",
     "@types/react-input-mask": "^3.0.6",
     "@vitejs/plugin-react": "^6.0.2",
     "jsdom": "^29.1.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.7"
   }
 }

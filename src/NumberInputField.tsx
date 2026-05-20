@@ -3,7 +3,6 @@ import { InputField, InputFieldProps } from "./InputField";
 import { Currency } from "@etsoo/appscript";
 import { NumberUtils } from "@etsoo/shared";
 import InputAdornment from "@mui/material/InputAdornment";
-import { MUGlobal } from "./MUGlobal";
 
 /**
  * Number input field properties
@@ -48,6 +47,11 @@ export type NumberInputFieldProps = Omit<
   step?: number;
 
   /**
+   * Number value change delay in milliseconds, default is 600ms, set to 0 to disable delay
+   */
+  numberChangeDelay?: number;
+
+  /**
    * Number value change handler
    * @param value New value
    */
@@ -71,10 +75,41 @@ export function NumberInputField(props: NumberInputFieldProps) {
     endSymbol,
     max = 9999999,
     onChange,
+    numberChangeDelay = 600,
     onNumberChange,
     slotProps = {},
     ...rest
   } = props;
+
+  const timeoutRef = React.useRef<number | undefined>(0);
+
+  function doNumberChange(value: number | undefined) {
+    if (numberChangeDelay <= 0) {
+      onNumberChange!(value);
+    } else {
+      if (timeoutRef.current == null) return;
+
+      clearTimeout();
+
+      timeoutRef.current = globalThis.setTimeout(
+        () => onNumberChange!(value),
+        numberChangeDelay
+      );
+    }
+  }
+
+  function clearTimeout() {
+    const timeout = timeoutRef.current;
+    if (timeout == null) return;
+    if (timeout > 0) {
+      globalThis.clearTimeout(timeout);
+    }
+    timeoutRef.current = undefined;
+  }
+
+  React.useEffect(() => {
+    return clearTimeout;
+  }, []);
 
   return (
     <InputField
@@ -86,10 +121,10 @@ export function NumberInputField(props: NumberInputFieldProps) {
           const input = event.target;
           if (input.checkValidity()) {
             const qty = NumberUtils.parse(input.value);
-            onNumberChange(qty);
+            doNumberChange(qty);
           } else {
             input.reportValidity();
-            onNumberChange(undefined);
+            doNumberChange(undefined);
           }
         }
       }}
