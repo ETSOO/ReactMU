@@ -20,7 +20,7 @@ export type LinkExProps = Omit<LinkProps<typeof RouterLink>, "component"> & {
 export function LinkEx(props: LinkExProps) {
   const { children, disabled, underline = "hover", ...rest } = props;
   return disabled ? (
-    <React.Fragment>{children}</React.Fragment>
+    children
   ) : (
     <Link component={RouterLink} underline={underline} {...rest}>
       {children}
