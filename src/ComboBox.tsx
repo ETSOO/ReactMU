@@ -268,7 +268,7 @@ export function ComboBox<
             // Custom
             if (onChange != null) onChange(event, value, reason, details);
 
-            if (onValueChange) onValueChange(value, inputRef.current);
+            if (onValueChange) onValueChange(value, inputRef.current, reason);
           }}
           openOnFocus={openOnFocus}
           sx={sx}

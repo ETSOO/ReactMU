@@ -318,7 +318,7 @@ export function Tiplist<
           // Custom
           if (onChange != null) onChange(event, value, reason, details);
 
-          if (onValueChange) onValueChange(value, inputRef.current);
+          if (onValueChange) onValueChange(value, inputRef.current, reason);
 
           // For clear case
           if (reason === "clear") {

@@ -1,5 +1,8 @@
 import { DataTypes } from "@etsoo/shared";
-import { AutocompleteProps } from "@mui/material/Autocomplete";
+import {
+  AutocompleteChangeReason,
+  AutocompleteProps
+} from "@mui/material/Autocomplete";
 import { ChangeEventHandler } from "react";
 
 /**
@@ -97,6 +100,11 @@ export type AutocompleteExtendedProps<
    * Value change handler
    * @param value New value
    * @param input Input element
+   * @param reason Reason for the change, 'undefined' for initial value change
    */
-  onValueChange?: (value: T | null, input?: HTMLInputElement | null) => void;
+  onValueChange?: (
+    value: T | null,
+    input?: HTMLInputElement | null,
+    reason?: AutocompleteChangeReason
+  ) => void;
 };
