@@ -184,7 +184,7 @@ export function SelectEx<
   // Local value
   const v = defaultValue ?? value;
   const valueSource = React.useMemo(
-    () => (multiple ? (v ? (Array.isArray(v) ? v : [v]) : []) : v ?? ""),
+    () => (multiple ? (v ? (Array.isArray(v) ? v : [v]) : []) : (v ?? "")),
     [multiple, v]
   );
 
@@ -326,8 +326,8 @@ export function SelectEx<
             multiple
               ? valueState
               : localOptions.some((o) => o[idField] === valueState)
-              ? valueState
-              : ""
+                ? valueState
+                : ""
           }
           input={
             <OutlinedInput
@@ -409,7 +409,10 @@ export function SelectEx<
                     }
                   />
                 )}
-                <ListItemText primary={label} />
+                <ListItemText
+                  primary={label}
+                  slotProps={{ primary: { noWrap: true } }}
+                />
                 {itemIconRenderer && (
                   <ListItemRightIcon>
                     {itemIconRenderer(option[idField])}
