@@ -2,24 +2,24 @@ import React from "react";
 import type { ChartData, ChartOptions } from "chart.js" with {
   "resolution-mode": "import"
 };
-import type { Line } from "react-chartjs-2" with {
+import type { Pie } from "react-chartjs-2" with {
   "resolution-mode": "import"
 };
 import LinearProgress from "@mui/material/LinearProgress";
 
 /**
- * Line chart
+ * Pie chart
  */
-export type LineChartProps = {
+export type PieChartProps = {
   /**
    * Chart data
    */
-  data: ChartData<"line">;
+  data: ChartData<"pie">;
 
   /**
    * Options
    */
-  options?: ChartOptions<"line">;
+  options?: ChartOptions<"pie">;
 
   /**
    * Subtitle
@@ -33,16 +33,16 @@ export type LineChartProps = {
 };
 
 /**
- * Line chart
+ * Pie chart
  * @param props Props
  * @returns Component
  */
-export function LineChart(props: LineChartProps) {
+export function PieChart(props: PieChartProps) {
   // Destruct
   const { data, options, subtitle, title } = props;
 
   // State
-  const [LineType, setLineType] = React.useState<typeof Line>();
+  const [PieType, setPieType] = React.useState<typeof Pie>();
 
   React.useEffect(() => {
     Promise.all([
@@ -51,13 +51,12 @@ export function LineChart(props: LineChartProps) {
       import("chartjs-plugin-datalabels")
     ]).then(
       ([
-        { Line },
+        { Pie },
         {
           Chart: ChartJS,
           CategoryScale,
           LinearScale,
-          PointElement,
-          LineElement,
+          ArcElement,
           Title,
           Tooltip,
           Legend
@@ -68,8 +67,7 @@ export function LineChart(props: LineChartProps) {
         ChartJS.register(
           CategoryScale,
           LinearScale,
-          PointElement,
-          LineElement,
+          ArcElement,
           Title,
           Tooltip,
           Legend,
@@ -77,15 +75,15 @@ export function LineChart(props: LineChartProps) {
           ChartDataLabels as any // CommonJS says 'id' is missing
         );
 
-        setLineType(Line);
+        setPieType(Pie);
       }
     );
   }, []);
 
-  return LineType == null ? (
+  return PieType == null ? (
     <LinearProgress />
   ) : (
-    <LineType
+    <PieType
       options={{
         scales: {
           x: {

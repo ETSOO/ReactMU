@@ -2,24 +2,24 @@ import React from "react";
 import type { ChartData, ChartOptions } from "chart.js" with {
   "resolution-mode": "import"
 };
-import type { Line } from "react-chartjs-2" with {
+import type { Bar } from "react-chartjs-2" with {
   "resolution-mode": "import"
 };
 import LinearProgress from "@mui/material/LinearProgress";
 
 /**
- * Line chart
+ * Bar chart
  */
-export type LineChartProps = {
+export type BarChartProps = {
   /**
    * Chart data
    */
-  data: ChartData<"line">;
+  data: ChartData<"bar">;
 
   /**
    * Options
    */
-  options?: ChartOptions<"line">;
+  options?: ChartOptions<"bar">;
 
   /**
    * Subtitle
@@ -33,16 +33,16 @@ export type LineChartProps = {
 };
 
 /**
- * Line chart
+ * Bar chart
  * @param props Props
  * @returns Component
  */
-export function LineChart(props: LineChartProps) {
+export function BarChart(props: BarChartProps) {
   // Destruct
   const { data, options, subtitle, title } = props;
 
   // State
-  const [LineType, setLineType] = React.useState<typeof Line>();
+  const [BarType, setBarType] = React.useState<typeof Bar>();
 
   React.useEffect(() => {
     Promise.all([
@@ -51,13 +51,12 @@ export function LineChart(props: LineChartProps) {
       import("chartjs-plugin-datalabels")
     ]).then(
       ([
-        { Line },
+        { Bar },
         {
           Chart: ChartJS,
           CategoryScale,
           LinearScale,
-          PointElement,
-          LineElement,
+          BarElement,
           Title,
           Tooltip,
           Legend
@@ -68,8 +67,7 @@ export function LineChart(props: LineChartProps) {
         ChartJS.register(
           CategoryScale,
           LinearScale,
-          PointElement,
-          LineElement,
+          BarElement,
           Title,
           Tooltip,
           Legend,
@@ -77,15 +75,15 @@ export function LineChart(props: LineChartProps) {
           ChartDataLabels as any // CommonJS says 'id' is missing
         );
 
-        setLineType(Line);
+        setBarType(Bar);
       }
     );
   }, []);
 
-  return LineType == null ? (
+  return BarType == null ? (
     <LinearProgress />
   ) : (
-    <LineType
+    <BarType
       options={{
         scales: {
           x: {
