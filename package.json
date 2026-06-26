@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.6.72",
+  "version": "1.6.73",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -40,18 +40,18 @@
     "@dnd-kit/react": "^0.5.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@etsoo/appscript": "^1.6.67",
-    "@etsoo/notificationbase": "^1.1.71",
+    "@etsoo/appscript": "^1.6.69",
+    "@etsoo/notificationbase": "^1.1.72",
     "@etsoo/react": "^1.8.92",
-    "@etsoo/shared": "^1.2.86",
+    "@etsoo/shared": "^1.2.87",
     "@mui/icons-material": "^9.1.1",
     "@mui/material": "^9.1.2",
-    "@mui/x-data-grid": "^9.6.0",
+    "@mui/x-data-grid": "^9.7.0",
     "chart.js": "^4.5.1",
     "chartjs-plugin-datalabels": "^2.2.0",
     "dompurify": "^3.4.11",
     "eventemitter3": "^5.0.4",
-    "pica": "^10.0.1",
+    "pica": "^10.0.2",
     "pulltorefreshjs": "^0.1.22",
     "react": "^19.2.7",
     "react-avatar-editor": "^15.1.0",
@@ -83,5 +83,8 @@
     "jsdom": "^29.1.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
+  },
+  "allowScripts": {
+    "core-js-pure@3.49.0": true
   }
 }
