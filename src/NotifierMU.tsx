@@ -80,7 +80,7 @@ const setError = (div?: HTMLDivElement | null, error?: string) => {
  * MU notification data methods
  */
 export interface NotificationMUDataMethods {
-  getValue(): unknown;
+  getValue(): unknown | PromiseLike<unknown>;
 }
 
 /**
@@ -181,9 +181,7 @@ export class NotificationMU extends NotificationReact {
       >
         <IconDialogTitle
           draggable={draggable}
-          className={
-            draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
-          }
+          className={`dialog-title${draggable ? " draggable-dialog-title" : ""}`}
         >
           {icon}
           <span className="dialogTitle">{title}</span>
@@ -279,9 +277,7 @@ export class NotificationMU extends NotificationReact {
       >
         <IconDialogTitle
           draggable={draggable}
-          className={
-            draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
-          }
+          className={`dialog-title${draggable ? " draggable-dialog-title" : ""}`}
         >
           <HelpIcon color="action" />
           <span className="dialogTitle">{title}</span>
@@ -398,15 +394,14 @@ export class NotificationMU extends NotificationReact {
 
       if (this.onReturn) {
         // Get the value
-        const value = mRef.current?.getValue();
+        const value = await mRef.current?.getValue();
         if (value == null) {
           return false;
         }
 
-        const result = this.onReturn(value);
+        const v = await this.onReturn(value);
 
         // returns false to prevent default dismiss
-        const v = await result;
         if (v === false) {
           return false;
         }
@@ -462,9 +457,7 @@ export class NotificationMU extends NotificationReact {
       >
         <IconDialogTitle
           draggable={draggable}
-          className={
-            draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
-          }
+          className={`dialog-title${draggable ? " draggable-dialog-title" : ""}`}
         >
           <InfoIcon color="primary" />
           <span className="dialogTitle">{title}</span>
@@ -664,9 +657,7 @@ export class NotificationMU extends NotificationReact {
       >
         <IconDialogTitle
           draggable={draggable}
-          className={
-            draggable ? "dialog-title draggable-dialog-title" : "dialog-title"
-          }
+          className={`dialog-title${draggable ? " draggable-dialog-title" : ""}`}
         >
           <InfoIcon color="primary" />
           <span className="dialogTitle">{title}</span>
