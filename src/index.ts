@@ -79,6 +79,7 @@ export * from "./GridUtils";
 export * from "./HiSelector";
 export * from "./HiSelectorTL";
 export * from "./IconButtonLink";
+export * from "./ImagePreviewButton";
 export * from "./InputField";
 export * from "./InputTipField";
 export * from "./IntInputField";
