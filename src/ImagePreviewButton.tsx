@@ -2,7 +2,7 @@ import Avatar from "@mui/material/Avatar";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import React from "react";
+import React, { CSSProperties } from "react";
 
 /**
  * Image preview button props
@@ -24,6 +24,11 @@ export type ImagePreviewButtonProps = {
   image?: string;
 
   /**
+   * Object fit style
+   */
+  objectFit?: CSSProperties["objectFit"];
+
+  /**
    * Size
    */
   size?: number | [number, number];
@@ -36,7 +41,13 @@ export type ImagePreviewButtonProps = {
  */
 export function ImagePreviewButton(props: ImagePreviewButtonProps) {
   // Destruct
-  const { buttonProps, dialogProps, image, size = 32 } = props;
+  const {
+    buttonProps,
+    dialogProps,
+    image,
+    objectFit = "contain",
+    size = 32
+  } = props;
 
   const [open, setOpen] = React.useState(false);
 
@@ -54,7 +65,17 @@ export function ImagePreviewButton(props: ImagePreviewButtonProps) {
         }}
         {...buttonProps}
       >
-        <Avatar src={image} variant="rounded" sx={{ width, height }} />
+        <Avatar
+          src={image}
+          variant="rounded"
+          sx={{
+            width,
+            height,
+            "& img": {
+              objectFit
+            }
+          }}
+        />
       </Button>
       <Dialog
         open={open}
