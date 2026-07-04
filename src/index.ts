@@ -41,6 +41,8 @@ export * from "./texts/DateText";
 export * from "./texts/MoneyText";
 export * from "./texts/NumberText";
 
+export * from "./utils/CanvasUtils";
+
 export * from "./AddresSelector";
 export * from "./AuditDisplay";
 export * from "./AutocompleteExtendedProps";
@@ -128,6 +130,7 @@ export * from "./SearchOptionGroup";
 export * from "./SelectBool";
 export * from "./SelectEx";
 export * from "./ShowDataComparison";
+export * from "./SignaturePadComponent";
 export * from "./Switch";
 export * from "./SwitchAnt";
 export * from "./SwitchField";
