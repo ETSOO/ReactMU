@@ -8,6 +8,7 @@ import { ResponsiveStyleValue } from "@mui/system";
 import { CanvasUtils } from "./utils/CanvasUtils";
 import Stack from "@mui/material/Stack";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * Extended SignaturePad class with trim method
@@ -36,7 +37,7 @@ export type SignaturePadComponentProps = {
   /**
    * Width of the canvas
    */
-  width: number;
+  width: number | string;
 
   /**
    * Height of the canvas
@@ -72,8 +73,18 @@ export function SignaturePadComponent(props: SignaturePadComponentProps) {
 
     ref.current = new SignaturePadEx(canvas, options);
 
+    const observer = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+    observer.observe(canvas.parentElement!);
+
     return () => {
       ref.current?.off();
+      observer.disconnect();
     };
   }, [options, ref]);
 
@@ -140,11 +151,15 @@ export type SignaturePadFullProps = Partial<
  * @returns Component
  */
 export function SignaturePadFull(props: SignaturePadFullProps) {
+  // Global app
+  const app = useAppContext();
+  const { clear, save } = app?.getLabels("clear", "save") ?? {};
+
   // Destruct
   const {
-    clearLabel = "Clear",
-    saveLabel = "Save",
-    width = 600,
+    clearLabel = clear || "Clear",
+    saveLabel = save || "Save",
+    width = "100%",
     height = 300,
     mRef,
     onSave,
