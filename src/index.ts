@@ -80,6 +80,7 @@ export * from "./GridDataFormat";
 export * from "./GridUtils";
 export * from "./HiSelector";
 export * from "./HiSelectorTL";
+export * from "./HtmlDescriptionBase";
 export * from "./IconButtonLink";
 export * from "./ImagePreviewButton";
 export * from "./InputField";
