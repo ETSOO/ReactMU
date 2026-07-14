@@ -645,6 +645,9 @@ export class NotificationMU extends NotificationReact {
                 ) as HTMLButtonElement
               )?.click();
               return false;
+            },
+            sx: {
+              overflow: "hidden"
             }
           }
         }}
