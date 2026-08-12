@@ -16,7 +16,7 @@ import type { OperationMessageHandlerAll } from "../messages/OperationMessageHan
  */
 export type ResponsePageProps<T extends object, F> = Omit<
   DataGridPageProps<T, F>,
-  "mRef" | "rowHeight"
+  "mRef" | "rowHeight" | "rowKey"
 > & {
   /**
    *
@@ -60,6 +60,11 @@ export type ResponsePageProps<T extends object, F> = Omit<
    * Row height
    */
   rowHeight?: ResponsibleContainerProps<T, F>["rowHeight"];
+
+  /**
+   * Row key
+   */
+  rowKey?: (index: number, data: T) => React.Key;
 
   /**
    * Header

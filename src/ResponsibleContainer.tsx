@@ -27,7 +27,13 @@ import Stack from "@mui/material/Stack";
  */
 export type ResponsibleContainerProps<T extends object, F> = Omit<
   DataGridExProps<T>,
-  "height" | "loadData" | "mRef" | "onInitLoad" | "onUpdateRows" | "rowHeight"
+  | "height"
+  | "loadData"
+  | "mRef"
+  | "onInitLoad"
+  | "onUpdateRows"
+  | "rowHeight"
+  | "rowKey"
 > & {
   /**
    * Height will be deducted
@@ -125,6 +131,11 @@ export type ResponsibleContainerProps<T extends object, F> = Omit<
       ) => B extends true
         ? DataGridExProps<T>["rowHeight"]
         : ScrollerListExProps<T>["rowHeight"]);
+
+  /**
+   * Row key
+   */
+  rowKey?: (index: number, data: T) => React.Key;
 
   /**
    * Size ready to read miliseconds span
@@ -320,7 +331,7 @@ export function ResponsibleContainer<T extends object, F>(
 
     if (showDataGrid) {
       // Remove useless props
-      const { itemRenderer, ...gridProps } = rest;
+      const { itemRenderer, rowKey, ...gridProps } = rest;
 
       return (
         <Box className="DataGridBox">
@@ -335,6 +346,11 @@ export function ResponsibleContainer<T extends object, F>(
             onDoubleClick={(_, data) => quickAction && quickAction(data)}
             columns={columns}
             rowHeight={getRowHeight(true)}
+            rowKey={
+              rowKey == null
+                ? undefined
+                : ({ rowIndex, data }) => rowKey(rowIndex, data.rows[rowIndex])
+            }
             {...gridProps}
           />
         </Box>
@@ -352,6 +368,7 @@ export function ResponsibleContainer<T extends object, F>(
       hoverColor,
       selectable,
       onCellsRendered,
+      rowKey,
       ...listProps
     } = rest;
 
@@ -366,6 +383,11 @@ export function ResponsibleContainer<T extends object, F>(
           mRef={mRefs}
           onClick={(event, data) =>
             quickAction && ReactUtils.isSafeClick(event) && quickAction(data)
+          }
+          rowKey={
+            rowKey == null
+              ? undefined
+              : (index, data) => rowKey(index, data.items[index])
           }
           rowHeight={getRowHeight(false)}
           {...listProps}
