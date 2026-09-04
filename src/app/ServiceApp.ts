@@ -25,9 +25,9 @@ const tryLoginKey = "tryLogin";
  * Use the new acess token and refresh token to login
  */
 export class ServiceApp<
-    U extends IServiceUser = IServiceUser,
-    S extends IServiceAppSettings = IServiceAppSettings
-  >
+  U extends IServiceUser = IServiceUser,
+  S extends IServiceAppSettings = IServiceAppSettings
+>
   extends ReactApp<S, U>
   implements IServiceApp
 {
@@ -157,7 +157,7 @@ export class ServiceApp<
    * @param keep Keep in local storage or not
    * @param dispatch User state dispatch
    */
-  userLoginEx(
+  async userLoginEx(
     user: U & ServiceUserToken,
     core?: ApiRefreshTokenDto,
     dispatch?: boolean
@@ -165,13 +165,13 @@ export class ServiceApp<
     if (user.clientDeviceId && user.passphrase) {
       // Save the passphrase
       // Interpolated string expressions are different between TypeScript and C# for the null value
-      const passphrase = this.decrypt(
+      const passphrase = await this.decrypt(
         user.passphrase,
         `${user.uid ?? ""}-${this.settings.appId}`
       );
       if (passphrase) {
         this.deviceId = user.clientDeviceId;
-        this.updatePassphrase(passphrase);
+        await this.updatePassphrase(passphrase);
       }
     }
 
@@ -278,7 +278,7 @@ export class ServiceApp<
       return;
     }
 
-    const coreTokenDecrypted = this.decrypt(coreToken);
+    const coreTokenDecrypted = await this.decrypt(coreToken);
     if (!coreTokenDecrypted) {
       callback?.({
         ok: false,
