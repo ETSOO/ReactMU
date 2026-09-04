@@ -198,12 +198,12 @@ export class ServiceApp<
    * Save core system data
    * @param data Data
    */
-  protected saveCoreToken(data: ApiRefreshTokenDto) {
+  protected async saveCoreToken(data: ApiRefreshTokenDto) {
     // Hold the core system access token
     this.coreAccessToken = data.accessToken;
 
     // Cache the core system refresh token
-    this.storage.setData(coreTokenKey, this.encrypt(data.refreshToken));
+    this.storage.setData(coreTokenKey, await this.encrypt(data.refreshToken));
 
     // Exchange tokens
     this.exchangeTokenAll(data);
