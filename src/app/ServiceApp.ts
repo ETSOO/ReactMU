@@ -188,10 +188,10 @@ export class ServiceApp<
     };
 
     // Cache the core system data
-    this.saveCoreToken(core);
+    await this.saveCoreToken(core);
 
     // User login and trigger the dispatch at last
-    this.userLogin(user, refreshToken, dispatch);
+    await this.userLogin(user, refreshToken, dispatch);
   }
 
   /**
@@ -206,7 +206,7 @@ export class ServiceApp<
     this.storage.setData(coreTokenKey, await this.encrypt(data.refreshToken));
 
     // Exchange tokens
-    this.exchangeTokenAll(data);
+    await this.exchangeTokenAll(data);
   }
 
   /**
@@ -255,13 +255,13 @@ export class ServiceApp<
     const user = refreshToken ? { ...result.data, refreshToken } : result.data;
 
     // User login without dispatch
-    this.userLoginEx(user, core, false);
+    await this.userLoginEx(user, core, false);
 
     // Handle the switch organization
     await this.onSwitchOrg();
 
     // Trigger the dispatch at last
-    this.doLoginDispatch(user);
+    await this.doLoginDispatch(user);
 
     return result;
   }
@@ -298,7 +298,7 @@ export class ServiceApp<
 
     // Cache the core system refresh token
     // Follow similar logic in userLoginEx
-    this.saveCoreToken(data);
+    await this.saveCoreToken(data);
 
     // Call the super
     await super.refreshTokenSucceed(user, token, callback);

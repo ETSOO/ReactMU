@@ -113,7 +113,8 @@ export interface IReactAppBase {
  * Core application interface
  */
 export interface IReactApp<S extends IAppSettings, D extends IUser>
-  extends ICoreApp<D, S, React.ReactNode, NotificationReactCallProps>,
+  extends
+    ICoreApp<D, S, React.ReactNode, NotificationReactCallProps>,
     Omit<IReactAppBase, "userState"> {
   /**
    * User state
@@ -478,13 +479,17 @@ export class ReactApp<S extends IAppSettings, D extends IUser>
    * @param refreshToken Refresh token
    * @param dispatch User state dispatch
    */
-  override userLogin(user: D, refreshToken: string, dispatch?: boolean): void {
+  override async userLogin(
+    user: D,
+    refreshToken: string,
+    dispatch?: boolean
+  ): Promise<void> {
     // Super call, set token
-    super.userLogin(user, refreshToken);
+    await super.userLogin(user, refreshToken);
 
     // Dispatch action
     if (dispatch !== false) {
-      this.doLoginDispatch(user);
+      await this.doLoginDispatch(user);
     }
   }
 
@@ -500,14 +505,14 @@ export class ReactApp<S extends IAppSettings, D extends IUser>
    * User login dispatch
    * @param user New user
    */
-  protected doLoginDispatch(user: D) {
-    this.onUserLogin(user).then(() => {
-      if (this.userStateDispatch != null)
-        this.userStateDispatch({
-          type: UserActionType.Login,
-          user
-        });
-    });
+  protected async doLoginDispatch(user: D) {
+    await this.onUserLogin(user);
+
+    if (this.userStateDispatch != null)
+      this.userStateDispatch({
+        type: UserActionType.Login,
+        user
+      });
   }
 
   /**
