@@ -18,8 +18,7 @@ export namespace SVGUtils {
   ) {
     if (!icon) return undefined;
 
-    if (icon.startsWith("/")) icon = "https://localhost:9002/" + icon;
-    else if (icon.startsWith("<path "))
+    if (icon.startsWith("<path "))
       icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">${icon}</svg>`;
 
     if (icon.startsWith("<svg "))
