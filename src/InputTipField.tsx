@@ -133,6 +133,7 @@ export function InputTipField<T extends ItemType = ItemType>(
   return (
     <React.Fragment>
       <Popover
+        disableRestoreFocus
         open={anchorEl != null}
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(undefined)}

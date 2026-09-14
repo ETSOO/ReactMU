@@ -710,6 +710,7 @@ export class NotificationMU extends NotificationReact {
         open={open}
         className={className}
         onClose={() => this.dismiss()}
+        disableRestoreFocus
         {...options}
       >
         {content}

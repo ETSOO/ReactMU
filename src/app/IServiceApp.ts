@@ -23,6 +23,11 @@ export interface IServiceApp extends ReactAppType {
   readonly coreOrigin: string;
 
   /**
+   * Core system web URL
+   */
+  readonly coreWebUrl: string;
+
+  /**
    * Get token authorization request data
    * @param api API, if not provided, use the core API
    * @returns Result

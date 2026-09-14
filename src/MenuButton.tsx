@@ -34,8 +34,8 @@ export function MenuButton<T extends DataTypes.IdItem>(
         anchorOrigin.vertical === "center"
           ? "center"
           : anchorOrigin.vertical === "top"
-          ? "bottom"
-          : "top",
+            ? "bottom"
+            : "top",
       horizontal: anchorOrigin.horizontal
     },
     sx,
@@ -101,6 +101,7 @@ export function MenuButton<T extends DataTypes.IdItem>(
           }
         }}
         disableScrollLock
+        disableRestoreFocus
         anchorEl={anchorEl}
         anchorOrigin={anchorOrigin}
         keepMounted

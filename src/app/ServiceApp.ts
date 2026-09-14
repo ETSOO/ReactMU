@@ -46,6 +46,11 @@ export class ServiceApp<
    */
   readonly coreOrigin: string;
 
+  /**
+   * Core system web URL
+   */
+  readonly coreWebUrl: string;
+
   private coreAccessToken: string | undefined;
 
   /**
@@ -64,6 +69,7 @@ export class ServiceApp<
     }
     this.coreEndpoint = coreEndpoint;
     this.coreOrigin = new URL(coreEndpoint.webUrl).origin;
+    this.coreWebUrl = coreEndpoint.webUrl;
     this.coreApi = this.createApi(this.coreName, coreEndpoint);
 
     this.keepLogin = true;

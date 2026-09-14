@@ -131,6 +131,7 @@ export function UserMenu(props: UserMenuProps) {
           }
         }}
         disableScrollLock
+        disableRestoreFocus
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: "bottom",

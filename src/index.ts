@@ -42,6 +42,7 @@ export * from "./texts/MoneyText";
 export * from "./texts/NumberText";
 
 export * from "./utils/CanvasUtils";
+export * from "./utils/SVGUtils";
 
 export * from "./AddresSelector";
 export * from "./AuditDisplay";

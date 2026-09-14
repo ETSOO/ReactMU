@@ -79,6 +79,7 @@ export function ButtonPopover<T>(props: ButtonPopoverProps<T>) {
         onClick={handleClose}
         transformOrigin={{ horizontal: position, vertical: "top" }}
         anchorOrigin={{ horizontal: position, vertical: "bottom" }}
+        disableRestoreFocus
         slotProps={{
           paper: {
             elevation: 0,

@@ -158,7 +158,8 @@ export function MoreFab(props: MoreFabProps) {
     <React.Fragment>
       {main}
       <Menu
-        disableScrollLock={true}
+        disableScrollLock
+        disableRestoreFocus
         anchorEl={anchorEl}
         anchorOrigin={anchorOrigin}
         keepMounted
