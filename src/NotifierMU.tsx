@@ -177,6 +177,7 @@ export class NotificationMU extends NotificationReact {
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         fullScreen={fullScreen}
+        disableRestoreFocus
         {...options}
       >
         <IconDialogTitle
@@ -273,6 +274,7 @@ export class NotificationMU extends NotificationReact {
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         fullScreen={fullScreen}
+        disableRestoreFocus
         {...options}
       >
         <IconDialogTitle
@@ -453,6 +455,7 @@ export class NotificationMU extends NotificationReact {
         maxWidth={maxWidth}
         fullScreen={fullScreen}
         scroll="paper"
+        disableRestoreFocus
         {...options}
       >
         <IconDialogTitle
@@ -656,6 +659,7 @@ export class NotificationMU extends NotificationReact {
         maxWidth={maxWidth}
         fullScreen={fullScreen}
         scroll="paper"
+        disableRestoreFocus
         {...options}
       >
         <IconDialogTitle

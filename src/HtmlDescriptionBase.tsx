@@ -4,6 +4,7 @@ import { useCombinedRefs } from "@etsoo/react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import { useAppContext } from "./app/ReactApp";
 
 /**
  * HTML Description component base props
@@ -30,11 +31,14 @@ export type HtmlDescriptionBaseProps = Omit<InputFieldProps, "multiline"> & {
  * @returns Component
  */
 export function HtmlDescriptionBase(props: HtmlDescriptionBaseProps) {
+  // Global app
+  const app = useAppContext();
+
   // Destruct
   const {
     fullWidth = true,
     inputRef,
-    label,
+    label = app?.get("description"),
     maxLength = 1280,
     name = "description",
     onEdit,

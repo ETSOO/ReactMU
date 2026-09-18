@@ -12,10 +12,7 @@ import {
 } from "../src";
 import TextField from "@mui/material/TextField";
 import { screen } from "@testing-library/react";
-
-// Without it will popup error:
-// The current testing environment is not configured to support act
-(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
+import "@testing-library/jest-dom/vitest";
 
 // Root
 const root = document.body;
@@ -34,258 +31,257 @@ act(() => {
 // Notifier
 const notifier = NotifierMU.instance;
 
-// Timer mock
-// https://jestjs.io/docs/en/timer-mocks
-vi.useFakeTimers();
-
-test("Alert tests", async () => {
-  // Click
-  const handleClick = vi.fn();
-
-  act(() => {
-    // Add the notification
-    notifier.alert("Alert message", handleClick);
+describe("NotifierMU Tests", () => {
+  beforeEach(() => {
+    // Timer mock
+    // https://jestjs.io/docs/en/timer-mocks
+    vi.useFakeTimers();
   });
 
-  // Button
-  const button = root.getElementsByTagName("button");
-
-  expect(button.length).toBe(1);
-  expect(button[0].innerHTML).toContain("OK");
-
-  await act(async () => {
-    button[0].click();
+  afterEach(() => {
+    //vi.useRealTimers();
+    vi.runOnlyPendingTimers();
   });
 
-  expect(handleClick).toHaveBeenCalled();
+  it("Alert tests", async () => {
+    // Click
+    const handleClick = vi.fn();
 
-  // Fast forward
-  vi.runOnlyPendingTimers();
-});
-
-test("Confirm tests", async () => {
-  // Click
-  const handleClick = vi.fn();
-
-  act(() => {
-    // Add the notification
-    notifier.confirm("Confirm message", undefined, handleClick);
-  });
-
-  // Button
-  const button = root.getElementsByTagName("button");
-
-  expect(button.length).toBe(2);
-  expect(button[0].innerHTML).toContain("Cancel");
-
-  await act(async () => {
-    button[0].click();
-  });
-
-  expect(handleClick).toHaveBeenCalled();
-
-  // Fast forward
-  vi.runOnlyPendingTimers();
-});
-
-test("Confirm tests without cancel button", async () => {
-  // Click
-  const handleClick = vi.fn();
-
-  act(() => {
-    // Add the notification
-    notifier.confirm("Confirm message", undefined, handleClick, {
-      cancelButton: false
+    act(() => {
+      // Add the notification
+      notifier.alert("Alert message", handleClick);
     });
-  });
 
-  // Button
-  const button = root.getElementsByTagName("button");
+    // Button
+    const button = root.getElementsByTagName("button");
 
-  expect(button.length).toBe(1);
-  expect(button[0].innerHTML).toContain("OK");
+    expect(button.length).toBe(1);
+    expect(button[0].innerHTML).toContain("OK");
 
-  await act(async () => {
-    button[0].click();
-  });
-
-  expect(handleClick).toHaveBeenCalled();
-
-  // Fast forward
-  vi.runOnlyPendingTimers();
-});
-
-test("Prompt tests", async () => {
-  // Click
-  const handleClick = vi.fn((result: boolean) => {
-    expect(result).toBeTruthy();
-  });
-
-  act(() => {
-    // Add the notification
-    notifier.prompt<boolean>("Prompt message", handleClick, undefined, {
-      type: "switch",
-      inputProps: { required: false }
+    await act(async () => {
+      button[0].click();
     });
+
+    expect(handleClick).toHaveBeenCalled();
   });
 
-  // Button
-  const button = root.getElementsByTagName("button");
+  it("Confirm tests", async () => {
+    // Click
+    const handleClick = vi.fn();
 
-  expect(button.length).toBe(2); // Switch will generate a button
-  expect(button[1].innerHTML).toContain("OK");
+    act(() => {
+      // Add the notification
+      notifier.confirm("Confirm message", undefined, handleClick);
+    });
 
-  await act(async () => {
-    button[1].click();
+    // Button
+    const button = root.getElementsByTagName("button");
+
+    expect(button.length).toBe(2);
+    expect(button[0].innerHTML).toContain("Cancel");
+
+    await act(async () => {
+      button[0].click();
+    });
+
+    expect(handleClick).toHaveBeenCalled();
   });
 
-  expect(handleClick).toHaveBeenCalled();
+  it("Confirm tests without cancel button", async () => {
+    // Click
+    const handleClick = vi.fn();
 
-  vi.runOnlyPendingTimers();
-});
+    act(() => {
+      // Add the notification
+      notifier.confirm("Confirm message", undefined, handleClick, {
+        cancelButton: false
+      });
+    });
 
-type DataType = {
-  name: string;
-  age: number;
-};
+    // Button
+    const button = root.getElementsByTagName("button");
 
-function DataCollector(props: NotificationMUDataProps) {
-  const { mRef } = props;
-  const nameRef = React.createRef<HTMLInputElement>();
-  const ageRef = React.createRef<HTMLInputElement>();
+    expect(button.length).toBe(1);
+    expect(button[0].innerHTML).toContain("OK");
 
-  function getValue(): DataType | undefined {
-    if (!nameRef.current?.value) {
-      nameRef.current?.focus();
-      return undefined;
+    await act(async () => {
+      button[0].click();
+    });
+
+    expect(handleClick).toHaveBeenCalled();
+  });
+
+  it("Prompt tests", async () => {
+    // Click
+    const handleClick = vi.fn((result: boolean) => {
+      expect(result).toBeTruthy();
+    });
+
+    act(() => {
+      // Add the notification
+      notifier.prompt<boolean>("Prompt message", handleClick, undefined, {
+        type: "switch",
+        inputProps: { required: false }
+      });
+    });
+
+    // Button
+    const button = root.getElementsByTagName("button");
+
+    expect(button.length).toBe(2); // Switch will generate a button
+    expect(button[1].innerHTML).toContain("OK");
+
+    await act(async () => {
+      button[1].click();
+    });
+
+    expect(handleClick).toHaveBeenCalled();
+  });
+
+  type DataType = {
+    name: string;
+    age: number;
+  };
+
+  function DataCollector(props: NotificationMUDataProps) {
+    const { mRef } = props;
+    const nameRef = React.createRef<HTMLInputElement>();
+    const ageRef = React.createRef<HTMLInputElement>();
+
+    function getValue(): DataType | undefined {
+      if (!nameRef.current?.value) {
+        nameRef.current?.focus();
+        return undefined;
+      }
+
+      if (!ageRef.current?.valueAsNumber) {
+        ageRef.current?.focus();
+        return undefined;
+      }
+
+      return {
+        name: nameRef.current.value,
+        age: ageRef.current.valueAsNumber
+      };
     }
 
-    if (!ageRef.current?.valueAsNumber) {
-      ageRef.current?.focus();
-      return undefined;
-    }
+    React.useImperativeHandle(mRef, () => ({
+      getValue
+    }));
 
-    return {
-      name: nameRef.current.value,
-      age: ageRef.current.valueAsNumber
-    };
+    return (
+      <VBox>
+        <TextField name="name" required inputRef={nameRef} />
+        <TextField name="age" type="number" required inputRef={ageRef} />
+      </VBox>
+    );
   }
 
-  React.useImperativeHandle(mRef, () => ({
-    getValue
-  }));
+  it("Data tests", async () => {
+    const name = "John Doe";
+    const age = 30;
 
-  return (
-    <VBox>
-      <TextField name="name" required inputRef={nameRef} />
-      <TextField name="age" type="number" required inputRef={ageRef} />
-    </VBox>
-  );
-}
+    act(() => {
+      // Add the notification
+      notifier.data<DataType>(
+        <DataCollector mRef={React.createRef<NotificationMUDataMethods>()} />,
+        (result) => {
+          expect(result).toEqual({ name, age });
+          return true;
+        },
+        "Data Modal"
+      );
+    });
 
-test("Data tests", async () => {
-  const name = "John Doe";
-  const age = 30;
+    const button = screen.getByText("OK");
+    expect(button).toBeInTheDocument();
 
-  act(() => {
-    // Add the notification
-    notifier.data<DataType>(
-      <DataCollector mRef={React.createRef<NotificationMUDataMethods>()} />,
-      (result) => {
-        expect(result).toEqual({ name, age });
-        return true;
-      },
-      "Data Modal"
-    );
-  });
+    const nameInput =
+      root.querySelector<HTMLInputElement>('input[name="name"]');
+    expect(nameInput).not.toBeNull();
+    nameInput!.value = name;
 
-  const button = screen.getByText("OK");
-  expect(button).toBeInTheDocument();
+    const ageInput = root.querySelector<HTMLInputElement>('input[name="age"]');
+    expect(ageInput).not.toBeNull();
+    ageInput!.value = age.toString();
 
-  const nameInput = root.querySelector<HTMLInputElement>('input[name="name"]');
-  expect(nameInput).not.toBeNull();
-  nameInput!.value = name;
-
-  const ageInput = root.querySelector<HTMLInputElement>('input[name="age"]');
-  expect(ageInput).not.toBeNull();
-  ageInput!.value = age.toString();
-
-  await act(async () => {
-    button.click();
-  });
-});
-
-test("Prompt tests with form submit", async () => {
-  // Click
-  const handleClick = vi.fn((result: boolean) => {
-    expect(result).toBeTruthy();
-  });
-
-  act(() => {
-    // Add the notification
-    notifier.prompt<boolean>("Prompt message", handleClick, undefined, {
-      type: "switch",
-      inputProps: { required: false }
+    await act(async () => {
+      button.click();
     });
   });
 
-  const button = screen.getByText("OK");
-  expect(button).toBeInTheDocument();
+  it("Prompt tests with form submit", async () => {
+    // Click
+    const handleClick = vi.fn((result: boolean) => {
+      expect(result).toBeTruthy();
+    });
 
-  await act(async () => {
-    button.click();
+    act(() => {
+      // Add the notification
+      notifier.prompt<boolean>("Prompt message", handleClick, undefined, {
+        type: "switch",
+        inputProps: { required: false }
+      });
+    });
+
+    const button = screen.getByText("OK");
+    expect(button).toBeInTheDocument();
+
+    await act(async () => {
+      button.click();
+    });
+
+    expect(handleClick).toHaveBeenCalled();
   });
 
-  expect(handleClick).toHaveBeenCalled();
-});
+  it("Message tests", () => {
+    // Callback
+    const callback = vi.fn();
 
-test("Message tests", () => {
-  // Callback
-  const callback = vi.fn();
+    let n: INotification<React.ReactNode, any> | undefined;
+    act(() => {
+      // Add the notification
+      n = notifier.message(
+        NotificationMessageType.Danger,
+        "Error Message",
+        undefined,
+        {
+          callback
+        }
+      );
+    });
 
-  let n: INotification<React.ReactNode, any> | undefined;
-  act(() => {
-    // Add the notification
-    n = notifier.message(
-      NotificationMessageType.Danger,
-      "Error Message",
-      undefined,
-      {
-        callback
-      }
-    );
+    expect(n?.timespan).toBe(5);
+
+    expect(root.innerHTML).toContain("Error Message");
+
+    act(() => {
+      // Here is the bug need further study...
+      n?.dismiss();
+
+      // Fast forward
+      vi.runOnlyPendingTimers();
+    });
+
+    expect(root.innerHTML).not.toContain("Error Message");
+    expect(callback).toHaveBeenCalled();
   });
 
-  expect(n?.timespan).toBe(5);
+  it("Loading tests", () => {
+    act(() => {
+      // Add the notification
+      notifier.showLoading("Loading");
+    });
 
-  expect(root.innerHTML).toContain("Error Message");
+    expect(root.innerHTML).toContain("Loading");
 
-  act(() => {
-    // Here is the bug need further study...
-    n?.dismiss();
+    act(() => {
+      notifier.hideLoading();
 
-    // Fast forward
-    vi.runOnlyPendingTimers();
+      // Fast forward
+      vi.runOnlyPendingTimers();
+    });
+
+    expect(root.innerHTML).not.toContain("Loading");
   });
-
-  expect(root.innerHTML).not.toContain("Error Message");
-  expect(callback).toHaveBeenCalled();
-});
-
-test("Loading tests", () => {
-  act(() => {
-    // Add the notification
-    notifier.showLoading("Loading");
-  });
-
-  expect(root.innerHTML).toContain("Loading");
-
-  act(() => {
-    notifier.hideLoading();
-
-    // Fast forward
-    vi.runOnlyPendingTimers();
-  });
-
-  expect(root.innerHTML).not.toContain("Loading");
 });

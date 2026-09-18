@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ES2022",
+    "target": "ES2025",
+    "module": "esnext",
     "moduleResolution": "bundler",
     "allowJs": false,
     "skipLibCheck": false,
