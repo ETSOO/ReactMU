@@ -131,13 +131,15 @@ export function NumberInputField(props: NumberInputFieldProps) {
       slotProps={Object.assign(slotProps, {
         input: {
           startAdornment: symbol ? (
-            <React.Fragment>
-              <InputAdornment position="start">{symbol}</InputAdornment>
-            </React.Fragment>
-          ) : undefined,
+            <InputAdornment position="start">{symbol}</InputAdornment>
+          ) : (
+            (slotProps?.input as any)?.startAdornment
+          ),
           endAdornment: endSymbol ? (
             <InputAdornment position="end">{endSymbol}</InputAdornment>
-          ) : undefined
+          ) : (
+            (slotProps?.input as any)?.endAdornment
+          )
         },
         htmlInput: {
           min,
