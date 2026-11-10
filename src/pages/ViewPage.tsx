@@ -35,6 +35,7 @@ export function ViewPageActionBar(
         justifyContent: "center",
         paddingTop: actionPaddings,
         paddingBottom: actionPaddings,
+        gap: actionPaddings,
         ...sx
       }}
       {...rest}

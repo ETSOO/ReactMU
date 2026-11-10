@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/materialui",
-  "version": "1.6.92",
+  "version": "1.6.93",
   "description": "TypeScript Material-UI Implementation",
   "main": "lib/cjs/index.js",
   "module": "lib/mjs/index.js",
@@ -37,16 +37,16 @@
   "homepage": "https://github.com/ETSOO/ReactMU#readme",
   "dependencies": {
     "@base-ui/react": "^1.9.0",
-    "@dnd-kit/react": "^0.5.1",
+    "@dnd-kit/react": "^0.5.3",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@etsoo/appscript": "^1.6.80",
     "@etsoo/notificationbase": "^1.1.76",
-    "@etsoo/react": "^1.9.5",
+    "@etsoo/react": "^1.9.7",
     "@etsoo/shared": "^1.2.92",
     "@mui/icons-material": "^9.5.0",
     "@mui/material": "^9.5.0",
-    "@mui/x-data-grid": "^9.16.0",
+    "@mui/x-data-grid": "^9.17.0",
     "chart.js": "^4.6.1",
     "chartjs-plugin-datalabels": "^2.2.0",
     "css-filter-converter": "^1.0.115",
@@ -75,10 +75,12 @@
     "@types/react-avatar-editor": "^13.0.4",
     "@types/react-dom": "^19.3.0",
     "@types/react-input-mask": "^3.0.6",
-    "@vitejs/plugin-react": "^6.1.2",
-    "jsdom": "^30.1.3",
+    "@vitejs/plugin-react": "^6.3.0",
+    "jsdom": "^31.0.0",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   },
-  "allowScripts": {}
+  "allowScripts": {
+    "core-js-pure": true
+  }
 }
