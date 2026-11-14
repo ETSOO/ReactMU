@@ -201,7 +201,7 @@ function InputUIs({
   // Labels
   const labels = app.getLabels(
     "add",
-    "delete",
+    "deleteItem",
     "edit",
     "sortTip",
     "dragIndicator"
@@ -385,7 +385,7 @@ function InputUIs({
                   <Grid size={smallSize}>
                     <IconButton
                       size="small"
-                      title={labels.delete}
+                      title={labels.deleteItem}
                       onClick={() =>
                         doChange(
                           items.filter((item) => item.name !== data.name)

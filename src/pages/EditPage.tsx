@@ -119,7 +119,7 @@ export function EditPage(props: EditPageProps) {
               onClick={() => onDelete()}
               startIcon={<DeleteIcon color="warning" />}
             >
-              {labels.delete}
+              {labels.deleteItem}
             </Button>
           )}
           <Button
