@@ -29,7 +29,6 @@ export function ViewPageActionBar(
     <Stack
       className="ET-ViewPage-Actions"
       direction="row"
-      spacing={actionPaddings}
       sx={{
         flexWrap: "wrap",
         justifyContent: "center",
