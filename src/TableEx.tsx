@@ -7,7 +7,6 @@ import {
   GridLoaderPartialStates,
   GridLoaderStates,
   GridMethodRef,
-  GridSizeGet,
   ScrollToRowParam
 } from "@etsoo/react";
 import { DataTypes, IdDefaultType } from "@etsoo/shared";
@@ -122,7 +121,6 @@ export function TableEx<
     defaultOrderBy,
     headerColors = [undefined, undefined],
     idField = "id" as D,
-    loadBatchSize,
     loadData,
     maxHeight,
     mRef,
@@ -136,18 +134,6 @@ export function TableEx<
 
   const selectable: boolean = onSelectChange != null;
 
-  // Rows per page
-  let rowsPerPageLocal: number;
-  if (maxHeight != null) {
-    if (loadBatchSize != null)
-      rowsPerPageLocal = GridSizeGet(loadBatchSize, maxHeight);
-    else rowsPerPageLocal = Math.floor((maxHeight - otherHeight) / rowHeight);
-  } else if (typeof loadBatchSize === "number") {
-    rowsPerPageLocal = loadBatchSize;
-  } else {
-    rowsPerPageLocal = 10;
-  }
-
   // Rows
   const [rows, updateRows] = React.useState<T[]>([]);
   const setRows = (rows: T[]) => {
@@ -160,7 +146,7 @@ export function TableEx<
     queryPaging: {
       currentPage: 0,
       orderBy: defaultOrderBy,
-      batchSize: rowsPerPageLocal
+      batchSize: 10
     },
     autoLoad,
     loadedItems: 0,

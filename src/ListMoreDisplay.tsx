@@ -18,8 +18,7 @@ import CardActions from "@mui/material/CardActions";
  * ListMoreDisplay props
  */
 export interface ListMoreDisplayProps<T extends object>
-  extends Omit<CardProps, "children">,
-    GridLoader<T> {
+  extends Omit<CardProps, "children">, GridLoader<T> {
   /**
    * Batch size to load
    */
@@ -75,7 +74,6 @@ export function ListMoreDisplay<T extends object>(
     headerRenderer,
     autoLoad = headerRenderer == null,
     headerTitle,
-    loadBatchSize,
     loadData,
     moreLabel = app?.get("more1"),
     fieldTemplate,
